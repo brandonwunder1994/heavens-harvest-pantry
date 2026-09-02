@@ -16,6 +16,7 @@ import {
 import { DeliveredToggle } from "@/components/owner/DeliveredToggle";
 import { CrossWheat } from "@/components/Sprite";
 import { OwnerShell } from "@/components/owner/Shell";
+import { PorchSwitch } from "@/components/owner/PorchSwitch";
 import { getShop } from "@/lib/settings";
 
 export const dynamic = "force-dynamic";
@@ -23,7 +24,8 @@ export const dynamic = "force-dynamic";
 export default async function OwnerPage() {
   if (!(await isSignedIn())) redirect("/owner/login");
 
-  const { delivery, verseOfTheWeek } = await getShop();
+  const shop = await getShop();
+  const { delivery, verseOfTheWeek } = shop;
   const result = await loadOrders();
   const orders = result.status === "ok" ? result.orders : [];
   // This page is force-dynamic and its whole job is to say what today looks
@@ -127,6 +129,10 @@ export default async function OwnerPage() {
             {runs.map((r) => (
               <BakeList key={`${r.area}-${r.nextDate}`} date={r.nextDate} rows={r.bake} />
             ))}
+
+            <section id="porch" className="border border-rule bg-paper px-5 py-4">
+              <PorchSwitch porch={shop.porch} />
+            </section>
 
             <section id="jars" className="flex flex-col gap-2 border border-rule bg-paper px-5 py-4">
               <h2 className="display m-0 text-[22px]">Jars</h2>

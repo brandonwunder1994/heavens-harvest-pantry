@@ -1,7 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
 import { CartCount } from "@/components/cart/CartBar";
+import { PorchLight } from "@/components/PorchLight";
 import { business, type Shop } from "@/lib/content";
+import { porchState } from "@/lib/porch";
 
 const leftLinks = [
   { href: "/menu", label: "Menu" },
@@ -26,7 +28,13 @@ export function Header({ shop }: { shop: Shop }) {
         <span>
           {first.area} · {first.day}
         </span>
-        <span className="hidden md:inline">Baked with prayer in a home kitchen · {business.city}</span>
+        {/* The lamp when there is something honest to say, and the line we
+            always had when there is not. */}
+        {porchState(shop.porch).show ? (
+          <PorchLight porch={shop.porch} />
+        ) : (
+          <span className="hidden md:inline">Baked with prayer in a home kitchen · {business.city}</span>
+        )}
         {last ? (
           <span>
             {last.area} · {last.day}

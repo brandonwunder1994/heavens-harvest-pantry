@@ -1,3 +1,5 @@
+import { noPorch, type Porch } from "@/lib/porch";
+
 /**
  * Every piece of copy and every number the owner will eventually edit from her
  * own page lives here. Until the database lands in step 3, this file is the
@@ -190,6 +192,8 @@ export const amount = (dollars: number): string => money(dollars).slice(1);
  */
 export type Shop = {
   flavors: Flavor[];
+  /** Whether she is baking this week. See `lib/porch.ts`. */
+  porch: Porch;
   jarRules: JarRules;
   rewards: RewardRules;
   blessingBag: BlessingBag;
@@ -200,6 +204,7 @@ export type Shop = {
 
 export const defaultShop: Shop = {
   flavors,
+  porch: noPorch,
   jarRules,
   rewards,
   blessingBag,

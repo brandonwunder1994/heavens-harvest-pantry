@@ -148,6 +148,10 @@ export function createPour({ canvas, data, onFinish, reducedMotion = false }) {
       transparent: true,
       depthWrite: false,
       blending: THREE.MultiplyBlending,
+      // Multiply blending expects colour already multiplied by alpha; without
+      // this three logs a warning on every load and the pool darkens at the
+      // edges where the texture fades out.
+      premultipliedAlpha: true,
     })
   );
   contact.rotation.x = -Math.PI / 2;

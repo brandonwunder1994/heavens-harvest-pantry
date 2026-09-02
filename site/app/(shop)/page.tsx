@@ -2,6 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { CrossWheat, HeartSeal, Jar } from "@/components/Sprite";
 import { HeroShelf, jarLabel } from "@/components/HeroShelf";
+import ThePour from "@/components/hero/ThePour";
 import { ScriptureBand } from "@/components/ScriptureBand";
 import { MenuList } from "@/components/MenuList";
 import { business, filled, money, type Shop } from "@/lib/content";
@@ -43,24 +44,35 @@ export default async function HomePage() {
 
   return (
     <>
-      <section className="relative flex flex-col items-center gap-6 px-6 pt-4 text-center sm:px-10 lg:px-18">
-        <h1 className="display m-0 max-w-[1240px] text-[52px] text-ink sm:text-[80px] lg:text-[132px]">
-          Granola baked <em className="italic text-sage">this week,</em>
-          <br />a few streets away.
-        </h1>
-        <p className="max-w-[660px] text-[20px] leading-relaxed text-bark sm:text-[25px]">
-          Oats, honey, nuts and not much else. Made in small batches in a {business.kitchen} kitchen, prayed over,
-          and left on your porch in a bag or a mason jar you can bring back.
-        </p>
-        <div className="mt-1.5 flex flex-wrap items-center justify-center gap-4">
-          <Link href="/menu" className="stamp">
-            See this week&apos;s flavors
-          </Link>
-          <Link href="/delivery" className="stamp stamp-light">
-            How delivery works
-          </Link>
+      {/* Granola falls into a real jar, settles, and then the words arrive.
+          The jar sits to the right and the words to its left, so nothing is
+          read through the glass. Anyone on an old phone, a metered connection,
+          or with motion switched off gets a photograph of the same scene and is
+          never told they missed anything — see components/hero/still.js. */}
+      <ThePour className="min-h-[84vh] w-full lg:min-h-[78vh]">
+        <div className="mx-auto flex min-h-[84vh] w-full max-w-[1296px] items-end px-6 pb-10 sm:px-10 lg:min-h-[78vh] lg:items-center lg:px-18 lg:pb-0">
+          <div className="flex max-w-[600px] flex-col items-start gap-5 text-left">
+            <h1 className="display m-0 text-[40px] leading-[0.98] text-ink sm:text-[52px] lg:text-[66px]">
+              Granola baked
+              <br />
+              <em className="italic text-sage">this week,</em>
+              <br />a few streets away.
+            </h1>
+            <p className="max-w-[460px] text-[18px] leading-relaxed text-bark sm:text-[20px]">
+              Oats, honey, nuts and not much else. Made in small batches in a {business.kitchen} kitchen,
+              prayed over, and left on your porch in a bag or a mason jar you can bring back.
+            </p>
+            <div className="mt-1 flex flex-wrap items-center gap-4">
+              <Link href="/menu" className="stamp">
+                See this week&apos;s flavors
+              </Link>
+              <Link href="/delivery" className="stamp stamp-light">
+                How delivery works
+              </Link>
+            </div>
+          </div>
         </div>
-      </section>
+      </ThePour>
 
       <div className="mx-auto mt-5 w-full max-w-[1296px] px-6 sm:px-10 lg:px-18">
         <HeroShelf labels={shop.flavors.slice(0, 3).map((f) => f.name)} />

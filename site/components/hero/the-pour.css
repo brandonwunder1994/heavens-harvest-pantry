@@ -1,0 +1,112 @@
+/* The Pour, and the photograph that stands in for it.
+   Import once, beside the component. `still/lqip.css` must be imported too —
+   it carries the blurred ground, and bake-still.mjs writes it. */
+
+.the-pour { position: relative; overflow: hidden; }
+
+.the-pour canvas.scene {
+  position: absolute; inset: 0; width: 100%; height: 100%; display: block;
+}
+
+/* Everything, without the graphics.
+   The ground is a twenty-pixel-wide copy of the same scene, blurred by the
+   browser. It lives in the stylesheet, so it costs no request and is on screen
+   in the first paint. The photograph fades over it. */
+.the-pour .still {
+  position: absolute; inset: 0; display: none; overflow: hidden;
+  background-image: var(--still-blur-wide);
+  background-size: cover;
+  background-position: 50% 42%;
+}
+.the-pour .still::before {
+  content: ''; position: absolute; inset: -8%;
+  background-image: inherit; background-size: cover; background-position: inherit;
+  filter: blur(26px);
+}
+.the-pour .still.on { display: block; }
+@media (orientation: portrait) {
+  .the-pour .still { background-image: var(--still-blur-tall); background-position: 50% 30%; }
+}
+
+.the-pour .still-photo {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  object-fit: cover; object-position: 50% 42%;
+  opacity: 0; transition: opacity 700ms ease;
+}
+.the-pour .still-photo.in { opacity: 1; }
+@media (orientation: portrait) { .the-pour .still-photo { object-position: 50% 30%; } }
+@media (prefers-reduced-motion: reduce) { .the-pour .still-photo { transition: none; } }
+
+/* A soft wash of the page colour across the side the words sit on, so they are
+   always read against paper rather than against the counter. It sits over the
+   scene and under the words, and costs nothing: no image, no request. */
+.the-pour::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    100deg,
+    #f4eee2 0%,
+    rgba(244, 238, 226, 0.94) 30%,
+    rgba(244, 238, 226, 0.72) 46%,
+    rgba(244, 238, 226, 0) 66%
+  );
+}
+
+/* On a phone the jar is above and the words below, so the wash comes up from
+   the bottom instead of in from the side. */
+@media (max-width: 1023px) {
+  .the-pour::after {
+    background: linear-gradient(
+      to top,
+      #f4eee2 0%,
+      #f4eee2 40%,
+      rgba(244, 238, 226, 0.9) 54%,
+      rgba(244, 238, 226, 0.45) 64%,
+      rgba(244, 238, 226, 0) 78%
+    );
+  }
+}
+
+.the-pour .words {
+  position: relative;
+  /* Above the canvas, which is absolutely positioned across the whole hero. */
+  z-index: 1;
+  opacity: 0; transform: translateY(16px);
+  transition: opacity 900ms cubic-bezier(.2,.7,.2,1), transform 900ms cubic-bezier(.2,.7,.2,1);
+}
+.the-pour[data-pour='settled'] .words { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) { /* A soft wash of the page colour across the side the words sit on, so they are
+   always read against paper rather than against the counter. It sits over the
+   scene and under the words, and costs nothing: no image, no request. */
+.the-pour::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    100deg,
+    #f4eee2 0%,
+    rgba(244, 238, 226, 0.94) 30%,
+    rgba(244, 238, 226, 0.72) 46%,
+    rgba(244, 238, 226, 0) 66%
+  );
+}
+
+/* On a phone the jar is above and the words below, so the wash comes up from
+   the bottom instead of in from the side. */
+@media (max-width: 1023px) {
+  .the-pour::after {
+    background: linear-gradient(
+      to top,
+      #f4eee2 0%,
+      #f4eee2 40%,
+      rgba(244, 238, 226, 0.9) 54%,
+      rgba(244, 238, 226, 0.45) 64%,
+      rgba(244, 238, 226, 0) 78%
+    );
+  }
+}
+
+.the-pour .words { transition: none; } }

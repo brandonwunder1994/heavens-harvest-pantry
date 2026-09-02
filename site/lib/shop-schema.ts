@@ -1,3 +1,4 @@
+import { noPorch, type Porch } from "@/lib/porch";
 import {
   defaultShop,
   type BlessingBag,
@@ -33,6 +34,7 @@ export const editableKeys = [
   "delivery",
   "verseOfTheWeek",
   "verses",
+  "porch",
 ] as const;
 
 export type EditableKey = (typeof editableKeys)[number];
@@ -50,6 +52,7 @@ export const limits = {
   prose: 600,
   verse: 600,
   reference: 60,
+  porchNote: 64,
 } as const;
 
 // ---------------------------------------------------------------- merging
@@ -178,6 +181,22 @@ export function mergeBlessingBag(value: unknown): BlessingBag {
   };
 }
 
+/**
+ * The porch light. Her note is hers, shown as written, but it has to fit on one
+ * line at the top of every page, and a garbled timestamp must read as "she has
+ * never flipped it" rather than as a lamp of unknown age.
+ */
+export function mergePorch(value: unknown): Porch {
+  const p = asObject(value);
+  const lit = typeof p.lit === "boolean" ? p.lit : null;
+  const flippedAt = typeof p.flippedAt === "string" && !Number.isNaN(Date.parse(p.flippedAt))
+    ? p.flippedAt
+    : null;
+
+  if (lit === null || !flippedAt) return noPorch;
+  return { lit, note: text(p.note, "", limits.porchNote), flippedAt };
+}
+
 /** Her saved rows laid over the defaults, one block at a time. */
 export function mergeShop(saved: Map<string, unknown>): Shop {
   const shop: Shop = {
@@ -188,6 +207,7 @@ export function mergeShop(saved: Map<string, unknown>): Shop {
     delivery: mergeDelivery(saved.get("delivery")),
     verseOfTheWeek: mergeVerse(saved.get("verseOfTheWeek"), defaultShop.verseOfTheWeek),
     verses: mergeVerses(saved.get("verses")),
+    porch: mergePorch(saved.get("porch")),
   };
   // The hero band always shows this week's card, whichever way she changed it.
   shop.verses = { ...shop.verses, hero: shop.verseOfTheWeek };
@@ -221,6 +241,8 @@ export function checkBlock(key: EditableKey, value: unknown): Check {
       return checkBlessingBag(value);
     case "verses":
       return good;
+    case "porch":
+      return checkPorch(value);
   }
 }
 
@@ -293,6 +315,15 @@ function checkJarRules(value: unknown): Check {
   const j = asObject(value);
   if (!(Number(j.creditDollars) >= 0)) return bad("Money off a returned jar cannot be less than nothing.");
   if (!(Number(j.bonusPoints) >= 0)) return bad("Bonus points cannot be less than nothing.");
+  return good;
+}
+
+function checkPorch(value: unknown): Check {
+  const p = asObject(value);
+  if (typeof p.lit !== "boolean") return bad("Choose whether you are baking this week or sold out.");
+  if (typeof p.note === "string" && p.note.length > limits.porchNote) {
+    return bad(`Those words are too long for the top of the page. Keep them under ${limits.porchNote} letters.`);
+  }
   return good;
 }
 
