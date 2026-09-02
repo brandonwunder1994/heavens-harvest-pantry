@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import InviteLine from "@/components/InviteLine";
 import { business, filled, type Shop } from "@/lib/content";
 
 const shopLinks = [
@@ -60,6 +61,10 @@ export function Footer({ shop }: { shop: Shop }) {
             </p>
             <div className="ref !text-[10px] text-faint">{verses.blessing.reference}</div>
           </div>
+
+          {/* A small door, six words and an arrow, under the blessing. It is
+              deliberately quiet: easy to walk past, easy to follow. */}
+          <InviteLine />
 
           <p className="text-center font-ui text-[11px] leading-relaxed text-faint">
             Made in a home kitchen in {business.city}. Registered with the Arizona Department of Health Services

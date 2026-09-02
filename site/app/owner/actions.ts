@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { isSignedIn } from "@/lib/owner-auth";
-import { archiveVerse, isEditableKey, readShop, saveSetting } from "@/lib/settings";
+import { archiveVerse, clearWeeklyVerse, isEditableKey, readShop, saveSetting } from "@/lib/settings";
 import { approve, remove } from "@/lib/reviews-source";
 import type { SaveState } from "@/lib/save-state";
 
@@ -73,6 +73,26 @@ export async function saveBlock(_previous: SaveState, formData: FormData): Promi
 
   refreshTheShop();
   return { ok: true, message: "Saved. It is live on the site now." };
+}
+
+/**
+ * Hands this week's verse back to the calendar. Her override is deleted, so from
+ * here on the week's verse is worked out from the date again and she has nothing
+ * to remember on a Monday.
+ */
+export async function handBackToCalendar(): Promise<SaveState> {
+  if (!(await isSignedIn())) return { ok: false, message: "Your sign-in expired." };
+
+  try {
+    await clearWeeklyVerse();
+  } catch (error) {
+    console.error("[owner] could not hand the verse back", error);
+    return { ok: false, message: "That did not go through. Nothing was changed." };
+  }
+
+  refreshTheShop();
+  revalidatePath("/owner/verse");
+  return { ok: true, message: "Back on the calendar. It changes on its own every Monday." };
 }
 
 export async function approveReview(_previous: SaveState, formData: FormData): Promise<SaveState> {

@@ -1,0 +1,55 @@
+{
+  "_comment": "Everything about the church lives here and nowhere else. Times and addresses below were taken from pureheart.org on 1 September 2026 — re-check them before launch and after any season change. A null value renders as a gold 'To come' badge on the page rather than a guess.",
+
+  "name": "Pure Heart Church",
+  "nameNote": "Their own site writes it as two words.",
+  "website": "https://www.pureheart.org/",
+  "planVisitUrl": "https://www.pureheart.org/planyourvisit/",
+  "verifiedOn": "2026-09-01",
+
+  "homeCampus": "glendale",
+  "homeCampusNote": "Confirmed by Brandon on 2 September 2026. The home campus is listed first on the page and carries a \"Where our family is\" mark; the other campus still shows in full.",
+
+  "campuses": [
+    {
+      "id": "peoria",
+      "name": "Peoria",
+      "near": "The closer of the two to Vistancia and Anthem",
+      "address": "7569 W Greenway Rd, Peoria, AZ 85381",
+      "mapUrl": "https://maps.google.com/?q=7569+W+Greenway+Rd,+Peoria,+AZ+85381",
+      "pageUrl": "https://www.pureheart.org/peoria/",
+      "services": [
+        { "day": "Sunday", "times": "9:00 and 11:00 am" }
+      ],
+      "kids": "Infant to 5th grade at both services, check-in in the lobby. Junior high and high school meet after the 11:00 service.",
+      "whichDoor": null
+    },
+    {
+      "id": "glendale",
+      "name": "Glendale",
+      "near": null,
+      "address": "14240 N 43rd Avenue, Glendale, AZ 85306",
+      "mapUrl": "https://maps.google.com/?q=14240+N+43rd+Avenue,+Glendale,+AZ+85306",
+      "pageUrl": "https://www.pureheart.org/glendale/",
+      "services": [
+        { "day": "Saturday", "times": "5:30 pm" },
+        { "day": "Sunday", "times": "8:30, 10:00 and 11:30 am" }
+      ],
+      "kids": null,
+      "whichDoor": null
+    }
+  ],
+
+  "online": {
+    "label": "Online",
+    "times": "Saturday 5:30 pm, Sunday 8:30, 10:00 and 11:30 am",
+    "url": "https://www.pureheart.org/online/"
+  },
+
+  "espanol": {
+    "label": "En español",
+    "times": "Saturday 5:30 pm at the Glendale campus"
+  },
+
+  "hostNote": "We will meet you at the door and you can sit with us."
+}

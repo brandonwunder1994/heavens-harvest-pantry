@@ -146,6 +146,26 @@ test("the hero band always follows this week's card", () => {
   assert.equal(shop.verses.hero.text, "A new verse");
 });
 
+// The calendar chooses the week's verse; she overrides it only when she wants to.
+const calendar = { text: "The calendar's pick", reference: "Ecclesiastes 4 : 9" };
+
+test("with nothing saved, the week's verse is the one the calendar chose", () => {
+  const shop = mergeShop(new Map(), calendar);
+  assert.deepEqual(shop.verseOfTheWeek, calendar);
+  assert.deepEqual(shop.verses.hero, calendar);
+});
+
+test("her own words override the calendar", () => {
+  const hers = { text: "Her own choice", reference: "Psalm 23 : 1" };
+  const shop = mergeShop(new Map([["verseOfTheWeek", hers]]), calendar);
+  assert.deepEqual(shop.verseOfTheWeek, hers);
+});
+
+test("a blank override falls back to the calendar, not to the samples", () => {
+  const shop = mergeShop(new Map([["verseOfTheWeek", { text: "  ", reference: "x" }]]), calendar);
+  assert.deepEqual(shop.verseOfTheWeek, calendar);
+});
+
 test("names become web addresses the same way every time", () => {
   assert.equal(slugify("Dark Chocolate & Sea Salt"), "dark-chocolate-sea-salt");
   assert.equal(slugify("  Maple  Pecan  "), "maple-pecan");

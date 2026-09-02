@@ -197,15 +197,25 @@ export function mergePorch(value: unknown): Porch {
   return { lit, note: text(p.note, "", limits.porchNote), flippedAt };
 }
 
-/** Her saved rows laid over the defaults, one block at a time. */
-export function mergeShop(saved: Map<string, unknown>): Shop {
+/**
+ * Her saved rows laid over the defaults, one block at a time.
+ *
+ * `weekly` is the verse the calendar has chosen for this week. It is passed in
+ * rather than imported so this file stays free of runtime-only imports and
+ * `node --test` can run it directly. Her own choice, if she has made one,
+ * overrides it — she has the last word, but she never has to use it.
+ */
+export function mergeShop(saved: Map<string, unknown>, weekly?: Verse): Shop {
   const shop: Shop = {
     flavors: mergeFlavors(saved.get("flavors")),
     jarRules: mergeJarRules(saved.get("jarRules")),
     rewards: mergeRewards(saved.get("rewards")),
     blessingBag: mergeBlessingBag(saved.get("blessingBag")),
     delivery: mergeDelivery(saved.get("delivery")),
-    verseOfTheWeek: mergeVerse(saved.get("verseOfTheWeek"), defaultShop.verseOfTheWeek),
+    verseOfTheWeek: mergeVerse(
+      saved.get("verseOfTheWeek"),
+      weekly ?? defaultShop.verseOfTheWeek,
+    ),
     verses: mergeVerses(saved.get("verses")),
     porch: mergePorch(saved.get("porch")),
   };

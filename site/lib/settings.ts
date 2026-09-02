@@ -3,6 +3,7 @@ import { cache } from "react";
 import { defaultShop, type Shop, type Verse } from "@/lib/content";
 import { databaseReady, sql } from "@/lib/db";
 import { checkBlock, mergeShop, mergeVerse, type EditableKey } from "@/lib/shop-schema";
+import { weeklyVerse } from "@/lib/verses";
 
 export { editableKeys, isEditableKey, type EditableKey } from "@/lib/shop-schema";
 
@@ -26,14 +27,19 @@ type Row = { key: string; value: unknown };
 
 /** One query per request, however many components ask for it. */
 export const readShop = cache(async function readShop(): Promise<ShopRead> {
-  if (!databaseReady) return { shop: defaultShop, live: false };
+  // Whatever happens below, the week's verse is worked out from the date. There
+  // is no Monday morning task and nothing that can be forgotten.
+  const weekly = weeklyVerse();
+
+  if (!databaseReady) return { shop: { ...defaultShop, verseOfTheWeek: weekly }, live: false };
 
   try {
     const rows = (await sql()`select key, value from settings`) as Row[];
-    return { shop: mergeShop(new Map(rows.map((row) => [row.key, row.value]))), live: true };
+    const saved = new Map(rows.map((row) => [row.key, row.value] as const));
+    return { shop: mergeShop(saved, weekly), live: true };
   } catch (error) {
     console.error("[settings] could not read her settings, showing the built-in defaults", error);
-    return { shop: defaultShop, live: false };
+    return { shop: { ...defaultShop, verseOfTheWeek: weekly }, live: false };
   }
 });
 
@@ -43,6 +49,23 @@ export async function getShop(): Promise<Shop> {
 }
 
 export type SaveOutcome = { ok: true } | { ok: false; problem: string };
+
+/** Whether she has overridden the week's verse, and what the calendar picked. */
+export async function weeklyVerseState(): Promise<{ chosen: Verse; overridden: boolean }> {
+  const chosen = weeklyVerse();
+  if (!databaseReady) return { chosen, overridden: false };
+  try {
+    const rows = (await sql()`select 1 from settings where key = 'verseOfTheWeek'`) as unknown[];
+    return { chosen, overridden: rows.length > 0 };
+  } catch {
+    return { chosen, overridden: false };
+  }
+}
+
+/** Hands the week's verse back to the calendar. */
+export async function clearWeeklyVerse(): Promise<void> {
+  await sql()`delete from settings where key = 'verseOfTheWeek'`;
+}
 
 /**
  * Writes one block, but only after checking it. A refused save changes nothing
