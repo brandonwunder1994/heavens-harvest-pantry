@@ -1,0 +1,242 @@
+/* Real paper, the oven timer, and the one sound.
+   Every rule is scoped under its own class, so dropping any of these into the
+   site cannot restyle anything already there. */
+
+.paper,
+.timer,
+.sound {
+  --c-cream: var(--color-cream, #f4eee2);
+  --c-paper: var(--color-paper, #fbf8f1);
+  --c-ink: var(--color-ink, #3a2712);
+  --c-brown: var(--color-brown, #5b3d1e);
+  --c-brown-deep: var(--color-brown-deep, #3f2a14);
+  --c-sage: var(--color-sage, #6b7a4a);
+  --c-sage-deep: var(--color-sage-deep, #4f5a35);
+  --c-gold: var(--color-gold, #c9a06a);
+  --c-sand: var(--color-sand, #cdbfa5);
+  --c-moss: var(--color-moss, #eef0e2);
+  --c-muted: var(--color-muted, #6b5a42);
+  --c-faint: var(--color-faint, #8a7a62);
+  --c-hedge: var(--color-hedge, #a9b18a);
+
+  --c-display: var(--font-display, 'Cinzel', Georgia, serif);
+  --c-serif: var(--font-serif, 'Cormorant Garamond', Georgia, serif);
+  --c-ui: var(--font-ui, 'Karla', system-ui, sans-serif);
+}
+
+/* ==========================================================================
+   REAL PAPER
+
+   Cotton stock, pressed. Three things separate paper from a beige rectangle:
+   the fibre catches light unevenly, the edges are debossed where the press bit,
+   and the ink sinks slightly into the surface instead of sitting on it. All
+   three are drawn here — nothing is downloaded, so there is nothing to wait for
+   and nothing to license. */
+
+.paper {
+  position: relative;
+  isolation: isolate;
+  background: var(--c-paper);
+  padding: clamp(26px, 4vw, 40px);
+  /* The sheet's own thickness, and the shadow it casts on the counter. */
+  box-shadow:
+    0 0 0 1px rgba(91, 61, 30, 0.1),
+    0 1px 1px rgba(58, 39, 18, 0.06),
+    0 14px 28px -18px rgba(58, 39, 18, 0.45);
+}
+
+/* The fibre. Turbulence at two scales: a coarse cloud for where the pulp
+   settled thicker, and a fine grain for the tooth. */
+.paper::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  mix-blend-mode: multiply;
+  opacity: 0.9;
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3CfeComponentTransfer%3E%3CfeFuncA type='table' tableValues='0 0 0.05 0.13 0.22'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23f)'/%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='420' height='420'%3E%3Cfilter id='c'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.012' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3CfeComponentTransfer%3E%3CfeFuncA type='table' tableValues='0 0.06 0.12'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='420' height='420' filter='url(%23c)'/%3E%3C/svg%3E");
+  background-size: 220px 220px, 420px 420px;
+}
+
+/* The deboss: the press bit a few millimetres in, so the edge sits proud and
+   the field inside it sits low. A soft light rim on the top-left, a shadow on
+   the bottom-right, and the whole thing inset. */
+.paper::after {
+  content: '';
+  position: absolute;
+  inset: 9px;
+  pointer-events: none;
+  box-shadow:
+    inset 1px 1px 0 rgba(255, 255, 255, 0.85),
+    inset -1px -1px 0 rgba(91, 61, 30, 0.16),
+    inset 0 0 14px -6px rgba(91, 61, 30, 0.3);
+}
+
+/* The ink. Letterpress ink spreads a hair into the fibre, so the edge of a
+   letter is very slightly soft and very slightly darker where it pooled.
+   A tiny shadow of the type's own colour does exactly that. */
+.paper .inked {
+  text-shadow:
+    0 0 0.35px currentColor,
+    0 0.5px 0.6px rgba(58, 39, 18, 0.18);
+}
+
+.paper .verse {
+  font-family: var(--c-serif);
+  font-style: italic;
+  font-size: clamp(24px, 3.4vw, 34px);
+  line-height: 1.22;
+  color: var(--c-ink);
+  margin: 0;
+  text-wrap: balance;
+}
+.paper .ref {
+  font-family: var(--c-display);
+  font-weight: 600;
+  font-size: 10px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--c-sage);
+  margin: 16px 0 0;
+}
+.paper .from {
+  font-family: var(--c-ui);
+  font-size: 11px;
+  color: var(--c-muted);
+  margin: 22px 0 0;
+}
+
+/* On a screen that cannot do blend modes the fibre simply does not appear and
+   the card is a clean sheet, which is the old behaviour and still fine. */
+@supports not (mix-blend-mode: multiply) {
+  .paper::before { display: none; }
+}
+
+/* ==========================================================================
+   THE OVEN TIMER
+
+   Instead of the spinner that belongs to every app on earth. Two seconds of
+   waiting becomes two seconds of her brand.
+
+   It is one SVG and one rotation. The dial does not spin forever pretending to
+   know how long is left; it winds down at a real rate and then simply keeps
+   waiting, which is honest about the fact that nothing knows. */
+
+.timer {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  font-family: var(--c-ui);
+}
+
+.timer svg { display: block; overflow: visible; }
+
+.timer .face { fill: var(--c-paper); stroke: var(--c-brown); stroke-width: 3; }
+.timer .bezel { fill: none; stroke: var(--c-sand); stroke-width: 2; }
+.timer .tick { stroke: var(--c-muted); stroke-width: 2; stroke-linecap: round; }
+.timer .tick-major { stroke: var(--c-brown); stroke-width: 3; }
+.timer .knob { fill: var(--c-brown); }
+.timer .nub { fill: var(--c-gold); stroke: var(--c-brown); stroke-width: 2; }
+
+/* The wound-up portion of the dial, unwinding anticlockwise. */
+.timer .wound {
+  fill: none;
+  stroke: var(--c-gold);
+  stroke-width: 9;
+  stroke-linecap: butt;
+  transform-origin: 50% 50%;
+  transform: rotate(-90deg);
+  stroke-dasharray: var(--dash, 226);
+  animation: timer-unwind 2.4s linear infinite;
+}
+
+.timer .hand {
+  stroke: var(--c-brown-deep);
+  stroke-width: 3;
+  stroke-linecap: round;
+  transform-origin: 50px 50px;
+  animation: timer-hand 2.4s linear infinite;
+}
+
+@keyframes timer-unwind {
+  from { stroke-dashoffset: 0; }
+  to { stroke-dashoffset: var(--dash, 226); }
+}
+@keyframes timer-hand {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(-360deg); }
+}
+
+.timer .said {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--c-muted);
+}
+
+/* Somebody who has asked their device to keep still gets the dial at rest and
+   the words, which say the same thing without moving. */
+@media (prefers-reduced-motion: reduce) {
+  .timer .wound,
+  .timer .hand { animation: none; }
+  .timer .wound { stroke-dashoffset: calc(var(--dash, 226) * 0.35); }
+  .timer .hand { transform: rotate(-126deg); }
+}
+
+/* ==========================================================================
+   ONE SOUND, ONCE
+
+   A soft crunch when something goes into the basket. Nothing else on the site
+   makes a sound, and it is off until you switch it on. A site with one perfect
+   sound is charming; a site with six is a site you close. */
+
+.sound {
+  display: inline-flex;
+  align-items: center;
+  gap: 11px;
+  font-family: var(--c-ui);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--c-muted);
+}
+
+.sound button {
+  appearance: none;
+  border: 0;
+  cursor: pointer;
+  padding: 0;
+  width: 46px;
+  height: 26px;
+  border-radius: 13px;
+  background: var(--c-sand);
+  position: relative;
+  flex: 0 0 auto;
+  transition: background 180ms ease;
+}
+.sound button::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--c-paper);
+  box-shadow: 0 1px 2px rgba(58, 39, 18, 0.3);
+  transition: transform 180ms cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.sound button[aria-pressed='true'] { background: var(--c-sage); }
+.sound button[aria-pressed='true']::after { transform: translateX(20px); }
+.sound button:focus-visible { outline: 2px solid var(--c-sage); outline-offset: 3px; }
+
+.sound .label { user-select: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .sound button,
+  .sound button::after { transition: none; }
+}

@@ -3,6 +3,9 @@ import { Cinzel, Cormorant_Garamond, Karla } from "next/font/google";
 import { Sprite, Grain } from "@/components/Sprite";
 import { business } from "@/lib/content";
 import "./globals.css";
+// After globals, so the typographic layer wins where the two overlap.
+import "./type.css";
+import "./craft.css";
 import "./porch.css";
 import "@/components/hero/the-pour.css";
 // Twenty pixels of the settled scene, inlined, so the hero is the right warm

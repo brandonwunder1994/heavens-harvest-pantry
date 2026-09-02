@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useCart } from "@/components/cart/CartProvider";
+import { basketCrunch } from "@/components/craft/SoundSwitch";
 import { Stepper } from "@/components/cart/Stepper";
 import { MAX_QTY_PER_LINE, type Format } from "@/lib/cart";
 import { money, type Flavor } from "@/lib/content";
@@ -46,7 +47,12 @@ export function AddToCart({ flavor }: { flavor: Flavor }) {
       ) : (
         <button
           type="button"
-          onClick={() => add(flavor.slug, format)}
+          onClick={() => {
+            add(flavor.slug, format);
+            // Decides for itself whether to make a noise, so the basket does
+            // not have to know anything about sound.
+            basketCrunch();
+          }}
           className="stamp !min-h-11 !px-6 !text-[11px]"
         >
           Add {format === "jar" ? "a jar" : "a bag"}

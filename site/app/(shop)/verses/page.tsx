@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { PageHeader } from "@/components/PageHeader";
-import { CrossWheat } from "@/components/Sprite";
+import { Paper } from "@/components/craft/Paper";
 import { getShop, verseArchive } from "@/lib/settings";
 import { wall, weeksUntilRepeat } from "@/lib/verses";
 
@@ -27,14 +27,10 @@ export default async function VersesPage() {
       />
 
       <section className="mx-auto mt-12 w-full max-w-[560px] px-6 sm:px-10">
-        <div className="bg-paper p-2.5 shadow-[0_16px_30px_rgba(58,39,18,0.18)]">
-          <div className="dashed-frame flex flex-col items-center gap-4 px-8 py-12 text-center">
-            <CrossWheat size={52} />
-            <div className="caps text-[9px] text-sage">This week</div>
-            <p className="verse text-[30px] text-ink sm:text-[36px]">&ldquo;{verseOfTheWeek.text}&rdquo;</p>
-            <div className="ref text-sage">{verseOfTheWeek.reference}</div>
-          </div>
-        </div>
+        {/* Cotton stock, pressed: the fibre catches light unevenly, the press
+            bit a few millimetres in, and the ink sank a hair into the surface.
+            All of it drawn in code — no image is fetched for any of it. */}
+        <Paper verse={verseOfTheWeek} from={`Tucked in with every order, week of ${thisMonday()}`} />
       </section>
 
       {hers.length > 0 ? (
@@ -65,6 +61,12 @@ export default async function VersesPage() {
       </section>
     </>
   );
+}
+
+/** The Monday this week began on, in her words. */
+function thisMonday(): string {
+  const on = wall()[0]?.on ?? new Date();
+  return on.toLocaleDateString("en-US", { month: "long", day: "numeric", timeZone: "America/Phoenix" });
 }
 
 /**
