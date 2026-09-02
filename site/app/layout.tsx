@@ -10,6 +10,7 @@ import "@/components/hero/the-pour.css";
 import "@/components/hero/lqip.css";
 // Every rule in this one is scoped under .kj, so it cannot reach another page.
 import "./know-jesus.css";
+import "./return.css";
 import "./porch.css";
 import "@/components/hero/the-pour.css";
 // Twenty pixels of the settled scene, inlined, so the hero is the right warm
@@ -17,6 +18,7 @@ import "@/components/hero/the-pour.css";
 import "@/components/hero/lqip.css";
 // Every rule in this one is scoped under .kj, so it cannot reach another page.
 import "./know-jesus.css";
+import "./return.css";
 
 const cinzel = Cinzel({
   subsets: ["latin"],

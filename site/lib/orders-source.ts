@@ -38,6 +38,21 @@ export async function loadOrders(days = 60): Promise<OrdersResult> {
 }
 
 /**
+ * One person's own orders, newest first.
+ *
+ * Stripe is already the order book, so this is the same read with a filter
+ * rather than a second store to keep in step. An empty list is the honest
+ * answer for somebody who has never ordered, and for a shop with no payment
+ * account yet.
+ */
+export async function ordersFor(email: string, days = 730): Promise<Order[]> {
+  const result = await loadOrders(days);
+  if (result.status !== "ok") return [];
+  const clean = email.trim().toLowerCase();
+  return result.orders.filter((order) => order.email === clean);
+}
+
+/**
  * How many blessing bags neighbors have paid for this year. Returns null when
  * that cannot be answered — no payment account, or Stripe unreachable — so the
  * pages that show it can leave the line out rather than print a made-up number.

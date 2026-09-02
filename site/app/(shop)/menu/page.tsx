@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import Link from "next/link";
 import { CrossWheat, HeartSeal, Jar } from "@/components/Sprite";
 import { jarLabel } from "@/components/HeroShelf";
 import { AddToCart } from "@/components/cart/AddToCart";
 import { CartBar } from "@/components/cart/CartBar";
+import { ReorderOnArrival } from "@/components/cart/ReorderOnArrival";
 import { amount, money } from "@/lib/content";
 import { getShop } from "@/lib/settings";
 
@@ -19,6 +21,11 @@ export default async function MenuPage() {
 
   return (
     <>
+      {/* Somebody arriving from the one-tap reorder on their own page. */}
+      <Suspense fallback={null}>
+        <ReorderOnArrival />
+      </Suspense>
+
       <section className="flex flex-col items-center gap-3 px-6 pt-2 text-center sm:px-10 lg:px-18">
         <HeartSeal size={38} />
         <h1 className="display m-0 text-[46px] sm:text-[64px] lg:text-[76px]">This week&apos;s menu</h1>

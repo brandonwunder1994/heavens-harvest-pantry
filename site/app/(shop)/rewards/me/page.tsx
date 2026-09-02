@@ -6,6 +6,10 @@ import { SignOutButton } from "@/components/rewards/SignOutButton";
 import { money } from "@/lib/content";
 import { bagsEarned, pointsToNext, progress, standing } from "@/lib/rewards";
 import { accountFor } from "@/lib/rewards-source";
+import { ordersFor } from "@/lib/orders-source";
+import { JarShelf, VerseWall, WelcomeBack } from "@/components/rewards/ReturnPieces";
+import { reorderLink } from "@/lib/reorder";
+import { verseForWeek, weekNumber } from "@/lib/verses";
 import { signedInEmail } from "@/lib/rewards-auth";
 import { getShop } from "@/lib/settings";
 
@@ -16,7 +20,22 @@ export default async function MyRewardsPage() {
   const email = await signedInEmail();
   if (!email) redirect("/rewards");
 
-  const [shop, account] = await Promise.all([getShop(), accountFor(email)]);
+  const [shop, account, orders] = await Promise.all([
+    getShop(),
+    accountFor(email),
+    ordersFor(email),
+  ]);
+
+  // The wall reads the shop's own rotation rather than a copy, so it can never
+  // disagree with the verse page about which card a given week carried.
+  const verseFor = (on: Date) => {
+    const week = verseForWeek(weekNumber(on));
+    return { text: week.text, reference: week.ref };
+  };
+
+  // Anything she has renamed or sold out since simply is not in the link.
+  const reorderHref = (items: { qty: number; name: string; format: "jar" | "bag" }[]) =>
+    reorderLink(items, shop.flavors) ?? "/menu";
   const { rewardAt } = shop.rewards;
   const points = account?.points ?? 0;
   const owed = bagsEarned(points, shop.rewards);
@@ -85,7 +104,13 @@ export default async function MyRewardsPage() {
           </div>
         ) : null}
 
-        <div className="mt-6 flex flex-wrap items-center justify-between gap-4 pb-16">
+        <div className="mt-8 flex flex-col gap-8">
+          <WelcomeBack name={account?.name ?? ""} orders={orders} reorderHref={reorderHref} />
+          <JarShelf orders={orders} />
+          <VerseWall orders={orders} verseFor={verseFor} />
+        </div>
+
+        <div className="mt-8 flex flex-wrap items-center justify-between gap-4 pb-16">
           <span className="font-ui text-[13px] text-faint">{email}</span>
           <SignOutButton />
         </div>

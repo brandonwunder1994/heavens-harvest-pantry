@@ -1,6 +1,8 @@
 export type OrderItem = { qty: number; name: string; format: "jar" | "bag" };
 
 export type Order = {
+  /** Lower-cased, so a customer's own orders can be found. */
+  email: string;
   id: string;
   createdAt: number;
   amountCents: number;
@@ -25,6 +27,7 @@ export type Order = {
 export type SessionLike = {
   id: string;
   created: number;
+  customer_details?: { email?: string | null } | null;
   amount_total: number | null;
   payment_status?: string;
   payment_intent?: string | { id: string } | null;
@@ -56,6 +59,7 @@ export function toOrder(session: SessionLike): Order {
   return {
     id: session.id,
     createdAt: session.created,
+    email: (session.customer_details?.email ?? "").toLowerCase(),
     amountCents: session.amount_total ?? 0,
     name: meta.customer_name ?? "",
     phone: meta.phone ?? "",

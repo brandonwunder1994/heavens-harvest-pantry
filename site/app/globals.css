@@ -73,6 +73,10 @@ body {
     font-weight: 500;
     letter-spacing: -0.015em;
     line-height: 0.98;
+    /* Garamond's own figures are old-style: the zero sits on the line and reads
+       as a lowercase o, and the five drops below it. Headlines here are often a
+       number — "0 points", "A free bag at 100" — so they get lining figures. */
+    font-variant-numeric: lining-nums;
   }
 
   .verse {
