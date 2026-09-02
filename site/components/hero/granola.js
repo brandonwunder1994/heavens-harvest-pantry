@@ -50,6 +50,9 @@ export function createGranola({ data }) {
   return {
     mesh,
     clusters,
+    // Lent to the crumbs, so sixty-four more pieces on the counter cost one
+    // draw call and no new texture.
+    geometry,
     material,
 
     /** Move the whole pile sideways, when the frame changes shape. */

@@ -163,3 +163,45 @@ export function kitchenEnvironment() {
   return tex;
 }
 
+
+/**
+ * One puff of warm air, as a soft cloud with a hole in the middle of nowhere.
+ *
+ * A plain radial fade reads as a glowing ball. Steam is ragged, so the fade is
+ * broken up by a handful of overlapping blobs before it is blurred back into
+ * one shape. Drawn white; the scene tints it.
+ */
+export function steamTexture() {
+  const tex = canvasTexture(128, 128, (g, w, h) => {
+    g.clearRect(0, 0, w, h);
+    const rnd = mulberry32(4471);
+
+    g.filter = 'blur(9px)';
+    for (let i = 0; i < 9; i++) {
+      const a = rnd() * Math.PI * 2;
+      const d = rnd() * w * 0.17;
+      const x = w / 2 + Math.cos(a) * d;
+      const y = h / 2 + Math.sin(a) * d;
+      const r = w * (0.13 + rnd() * 0.14);
+      const blob = g.createRadialGradient(x, y, 0, x, y, r);
+      blob.addColorStop(0, 'rgba(255,255,255,0.85)');
+      blob.addColorStop(1, 'rgba(255,255,255,0)');
+      g.fillStyle = blob;
+      g.beginPath();
+      g.arc(x, y, r, 0, Math.PI * 2);
+      g.fill();
+    }
+    g.filter = 'none';
+
+    // Anything still alive at the very edge would show the square it was drawn
+    // in, so the whole thing is closed off inside a circle.
+    g.globalCompositeOperation = 'destination-in';
+    const mask = g.createRadialGradient(w / 2, h / 2, w * 0.18, w / 2, h / 2, w * 0.5);
+    mask.addColorStop(0, 'rgba(255,255,255,1)');
+    mask.addColorStop(1, 'rgba(255,255,255,0)');
+    g.fillStyle = mask;
+    g.fillRect(0, 0, w, h);
+    g.globalCompositeOperation = 'source-over';
+  });
+  return tex;
+}

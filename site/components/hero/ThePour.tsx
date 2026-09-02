@@ -10,6 +10,9 @@
 // The children are the words. They stay hidden until the granola has settled,
 // then rise into place.
 //
+// The light follows the visitor's own clock: low gold in the morning, overhead
+// at midday, amber before dinner, one warm bulb after dark.
+//
 // Everything, without the graphics: before three.js is asked for, still.js
 // decides whether this visitor should get it at all. Anyone on an old phone, a
 // metered connection, or with motion switched off is shown a photograph of the
@@ -20,8 +23,13 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { stillReason, showStill } from './still';
+import { hourFor, isHour } from '@/lib/hour';
 
-type Pour = { dispose(): void; seek(t: number): void };
+type Pour = {
+  dispose(): void;
+  seek(t: number): void;
+  stage: { setHour(name: string): boolean };
+};
 
 export default function ThePour({
   children,
@@ -34,6 +42,7 @@ export default function ThePour({
   const stillRef = useRef<HTMLDivElement>(null);
   const [shown, setShown] = useState(false);
   const [still, setStill] = useState<string | null>(null);
+  const [hour, setHour] = useState<string | null>(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -69,10 +78,19 @@ export default function ThePour({
         if (cancelled) return;
         pour = createPour({ canvas, data, onFinish: () => setShown(true) });
 
+        // Her kitchen, at the hour the visitor is standing in it. The clock is
+        // the visitor's own, which is why this cannot be decided on the server:
+        // the page is cached for everyone and the hour is not.
+        const search = new URLSearchParams(window.location.search);
+        const asked = search.get('hour');
+        const lit = isHour(asked) ? asked : hourFor(new Date());
+        pour.stage.setHour(lit);
+        setHour(lit);
+
         // A review hatch, the same way still.js has one: `?pour=1.4` freezes the
         // scene at that second so a screenshot is the same image every time.
         // The site never sets it, and without it nothing here runs.
-        const frozen = new URLSearchParams(window.location.search).get('pour');
+        const frozen = search.get('pour');
         if (frozen !== null) {
           const at = Number(frozen);
           if (Number.isFinite(at)) {
@@ -120,6 +138,7 @@ export default function ThePour({
       className={className ? `the-pour ${className}` : 'the-pour'}
       data-pour={shown ? 'settled' : 'pouring'}
       data-still={still ?? undefined}
+      data-hour={hour ?? undefined}
     >
       <canvas
         ref={canvasRef}

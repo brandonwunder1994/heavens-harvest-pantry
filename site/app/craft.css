@@ -354,3 +354,36 @@
 @media (prefers-reduced-motion: reduce) {
   .try-card { transition: none; }
 }
+
+/* --- the wheat hem ---------------------------------------------------------
+   Oat grass along the foot of every page. It is drawn, not fetched, and it is
+   scenery: it never takes a click and it is never read aloud. */
+
+.wheat-hem {
+  position: relative;
+  width: 100%;
+  margin-top: -30px;
+  pointer-events: none;
+  user-select: none;
+  line-height: 0;
+}
+
+.wheat-hem canvas {
+  display: block;
+  width: 100%;
+  height: 124px;
+}
+
+@media (max-width: 640px) {
+  .wheat-hem canvas { height: 84px; }
+}
+
+/* The grass grows out of the paper rather than sitting on a line, so the very
+   bottom of the strip is faded into the page colour. */
+.wheat-hem::after {
+  content: '';
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 14px;
+  background: linear-gradient(to top, var(--color-cream, #f4eee2), rgba(244, 238, 226, 0));
+}

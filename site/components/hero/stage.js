@@ -22,14 +22,21 @@ const LOOK_AT = new THREE.Vector3(0.12, 0.78, 0);
  * The hours of her day, as light.
  *
  * Six in the morning is low and gold and rakes in from the left, which is where
- * this scene started and is still the default. The rest are here because the
- * light following the visitor's own hour costs one angle and one colour.
+ * this scene started and is still the default — `dawn` reproduces the original
+ * lighting exactly, so the hour can always be wound back to it. The rest are
+ * here because the light following the visitor's own hour costs one angle, one
+ * colour and one exposure.
+ *
+ * Evening comes in from the right, because a sun that set on the same side it
+ * rose is the sort of thing you cannot unsee. Night is not the sun at all: it
+ * is the one bulb over her counter, close and warm and much dimmer, which is
+ * why its exposure drops rather than only its intensity.
  */
 export const HOURS = {
-  dawn: { colour: '#ffe6b8', at: [-4.2, 3.4, 2.6], power: 3.6, sky: '#fff2d8', ground: '#7a5228', bounce: 0.6 },
-  noon: { colour: '#fff6e6', at: [-1.2, 6.2, 2.2], power: 3.9, sky: '#fffaf0', ground: '#8a6236', bounce: 0.75 },
-  evening: { colour: '#ffc98a', at: [4.0, 2.4, 2.4], power: 3.2, sky: '#ffe2bd', ground: '#6a431f', bounce: 0.5 },
-  night: { colour: '#ffd9a0', at: [-1.6, 3.0, 1.4], power: 2.1, sky: '#e8cfa6', ground: '#3d2712', bounce: 0.34 },
+  dawn: { colour: '#ffe6b8', at: [-4.2, 3.4, 2.6], power: 3.6, sky: '#fff2d8', ground: '#7a5228', bounce: 0.6, fill: 0.55, env: 1, exposure: 1.06 },
+  noon: { colour: '#fff6e6', at: [-1.2, 6.2, 2.2], power: 3.9, sky: '#fffaf0', ground: '#8a6236', bounce: 0.75, fill: 0.7, env: 1.1, exposure: 1.04 },
+  evening: { colour: '#ffc07a', at: [4.4, 2.1, 2.2], power: 3.1, sky: '#ffe2bd', ground: '#6a431f', bounce: 0.46, fill: 0.34, env: 0.68, exposure: 0.96 },
+  night: { colour: '#ffd08a', at: [-1.1, 2.6, 1.1], power: 1.9, sky: '#c9ad84', ground: '#2a1a0c', bounce: 0.22, fill: 0.1, env: 0.26, exposure: 0.7 },
 };
 
 export function createStage({ canvas }) {
@@ -105,6 +112,7 @@ export function createStage({ canvas }) {
   scene.add(wall);
 
   // --- the shape of the frame ------------------------------------------------
+  let hour = 'dawn';
   let narrow = false;
   const listeners = [];
   let disposed = false;
@@ -128,6 +136,15 @@ export function createStage({ canvas }) {
 
   window.addEventListener('resize', measure);
 
+  // The hero is as tall as its own headline, and the headline is set in a font
+  // that arrives after the page does. On a first visit the scene is therefore
+  // built against the fallback and the canvas grows underneath it a moment
+  // later — leaving the render stretched, and only on the visit that matters
+  // most. Watching the canvas itself catches that, and every other reason the
+  // box might change that a window resize would miss.
+  const watch = typeof ResizeObserver === 'function' ? new ResizeObserver(() => measure()) : null;
+  watch?.observe(canvas);
+
   return {
     renderer,
     scene,
@@ -149,8 +166,12 @@ export function createStage({ canvas }) {
     },
 
     /**
-     * Move the sun. One angle and one colour, so the shop is lit by the hour
-     * the visitor happens to be looking at it.
+     * Move the sun. One angle, one colour and one exposure, so the shop is lit
+     * by the hour the visitor happens to be looking at it.
+     *
+     * Exposure and the environment are what make night read as night: dimming
+     * the lamps alone leaves the kitchen reflected in everything and the room
+     * stays stubbornly bright at two in the morning.
      */
     setHour(name) {
       const h = HOURS[name];
@@ -158,15 +179,22 @@ export function createStage({ canvas }) {
       key.color.set(h.colour);
       key.intensity = h.power;
       key.position.set(h.at[0], h.at[1], h.at[2]);
+      fill.intensity = h.fill;
       bounce.color.set(h.sky);
       bounce.groundColor.set(h.ground);
       bounce.intensity = h.bounce;
+      scene.environmentIntensity = h.env;
+      renderer.toneMappingExposure = h.exposure;
+      hour = name;
       return true;
     },
+
+    get hour() { return hour; },
 
     dispose() {
       disposed = true;
       window.removeEventListener('resize', measure);
+      watch?.disconnect();
       listeners.length = 0;
       counterGeo.dispose();
       counterMat.dispose();

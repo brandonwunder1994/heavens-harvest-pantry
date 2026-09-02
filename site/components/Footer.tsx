@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import InviteLine from "@/components/InviteLine";
 import { SoundSwitch } from "@/components/craft/SoundSwitch";
+import { WheatHem } from "@/components/craft/WheatHem";
 import { business, filled, type Shop } from "@/lib/content";
 
 const shopLinks = [
@@ -15,7 +16,8 @@ export function Footer({ shop }: { shop: Shop }) {
   const { delivery, verses } = shop;
 
   return (
-    <footer className="px-6 pb-14 sm:px-10 lg:px-18">
+    <>
+      <footer className="px-6 pb-14 sm:px-10 lg:px-18">
       <div className="border border-brown p-2.5">
         <div className="dashed-frame flex flex-col gap-8 px-6 py-9 sm:px-10 lg:px-12">
           <div className="grid gap-9 lg:grid-cols-[1.2fr_1fr_1fr_auto] lg:items-center lg:gap-10">
@@ -77,6 +79,12 @@ export function Footer({ shop }: { shop: Shop }) {
           </p>
         </div>
       </div>
-    </footer>
+      </footer>
+
+      {/* A horizon for the blessing to sit above. It is outside the footer's
+          own box so the grass runs the full width of the page and reaches the
+          very bottom of it. */}
+      <WheatHem />
+    </>
   );
 }
