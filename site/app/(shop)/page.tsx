@@ -79,7 +79,7 @@ export default async function HomePage() {
       </div>
 
       <div className="mt-10">
-        <ScriptureBand verse={verses.hero}>
+        <ScriptureBand verse={verses.hero} ink>
           That verse is why this kitchen exists. Good food, made slowly, handed to a neighbor is one of the plainest
           ways we know to show someone they are loved.
         </ScriptureBand>

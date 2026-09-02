@@ -1,4 +1,5 @@
 import { CrossWheat } from "@/components/Sprite";
+import { InkingMark } from "@/components/craft/InkingMark";
 import type { Verse } from "@/lib/content";
 
 /** Past this many letters a verse stops being a band and becomes a wall. */
@@ -34,11 +35,14 @@ export function ScriptureBand({
   verse,
   tone = "brown",
   size = "large",
+  ink = false,
   children,
 }: {
   verse: Verse;
   tone?: Tone;
   size?: "large" | "medium";
+  /** Draw the mark on rather than simply showing it. Once per visitor, ever. */
+  ink?: boolean;
   children?: React.ReactNode;
 }) {
   const t = tones[tone];
@@ -51,7 +55,11 @@ export function ScriptureBand({
 
   return (
     <section className={`flex flex-col items-center gap-5 px-6 py-14 text-center sm:px-10 lg:py-[76px] ${t.wrap}`}>
-      <CrossWheat size={size === "large" ? 72 : 56} color={t.mark} />
+      {ink ? (
+        <InkingMark size={size === "large" ? 72 : 56} color={t.mark} />
+      ) : (
+        <CrossWheat size={size === "large" ? 72 : 56} color={t.mark} />
+      )}
       {verse.text ? (
         <p className={`verse max-w-5xl ${type} ${t.text}`}>&ldquo;{verse.text}&rdquo;</p>
       ) : null}

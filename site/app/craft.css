@@ -240,3 +240,117 @@
   .sound button,
   .sound button::after { transition: none; }
 }
+
+/* ------------------------------------------------------- the mark inks itself
+
+   Once, on a first visit, and never again for that person. Before the browser
+   has said which it is, the strokes are held back — so the mark cannot be seen
+   drawn and then redrawn, which is the one thing that would make it look broken
+   rather than deliberate. `InkingMark` adds `draw` or `still` on mount, and a
+   <noscript> rule covers anyone who will never get either. */
+
+.inkmark path {
+  stroke-dasharray: var(--len, 46);
+  stroke-dashoffset: var(--len, 46);
+}
+
+.inkmark ellipse {
+  opacity: 0;
+}
+
+.inkmark.draw path {
+  animation: ink 1500ms cubic-bezier(0.5, 0.05, 0.2, 1) forwards;
+}
+
+.inkmark.draw ellipse {
+  animation: ink-grain 700ms ease 900ms forwards;
+}
+
+.inkmark.still path {
+  stroke-dashoffset: 0;
+}
+
+.inkmark.still ellipse {
+  opacity: 1;
+}
+
+@keyframes ink {
+  to { stroke-dashoffset: 0; }
+}
+
+@keyframes ink-grain {
+  to { opacity: 1; }
+}
+
+/* Somebody who has asked their device to keep still gets the finished mark. */
+@media (prefers-reduced-motion: reduce) {
+  .inkmark path { stroke-dashoffset: 0 !important; animation: none !important; }
+  .inkmark ellipse { opacity: 1 !important; animation: none !important; }
+}
+
+/* ----------------------------------------------------------- what should I try
+
+   The page warms toward the answer as the questions are answered, so by the
+   last one it already looks like the flavour it is about to name. The tint is
+   set as a custom property by the component and defaults to the page's own
+   cream, so before anybody has answered anything nothing has changed. */
+
+.try {
+  --try-tint: var(--color-cream, #f4eee2);
+}
+
+.try-card {
+  background: linear-gradient(180deg, var(--try-tint) 0%, var(--color-paper, #fbf8f1) 78%);
+  box-shadow:
+    inset 0 0 0 1px var(--color-sand, #cdbfa5),
+    inset 0 0 0 5px var(--color-paper, #fbf8f1),
+    inset 0 0 0 6px var(--color-sand, #cdbfa5);
+  transition: background 700ms ease;
+}
+
+.try-choice {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  width: 100%;
+  padding: 14px 18px;
+  text-align: left;
+  background: var(--color-paper, #fbf8f1);
+  border: 1px solid var(--color-sand, #cdbfa5);
+  color: var(--color-ink, #3a2712);
+  cursor: pointer;
+  transition: border-color 160ms ease, background 160ms ease;
+}
+
+.try-choice:hover {
+  border-color: var(--color-brown, #5b3d1e);
+  background: var(--color-cream, #f4eee2);
+}
+
+.try-choice-label {
+  font-family: var(--font-serif);
+  font-size: 23px;
+  line-height: 1.2;
+}
+
+.try-choice-hint {
+  font-family: var(--font-ui);
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--color-muted, #6b5a42);
+}
+
+.try-back {
+  font-family: var(--font-ui);
+  font-size: 13px;
+  color: var(--color-brown, #5b3d1e);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .try-card { transition: none; }
+}

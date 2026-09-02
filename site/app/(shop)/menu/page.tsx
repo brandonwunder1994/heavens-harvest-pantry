@@ -6,6 +6,7 @@ import { jarLabel } from "@/components/HeroShelf";
 import { AddToCart } from "@/components/cart/AddToCart";
 import { CartBar } from "@/components/cart/CartBar";
 import { ReorderOnArrival } from "@/components/cart/ReorderOnArrival";
+import { WhatShouldITry } from "@/components/suggest/WhatShouldITry";
 import { amount, money } from "@/lib/content";
 import { getShop } from "@/lib/settings";
 
@@ -99,6 +100,12 @@ export default async function MenuPage() {
           </article>
         ))}
       </section>
+
+      {/* Read the list and still cannot choose? Four questions. It reads her
+          real flavours, so it can never name one she has renamed or taken off. */}
+      <div className="mt-14">
+        <WhatShouldITry flavors={flavors} />
+      </div>
 
       <section className="mx-auto mt-10 grid w-full max-w-[900px] gap-4 px-6 pb-4 sm:px-10 lg:grid-cols-2">
         <div className="dashed-frame flex items-center gap-4 bg-paper px-5 py-4">
