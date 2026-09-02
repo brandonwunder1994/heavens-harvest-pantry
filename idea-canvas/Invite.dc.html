@@ -1,0 +1,213 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=Karla:wght@400;500;600;700&display=swap">
+  <style>
+    body { margin: 0; background: #f4eee2; color: #3a2712; font-family: 'Karla', system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+    a { color: #5b3d1e; text-decoration: none; } a:hover { color: #6b7a4a; }
+    p { margin: 0; }
+    .small { font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; font-weight: 700; color: #6b7a4a; }
+    .caps { font-family: 'Cinzel', Georgia, serif; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; }
+    .display { font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 500; line-height: 1; letter-spacing: -0.02em; text-wrap: balance; }
+    .verse { font-family: 'Cormorant Garamond', Georgia, serif; font-style: italic; line-height: 1.26; }
+    .body { font-size: 14px; line-height: 1.68; color: #4a3520; text-wrap: pretty; }
+    .lede { font-family: 'Cormorant Garamond', Georgia, serif; font-size: 24px; line-height: 1.42; color: #4a3520; text-wrap: pretty; }
+    .ph { background: #ecdfc6; color: #8a6524; font-weight: 700; font-size: 12px; letter-spacing: 0.08em; padding: 2px 7px; }
+  </style>
+</helmet>
+
+<div style="width: 1440px; height: 1560px; box-sizing: border-box; background: #f4eee2; position: relative; overflow: hidden;">
+
+  <svg width="0" height="0" style="position: absolute;">
+    <defs>
+      <filter id="grainI" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch"></feTurbulence><feColorMatrix type="saturate" values="0"></feColorMatrix><feComponentTransfer><feFuncA type="table" tableValues="0 0 0 0.04 0.07"></feFuncA></feComponentTransfer></filter>
+      <g id="cwI" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round">
+        <path d="M30 8 v44 M18 22 h24"></path>
+        <path d="M9 52 c 1 -16 5 -24 13 -33"></path>
+        <path d="M51 52 c -1 -16 -5 -24 -13 -33"></path>
+        <g fill="#c9a06a" stroke="none">
+          <ellipse cx="12" cy="41" rx="3" ry="4.6" transform="rotate(-22 12 41)"></ellipse><ellipse cx="15" cy="32" rx="3" ry="4.6" transform="rotate(-22 15 32)"></ellipse><ellipse cx="19" cy="24" rx="3" ry="4.6" transform="rotate(-22 19 24)"></ellipse>
+          <ellipse cx="48" cy="41" rx="3" ry="4.6" transform="rotate(22 48 41)"></ellipse><ellipse cx="45" cy="32" rx="3" ry="4.6" transform="rotate(22 45 32)"></ellipse><ellipse cx="41" cy="24" rx="3" ry="4.6" transform="rotate(22 41 24)"></ellipse>
+        </g>
+      </g>
+      <g id="doorI" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M6 46 V10 c0 -2 2 -4 4 -4 h20 c2 0 4 2 4 4 v36"></path>
+        <path d="M2 46 h40"></path>
+        <path d="M20 6 v40"></path>
+        <circle cx="26" cy="28" r="1.6" fill="currentColor"></circle>
+      </g>
+    </defs>
+  </svg>
+  <svg style="position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; mix-blend-mode: multiply;"><rect width="100%" height="100%" filter="url(#grainI)"></rect></svg>
+
+  <!-- ================= WHERE IT APPEARS ================= -->
+  <div style="padding: 34px 64px 0;">
+    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+      <div>
+        <div class="small">Idea &middot; The open door</div>
+        <h2 class="display" style="font-size: 42px; margin: 12px 0 0; color: #3a2712;">One quiet line, and a page behind it</h2>
+      </div>
+      <div style="width: 420px; text-align: right;">
+        <div class="body" style="font-size: 13px;">Nothing on the granola pages changes. The invitation lives in one place, under the closing blessing, phrased so it is easy to walk past and easy to follow.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- the placement, shown in the footer it lives in -->
+  <div style="margin: 24px 64px 0; background: #fbf5e8; box-shadow: inset 0 0 0 1px #ddcdae; padding: 34px 44px 30px;">
+    <div class="small" style="color: #a08a63;">Bottom of every page, under the blessing</div>
+    <div style="text-align: center; margin-top: 22px; color: #6b7a4a;">
+      <svg width="40" height="40" viewBox="0 0 60 60"><use href="#cwI"></use></svg>
+      <div class="verse" style="font-size: 26px; color: #5b3d1e; margin-top: 6px;">"The Lord bless you and keep you; the Lord make his face shine on you."</div>
+      <div class="caps" style="font-size: 9px; color: #a08a63; margin-top: 8px;">Numbers 6:24&ndash;25</div>
+    </div>
+    <div style="display: flex; align-items: center; gap: 18px; margin-top: 28px;">
+      <div style="flex: 1; border-bottom: 1px dotted #c2b393;"></div>
+      <div style="display: inline-flex; align-items: center; gap: 11px; color: #6b7a4a;">
+        <svg width="18" height="18" viewBox="0 0 44 52"><use href="#doorI"></use></svg>
+        <span class="caps" style="font-size: 12px; color: #5b3d1e;">Want to know Jesus?</span>
+        <svg width="15" height="10" viewBox="0 0 15 10" fill="none" stroke="#6b7a4a" stroke-width="1.6" stroke-linecap="round"><path d="M1 5 h12 M9 1 l4 4 -4 4"></path></svg>
+      </div>
+      <div style="flex: 1; border-bottom: 1px dotted #c2b393;"></div>
+    </div>
+    <div style="display: flex; justify-content: space-between; margin-top: 26px; font-size: 11px; color: #a08a63; letter-spacing: 0.16em; text-transform: uppercase; font-weight: 600;">
+      <span>Heaven's Harvest Pantry &middot; Vistancia &amp; Anthem, Arizona</span>
+      <span>Cottage food &middot; made in a home kitchen</span>
+    </div>
+  </div>
+
+  <!-- ================= THE PAGE ================= -->
+  <div style="margin: 40px 64px 0; background: #eef0e0; position: relative; box-shadow: inset 0 0 0 6px #eef0e0, inset 0 0 0 7px #a9b18a;">
+
+    <div style="padding: 46px 72px 0; display: flex; justify-content: space-between; align-items: center;">
+      <div class="caps" style="font-size: 13px; color: #3f4d25;">Heaven's Harvest Pantry</div>
+      <div class="small" style="color: #6b7a4a;">heavensharvestpantry.com/know-jesus</div>
+    </div>
+
+    <div style="padding: 44px 72px 0; display: grid; grid-template-columns: 620px 1fr; gap: 60px; align-items: start;">
+      <div>
+        <div class="small" style="color: #5d6c3a;">No pressure, no pitch</div>
+        <h1 class="display" style="font-size: 82px; margin: 18px 0 0; color: #2f3d1a;">Want to know Jesus?</h1>
+        <div class="lede" style="margin-top: 26px; color: #3f4d25;">
+          Then this page is the whole of it. We are a family that bakes granola in a
+          home kitchen, and we follow Jesus. If you have questions, or you are looking
+          for a church, or you just want somebody to sit next to on a Sunday, there is
+          a seat for you and we will meet you at the door.
+        </div>
+      </div>
+      <div style="display: flex; justify-content: flex-end; color: #6b7a4a; padding-top: 12px;">
+        <svg width="118" height="118" viewBox="0 0 60 60"><use href="#cwI"></use></svg>
+      </div>
+    </div>
+
+    <!-- what we actually mean -->
+    <div style="padding: 52px 72px 0;">
+      <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 40px;">
+        <div style="border-top: 2px solid #6b7a4a; padding-top: 18px;">
+          <div class="display" style="font-size: 30px; color: #2f3d1a;">It is not a performance</div>
+          <div class="body" style="margin-top: 12px; color: #445029;">You do not need to clean yourself up first, know the songs, or have the answers. Nobody in the room has them either. You are welcome exactly as you are today.</div>
+        </div>
+        <div style="border-top: 2px solid #6b7a4a; padding-top: 18px;">
+          <div class="display" style="font-size: 30px; color: #2f3d1a;">It is being there for people</div>
+          <div class="body" style="margin-top: 12px; color: #445029;">Most of what being a Christian looks like day to day is showing up: meals when somebody is sick, a hand when somebody moves, sitting with people in the hard weeks. That is the job.</div>
+        </div>
+        <div style="border-top: 2px solid #6b7a4a; padding-top: 18px;">
+          <div class="display" style="font-size: 30px; color: #2f3d1a;">And telling the good news</div>
+          <div class="body" style="margin-top: 12px; color: #445029;">The other half is saying out loud why we do it. Jesus came, died and rose so that anybody who wants to come home can. That is the news, and it is meant to be shared, not kept.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- the church -->
+    <div style="margin: 52px 72px 0; background: #fbf5e8; box-shadow: inset 0 0 0 1px #cfc19f; display: grid; grid-template-columns: 1fr 452px;">
+      <div style="padding: 40px 46px 42px;">
+        <div class="small" style="color: #a08a63;">Where our family goes</div>
+        <div class="display" style="font-size: 54px; margin-top: 14px; color: #3a2712;">Pure Heart Church</div>
+        <div class="body" style="margin-top: 16px; max-width: 520px; font-size: 15px;">
+          It is our home church here in the north valley, and it is where our family is
+          on a Sunday. We are not asking you to leave anywhere. If you already have a
+          church, good. If you do not, or you are between churches, or you have not set
+          foot in one in twenty years, come and sit with us once and see.
+        </div>
+        <div style="display: flex; gap: 14px; margin-top: 26px; flex-wrap: wrap;">
+          <div class="caps" style="font-size: 12px; background: #6b7a4a; color: #f4eee2; padding: 15px 24px;">Plan a visit</div>
+          <div class="caps" style="font-size: 12px; color: #5b3d1e; box-shadow: inset 0 0 0 1px #b9a98a; padding: 15px 22px;">Come with us this Sunday</div>
+        </div>
+        <div class="body" style="margin-top: 18px; font-size: 12.5px; color: #8a6c45;">
+          "Come with us" sends her a note. She replies, and you walk in beside somebody
+          you have already met. That is the whole feature.
+        </div>
+      </div>
+
+      <div style="background: #f4eee2; box-shadow: inset 1px 0 0 #cfc19f; padding: 38px 40px 40px;">
+        <div class="small">Service times</div>
+        <div style="display: flex; flex-direction: column; gap: 0; margin-top: 18px;">
+          <div style="display: flex; align-items: baseline; gap: 10px; padding: 13px 0; border-bottom: 1px dotted #c2b393;">
+            <div style="font-family: 'Cormorant Garamond', Georgia, serif; font-size: 24px; color: #3a2712;">Sunday</div>
+            <div style="flex: 1; border-bottom: 1px dotted #c2b393; transform: translateY(-5px);"></div>
+            <div class="ph">SERVICE TIMES</div>
+          </div>
+          <div style="display: flex; align-items: baseline; gap: 10px; padding: 13px 0; border-bottom: 1px dotted #c2b393;">
+            <div style="font-family: 'Cormorant Garamond', Georgia, serif; font-size: 24px; color: #3a2712;">Midweek</div>
+            <div style="flex: 1; border-bottom: 1px dotted #c2b393; transform: translateY(-5px);"></div>
+            <div class="ph">IF ANY</div>
+          </div>
+          <div style="display: flex; align-items: baseline; gap: 10px; padding: 13px 0; border-bottom: 1px dotted #c2b393;">
+            <div style="font-family: 'Cormorant Garamond', Georgia, serif; font-size: 24px; color: #3a2712;">Kids</div>
+            <div style="flex: 1; border-bottom: 1px dotted #c2b393; transform: translateY(-5px);"></div>
+            <div class="ph">AGES &amp; ROOMS</div>
+          </div>
+        </div>
+
+        <div class="small" style="margin-top: 28px;">Where</div>
+        <div class="body" style="margin-top: 10px;">
+          <span class="ph">CAMPUS &amp; STREET ADDRESS</span><br>
+          <span style="color: #8a6c45; font-size: 12.5px;">Map, parking, and which door to walk in.</span>
+        </div>
+
+        <div style="margin-top: 26px; padding-top: 18px; border-top: 1px solid #c2b393;">
+          <div class="body" style="font-size: 12.5px; color: #8a6c45;">Everything boxed in gold comes straight from her, and from the church's own page, so it is never out of date on our side.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- the quieter door -->
+    <div style="margin: 40px 72px 0; display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: start;">
+      <div style="background: #fbf5e8; box-shadow: inset 0 0 0 1px #cfc19f; padding: 32px 36px 34px;">
+        <div class="small" style="color: #a08a63;">If a building is too much right now</div>
+        <div class="display" style="font-size: 34px; margin-top: 12px; color: #3a2712;">Just write to us instead</div>
+        <div class="body" style="margin-top: 12px;">
+          A private line straight to her. Ask anything, or send something you would like
+          prayed over. Nobody else sees it, it never goes on the site, and it is never
+          added to a mailing list.
+        </div>
+        <div class="caps" style="display: inline-flex; font-size: 12px; color: #5b3d1e; box-shadow: inset 0 0 0 1px #b9a98a; padding: 14px 22px; margin-top: 20px;">Write privately</div>
+      </div>
+
+      <div style="padding-top: 6px;">
+        <div class="verse" style="font-size: 34px; color: #2f3d1a; line-height: 1.24;">
+          "Let us consider how we may spur one another on toward love and good deeds,
+          not giving up meeting together&hellip; but encouraging one another."
+        </div>
+        <div class="caps" style="font-size: 10px; color: #6b7a4a; margin-top: 16px;">Hebrews 10:24&ndash;25</div>
+        <div class="body" style="margin-top: 24px; max-width: 470px; color: #445029;">
+          That verse is why this page exists at all. Not to sell anybody anything &mdash;
+          there is nothing to buy on it &mdash; but because a granola company run out of a
+          kitchen is a small way of doing exactly what it describes.
+        </div>
+      </div>
+    </div>
+
+    <div style="height: 56px;"></div>
+  </div>
+
+</div>
+</x-dc>
+</body>
+</html>

@@ -1,0 +1,328 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=Karla:wght@400;500;600&display=swap">
+  <style>
+    body { margin: 0; background: #f4eee2; color: #3a2712; font-family: 'Cormorant Garamond', Georgia, serif; -webkit-font-smoothing: antialiased; }
+    a { color: #5b3d1e; text-decoration: none; } a:hover { color: #6b7a4a; }
+    p { margin: 0; }
+    .ui { font-family: 'Karla', system-ui, sans-serif; }
+    .caps { font-family: 'Cinzel', Georgia, serif; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; }
+    .small { font-family: 'Karla', system-ui, sans-serif; font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: #6b7a4a; font-weight: 600; }
+    .display { font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 500; letter-spacing: -0.015em; line-height: 0.98; }
+    .verse { font-family: 'Cormorant Garamond', Georgia, serif; font-style: italic; font-weight: 400; line-height: 1.18; }
+    .ref { font-family: 'Cinzel', Georgia, serif; font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase; font-size: 11px; }
+    .stamp { font-family: 'Cinzel', Georgia, serif; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; font-size: 12px; background: #5b3d1e; color: #f4eee2; padding: 0 26px; height: 52px; display: inline-flex; align-items: center; justify-content: center; box-shadow: inset 0 0 0 4px #5b3d1e, inset 0 0 0 5px #c9a06a; }
+    .stamp-light { background: transparent; color: #5b3d1e; box-shadow: inset 0 0 0 1px #5b3d1e, inset 0 0 0 4px transparent, inset 0 0 0 5px #5b3d1e; }
+    .leader { display: flex; align-items: baseline; gap: 10px; }
+    .leader .dots { flex: 1; border-bottom: 2px dotted #b9a98a; transform: translateY(-6px); }
+    .dashed { border: 1px dashed #a9b18a; }
+    .dropcap { font-family: 'Cinzel', Georgia, serif; font-weight: 700; font-size: 76px; line-height: 0.78; float: left; margin: 6px 14px 0 0; color: #6b7a4a; }
+  </style>
+</helmet>
+<div style="width: 1440px; box-sizing: border-box; background: #f4eee2; position: relative; overflow: hidden;">
+
+  <svg width="0" height="0" style="position: absolute;">
+    <defs>
+      <filter id="grain" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/><feComponentTransfer><feFuncA type="table" tableValues="0 0 0 0.05 0.08"/></feComponentTransfer></filter>
+      <pattern id="oats" width="14" height="14" patternUnits="userSpaceOnUse"><ellipse cx="4" cy="4" rx="3" ry="2" fill="#c9a06a"/><ellipse cx="11" cy="9" rx="2.6" ry="1.8" fill="#a97f4a" transform="rotate(30 11 9)"/><circle cx="8" cy="12" r="1.3" fill="#5b3d1e" opacity="0.7"/></pattern>
+      <path id="heart" d="M12 21s-7.5-4.6-9.6-9.1C.8 8.3 3 4.5 6.6 4.5c2 0 3.6 1.1 4.4 2.6.8-1.5 2.4-2.6 4.4-2.6 3.6 0 5.8 3.8 4.2 7.4C19.5 16.4 12 21 12 21z"/>
+      <g id="crosswheat" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round">
+        <path d="M30 8 v44 M18 22 h24"/>
+        <path d="M9 52 c 1 -16 5 -24 13 -33"/>
+        <path d="M51 52 c -1 -16 -5 -24 -13 -33"/>
+        <g fill="#c9a06a" stroke="none">
+          <ellipse cx="12" cy="41" rx="3" ry="4.6" transform="rotate(-22 12 41)"/><ellipse cx="15" cy="32" rx="3" ry="4.6" transform="rotate(-22 15 32)"/><ellipse cx="19" cy="24" rx="3" ry="4.6" transform="rotate(-22 19 24)"/>
+          <ellipse cx="48" cy="41" rx="3" ry="4.6" transform="rotate(22 48 41)"/><ellipse cx="45" cy="32" rx="3" ry="4.6" transform="rotate(22 45 32)"/><ellipse cx="41" cy="24" rx="3" ry="4.6" transform="rotate(22 41 24)"/>
+        </g>
+      </g>
+      <g id="branch" fill="none" stroke="#6b7a4a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M0 90 C 40 70, 90 40, 170 8"/>
+        <path d="M34 66 c -12 -14 -8 -30 6 -36 c 8 12 6 28 -6 36 z" fill="#e2e6cf"/>
+        <path d="M58 54 c 0 -18 12 -28 26 -26 c -2 16 -12 26 -26 26 z" fill="#e2e6cf"/>
+        <path d="M84 40 c -12 -14 -8 -30 6 -36 c 8 12 6 28 -6 36 z" fill="#e2e6cf"/>
+        <path d="M110 28 c 0 -18 12 -28 26 -26 c -2 16 -12 26 -26 26 z" fill="#e2e6cf"/>
+        <path d="M136 16 c -10 -12 -6 -26 6 -30 c 6 10 4 24 -6 30 z" fill="#e2e6cf"/>
+        <circle cx="48" cy="64" r="2.2" fill="#6b7a4a"/><circle cx="98" cy="42" r="2.2" fill="#6b7a4a"/><circle cx="124" cy="30" r="1.8" fill="#6b7a4a"/>
+      </g>
+      <clipPath id="bodyclip"><path d="M48 30v12c0 6-14 10-14 22v122c0 10 8 16 18 16h56c10 0 18-6 18-16V64c0-12-14-16-14-22V30z"/></clipPath>
+      <g id="jar">
+        <rect x="42" y="8" width="76" height="22" rx="4" fill="#f4eee2" stroke="#5b3d1e" stroke-width="1.6"/>
+        <path d="M48 14h64M48 24h64" stroke="#5b3d1e" stroke-width="1" opacity="0.5"/>
+        <path d="M48 30v12c0 6-14 10-14 22v122c0 10 8 16 18 16h56c10 0 18-6 18-16V64c0-12-14-16-14-22V30z" fill="#fbf8f1" stroke="#5b3d1e" stroke-width="1.6" stroke-linejoin="round"/>
+        <rect x="30" y="68" width="100" height="140" fill="url(#oats)" clip-path="url(#bodyclip)" opacity="0.9"/>
+        <path d="M42 80v100M118 80v100" stroke="#fff" stroke-width="3" opacity="0.45"/>
+        <rect x="50" y="104" width="60" height="62" rx="3" fill="#f4eee2" stroke="#5b3d1e" stroke-width="1.2"/>
+        <rect x="54" y="108" width="52" height="54" rx="2" fill="none" stroke="#a9b18a" stroke-width="0.8" stroke-dasharray="2 2"/>
+        <text x="80" y="120" text-anchor="middle" font-family="Cinzel, Georgia, serif" font-size="5.2" font-weight="700" letter-spacing="0.8" fill="#5b3d1e">HEAVEN'S HARVEST</text>
+        <use href="#heart" transform="translate(76 148) scale(0.34)" fill="#c9a06a"/>
+      </g>
+    </defs>
+  </svg>
+  <svg style="position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; mix-blend-mode: multiply;"><rect width="100%" height="100%" filter="url(#grain)"/></svg>
+
+  <div class="ui" style="display: flex; justify-content: space-between; align-items: center; padding: 14px 72px; border-bottom: 1px dashed #a9b18a; font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: #6b7a4a; font-weight: 600;">
+    <span>Vistancia · Tuesdays</span>
+    <span>Baked with prayer in a home kitchen · Peoria, Arizona</span>
+    <span>Anthem · Fridays</span>
+  </div>
+
+  <div style="display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; padding: 30px 72px 26px; gap: 40px;">
+    <div class="caps" style="display: flex; gap: 40px; font-size: 12px; color: #5b3d1e;"><a href="#">Menu</a><a href="#">Our Story</a><a href="#">Delivery</a></div>
+    <img src="logo.webp" alt="" style="width: 196px; height: 196px;">
+    <div class="caps" style="display: flex; gap: 40px; font-size: 12px; color: #5b3d1e; justify-content: flex-end; align-items: center;"><a href="#">Rewards</a><a href="#">Reviews</a><span class="stamp" style="height: 44px; padding: 0 20px; font-size: 11px;">Order</span></div>
+  </div>
+
+  <div style="position: relative; padding: 20px 72px 0; display: flex; flex-direction: column; align-items: center; gap: 22px;">
+    <h1 class="display" style="font-size: 132px; margin: 0; text-align: center; color: #3a2712; max-width: 1240px;">Granola baked <em style="font-weight: 500; color: #6b7a4a;">this week,</em><br>a few streets away.</h1>
+    <p style="font-size: 25px; line-height: 1.4; color: #5a4530; max-width: 660px; text-align: center;">Oats, honey, nuts and not much else. Made in small batches in a Vistancia kitchen, prayed over, and left on your porch in a bag or a mason jar you can bring back.</p>
+    <div style="display: flex; gap: 16px; align-items: center; margin-top: 6px;">
+      <span class="stamp">See this week's flavors</span>
+      <span class="stamp stamp-light">How delivery works</span>
+    </div>
+  </div>
+
+  <div style="position: relative; height: 500px; margin: 20px 72px 0;">
+    <svg viewBox="0 0 1296 500" style="position: absolute; inset: 0; width: 100%; height: 100%;" overflow="visible">
+      <use href="#branch" transform="translate(30 130) scale(1.6)"/>
+      <use href="#branch" transform="translate(1266 130) scale(-1.6 1.6)"/>
+      <g transform="translate(300 60) scale(1.22)"><use href="#jar"/><text x="80" y="134" text-anchor="middle" font-family="Cormorant Garamond, Georgia, serif" font-size="9.5" font-weight="600" fill="#3a2712">Honey Almond</text><text x="80" y="143" text-anchor="middle" font-family="Cormorant Garamond, Georgia, serif" font-size="9.5" font-weight="600" fill="#3a2712">Crunch</text></g>
+      <g transform="translate(548 30) scale(1.42)"><use href="#jar"/><text x="80" y="134" text-anchor="middle" font-family="Cormorant Garamond, Georgia, serif" font-size="9.5" font-weight="600" fill="#3a2712">Maple</text><text x="80" y="143" text-anchor="middle" font-family="Cormorant Garamond, Georgia, serif" font-size="9.5" font-weight="600" fill="#3a2712">Pecan</text></g>
+      <g transform="translate(820 60) scale(1.22)"><use href="#jar"/><text x="80" y="134" text-anchor="middle" font-family="Cormorant Garamond, Georgia, serif" font-size="9" font-weight="600" fill="#3a2712">Dark Chocolate</text><text x="80" y="143" text-anchor="middle" font-family="Cormorant Garamond, Georgia, serif" font-size="9.5" font-weight="600" fill="#3a2712">Sea Salt</text></g>
+      <path d="M180 320 H1116" stroke="#5b3d1e" stroke-width="2.5" stroke-linecap="round"/>
+      <path d="M200 328 H1096" stroke="#5b3d1e" stroke-width="1" opacity="0.4"/>
+      <ellipse cx="380" cy="330" rx="4" ry="2.5" fill="#c9a06a"/><ellipse cx="470" cy="333" rx="3" ry="2" fill="#a97f4a"/><ellipse cx="760" cy="331" rx="4" ry="2.5" fill="#c9a06a"/><ellipse cx="950" cy="334" rx="3" ry="2" fill="#a97f4a"/>
+      <g transform="translate(1176 410)">
+        <circle r="66" fill="none" stroke="#5b3d1e" stroke-width="1.2"/>
+        <circle r="60" fill="none" stroke="#5b3d1e" stroke-width="0.8" stroke-dasharray="3 3"/>
+        <defs><path id="ring" d="M -46 0 a 46 46 0 1 1 92 0 a 46 46 0 1 1 -92 0"/></defs>
+        <text font-family="Cinzel, Georgia, serif" font-size="9.5" font-weight="600" letter-spacing="2.4" fill="#5b3d1e"><textPath href="#ring">MADE IN A HOME KITCHEN · SMALL BATCH · VISTANCIA ARIZONA · </textPath></text>
+        <use href="#heart" transform="translate(-12 -13) scale(1)" fill="#c9a06a"/>
+      </g>
+      <g transform="translate(110 400)">
+        <text font-family="Cormorant Garamond, Georgia, serif" font-size="22" font-style="italic" fill="#5a4530">[Real photos of her jars go here once shot.]</text>
+      </g>
+    </svg>
+  </div>
+
+  <div style="margin-top: 40px; background: #5b3d1e; color: #f4eee2; padding: 76px 72px 68px; display: flex; flex-direction: column; align-items: center; gap: 22px; position: relative;">
+    <svg width="72" height="72" viewBox="0 0 60 60" style="color: #c9a06a;"><use href="#crosswheat"/></svg>
+    <p class="verse" style="font-size: 68px; text-align: center; max-width: 1000px; color: #f4eee2;">"Taste and see that the Lord is good."</p>
+    <div class="ref" style="color: #c9a06a;">Psalm 34 : 8</div>
+    <p style="font-size: 21px; line-height: 1.45; color: #eadfcc; max-width: 640px; text-align: center; margin-top: 6px;">That verse is why this kitchen exists. Good food, made slowly, handed to a neighbor is one of the plainest ways we know to show someone they are loved.</p>
+  </div>
+
+  <div style="padding: 84px 72px 0; display: grid; grid-template-columns: 1fr 360px; gap: 80px; align-items: start;">
+    <div style="display: flex; flex-direction: column; gap: 30px;">
+      <div style="display: flex; align-items: center; gap: 18px;">
+        <svg width="44" height="44" viewBox="0 0 44 44"><circle cx="22" cy="22" r="20" fill="none" stroke="#6b7a4a" stroke-width="1"/><circle cx="22" cy="22" r="16" fill="none" stroke="#6b7a4a" stroke-width="0.8" stroke-dasharray="2.5 2.5"/><use href="#heart" transform="translate(13 12.5) scale(0.75)" fill="#c9a06a"/></svg>
+        <h2 class="display" style="font-size: 58px; margin: 0;">This week's menu</h2>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 26px;">
+        <div style="display: flex; flex-direction: column; gap: 6px;">
+          <div class="leader"><span class="display" style="font-size: 32px;">Honey Almond Crunch</span><span class="dots"></span><span class="ui" style="font-size: 15px; color: #5b3d1e; font-weight: 600;">bag 9 · jar 12</span></div>
+          <p style="font-size: 19px; font-style: italic; color: #6b5a42; line-height: 1.35;">Local honey, toasted almonds, a little sea salt. The one people start with.</p>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 6px;">
+          <div class="leader"><span class="display" style="font-size: 32px;">Maple Pecan</span><span class="dots"></span><span class="ui" style="font-size: 15px; color: #5b3d1e; font-weight: 600;">bag 10 · jar 13</span></div>
+          <p style="font-size: 19px; font-style: italic; color: #6b5a42; line-height: 1.35;">Real maple, Arizona pecans, cinnamon. Big clusters.</p>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 6px;">
+          <div class="leader"><span class="display" style="font-size: 32px;">Dark Chocolate Sea Salt</span><span class="dots"></span><span class="ui" style="font-size: 15px; color: #5b3d1e; font-weight: 600;">bag 10 · jar 13</span></div>
+          <p style="font-size: 19px; font-style: italic; color: #6b5a42; line-height: 1.35;">Cacao nibs and dark chocolate chunks. Dessert that counts as breakfast.</p>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 6px; position: relative;">
+          <div class="leader" style="opacity: 0.55;"><span class="display" style="font-size: 32px;">Cinnamon Apple</span><span class="dots"></span><span class="ui" style="font-size: 15px; color: #5b3d1e; font-weight: 600;">bag 9 · jar 12</span></div>
+          <p style="font-size: 19px; font-style: italic; color: #6b5a42; line-height: 1.35; opacity: 0.55;">Dried apple, cinnamon, brown sugar. Tastes like October.</p>
+          <span class="caps" style="position: absolute; right: 190px; top: -6px; transform: rotate(-6deg); font-size: 11px; color: #5b3d1e; border: 2px solid #5b3d1e; padding: 6px 10px; background: #f4eee2;">Sold out · back Friday</span>
+        </div>
+      </div>
+      <div style="display: flex; gap: 16px; align-items: center; margin-top: 8px;">
+        <span class="stamp">Start an order</span>
+        <span class="ui" style="font-size: 14px; color: #6b5a42;">Ingredients and allergens on every flavor. Order by Sunday 9pm.</span>
+      </div>
+    </div>
+    <div class="dashed" style="padding: 28px 28px 24px; display: flex; flex-direction: column; gap: 16px; background: #fbf8f1;">
+      <div class="small">Jar or bag?</div>
+      <svg viewBox="0 0 160 220" width="120" style="align-self: center;"><use href="#jar"/><text x="80" y="134" text-anchor="middle" font-family="Cormorant Garamond, Georgia, serif" font-size="9.5" font-weight="600" fill="#3a2712">Any</text><text x="80" y="143" text-anchor="middle" font-family="Cormorant Garamond, Georgia, serif" font-size="9.5" font-weight="600" fill="#3a2712">flavor</text></svg>
+      <p style="font-size: 18px; line-height: 1.4; color: #4a3520;">The <strong style="font-weight: 600;">bag</strong> is a resealable pouch, about 12 ounces.</p>
+      <p style="font-size: 18px; line-height: 1.4; color: #4a3520;">The <strong style="font-weight: 600;">jar</strong> is a 16-ounce glass mason jar. It costs $3 more, stays fresh longer, and every time you hand one back you take $2 off.</p>
+      <p style="font-size: 15px; font-style: italic; color: #6b7a4a;">Most regulars end up on jars.</p>
+    </div>
+  </div>
+
+  <div style="margin: 84px 72px 0; border-top: 1px solid #cdbfa5; border-bottom: 1px solid #cdbfa5; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));">
+    <div style="padding: 36px 32px 36px 0; border-right: 1px solid #cdbfa5; display: flex; gap: 20px; align-items: flex-start;">
+      <span class="caps" style="font-size: 30px; color: #c9a06a; line-height: 1;">I</span>
+      <div style="display: flex; flex-direction: column; gap: 6px;"><div class="display" style="font-size: 27px;">Order by Sunday night.</div><p style="font-size: 17px; line-height: 1.4; color: #6b5a42;">Three taps from your phone. No account, no app.</p></div>
+    </div>
+    <div style="padding: 36px 32px; border-right: 1px solid #cdbfa5; display: flex; gap: 20px; align-items: flex-start;">
+      <span class="caps" style="font-size: 30px; color: #c9a06a; line-height: 1;">II</span>
+      <div style="display: flex; flex-direction: column; gap: 6px;"><div class="display" style="font-size: 27px;">She bakes Monday.</div><p style="font-size: 17px; line-height: 1.4; color: #6b5a42;">Only what was ordered, and she prays over each name on the list.</p></div>
+    </div>
+    <div style="padding: 36px 0 36px 32px; display: flex; gap: 20px; align-items: flex-start;">
+      <span class="caps" style="font-size: 30px; color: #c9a06a; line-height: 1;">III</span>
+      <div style="display: flex; flex-direction: column; gap: 6px;"><div class="display" style="font-size: 27px;">On your porch, with a text.</div><p style="font-size: 17px; line-height: 1.4; color: #6b5a42;">Tuesdays in Vistancia, Fridays in Anthem, or a drop-off spot.</p></div>
+    </div>
+  </div>
+
+  <div style="padding: 88px 72px 0; display: grid; grid-template-columns: 420px 1fr; gap: 72px; align-items: start;">
+    <div style="display: flex; flex-direction: column; gap: 14px;">
+      <div class="dashed" style="height: 500px; background: #fbf8f1; display: flex; align-items: center; justify-content: center; padding: 10px;">
+        <p style="font-size: 19px; font-style: italic; color: #8a7a62; text-align: center; padding: 0 30px;">[Photo of her in the kitchen, tray in hand.]</p>
+      </div>
+      <p class="small" style="color: #8a7a62;">[Her name] · founder, baker, jar washer</p>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 24px;">
+      <div class="small">Why this kitchen exists</div>
+      <h2 class="display" style="font-size: 56px; margin: 0;">A pantry is a small<br>way to love people.</h2>
+      <div style="font-size: 21px; line-height: 1.55; color: #4a3520; max-width: 620px;">
+        <span class="dropcap">I</span>
+        <p style="margin-bottom: 18px;">t started the way these things usually do. A neighbor was having a hard week, so she baked a batch and walked it over. Then someone else asked for a jar, and then their sister did, and the oven has not really cooled since. [Her own words go here once she writes them.]</p>
+        <p style="margin-bottom: 18px;">Everything that leaves this kitchen is made the same way it would be for family: honest ingredients, nothing hurried, and a prayer over the list before the first tray goes in.</p>
+      </div>
+      <div style="border-left: 3px solid #c9a06a; padding: 6px 0 6px 26px; display: flex; flex-direction: column; gap: 8px; max-width: 620px;">
+        <p class="verse" style="font-size: 32px; color: #3a2712;">"Whatever you do, work at it with all your heart, as working for the Lord."</p>
+        <div class="ref" style="color: #6b7a4a;">Colossians 3 : 23</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin: 88px 72px 0; background: #5b3d1e; color: #f4eee2; display: grid; grid-template-columns: 1.1fr 0.9fr; padding: 0; position: relative; overflow: hidden;">
+    <div style="padding: 72px 64px; display: flex; flex-direction: column; gap: 22px;">
+      <div class="small" style="color: #c9a06a;">The jar promise</div>
+      <h2 class="display" style="font-size: 76px; margin: 0; color: #f4eee2;">This jar is<br>worth $2.</h2>
+      <p style="font-size: 21px; line-height: 1.45; color: #eadfcc; max-width: 460px;">Every jar goes out with a tag. When you reorder, tell us how many you are handing back and each one comes off the total before you pay. She counts them at the door.</p>
+      <p style="font-size: 18px; font-style: italic; line-height: 1.45; color: #c9a06a; max-width: 460px;">We were given a good earth to look after. Washing a jar and using it again is a small piece of that.</p>
+      <span class="stamp" style="background: #c9a06a; color: #3a2712; box-shadow: inset 0 0 0 4px #c9a06a, inset 0 0 0 5px #5b3d1e; width: fit-content;">Start a jar order</span>
+    </div>
+    <div style="position: relative; min-height: 500px;">
+      <svg viewBox="0 0 560 500" style="position: absolute; inset: 0; width: 100%; height: 100%;">
+        <path d="M244 0 v60 c 0 40 -30 60 -20 100" stroke="#c9a06a" stroke-width="1.5" fill="none"/>
+        <g transform="translate(330 130) scale(1.4)"><use href="#jar"/><text x="80" y="134" text-anchor="middle" font-family="Cormorant Garamond, Georgia, serif" font-size="9.5" font-weight="600" fill="#3a2712">Maple</text><text x="80" y="143" text-anchor="middle" font-family="Cormorant Garamond, Georgia, serif" font-size="9.5" font-weight="600" fill="#3a2712">Pecan</text></g>
+      </svg>
+      <div style="position: absolute; left: 150px; top: 160px; width: 168px; height: 230px; background: #f4eee2; transform: rotate(-7deg); box-sizing: border-box; padding: 8px; box-shadow: 0 18px 30px rgba(0,0,0,0.25);">
+        <div class="dashed" style="height: 100%; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; justify-content: space-between; padding: 8px 8px 10px;">
+          <div style="width: 10px; height: 10px; border-radius: 50%; border: 1.4px solid #5b3d1e;"></div>
+          <div style="display: flex; flex-direction: column; align-items: center; gap: 2px;">
+            <div class="caps" style="font-size: 7px; color: #6b7a4a;">Heaven's Harvest</div>
+            <div class="display" style="font-size: 26px; text-align: center; color: #3a2712;">This jar is<br>worth $2.</div>
+            <div style="font-size: 11px; font-style: italic; color: #6b5a42;">Bring it back next order.</div>
+          </div>
+          <div style="background: #fff; padding: 3px;"><img src="qr.svg" alt="" style="width: 56px; height: 56px; display: block;"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="padding: 96px 72px 0; display: grid; grid-template-columns: 1fr 440px; gap: 72px; align-items: center;">
+    <div style="display: flex; flex-direction: column; gap: 20px;">
+      <div class="small">In every order</div>
+      <h2 class="display" style="font-size: 56px; margin: 0;">A verse card, written<br>by hand, tucked in the bag.</h2>
+      <p style="font-size: 21px; line-height: 1.5; color: #5a4530; max-width: 560px;">Each week she picks a verse and writes it out on a small card that goes into every order. Some people keep them on the windowsill above the sink. The whole set is posted here too, so you can look back at the one from the week you needed it.</p>
+      <a href="#" class="ui" style="font-size: 14px; font-weight: 600; color: #6b7a4a;">Read every verse she has sent out</a>
+    </div>
+    <div style="display: flex; justify-content: center; position: relative;">
+      <div style="position: absolute; width: 380px; height: 250px; background: #eef0e2; transform: rotate(5deg); border: 1px solid #d7dbc0;"></div>
+      <div style="position: relative; width: 380px; height: 250px; background: #fbf8f1; transform: rotate(-3deg); box-shadow: 0 16px 30px rgba(58,39,18,0.18); padding: 10px; box-sizing: border-box;">
+        <div class="dashed" style="height: 100%; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; padding: 20px;">
+          <svg width="44" height="44" viewBox="0 0 60 60" style="color: #6b7a4a;"><use href="#crosswheat"/></svg>
+          <p class="verse" style="font-size: 27px; text-align: center; color: #3a2712;">"Give us today our daily bread."</p>
+          <div class="ref" style="color: #6b7a4a;">Matthew 6 : 11</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin: 96px 72px 0; background: #6b7a4a; color: #f4eee2; padding: 68px 72px; display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center;">
+    <div style="display: flex; flex-direction: column; gap: 20px;">
+      <div class="small" style="color: #e5e9d3;">Blessing bags</div>
+      <h2 class="display" style="font-size: 60px; margin: 0; color: #f4eee2;">Add a bag for<br>someone else.</h2>
+      <p style="font-size: 21px; line-height: 1.45; color: #eef0e2; max-width: 480px;">For $9 at checkout you can put a bag on someone else's porch. A new mom, a family in a hard season, a widow down the street. She delivers it with your name on it, or without, whichever you say.</p>
+      <p class="ui" style="font-size: 14px; color: #e5e9d3; letter-spacing: 0.04em;">Names can be suggested by anyone. Church partners can request a batch at once.</p>
+      <span class="stamp" style="background: #f4eee2; color: #4f5a35; box-shadow: inset 0 0 0 4px #f4eee2, inset 0 0 0 5px #6b7a4a; width: fit-content;">Bless a neighbor</span>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 22px; align-items: center; text-align: center;">
+      <svg width="70" height="70" viewBox="0 0 60 60" style="color: #f4eee2;"><use href="#crosswheat"/></svg>
+      <p class="verse" style="font-size: 40px; color: #f4eee2; max-width: 460px;">"Let us not become weary in doing good, for at the proper time we will reap a harvest if we do not give up."</p>
+      <div class="ref" style="color: #e5e9d3;">Galatians 6 : 9</div>
+      <div class="ui" style="border-top: 1px solid rgba(244,238,226,0.35); padding-top: 18px; font-size: 15px; color: #eef0e2;">[Number] blessing bags delivered so far this year</div>
+    </div>
+  </div>
+
+  <div style="padding: 96px 72px 0; display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center;">
+    <div style="display: flex; flex-direction: column; gap: 18px;">
+      <svg width="44" height="44" viewBox="0 0 44 44"><circle cx="22" cy="22" r="20" fill="none" stroke="#6b7a4a" stroke-width="1"/><circle cx="22" cy="22" r="16" fill="none" stroke="#6b7a4a" stroke-width="0.8" stroke-dasharray="2.5 2.5"/><use href="#heart" transform="translate(13 12.5) scale(0.75)" fill="#c9a06a"/></svg>
+      <p class="display" style="font-size: 44px; font-style: italic; line-height: 1.12; color: #3a2712;">"[The first real review goes here, in the customer's own words, once the first deliveries land.]"</p>
+      <svg width="220" height="14" viewBox="0 0 220 14"><path d="M2 8 C 40 3, 80 12, 120 6 S 190 4, 218 9" fill="none" stroke="#6b7a4a" stroke-width="2.5" stroke-linecap="round"/></svg>
+      <div class="small">[Name] · Vistancia · verified order</div>
+      <a href="#" class="ui" style="font-size: 14px; font-weight: 600; color: #6b7a4a; margin-top: 8px;">Read the rest, or leave yours</a>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 22px; align-items: flex-start;">
+      <div class="small">Pantry Rewards</div>
+      <h2 class="display" style="font-size: 54px; margin: 0;">A point a dollar.<br>A free bag at 100.</h2>
+      <svg viewBox="0 0 420 210" width="420">
+        <rect x="1" y="1" width="418" height="208" fill="#fbf8f1" stroke="#5b3d1e" stroke-width="1.5"/>
+        <rect x="9" y="9" width="402" height="192" fill="none" stroke="#a9b18a" stroke-width="1" stroke-dasharray="3 3"/>
+        <text x="210" y="40" text-anchor="middle" font-family="Cinzel, Georgia, serif" font-size="11" font-weight="700" letter-spacing="3" fill="#5b3d1e">PANTRY REWARDS</text>
+        <text x="210" y="60" text-anchor="middle" font-family="Cormorant Garamond, Georgia, serif" font-size="14" font-style="italic" fill="#6b5a42">Sarah · one more for a free bag</text>
+        <g fill="#c9a06a">
+          <circle cx="60" cy="105" r="18" fill="none" stroke="#5b3d1e" stroke-width="1"/><use href="#heart" transform="translate(48 93)"/>
+          <circle cx="135" cy="105" r="18" fill="none" stroke="#5b3d1e" stroke-width="1"/><use href="#heart" transform="translate(123 93)"/>
+          <circle cx="210" cy="105" r="18" fill="none" stroke="#5b3d1e" stroke-width="1"/><use href="#heart" transform="translate(198 93)"/>
+          <circle cx="285" cy="105" r="18" fill="none" stroke="#5b3d1e" stroke-width="1"/><use href="#heart" transform="translate(273 93)"/>
+          <circle cx="360" cy="105" r="18" fill="none" stroke="#5b3d1e" stroke-width="1"/><use href="#heart" transform="translate(348 93)"/>
+          <circle cx="60" cy="160" r="18" fill="none" stroke="#5b3d1e" stroke-width="1"/><use href="#heart" transform="translate(48 148)"/>
+          <circle cx="135" cy="160" r="18" fill="none" stroke="#5b3d1e" stroke-width="1"/><use href="#heart" transform="translate(123 148)"/>
+          <circle cx="210" cy="160" r="18" fill="none" stroke="#5b3d1e" stroke-width="1"/><use href="#heart" transform="translate(198 148)"/>
+          <circle cx="285" cy="160" r="18" fill="none" stroke="#5b3d1e" stroke-width="1"/><use href="#heart" transform="translate(273 148)"/>
+          <circle cx="360" cy="160" r="18" fill="none" stroke="#5b3d1e" stroke-width="1.2" stroke-dasharray="3 3"/>
+        </g>
+      </svg>
+      <p style="font-size: 18px; line-height: 1.45; color: #5a4530; max-width: 420px;">Your phone number is your card. Returned jars earn extra, and so does sending a neighbor our way.</p>
+    </div>
+  </div>
+
+  <div style="margin-top: 96px; border-top: 1px dashed #a9b18a; border-bottom: 1px dashed #a9b18a; padding: 56px 72px; display: flex; flex-direction: column; align-items: center; gap: 16px;">
+    <svg width="56" height="56" viewBox="0 0 60 60" style="color: #6b7a4a;"><use href="#crosswheat"/></svg>
+    <p class="verse" style="font-size: 42px; text-align: center; max-width: 900px; color: #3a2712;">"They broke bread in their homes and ate together with glad and sincere hearts."</p>
+    <div class="ref" style="color: #6b7a4a;">Acts 2 : 46</div>
+  </div>
+
+  <div style="margin: 56px 72px 56px; border: 1px solid #5b3d1e; padding: 10px;">
+    <div class="dashed" style="padding: 40px 48px; display: flex; flex-direction: column; gap: 34px;">
+      <div style="display: grid; grid-template-columns: 1.2fr 1fr 1fr auto; gap: 40px; align-items: center;">
+        <div style="display: flex; align-items: center; gap: 20px;">
+          <img src="logo.webp" alt="" style="width: 110px; height: 110px;">
+          <div style="display: flex; flex-direction: column; gap: 6px;">
+            <div class="caps" style="font-size: 13px; color: #5b3d1e;">Heaven's Harvest Pantry</div>
+            <p style="font-size: 17px; font-style: italic; color: #6b7a4a;">Wholesome ingredients, shared with love.</p>
+          </div>
+        </div>
+        <div class="ui" style="display: flex; flex-direction: column; gap: 8px; font-size: 15px;">
+          <div class="small">Shop</div><a href="#">This week's menu</a><a href="#">Jar returns</a><a href="#">Blessing bags</a><a href="#">Rewards</a>
+        </div>
+        <div class="ui" style="display: flex; flex-direction: column; gap: 8px; font-size: 15px;">
+          <div class="small">Find us</div><span>Vistancia · Tuesdays</span><span>Anthem · Fridays</span><span>Drop-off · [spot name]</span><span>Text · [her number]</span>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 8px; align-items: center;">
+          <img src="qr.svg" alt="" style="width: 104px; height: 104px;">
+          <div class="small" style="color: #8a7a62;">Scan to reorder</div>
+        </div>
+      </div>
+      <div style="border-top: 1px solid #cdbfa5; padding-top: 26px; display: flex; flex-direction: column; align-items: center; gap: 8px;">
+        <p class="verse" style="font-size: 27px; text-align: center; color: #5b3d1e;">"The Lord bless you and keep you; the Lord make his face shine on you."</p>
+        <div class="ref" style="color: #8a7a62; font-size: 10px;">Numbers 6 : 24 – 25</div>
+      </div>
+    </div>
+  </div>
+</div>
+</x-dc>
+</body>
+</html>

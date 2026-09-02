@@ -1,0 +1,292 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The porch light — Heaven's Harvest Pantry</title>
+<!-- the standalone demo has no icon of its own; this stops the browser asking -->
+<link rel="icon" href="data:,">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Karla:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="./porch.css">
+<style>
+  /* The shop's own tokens, exactly as they are defined on the site, so this
+     page and the real header cannot drift apart. */
+  :root {
+    --color-cream: #f4eee2;
+    --color-paper: #fbf8f1;
+    --color-ink: #3a2712;
+    --color-brown: #5b3d1e;
+    --color-brown-deep: #3f2a14;
+    --color-sage: #6b7a4a;
+    --color-sage-deep: #4f5a35;
+    --color-gold: #c9a06a;
+    --color-sand: #cdbfa5;
+    --color-moss: #eef0e2;
+    --color-muted: #6b5a42;
+    --color-faint: #8a7a62;
+    --color-hedge: #a9b18a;
+    --color-rule: #e3d9c4;
+    --font-display: 'Cinzel', Georgia, serif;
+    --font-serif: 'Cormorant Garamond', Georgia, serif;
+    --font-ui: 'Karla', system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--color-cream);
+    color: var(--color-ink);
+    font-family: var(--font-serif);
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 1120px; margin: 0 auto; padding: 0 clamp(20px, 5vw, 56px); }
+
+  .lead { padding: clamp(40px, 6vw, 72px) 0 clamp(24px, 3vw, 34px); }
+  .eyebrow {
+    font-family: var(--font-ui); font-size: 11px; font-weight: 700;
+    letter-spacing: 0.22em; text-transform: uppercase; color: var(--color-sage); margin: 0;
+  }
+  h1 {
+    font-family: var(--font-serif); font-weight: 500;
+    font-size: clamp(42px, 7vw, 76px); line-height: 0.96; letter-spacing: -0.02em;
+    margin: 12px 0 0; text-wrap: balance;
+  }
+  .lede {
+    font-family: var(--font-serif); font-style: italic;
+    font-size: clamp(19px, 2.2vw, 24px); line-height: 1.34; color: var(--color-brown);
+    max-width: 34ch; margin: 18px 0 0;
+  }
+
+  h2 {
+    font-family: var(--font-serif); font-weight: 600;
+    font-size: clamp(26px, 3vw, 34px); line-height: 1.05; letter-spacing: -0.012em;
+    margin: 10px 0 0;
+  }
+  section { padding: clamp(30px, 4vw, 48px) 0; border-top: 1px solid var(--color-rule); }
+  .say {
+    font-family: var(--font-ui); font-size: 15px; line-height: 1.62;
+    color: var(--color-muted); max-width: 62ch; margin: 14px 0 0;
+  }
+
+  /* ---- the real header strip, reproduced exactly ---- */
+  .strip {
+    display: flex; flex-wrap: wrap; align-items: center;
+    justify-content: center; gap: 8px 24px; text-align: center;
+    border-top: 1px dashed var(--color-hedge);
+    border-bottom: 1px dashed var(--color-hedge);
+    padding: 12px 24px;
+    font-family: var(--font-ui); font-size: 10px; font-weight: 600;
+    letter-spacing: 0.22em; text-transform: uppercase; color: var(--color-sage);
+    background: var(--color-cream);
+  }
+  @media (min-width: 640px) { .strip { justify-content: space-between; padding: 12px 40px; } }
+  .strip .mid { display: none; }
+  @media (min-width: 768px) { .strip .mid { display: inline; } }
+
+  .case { margin-top: 26px; }
+  .case + .case { margin-top: 34px; }
+  .case > h3 {
+    font-family: var(--font-ui); font-size: 11px; font-weight: 700;
+    letter-spacing: 0.16em; text-transform: uppercase; color: var(--color-faint);
+    margin: 0 0 10px;
+  }
+  .case > p {
+    font-family: var(--font-ui); font-size: 13px; line-height: 1.55;
+    color: var(--color-faint); margin: 10px 0 0; max-width: 60ch;
+  }
+  .nothing {
+    font-family: var(--font-serif); font-style: italic; font-size: 17px;
+    color: var(--color-faint);
+    border: 1px dashed var(--color-sand); padding: 13px 18px;
+  }
+
+  .owner-frame {
+    margin-top: 24px; padding: clamp(22px, 3vw, 34px);
+    background: var(--color-cream); border: 1px solid var(--color-rule);
+    max-width: 720px;
+  }
+
+  footer {
+    border-top: 1px dashed var(--color-hedge);
+    padding: 28px 0 44px;
+    font-family: var(--font-ui); font-size: 11px; font-weight: 600;
+    letter-spacing: 0.18em; text-transform: uppercase; color: var(--color-faint);
+    display: flex; flex-wrap: wrap; gap: 12px; justify-content: space-between;
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="lead">
+    <p class="eyebrow">Phase one &middot; a wave-one idea</p>
+    <h1>The porch light</h1>
+    <p class="lede">One glance answers the only question a returning customer has. She flips it from her phone.</p>
+  </header>
+</div>
+
+<section>
+  <div class="wrap">
+    <p class="eyebrow">Where it lives</p>
+    <h2>In the strip at the top of every page</h2>
+    <p class="say">Beside the delivery days, where a regular&rsquo;s eye already goes. It is one lamp and a few words, and it is the first thing on the page.</p>
+  </div>
+
+  <div class="case">
+    <div class="wrap"><h3>Lit &mdash; she is baking</h3></div>
+    <div class="strip">
+      <span>Vistancia &middot; Tuesdays</span>
+      <span class="porch is-lit"><span class="porch-lamp"></span><span class="porch-note">Baking Thursday, orders open</span></span>
+      <span>Anthem &middot; Fridays</span>
+    </div>
+  </div>
+
+  <div class="case">
+    <div class="wrap"><h3>Out &mdash; she has sold out</h3></div>
+    <div class="strip">
+      <span>Vistancia &middot; Tuesdays</span>
+      <span class="porch is-out"><span class="porch-lamp"></span><span class="porch-note">Sold out &mdash; back Monday</span></span>
+      <span>Anthem &middot; Fridays</span>
+    </div>
+  </div>
+
+  <div class="case">
+    <div class="wrap"><h3>Never set, or not flipped in three weeks</h3></div>
+    <div class="strip">
+      <span>Vistancia &middot; Tuesdays</span>
+      <span class="mid">Baked with prayer in a home kitchen &middot; Peoria, Arizona</span>
+      <span>Anthem &middot; Fridays</span>
+    </div>
+    <div class="wrap">
+      <p>The lamp is simply not there, and the strip reads as it did before the feature existed. This is the case most versions of this idea get wrong.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <p class="eyebrow">The rule that matters</p>
+    <h2>A light she forgets goes out on its own</h2>
+    <p class="say">
+      She bakes weekly, so three weeks of silence means the switch is not being flipped &mdash; not that
+      nothing has changed. After twenty-one days the lamp disappears rather than telling people she is
+      baking on the strength of a switch nobody has touched since April. Her own page warns her five
+      days before it happens, so it is never a surprise.
+    </p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <p class="eyebrow">Her page</p>
+    <h2>Two buttons and her own words</h2>
+    <p class="say">
+      She sees the exact thing a customer will see before she saves it. Nothing here is a setting with
+      a name only a programmer would use.
+    </p>
+
+    <div class="owner-frame">
+      <div class="porch-switch" id="switch">
+        <div class="status" id="st">
+          <span class="porch" id="st-lamp"><span class="porch-lamp"></span></span>
+          <div>
+            <h4 id="st-head">The light is off</h4>
+            <p id="st-detail">Nobody is being told anything yet.</p>
+          </div>
+        </div>
+
+        <div class="choices" role="group" aria-label="The porch light">
+          <button type="button" class="choice" data-state="lit" id="btn-lit" aria-pressed="false">
+            <span class="dot"></span>I am baking this week
+          </button>
+          <button type="button" class="choice" data-state="out" id="btn-out" aria-pressed="false">
+            <span class="dot"></span>Sold out this week
+          </button>
+        </div>
+
+        <label class="field" id="field">
+          <span>Say it in your own words, if you like</span>
+          <input type="text" id="note" maxlength="64" placeholder="Baking Thursday, orders open">
+          <span class="recheck-note" role="status" id="recheck" hidden>Your words did not change. Do they still fit?</span>
+          <span class="hint" id="hint"></span>
+        </label>
+
+        <div class="preview">
+          <span>What everyone will see</span>
+          <div id="preview"><span class="empty">Nothing yet &mdash; choose one above.</span></div>
+        </div>
+      </div>
+    </div>
+    <p class="say" style="margin-top:16px">
+      In the shop this saves through the same button every other block on her page uses. Here it is
+      live but saves nowhere, so you can flip it as often as you like.
+    </p>
+  </div>
+</section>
+
+<div class="wrap">
+  <footer>
+    <span>Heaven&rsquo;s Harvest Pantry</span>
+    <span>Prototype &middot; drops into the site unchanged</span>
+  </footer>
+</div>
+
+<script type="module">
+  import { porchState, defaultNote, ownerStatus, flip, noPorch } from './porch.js';
+
+  const el = (id) => document.getElementById(id);
+  let porch = { ...noPorch };
+  let lit = null;
+  // Her words are hers. Flipping never rewrites them; it only asks her to look
+  // again, because "Baking Thursday" under an unlit lamp is exactly what this
+  // feature exists to prevent.
+  let recheck = false;
+
+  function render() {
+    const note = el('note').value;
+    const showing = lit === null ? null : (note.trim() || defaultNote(lit));
+
+    el('btn-lit').setAttribute('aria-pressed', String(lit === true));
+    el('btn-out').setAttribute('aria-pressed', String(lit === false));
+    el('note').placeholder = lit === false ? 'Sold out — back Thursday' : 'Baking Thursday, orders open';
+    el('hint').innerHTML =
+      `Leave it empty and it reads &ldquo;${defaultNote(lit ?? true)}&rdquo;. Keep it short: it sits on one line at the top of every page.`;
+
+    // Her page always describes what is actually saved, not what she is typing.
+    const status = ownerStatus(porch);
+    el('st').className = `status is-${status.tone}`;
+    el('st-lamp').className = `porch ${status.tone === 'lit' ? 'is-lit' : 'is-out'}`;
+    el('st-head').textContent = status.headline;
+    el('st-detail').textContent = status.detail;
+
+    el('field').className = recheck ? 'field recheck' : 'field';
+    el('recheck').hidden = !recheck;
+
+    el('preview').innerHTML = showing
+      ? `<span class="porch ${lit ? 'is-lit' : 'is-out'}"><span class="porch-lamp"></span><span class="porch-note"></span></span>`
+      : '<span class="empty">Nothing yet &mdash; choose one above.</span>';
+    if (showing) el('preview').querySelector('.porch-note').textContent = showing;
+  }
+
+  function choose(value) {
+    recheck = el('note').value.trim().length > 0 && value !== lit;
+    lit = value;
+    // Standing in for the save, so the status block behaves exactly as it will.
+    porch = flip(porch, value, el('note').value);
+    render();
+  }
+
+  el('btn-lit').addEventListener('click', () => choose(true));
+  el('btn-out').addEventListener('click', () => choose(false));
+  el('note').addEventListener('input', () => {
+    recheck = false;
+    if (lit !== null) porch = { ...porch, note: el('note').value.trim() };
+    render();
+  });
+
+  render();
+  window.__porch = { porchState, ownerStatus, flip, get porch() { return porch; } };
+</script>
+</body>
+</html>

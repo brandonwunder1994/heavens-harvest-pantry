@@ -1,0 +1,299 @@
+/* Reasons to come back: welcome back, the jar shelf, the verse wall.
+   Every rule is scoped under .rtn, so dropping these into the site cannot
+   restyle anything already there. Colours are the shop's own tokens, with the
+   same values as fallbacks so the standalone demo cannot drift. */
+
+.rtn {
+  --r-cream: var(--color-cream, #f4eee2);
+  --r-paper: var(--color-paper, #fbf8f1);
+  --r-ink: var(--color-ink, #3a2712);
+  --r-brown: var(--color-brown, #5b3d1e);
+  --r-sage: var(--color-sage, #6b7a4a);
+  --r-sage-deep: var(--color-sage-deep, #4f5a35);
+  --r-gold: var(--color-gold, #c9a06a);
+  --r-sand: var(--color-sand, #cdbfa5);
+  --r-moss: var(--color-moss, #eef0e2);
+  --r-muted: var(--color-muted, #6b5a42);
+  --r-faint: var(--color-faint, #8a7a62);
+  --r-hedge: var(--color-hedge, #a9b18a);
+  --r-rule: var(--color-rule, #e3d9c4);
+
+  --r-display: var(--font-display, 'Cinzel', Georgia, serif);
+  --r-serif: var(--font-serif, 'Cormorant Garamond', Georgia, serif);
+  --r-ui: var(--font-ui, 'Karla', system-ui, sans-serif);
+
+  font-family: var(--r-ui);
+  color: var(--r-ink);
+}
+
+.rtn .eyebrow {
+  font-family: var(--r-ui);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--r-sage);
+  margin: 0;
+}
+
+/* ------------------------------------------------------------ welcome back */
+
+.rtn.welcome { display: flex; flex-direction: column; gap: 18px; }
+
+.rtn.welcome h2 {
+  font-family: var(--r-serif);
+  font-weight: 500;
+  font-size: clamp(38px, 5vw, 56px);
+  line-height: 0.98;
+  letter-spacing: -0.018em;
+  margin: 6px 0 0;
+  color: var(--r-ink);
+  text-wrap: balance;
+}
+
+.rtn.welcome .again {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px 20px;
+  padding: 20px 22px;
+  background: var(--r-paper);
+  border-left: 3px solid var(--r-gold);
+}
+
+.rtn.welcome .again .what {
+  flex: 1 1 260px;
+  min-width: 0;
+}
+.rtn.welcome .again .what p {
+  margin: 0;
+  font-family: var(--r-serif);
+  font-size: 23px;
+  line-height: 1.25;
+  color: var(--r-ink);
+  text-wrap: pretty;
+}
+.rtn.welcome .again .what .when {
+  margin-top: 6px;
+  font-family: var(--r-ui);
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--r-muted);
+}
+
+.rtn .stamp-btn {
+  font-family: var(--r-display);
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  font-size: 12px;
+  min-height: 52px;
+  padding: 0 26px;
+  border: 0;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background: var(--r-brown);
+  color: var(--r-cream);
+  text-decoration: none;
+  box-shadow: inset 0 0 0 4px var(--r-brown), inset 0 0 0 5px var(--r-gold);
+  transition: background 160ms ease, box-shadow 160ms ease;
+  flex: 0 0 auto;
+}
+.rtn .stamp-btn:hover {
+  background: var(--color-brown-deep, #3f2a14);
+  box-shadow: inset 0 0 0 4px var(--color-brown-deep, #3f2a14), inset 0 0 0 5px var(--r-gold);
+}
+
+.rtn.welcome .first-time {
+  font-family: var(--r-serif);
+  font-size: 21px;
+  line-height: 1.36;
+  color: var(--r-muted);
+  margin: 0;
+  max-width: 46ch;
+}
+
+/* -------------------------------------------------------------- jar shelf */
+
+.rtn.shelf { display: flex; flex-direction: column; gap: 16px; }
+
+.rtn.shelf h3 {
+  font-family: var(--r-serif);
+  font-weight: 600;
+  font-size: clamp(26px, 3vw, 34px);
+  line-height: 1.04;
+  margin: 6px 0 0;
+  color: var(--r-ink);
+}
+
+/* The jars sit in a grid that wraps to whatever width it is given, and the
+   planks are painted underneath at exactly one per row. A fixed number of jars
+   per plank looks fine on a laptop and hangs off the side of a phone. */
+.rtn.shelf .boards {
+  --jar-w: 22px;
+  --jar-h: 30px;
+  --plank: 5px;
+  --row-gap: 28px;
+
+  display: grid;
+  grid-template-columns: repeat(auto-fit, var(--jar-w));
+  justify-content: start;
+  align-items: end;
+  column-gap: 9px;
+  row-gap: var(--row-gap);
+  padding: 5px 10px var(--plank);
+  background-image: repeating-linear-gradient(
+    to bottom,
+    transparent 0,
+    transparent var(--jar-h),
+    var(--r-brown) var(--jar-h),
+    var(--r-brown) calc(var(--jar-h) + var(--plank)),
+    rgba(58, 39, 18, 0.16) calc(var(--jar-h) + var(--plank)),
+    rgba(58, 39, 18, 0.16) calc(var(--jar-h) + var(--plank) + 2px),
+    transparent calc(var(--jar-h) + var(--plank) + 2px),
+    transparent calc(var(--jar-h) + var(--row-gap))
+  );
+  background-position: 0 5px;
+}
+
+.rtn.shelf .jar {
+  position: relative;
+  width: 22px;
+  height: 30px;
+  flex: 0 0 auto;
+  background: linear-gradient(100deg, rgba(255, 255, 255, 0.7) 0%, rgba(233, 222, 199, 0.9) 48%, rgba(205, 191, 165, 0.85) 100%);
+  border-radius: 2px 2px 4px 4px;
+  box-shadow: inset 0 0 0 1px rgba(91, 61, 30, 0.28);
+}
+/* The lid. */
+.rtn.shelf .jar::before {
+  content: '';
+  position: absolute;
+  top: -4px;
+  left: 3px;
+  right: 3px;
+  height: 5px;
+  background: var(--r-gold);
+  border-radius: 1px;
+  box-shadow: inset 0 0 0 1px rgba(91, 61, 30, 0.3);
+}
+/* The label. */
+.rtn.shelf .jar::after {
+  content: '';
+  position: absolute;
+  left: 2px;
+  right: 2px;
+  top: 11px;
+  height: 9px;
+  background: var(--r-paper);
+  box-shadow: inset 0 0 0 1px rgba(91, 61, 30, 0.14);
+}
+
+.rtn.shelf .empty-board {
+  display: flex;
+  align-items: center;
+  min-height: 40px;
+  padding: 0 14px 12px;
+  border-bottom: 5px solid var(--r-sand);
+  margin-bottom: 10px;
+  font-family: var(--r-serif);
+  font-style: italic;
+  font-size: 19px;
+  color: var(--r-muted);
+}
+
+.rtn.shelf .count {
+  font-family: var(--r-serif);
+  font-size: clamp(21px, 2.4vw, 26px);
+  line-height: 1.3;
+  color: var(--r-brown);
+  margin: 0;
+  text-wrap: pretty;
+}
+.rtn.shelf .more {
+  font-family: var(--r-ui);
+  font-size: 12.5px;
+  color: var(--r-muted);
+  margin: 0;
+}
+
+/* ------------------------------------------------------------- verse wall */
+
+.rtn.wall { display: flex; flex-direction: column; gap: 18px; }
+
+.rtn.wall h3 {
+  font-family: var(--r-serif);
+  font-weight: 600;
+  font-size: clamp(26px, 3vw, 34px);
+  line-height: 1.04;
+  margin: 6px 0 0;
+  color: var(--r-ink);
+}
+
+.rtn.wall .cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(212px, 1fr));
+  gap: 16px;
+}
+
+.rtn.wall .card {
+  background: var(--r-paper);
+  box-shadow: inset 0 0 0 1px var(--r-rule), 0 1px 2px rgba(58, 39, 18, 0.07);
+  padding: 16px 17px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-height: 132px;
+}
+.rtn.wall .card .t {
+  font-family: var(--r-serif);
+  font-style: italic;
+  font-size: 17px;
+  line-height: 1.28;
+  color: var(--r-ink);
+  margin: 0;
+  flex: 1 1 auto;
+  text-wrap: pretty;
+}
+.rtn.wall .card .b {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+}
+.rtn.wall .card .r {
+  font-family: var(--r-display);
+  font-weight: 600;
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--r-sage);
+}
+.rtn.wall .card .d {
+  font-family: var(--r-ui);
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--r-muted);
+  white-space: nowrap;
+}
+
+.rtn.wall .nothing {
+  font-family: var(--r-serif);
+  font-style: italic;
+  font-size: 20px;
+  line-height: 1.4;
+  color: var(--r-muted);
+  margin: 0;
+  padding: 22px 24px;
+  border: 1px dashed var(--r-hedge);
+  max-width: 52ch;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rtn * { transition: none !important; animation: none !important; }
+}

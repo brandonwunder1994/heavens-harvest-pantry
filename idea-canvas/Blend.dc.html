@@ -1,0 +1,210 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=Karla:wght@400;500;600;700&display=swap">
+  <style>
+    body { margin: 0; background: #f4eee2; color: #3a2712; font-family: 'Karla', system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+    a { color: #5b3d1e; text-decoration: none; } a:hover { color: #6b7a4a; }
+    p { margin: 0; }
+    .small { font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; font-weight: 700; color: #6b7a4a; }
+    .caps { font-family: 'Cinzel', Georgia, serif; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; }
+    .display { font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 500; line-height: 1; letter-spacing: -0.015em; }
+    .body { font-size: 13px; line-height: 1.55; color: #6b5333; }
+    .opt { min-height: 48px; display: flex; align-items: center; justify-content: center; text-align: center; font-size: 13px; font-weight: 600; color: #5b3d1e; background: #fbf7ee; box-shadow: inset 0 0 0 1px #d8c8a8; padding: 0 6px; }
+    .opt-on { background: #5b3d1e; color: #f4eee2; box-shadow: inset 0 0 0 1px #5b3d1e, inset 0 0 0 3px #5b3d1e, inset 0 0 0 4px #c9a06a; }
+    .opt-sage { background: #e2e6cf; color: #3f4d25; box-shadow: inset 0 0 0 1px #a9b18a; }
+    .track { height: 4px; background: #ddceb0; position: relative; }
+    .fill { position: absolute; left: 0; top: 0; bottom: 0; background: #6b7a4a; }
+    .knob { position: absolute; top: 50%; width: 26px; height: 26px; border-radius: 50%; background: #f4eee2; box-shadow: 0 1px 4px rgba(74,47,20,0.35), inset 0 0 0 2px #5b3d1e; transform: translate(-50%, -50%); }
+  </style>
+</helmet>
+
+<div style="width: 390px; box-sizing: border-box; background: #f4eee2; position: relative; overflow: hidden; padding-bottom: 26px;">
+
+  <svg width="0" height="0" style="position: absolute;">
+    <defs>
+      <pattern id="oatsB" width="13" height="13" patternUnits="userSpaceOnUse">
+        <rect width="13" height="13" fill="#d9ab6d"></rect>
+        <ellipse cx="4" cy="4" rx="2.8" ry="2" fill="#c08f52"></ellipse>
+        <ellipse cx="10" cy="8" rx="2.4" ry="1.7" fill="#a3743c" transform="rotate(30 10 8)"></ellipse>
+        <circle cx="7" cy="12" r="1.2" fill="#7a5227"></circle>
+        <circle cx="11" cy="2" r="1.6" fill="#4a2f18"></circle>
+        <circle cx="2" cy="9" r="1.3" fill="#8fa05e"></circle>
+      </pattern>
+      <linearGradient id="glassB" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0" stop-color="#ffffff" stop-opacity="0.6"></stop><stop offset="0.22" stop-color="#ffffff" stop-opacity="0.08"></stop>
+        <stop offset="0.8" stop-color="#ffffff" stop-opacity="0.08"></stop><stop offset="1" stop-color="#ffffff" stop-opacity="0.5"></stop>
+      </linearGradient>
+      <filter id="softB" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="7"></feGaussianBlur></filter>
+    </defs>
+  </svg>
+
+  <!-- top bar -->
+  <div style="display: flex; align-items: center; justify-content: space-between; padding: 18px 20px 0;">
+    <div style="width: 44px; height: 44px; display: flex; align-items: center;">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#5b3d1e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5 L8 12 L15 19"></path></svg>
+    </div>
+    <div class="caps" style="font-size: 11px; color: #5b3d1e;">Build your blend</div>
+    <div style="width: 44px;"></div>
+  </div>
+
+  <!-- LIVE JAR -->
+  <div style="position: relative; background: linear-gradient(180deg, #fbf5e8 0%, #efe3cc 100%); margin: 12px 0 0; padding: 10px 0 18px;">
+    <svg viewBox="0 0 390 268" width="390" height="268" style="display: block;">
+      <ellipse cx="195" cy="242" rx="86" ry="12" fill="#8a6a45" opacity="0.34" filter="url(#softB)"></ellipse>
+      <g transform="translate(133 24)">
+        <clipPath id="jarClipB"><path d="M14 58 v14 c0 8 -14 12 -14 27 v104 c0 13 10 19 22 19 h84 c12 0 22 -6 22 -19 V99 c0 -15 -14 -19 -14 -27 V58 Z"></path></clipPath>
+        <g clip-path="url(#jarClipB)">
+          <rect x="-6" y="128" width="150" height="110" fill="url(#oatsB)"></rect>
+          <path d="M-6 136 q34 -16 74 -3 q40 12 76 -9 v-12 H-6 Z" fill="url(#oatsB)"></path>
+        </g>
+        <path d="M14 58 v14 c0 8 -14 12 -14 27 v104 c0 13 10 19 22 19 h84 c12 0 22 -6 22 -19 V99 c0 -15 -14 -19 -14 -27 V58 Z" fill="url(#glassB)" stroke="#8a6a45" stroke-width="1.6"></path>
+        <rect x="10" y="88" width="6" height="120" rx="3" fill="#ffffff" opacity="0.6"></rect>
+        <rect x="10" y="34" width="128" height="26" rx="4" fill="#f4eee2" stroke="#8a6a45" stroke-width="1.6"></rect>
+        <path d="M16 42 h116 M16 52 h116" stroke="#c9b393" stroke-width="1.4"></path>
+        <rect x="30" y="130" width="88" height="66" rx="2" fill="#f4eee2" stroke="#8a6a45" stroke-width="1.2" opacity="0.97"></rect>
+        <text x="74" y="150" text-anchor="middle" font-family="Cinzel, Georgia, serif" font-size="7" font-weight="700" letter-spacing="0.9" fill="#5b3d1e">HEAVEN'S HARVEST</text>
+        <text x="74" y="171" text-anchor="middle" font-family="Cormorant Garamond, Georgia, serif" font-style="italic" font-size="15" fill="#3a2712">Sunday Blend</text>
+        <text x="74" y="186" text-anchor="middle" font-family="Karla, sans-serif" font-size="6" letter-spacing="1.4" fill="#6b7a4a">FOR THE KELLERS</text>
+      </g>
+      <!-- pieces dropping in as you choose -->
+      <g>
+        <g fill="#4a2f18"><circle cx="228" cy="42" r="4"></circle><circle cx="244" cy="72" r="3"></circle></g>
+        <g fill="#8fa05e"><ellipse cx="160" cy="34" rx="5" ry="3.4" transform="rotate(24 160 34)"></ellipse></g>
+        <g fill="#c99553"><ellipse cx="196" cy="58" rx="6" ry="4.2" transform="rotate(-30 196 58)"></ellipse></g>
+      </g>
+    </svg>
+    <div style="text-align: center; margin-top: 2px;">
+      <div class="small" style="color: #a08a63;">Drag to turn it &middot; changes as you choose</div>
+    </div>
+  </div>
+
+  <!-- STEP 1 -->
+  <div style="padding: 24px 20px 0;">
+    <div style="display: flex; align-items: baseline; justify-content: space-between;">
+      <div class="small">Step one &middot; the oats</div>
+      <div class="small" style="color: #a08a63;">Included</div>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin-top: 12px;">
+      <div class="opt opt-on">Rolled<br>oats</div>
+      <div class="opt">Thick<br>cut</div>
+      <div class="opt">Gluten<br>free</div>
+    </div>
+  </div>
+
+  <!-- STEP 2 -->
+  <div style="padding: 26px 20px 0;">
+    <div style="display: flex; align-items: baseline; justify-content: space-between;">
+      <div class="small">Step two &middot; pick three</div>
+      <div class="small" style="color: #8a6524;">2 of 3 chosen</div>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin-top: 12px;">
+      <div class="opt opt-on">Pecans</div>
+      <div class="opt">Almonds</div>
+      <div class="opt">Walnuts</div>
+      <div class="opt opt-on">Dark<br>chocolate</div>
+      <div class="opt">Coconut</div>
+      <div class="opt">Dried<br>cherry</div>
+      <div class="opt">Pumpkin<br>seed</div>
+      <div class="opt">Cinnamon</div>
+      <div class="opt opt-sage">+ $1<br>Sea salt</div>
+    </div>
+  </div>
+
+  <!-- STEP 3 -->
+  <div style="padding: 28px 20px 0;">
+    <div class="small">Step three &middot; how you like it</div>
+
+    <div style="margin-top: 18px;">
+      <div style="display: flex; justify-content: space-between; align-items: baseline;">
+        <div style="font-size: 13px; font-weight: 600; color: #5b3d1e;">Sweetness</div>
+        <div class="body" style="font-family: 'Cormorant Garamond', Georgia, serif; font-style: italic; font-size: 16px; color: #5b3d1e;">Just a touch of honey</div>
+      </div>
+      <div class="track" style="margin-top: 16px;">
+        <div class="fill" style="width: 38%;"></div>
+        <div class="knob" style="left: 38%;"></div>
+      </div>
+      <div style="display: flex; justify-content: space-between; margin-top: 12px;">
+        <div class="small" style="color: #a08a63;">Barely</div>
+        <div class="small" style="color: #a08a63;">Dessert</div>
+      </div>
+    </div>
+
+    <div style="margin-top: 22px;">
+      <div style="display: flex; justify-content: space-between; align-items: baseline;">
+        <div style="font-size: 13px; font-weight: 600; color: #5b3d1e;">Roast</div>
+        <div class="body" style="font-family: 'Cormorant Garamond', Georgia, serif; font-style: italic; font-size: 16px; color: #5b3d1e;">Deep and toasty</div>
+      </div>
+      <div class="track" style="margin-top: 16px;">
+        <div class="fill" style="width: 72%; background: #8a5a28;"></div>
+        <div class="knob" style="left: 72%;"></div>
+      </div>
+      <div style="display: flex; justify-content: space-between; margin-top: 12px;">
+        <div class="small" style="color: #a08a63;">Golden</div>
+        <div class="small" style="color: #a08a63;">Dark</div>
+      </div>
+      <div class="body" style="margin-top: 10px; font-size: 12px; color: #8a6c45;">The clusters darken in the jar as you drag.</div>
+    </div>
+  </div>
+
+  <!-- STEP 4 -->
+  <div style="padding: 28px 20px 0;">
+    <div class="small">Step four &middot; name it</div>
+    <div style="margin-top: 12px; background: #fbf7ee; box-shadow: inset 0 0 0 1px #d8c8a8; min-height: 52px; display: flex; align-items: center; padding: 0 16px;">
+      <div class="display" style="font-size: 24px; color: #3a2712;">Sunday Blend</div>
+      <div style="width: 2px; height: 24px; background: #c9a06a; margin-left: 3px;"></div>
+    </div>
+    <div class="body" style="margin-top: 9px; font-size: 12px;">This goes on the label, printed the morning she bakes it.</div>
+  </div>
+
+  <!-- SUMMARY -->
+  <div style="margin: 28px 20px 0; background: #e2e6cf; padding: 18px 18px 20px;">
+    <div class="small" style="color: #4d5a33;">Your jar</div>
+    <div style="display: flex; flex-direction: column; gap: 7px; margin-top: 12px;">
+      <div style="display: flex; align-items: baseline; gap: 8px;">
+        <div style="font-size: 13px; color: #3f4d25;">Rolled oats, pecans, dark chocolate</div>
+        <div style="flex: 1; border-bottom: 1px dotted #8b9a68; transform: translateY(-4px);"></div>
+        <div style="font-size: 13px; font-weight: 700; color: #3f4d25; font-variant-numeric: tabular-nums;">$14.00</div>
+      </div>
+      <div style="display: flex; align-items: baseline; gap: 8px;">
+        <div style="font-size: 13px; color: #3f4d25;">Sea salt finish</div>
+        <div style="flex: 1; border-bottom: 1px dotted #8b9a68; transform: translateY(-4px);"></div>
+        <div style="font-size: 13px; font-weight: 700; color: #3f4d25; font-variant-numeric: tabular-nums;">$1.00</div>
+      </div>
+      <div style="display: flex; align-items: baseline; gap: 8px;">
+        <div style="font-size: 13px; color: #3f4d25;">Name on the label</div>
+        <div style="flex: 1; border-bottom: 1px dotted #8b9a68; transform: translateY(-4px);"></div>
+        <div style="font-size: 13px; font-weight: 700; color: #3f4d25; font-variant-numeric: tabular-nums;">$2.00</div>
+      </div>
+      <div style="display: flex; align-items: baseline; gap: 8px; margin-top: 6px; padding-top: 10px; border-top: 1px solid #a9b18a;">
+        <div class="caps" style="font-size: 12px; color: #2f3d1a;">Total</div>
+        <div style="flex: 1;"></div>
+        <div class="display" style="font-size: 30px; color: #2f3d1a; font-variant-numeric: tabular-nums;">$17.00</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="padding: 18px 20px 0;">
+    <div style="min-height: 56px; background: #5b3d1e; color: #f4eee2; display: flex; align-items: center; justify-content: center; box-shadow: inset 0 0 0 4px #5b3d1e, inset 0 0 0 5px #c9a06a;">
+      <div class="caps" style="font-size: 13px;">Add my jar to the basket</div>
+    </div>
+    <div style="text-align: center; margin-top: 14px;">
+      <div class="body" style="font-size: 12px;">Made fresh Thursday. Bring the jar back for $2 off next time.</div>
+    </div>
+  </div>
+
+  <div style="margin: 22px 20px 0; border-top: 1px dotted #c2b393; padding-top: 14px; text-align: center;">
+    <div style="font-family: 'Cormorant Garamond', Georgia, serif; font-style: italic; font-size: 17px; color: #5b3d1e;">"Give us this day our daily bread."</div>
+    <div class="caps" style="font-size: 9px; color: #a08a63; margin-top: 6px;">Matthew 6:11</div>
+  </div>
+
+</div>
+</x-dc>
+</body>
+</html>

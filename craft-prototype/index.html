@@ -1,0 +1,347 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The craft pass — Heaven's Harvest Pantry</title>
+<!-- the standalone demo has no icon of its own; this stops the browser asking -->
+<link rel="icon" href="data:,">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Karla:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="./fallback-fonts.css">
+<link rel="stylesheet" href="./type.css">
+<link rel="stylesheet" href="./craft.css">
+<style>
+  /* The shop's own tokens, exactly as defined on the site. type.css redefines
+     the three font stacks on top of these, which is the point of it. */
+  :root {
+    --color-cream: #f4eee2;
+    --color-paper: #fbf8f1;
+    --color-ink: #3a2712;
+    --color-brown: #5b3d1e;
+    --color-brown-deep: #3f2a14;
+    --color-sage: #6b7a4a;
+    --color-sage-deep: #4f5a35;
+    --color-gold: #c9a06a;
+    --color-sand: #cdbfa5;
+    --color-moss: #eef0e2;
+    --color-muted: #6b5a42;
+    --color-faint: #8a7a62;
+    --color-hedge: #a9b18a;
+    --color-rule: #e3d9c4;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--color-cream); color: var(--color-ink);
+    font-family: var(--font-serif); -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 1000px; margin: 0 auto; padding: 0 clamp(20px, 5vw, 56px); }
+
+  .lead { padding: clamp(40px, 6vw, 72px) 0 clamp(22px, 3vw, 32px); }
+  .eyebrow-top {
+    font-family: var(--font-ui); font-size: 11px; font-weight: 700;
+    letter-spacing: 0.22em; text-transform: uppercase; color: var(--color-sage); margin: 0;
+  }
+  h1 { font-family: var(--font-serif); font-weight: 500; font-size: clamp(42px, 7vw, 76px); line-height: 0.96; margin: 12px 0 0; }
+  .lede {
+    font-family: var(--font-serif); font-style: italic;
+    font-size: clamp(19px, 2.2vw, 24px); line-height: 1.34; color: var(--color-brown);
+    max-width: 38ch; margin: 18px 0 0;
+  }
+  section.demo { padding: clamp(30px, 4vw, 48px) 0; border-top: 1px solid var(--color-rule); }
+  h2.title { font-family: var(--font-serif); font-weight: 600; font-size: clamp(26px, 3vw, 34px); line-height: 1.05; margin: 10px 0 0; }
+  .say {
+    font-family: var(--font-ui); font-size: 15px; line-height: 1.62;
+    color: var(--color-muted); max-width: 62ch; margin: 14px 0 0;
+  }
+  .sub {
+    font-family: var(--font-ui); font-size: 11px; font-weight: 700;
+    letter-spacing: 0.16em; text-transform: uppercase; color: var(--color-faint);
+    margin: 26px 0 10px;
+  }
+
+  .two { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: clamp(24px, 4vw, 44px); margin-top: 22px; align-items: start; }
+
+  /* A menu row, to show figures lining up. */
+  .menu { margin-top: 8px; }
+  .leader { display: flex; align-items: baseline; gap: 10px; padding: 9px 0; border-bottom: 1px dotted var(--color-sand); }
+  .leader .name { font-family: var(--font-serif); font-size: 22px; color: var(--color-ink); }
+  .leader .dots { flex: 1; border-bottom: 2px dotted var(--color-sand); transform: translateY(-6px); min-width: 16px; }
+  .leader .price { font-family: var(--font-serif); font-size: 22px; color: var(--color-ink); }
+  /* Deliberately NOT lining, so the two columns can be compared side by side. */
+  .menu.raw .price { font-variant-numeric: normal; font-feature-settings: normal; }
+
+  .headline-demo p.raw,
+  .headline-demo p.display {
+    font-family: var(--font-serif); font-weight: 500; font-size: 34px; line-height: 1.06;
+    margin: 0 0 10px; max-width: 19ch; color: var(--color-ink);
+    box-shadow: inset 0 0 0 1px rgba(107, 122, 74, 0.35);
+    padding: 10px 12px;
+  }
+  /* The "before" column is held at the browser default on purpose. */
+  .headline-demo p.raw { text-wrap: wrap; }
+
+  .timers { display: flex; flex-wrap: wrap; gap: 44px; align-items: flex-start; margin-top: 22px; }
+
+  .sound-row { display: flex; flex-wrap: wrap; gap: 22px; align-items: center; margin-top: 22px; }
+  .basket-btn {
+    font-family: var(--font-display); font-weight: 600; letter-spacing: 0.16em;
+    text-transform: uppercase; font-size: 12px; min-height: 52px; padding: 0 26px;
+    background: var(--color-brown); color: var(--color-cream); border: 0; cursor: pointer;
+    box-shadow: inset 0 0 0 4px var(--color-brown), inset 0 0 0 5px var(--color-gold);
+  }
+  .heard {
+    font-family: var(--font-ui); font-size: 12.5px; color: var(--color-muted);
+  }
+
+  .sr-only {
+    position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+    overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+  }
+
+  /* The "before" card: the same sheet with the paper switched off, so the two
+     can honestly be compared. */
+  .no-press::before, .no-press::after { display: none !important; }
+  .no-press { box-shadow: 0 0 0 1px rgba(91,61,30,0.1) !important; }
+
+  .metrics {
+    margin-top: 20px; font-family: var(--font-ui); font-size: 13px;
+    border-collapse: collapse; width: 100%; max-width: 640px;
+  }
+  .metrics th, .metrics td { text-align: left; padding: 9px 12px 9px 0; border-bottom: 1px dotted var(--color-sand); }
+  .metrics th { font-size: 10px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--color-faint); }
+  .metrics td.num { text-align: right; padding-right: 0; }
+
+  footer {
+    border-top: 1px dashed var(--color-hedge); padding: 28px 0 44px;
+    font-family: var(--font-ui); font-size: 11px; font-weight: 600;
+    letter-spacing: 0.18em; text-transform: uppercase; color: var(--color-faint);
+    display: flex; flex-wrap: wrap; gap: 12px; justify-content: space-between;
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="lead">
+    <p class="eyebrow-top">Phase three &middot; four ideas</p>
+    <h1>The things people feel and cannot name</h1>
+    <p class="lede">Nothing new appears. Everything already there stops looking cheap in the four ways people notice without knowing why.</p>
+  </header>
+</div>
+
+<!-- ------------------------------------------------ type that behaves -->
+<section class="demo">
+  <div class="wrap">
+    <p class="eyebrow-top">One of four</p>
+    <h2 class="title">Type that behaves</h2>
+    <p class="say">
+      Invisible when it is right and cheap-looking the moment it is wrong. Four things: nothing
+      jumps as the fonts load, headlines break where a person would break them, prices line up in a
+      column, and quotation marks hang outside the text edge so the margin stays straight.
+    </p>
+
+    <p class="sub">Headlines break to even lines</p>
+    <div class="two headline-demo">
+      <div>
+        <p class="raw">Baked Thursday mornings in a home kitchen</p>
+        <p class="say">Before &mdash; two full lines, then one word on its own.</p>
+      </div>
+      <div>
+        <p class="display">Baked Thursday mornings in a home kitchen</p>
+        <p class="say">After &mdash; the same three lines, evened to within a word of each other.</p>
+      </div>
+    </div>
+
+    <p class="sub">Prices line up in a column</p>
+    <div class="two">
+      <div>
+        <div class="menu raw">
+          <div class="leader"><span class="name">Honey Almond Crunch</span><i class="dots"></i><span class="price">$13.00</span></div>
+          <div class="leader"><span class="name">Maple Pecan</span><i class="dots"></i><span class="price">$16.00</span></div>
+          <div class="leader"><span class="name">Dark Chocolate Sea Salt</span><i class="dots"></i><span class="price">$17.00</span></div>
+          <div class="leader"><span class="name">Cinnamon Apple</span><i class="dots"></i><span class="price">$11.50</span></div>
+        </div>
+        <p class="say" style="margin-top:10px">Before &mdash; the garamond&rsquo;s old-style figures, every digit a different height.</p>
+      </div>
+      <div>
+        <div class="menu">
+          <div class="leader"><span class="name">Honey Almond Crunch</span><i class="dots"></i><span class="price">$13.00</span></div>
+          <div class="leader"><span class="name">Maple Pecan</span><i class="dots"></i><span class="price">$16.00</span></div>
+          <div class="leader"><span class="name">Dark Chocolate Sea Salt</span><i class="dots"></i><span class="price">$17.00</span></div>
+          <div class="leader"><span class="name">Cinnamon Apple</span><i class="dots"></i><span class="price">$11.50</span></div>
+        </div>
+        <p class="say" style="margin-top:10px">After &mdash; lining and tabular, so the column is a column.</p>
+      </div>
+    </div>
+
+    <p class="sub">Nothing jumps as the fonts load</p>
+    <p class="say">
+      The page paints in a font already on the machine, then the real one lands and every line
+      reflows. Below is what each stand-in was, and what it was squeezed to so the swap barely
+      moves anything. Chrome measured both; nothing here is a guess.
+    </p>
+    <table class="metrics" id="metrics"><tbody></tbody></table>
+  </div>
+</section>
+
+<!-- ------------------------------------------------ real paper -->
+<section class="demo">
+  <div class="wrap">
+    <p class="eyebrow-top">Two of four</p>
+    <h2 class="title">Real paper</h2>
+    <p class="say">
+      Cotton stock, pressed. The fibre catches light unevenly, the press bit a few millimetres in
+      so the edge sits proud, and the ink sank a hair into the surface instead of sitting on it.
+      All three are drawn in code, so there is nothing to wait for and nothing to license.
+    </p>
+
+    <div class="two" style="max-width:760px">
+      <article class="paper" id="card">
+        <p class="verse inked">&ldquo;Taste and see that the Lord is good.&rdquo;</p>
+        <p class="ref inked">Psalm 34 : 8</p>
+        <p class="from">Tucked in with your order, week of 31 August</p>
+      </article>
+      <div>
+        <p class="say" style="margin-top:0">
+          Beside it, the same card with the paper switched off &mdash; which is what it is today.
+        </p>
+        <article class="paper no-press" id="card-plain" style="margin-top:14px">
+          <p class="verse">&ldquo;Taste and see that the Lord is good.&rdquo;</p>
+          <p class="ref">Psalm 34 : 8</p>
+          <p class="from">Tucked in with your order, week of 31 August</p>
+        </article>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ------------------------------------------------ the oven timer -->
+<section class="demo">
+  <div class="wrap">
+    <p class="eyebrow-top">Three of four</p>
+    <h2 class="title">The oven timer</h2>
+    <p class="say">
+      Instead of the spinner that belongs to every app on earth. Two seconds of waiting becomes two
+      seconds of her brand. It winds down at a real rate rather than spinning forever pretending to
+      know how long is left.
+    </p>
+    <div class="timers" id="timers"></div>
+  </div>
+</section>
+
+<!-- ------------------------------------------------ one sound, once -->
+<section class="demo">
+  <div class="wrap">
+    <p class="eyebrow-top">Four of four</p>
+    <h2 class="title">One sound, once</h2>
+    <p class="say">
+      A soft crunch when something goes into the basket. Nothing else on the site makes a sound,
+      and it is off until you switch it on. The crunch is built in the browser &mdash; a short
+      burst of filtered noise &mdash; so there is no audio file to fetch and no licence to buy.
+    </p>
+    <div class="sound-row">
+      <div class="sound">
+        <button type="button" role="switch" aria-checked="false" aria-pressed="false" id="sw">
+          <span class="sr-only">Sound off</span>
+        </button>
+        <span class="label" aria-hidden="true" id="sw-label">Sound &middot; off</span>
+      </div>
+      <button class="basket-btn" type="button" id="basket">Add to basket</button>
+      <span class="heard" id="heard">Switch it on, then press the button.</span>
+    </div>
+  </div>
+</section>
+
+<div class="wrap">
+  <footer>
+    <span>Heaven&rsquo;s Harvest Pantry</span>
+    <span>Prototype &middot; drops into the site unchanged</span>
+  </footer>
+</div>
+
+<script type="module">
+  import { crunch, preview, setSound, soundIsOn, DEBOUNCE_MS } from './crunch.js';
+
+  const el = (id) => document.getElementById(id);
+
+  // ---- the oven timer, drawn the way the component draws it ----
+  const DIAL_R = 36, DIAL_C = 2 * Math.PI * DIAL_R;
+  function timerSvg(size) {
+    const ticks = Array.from({ length: 12 }, (_, i) => {
+      const a = (i * 30 - 90) * (Math.PI / 180);
+      const major = i % 3 === 0;
+      const inner = major ? 36 : 39;
+      return `<line class="tick${major ? ' tick-major' : ''}" x1="${(50 + Math.cos(a) * inner).toFixed(2)}" y1="${(50 + Math.sin(a) * inner).toFixed(2)}" x2="${(50 + Math.cos(a) * 44).toFixed(2)}" y2="${(50 + Math.sin(a) * 44).toFixed(2)}"/>`;
+    }).join('');
+    return `<svg width="${size}" height="${size}" viewBox="0 0 100 100" aria-hidden="true" style="--dash:${DIAL_C.toFixed(1)}">
+      <rect class="knob" x="45" y="1" width="10" height="7" rx="2"/>
+      <circle class="face" cx="50" cy="50" r="43"/>
+      <circle class="bezel" cx="50" cy="50" r="47"/>
+      ${ticks}
+      <circle class="wound" cx="50" cy="50" r="${DIAL_R}"/>
+      <line class="hand" x1="50" y1="50" x2="50" y2="19"/>
+      <circle class="nub" cx="50" cy="50" r="4"/>
+    </svg>`;
+  }
+
+  el('timers').innerHTML = [
+    ['A moment', 96],
+    ['Warming up', 64],
+    ['Just a second', 44],
+  ]
+    .map(([said, size]) => `<div class="timer" role="status"><div>${timerSvg(size)}</div><span class="said">${said}</span></div>`)
+    .join('');
+
+  // ---- the sound switch ----
+  function paint() {
+    const on = soundIsOn();
+    el('sw').setAttribute('aria-checked', String(on));
+    el('sw').setAttribute('aria-pressed', String(on));
+    el('sw').querySelector('.sr-only').textContent = on ? 'Sound on' : 'Sound off';
+    el('sw-label').innerHTML = `Sound &middot; ${on ? 'on' : 'off'}`;
+    el('heard').textContent = on
+      ? 'On. Press the button — and press it twice quickly to hear it refuse to double up.'
+      : 'Switch it on, then press the button.';
+  }
+
+  el('sw').addEventListener('click', () => {
+    const next = !soundIsOn();
+    setSound(next);
+    if (next) preview();
+    paint();
+  });
+
+  let plays = 0;
+  el('basket').addEventListener('click', () => {
+    if (crunch()) plays++;
+    el('heard').textContent = soundIsOn()
+      ? `Crunched ${plays} time${plays === 1 ? '' : 's'}. Two presses inside ${DEBOUNCE_MS} milliseconds count as one.`
+      : 'Silent, because the switch is off. That is the whole rule.';
+  });
+
+  paint();
+
+  // ---- what the fallbacks were measured at ----
+  fetch('./fallback-fonts.css')
+    .then((r) => (r.ok ? r.text() : ''))
+    .then((css) => {
+      const rows = [...css.matchAll(/font-family: '([^']+)';[\s\S]*?size-adjust: ([\d.]+)%/g)];
+      const was = [...css.matchAll(/was ([\d.]+)% of/g)];
+      if (!rows.length) return;
+      el('metrics').innerHTML =
+        '<thead><tr><th>Face</th><th class="num">Fallback was</th><th class="num">Squeezed to</th></tr></thead><tbody>' +
+        rows
+          .map(
+            (m, i) =>
+              `<tr><td>${m[1].replace(' Fallback', '')}</td><td class="num">${was[i] ? was[i][1] : '—'}%</td><td class="num">${m[2]}%</td></tr>`,
+          )
+          .join('') +
+        '</tbody>';
+    });
+
+  window.__craft = { crunch, preview, setSound, soundIsOn, DEBOUNCE_MS, get plays() { return plays; } };
+</script>
+</body>
+</html>

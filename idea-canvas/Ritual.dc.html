@@ -1,0 +1,215 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=Karla:wght@400;500;600;700&display=swap">
+  <style>
+    body { margin: 0; background: #f4eee2; color: #3a2712; font-family: 'Karla', system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+    a { color: #5b3d1e; text-decoration: none; } a:hover { color: #6b7a4a; }
+    p { margin: 0; }
+    .small { font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; font-weight: 700; color: #6b7a4a; }
+    .caps { font-family: 'Cinzel', Georgia, serif; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; }
+    .display { font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 500; line-height: 1; letter-spacing: -0.018em; text-wrap: balance; }
+    .verse { font-family: 'Cormorant Garamond', Georgia, serif; font-style: italic; line-height: 1.26; }
+    .body { font-size: 12.5px; line-height: 1.58; color: #6b5333; text-wrap: pretty; }
+    .panel { background: #fbf5e8; box-shadow: inset 0 0 0 1px #ddcdae; }
+    .minicard { background: #f8f1e2; box-shadow: inset 0 0 0 1px #dccdb0; padding: 10px 9px; display: flex; flex-direction: column; justify-content: space-between; }
+  </style>
+</helmet>
+
+<div style="width: 1440px; height: 1080px; box-sizing: border-box; background: #f4eee2; position: relative; overflow: hidden; padding: 34px 52px 0;">
+
+  <svg width="0" height="0" style="position: absolute;">
+    <defs>
+      <radialGradient id="glowR" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="#ffd98a" stop-opacity="0.95"></stop><stop offset="1" stop-color="#ffd98a" stop-opacity="0"></stop></radialGradient>
+      <radialGradient id="dotR" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="#f6c667" stop-opacity="1"></stop><stop offset="1" stop-color="#f6c667" stop-opacity="0"></stop></radialGradient>
+      <pattern id="oatsR" width="11" height="11" patternUnits="userSpaceOnUse">
+        <rect width="11" height="11" fill="#d9ab6d"></rect>
+        <ellipse cx="3" cy="3" rx="2.4" ry="1.7" fill="#c08f52"></ellipse>
+        <ellipse cx="8" cy="7" rx="2" ry="1.5" fill="#a3743c" transform="rotate(30 8 7)"></ellipse>
+      </pattern>
+      <filter id="grainR" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch"></feTurbulence><feColorMatrix type="saturate" values="0"></feColorMatrix><feComponentTransfer><feFuncA type="table" tableValues="0 0 0 0.04 0.07"></feFuncA></feComponentTransfer></filter>
+      <g id="jarR">
+        <path d="M8 14 v6 c0 4 -8 6 -8 13 v40 c0 6 5 9 10 9 h32 c5 0 10 -3 10 -9 V33 c0 -7 -8 -9 -8 -13 v-6 Z" fill="#f7f1e4" stroke="#8a6a45" stroke-width="1.4"></path>
+        <path d="M6 44 h48 v29 c0 6 -5 9 -10 9 H16 c-5 0 -10 -3 -10 -9 z" fill="url(#oatsR)" opacity="0.9"></path>
+        <rect x="6" y="2" width="42" height="12" rx="2" fill="#f4eee2" stroke="#8a6a45" stroke-width="1.4"></rect>
+      </g>
+    </defs>
+  </svg>
+  <svg style="position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; mix-blend-mode: multiply;"><rect width="100%" height="100%" filter="url(#grainR)"></rect></svg>
+
+  <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+    <div>
+      <div class="small">Ideas &middot; the return visit</div>
+      <h2 class="display" style="font-size: 48px; margin: 12px 0 0; color: #3a2712;">What a regular sees on a Monday</h2>
+    </div>
+    <div style="width: 400px; text-align: right;">
+      <div class="body">Four ideas in one screen. None of them sell anything. All of them are why someone opens the site in a week they are not buying granola.</div>
+    </div>
+  </div>
+
+  <!-- welcome back bar -->
+  <div style="margin-top: 24px; background: #5b3d1e; color: #f4eee2; display: flex; align-items: center; gap: 28px; padding: 20px 28px; box-shadow: inset 0 0 0 4px #5b3d1e, inset 0 0 0 5px #c9a06a;">
+    <div style="position: relative; width: 62px; height: 62px; flex: none;">
+      <svg viewBox="0 0 62 62" width="62" height="62">
+        <circle cx="31" cy="31" r="30" fill="url(#glowR)"></circle>
+        <path d="M31 14 l13 12 v20 h-26 v-20 z" fill="none" stroke="#c9a06a" stroke-width="2"></path>
+        <circle cx="31" cy="35" r="6" fill="#ffd98a"></circle>
+      </svg>
+    </div>
+    <div style="flex: none; width: 176px;">
+      <div class="small" style="color: #c9a06a;">The porch light</div>
+      <div class="verse" style="font-size: 20px; color: #f4eee2; margin-top: 4px;">She is baking this week</div>
+    </div>
+    <div style="width: 1px; height: 54px; background: #7d5a33;"></div>
+    <div style="flex: 1;">
+      <div class="display" style="font-size: 34px; color: #f4eee2;">Welcome back, Sarah.</div>
+      <div class="body" style="color: #cbb896; margin-top: 6px;">Your usual: honey almond, two bags, Thursday drop at the Anthem market. You have 62 points and two jars out.</div>
+    </div>
+    <div style="flex: none; display: flex; gap: 12px; align-items: center;">
+      <div class="caps" style="font-size: 12px; background: #c9a06a; color: #3a2712; height: 52px; display: flex; align-items: center; padding: 0 24px;">Order the usual</div>
+      <div class="caps" style="font-size: 12px; color: #ecdfc6; height: 52px; display: flex; align-items: center; padding: 0 18px; box-shadow: inset 0 0 0 1px #a3825a;">Change it</div>
+    </div>
+  </div>
+
+  <div style="display: grid; grid-template-columns: 356px 1fr 386px; gap: 22px; margin-top: 22px;">
+
+    <!-- Monday's verse -->
+    <div class="panel" style="padding: 22px 24px 24px; position: relative;">
+      <div class="small">Monday's verse</div>
+      <div style="position: absolute; right: 16px; top: 6px; width: 54px; height: 54px;">
+        <svg viewBox="0 0 54 54" width="54" height="54">
+          <circle cx="27" cy="27" r="24" fill="#a8442e"></circle>
+          <circle cx="27" cy="27" r="24" fill="#000" opacity="0.12"></circle>
+          <circle cx="27" cy="27" r="19" fill="none" stroke="#f4eee2" stroke-width="1.2" opacity="0.6"></circle>
+          <text x="27" y="24" text-anchor="middle" font-family="Cinzel, Georgia, serif" font-size="8" font-weight="700" letter-spacing="1" fill="#f4eee2">NEW</text>
+          <text x="27" y="35" text-anchor="middle" font-family="Cinzel, Georgia, serif" font-size="7" font-weight="600" letter-spacing="0.8" fill="#f4eee2">THIS WK</text>
+        </svg>
+      </div>
+      <div style="margin-top: 30px; background: #f8f1e2; box-shadow: inset 0 0 0 1px #d8c8a8; padding: 30px 26px 26px; min-height: 232px; display: flex; flex-direction: column; justify-content: space-between;">
+        <div>
+          <div class="verse" style="font-size: 30px; color: #3a2712; line-height: 1.22;">"Let us not become weary in doing good, for at the proper time we will reap a harvest if we do not give up."</div>
+          <div class="caps" style="font-size: 10px; color: #a08a63; margin-top: 16px;">Galatians 6:9</div>
+        </div>
+        <div style="display: flex; align-items: flex-end; justify-content: space-between; margin-top: 20px;">
+          <div class="body" style="font-size: 11.5px; color: #8a6c45;">Hand-written, in every order this week.</div>
+          <svg width="34" height="34" viewBox="0 0 60 60" style="color: #6b7a4a;">
+            <g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M30 8 v44 M18 22 h24"></path><path d="M9 52 c 1 -16 5 -24 13 -33"></path><path d="M51 52 c -1 -16 -5 -24 -13 -33"></path></g>
+          </svg>
+        </div>
+      </div>
+      <div class="body" style="margin-top: 14px;">Arrives at five every Monday morning. The seal only shows until you have read it.</div>
+    </div>
+
+    <!-- verse wall -->
+    <div class="panel" style="padding: 22px 24px 24px;">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <div class="small">Your verse wall</div>
+        <div class="small" style="color: #a08a63;">29 cards since February</div>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 9px; margin-top: 14px;">
+        <div class="minicard" style="height: 52px; opacity: 0.24;"><div class="caps" style="font-size: 7px; color: #a08a63;">Wk 20</div></div>
+        <div class="minicard" style="height: 52px; opacity: 0.32;"><div class="caps" style="font-size: 7px; color: #a08a63;">Wk 21</div></div>
+        <div class="minicard" style="height: 52px; opacity: 0.4;"><div class="caps" style="font-size: 7px; color: #a08a63;">Wk 22</div></div>
+        <div class="minicard" style="height: 52px; opacity: 0.45;"><div class="caps" style="font-size: 7px; color: #a08a63;">Wk 23</div></div>
+        <div class="minicard" style="height: 52px; opacity: 0.5;"><div class="caps" style="font-size: 7px; color: #a08a63;">Wk 24</div></div>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 9px; margin-top: 9px;">
+        <div class="minicard" style="height: 88px;"><div class="verse" style="font-size: 12px; color: #3a2712;">"Taste and see"</div><div class="caps" style="font-size: 7px; color: #a08a63;">Ps 34:8</div></div>
+        <div class="minicard" style="height: 88px;"><div class="verse" style="font-size: 12px; color: #3a2712;">"Daily bread"</div><div class="caps" style="font-size: 7px; color: #a08a63;">Mt 6:11</div></div>
+        <div class="minicard" style="height: 88px;"><div class="verse" style="font-size: 12px; color: #3a2712;">"With all your heart"</div><div class="caps" style="font-size: 7px; color: #a08a63;">Col 3:23</div></div>
+        <div class="minicard" style="height: 88px;"><div class="verse" style="font-size: 12px; color: #3a2712;">"Glad and sincere hearts"</div><div class="caps" style="font-size: 7px; color: #a08a63;">Acts 2:46</div></div>
+        <div class="minicard" style="height: 88px;"><div class="verse" style="font-size: 12px; color: #3a2712;">"Give and it will be given"</div><div class="caps" style="font-size: 7px; color: #a08a63;">Lk 6:38</div></div>
+        <div class="minicard" style="height: 88px;"><div class="verse" style="font-size: 12px; color: #3a2712;">"The Lord bless you"</div><div class="caps" style="font-size: 7px; color: #a08a63;">Nm 6:24</div></div>
+        <div class="minicard" style="height: 88px;"><div class="verse" style="font-size: 12px; color: #3a2712;">"Be still"</div><div class="caps" style="font-size: 7px; color: #a08a63;">Ps 46:10</div></div>
+        <div class="minicard" style="height: 88px;"><div class="verse" style="font-size: 12px; color: #3a2712;">"Come to me"</div><div class="caps" style="font-size: 7px; color: #a08a63;">Mt 11:28</div></div>
+        <div class="minicard" style="height: 88px;"><div class="verse" style="font-size: 12px; color: #3a2712;">"A cheerful giver"</div><div class="caps" style="font-size: 7px; color: #a08a63;">2 Cor 9:7</div></div>
+        <div class="minicard" style="height: 88px; background: #e2e6cf; box-shadow: inset 0 0 0 1px #a9b18a;"><div class="verse" style="font-size: 12px; color: #2f3d1a;">"Weary in doing good"</div><div class="caps" style="font-size: 7px; color: #5d6c3a;">Gal 6:9</div></div>
+      </div>
+      <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-top: 16px;">
+        <div class="body" style="max-width: 330px;">Yours, in the order they arrived, with the date on the back of each. Print the set as a booklet whenever you like.</div>
+        <div class="caps" style="font-size: 11px; color: #5b3d1e; box-shadow: inset 0 0 0 1px #b9a98a; padding: 12px 18px;">Print my set</div>
+      </div>
+    </div>
+
+    <!-- jar shelf -->
+    <div class="panel" style="padding: 22px 24px 24px;">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <div class="small">Your jar shelf</div>
+        <div class="small" style="color: #a08a63;">+5 points each</div>
+      </div>
+      <div style="margin-top: 18px;">
+        <svg viewBox="0 0 338 210" width="338" height="210" style="display: block;">
+          <g transform="translate(6 4)">
+            <use href="#jarR" transform="translate(0 0)"></use><use href="#jarR" transform="translate(62 0)"></use>
+            <use href="#jarR" transform="translate(124 0)"></use><use href="#jarR" transform="translate(186 0)"></use>
+            <use href="#jarR" transform="translate(248 0)"></use>
+          </g>
+          <rect x="0" y="90" width="338" height="7" fill="#a9794a"></rect>
+          <rect x="0" y="97" width="338" height="4" fill="#7d5530"></rect>
+          <g transform="translate(6 108)">
+            <use href="#jarR" transform="translate(0 0)"></use><use href="#jarR" transform="translate(62 0)"></use>
+            <use href="#jarR" transform="translate(124 0)"></use><use href="#jarR" transform="translate(186 0)"></use>
+            <g opacity="0.28"><use href="#jarR" transform="translate(248 0)"></use></g>
+          </g>
+          <rect x="0" y="194" width="338" height="7" fill="#a9794a"></rect>
+          <rect x="0" y="201" width="338" height="4" fill="#7d5530"></rect>
+        </svg>
+      </div>
+      <div style="display: flex; align-items: baseline; gap: 12px; margin-top: 18px;">
+        <div class="display" style="font-size: 52px; color: #5b3d1e; font-variant-numeric: tabular-nums;">9</div>
+        <div class="body" style="font-size: 14px; color: #5b3d1e;">jars brought back<br>and refilled</div>
+      </div>
+      <div class="body" style="margin-top: 12px;">Every returned jar is $2 off and lights a place on the shelf. The tenth one has a gap waiting for it, which is the whole trick.</div>
+    </div>
+  </div>
+
+  <!-- blessing map -->
+  <div class="panel" style="margin-top: 22px; padding: 22px 24px 22px; display: grid; grid-template-columns: 300px 1fr; gap: 30px; align-items: center;">
+    <div>
+      <div class="small">The blessing map</div>
+      <div class="display" style="font-size: 34px; color: #3a2712; margin-top: 10px;">148 bags on 148 porches</div>
+      <div class="body" style="margin-top: 12px;">Nine dollars puts a bag of granola and a verse on a neighbor's step. Each one lights a point over Vistancia and Anthem. No names, no addresses, no pins you can click. Just light gathering over the town, month after month.</div>
+      <div style="display: flex; gap: 10px; margin-top: 16px;">
+        <div class="caps" style="font-size: 11px; background: #6b7a4a; color: #f4eee2; padding: 13px 20px;">Send a bag &middot; $9</div>
+        <div class="caps" style="font-size: 11px; color: #5b3d1e; box-shadow: inset 0 0 0 1px #b9a98a; padding: 13px 18px;">For a church</div>
+      </div>
+    </div>
+    <div style="background: #efe4cd; box-shadow: inset 0 0 0 1px #ddcdae; position: relative; overflow: hidden;">
+      <svg viewBox="0 0 1000 200" width="100%" height="200" style="display: block;" preserveAspectRatio="none">
+        <rect width="1000" height="200" fill="#efe4cd"></rect>
+        <g stroke="#d9c8a6" stroke-width="2" fill="none">
+          <path d="M0 60 H1000 M0 118 H1000 M0 166 H1000"></path>
+          <path d="M150 0 V200 M330 0 V200 M520 0 V200 M700 0 V200 M860 0 V200"></path>
+          <path d="M0 20 C 200 34, 420 8, 640 30 S 900 20, 1000 40" stroke="#c9b78f" stroke-width="3"></path>
+        </g>
+        <path d="M40 176 l30 -46 l24 30 l40 -62 l34 44" fill="none" stroke="#bda87e" stroke-width="2"></path>
+        <g>
+          <circle cx="196" cy="82" r="26" fill="url(#dotR)"></circle><circle cx="196" cy="82" r="3.4" fill="#e8a83c"></circle>
+          <circle cx="268" cy="132" r="22" fill="url(#dotR)"></circle><circle cx="268" cy="132" r="3" fill="#e8a83c"></circle>
+          <circle cx="372" cy="66" r="30" fill="url(#dotR)"></circle><circle cx="372" cy="66" r="3.6" fill="#e8a83c"></circle>
+          <circle cx="430" cy="140" r="20" fill="url(#dotR)"></circle><circle cx="430" cy="140" r="2.8" fill="#e8a83c"></circle>
+          <circle cx="520" cy="96" r="34" fill="url(#dotR)"></circle><circle cx="520" cy="96" r="4" fill="#e8a83c"></circle>
+          <circle cx="596" cy="52" r="20" fill="url(#dotR)"></circle><circle cx="596" cy="52" r="2.8" fill="#e8a83c"></circle>
+          <circle cx="648" cy="150" r="24" fill="url(#dotR)"></circle><circle cx="648" cy="150" r="3.2" fill="#e8a83c"></circle>
+          <circle cx="742" cy="88" r="28" fill="url(#dotR)"></circle><circle cx="742" cy="88" r="3.4" fill="#e8a83c"></circle>
+          <circle cx="820" cy="136" r="18" fill="url(#dotR)"></circle><circle cx="820" cy="136" r="2.6" fill="#e8a83c"></circle>
+          <circle cx="884" cy="70" r="22" fill="url(#dotR)"></circle><circle cx="884" cy="70" r="3" fill="#e8a83c"></circle>
+          <circle cx="120" cy="140" r="16" fill="url(#dotR)"></circle><circle cx="120" cy="140" r="2.4" fill="#e8a83c"></circle>
+          <circle cx="940" cy="112" r="16" fill="url(#dotR)"></circle><circle cx="940" cy="112" r="2.4" fill="#e8a83c"></circle>
+        </g>
+        <text x="196" y="34" text-anchor="middle" font-family="Karla, sans-serif" font-size="11" letter-spacing="3" fill="#a08a63">VISTANCIA</text>
+        <text x="800" y="34" text-anchor="middle" font-family="Karla, sans-serif" font-size="11" letter-spacing="3" fill="#a08a63">ANTHEM</text>
+      </svg>
+    </div>
+  </div>
+
+</div>
+</x-dc>
+</body>
+</html>

@@ -1,0 +1,217 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=Karla:wght@400;500;600;700&display=swap">
+  <style>
+    body { margin: 0; background: #f4eee2; color: #3a2712; font-family: 'Cormorant Garamond', Georgia, serif; -webkit-font-smoothing: antialiased; }
+    a { color: #5b3d1e; text-decoration: none; } a:hover { color: #6b7a4a; }
+    p { margin: 0; }
+    .small { font-family: 'Karla', system-ui, sans-serif; font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; font-weight: 600; }
+    .caps { font-family: 'Cinzel', Georgia, serif; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; }
+    .display { font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 500; letter-spacing: -0.02em; line-height: 0.94; text-wrap: balance; }
+    .body { font-family: 'Karla', system-ui, sans-serif; font-size: 13px; line-height: 1.6; text-wrap: pretty; }
+    .verse { font-family: 'Cormorant Garamond', Georgia, serif; font-style: italic; }
+    .stamp { font-family: 'Cinzel', Georgia, serif; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; font-size: 12px; background: #5b3d1e; color: #f4eee2; padding: 0 28px; height: 52px; display: inline-flex; align-items: center; box-shadow: inset 0 0 0 4px #5b3d1e, inset 0 0 0 5px #c9a06a; }
+    .beat { border-top: 2px solid #c9a06a; padding-top: 12px; }
+  </style>
+</helmet>
+
+<div style="width: 1440px; height: 900px; box-sizing: border-box; background: #f4eee2; position: relative; overflow: hidden; display: flex; flex-direction: column;">
+
+  <svg width="0" height="0" style="position: absolute;">
+    <defs>
+      <linearGradient id="airP" x1="0" y1="0" x2="0.3" y2="1">
+        <stop offset="0" stop-color="#fcf6e9"></stop><stop offset="0.55" stop-color="#f4eadb"></stop><stop offset="1" stop-color="#e9dcc6"></stop>
+      </linearGradient>
+      <linearGradient id="woodP" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#b98d5c"></stop><stop offset="0.18" stop-color="#a9794a"></stop><stop offset="1" stop-color="#7d5530"></stop>
+      </linearGradient>
+      <linearGradient id="shaftP" x1="0" y1="0" x2="0.6" y2="1">
+        <stop offset="0" stop-color="#fff4d8" stop-opacity="0.92"></stop><stop offset="1" stop-color="#fff4d8" stop-opacity="0"></stop>
+      </linearGradient>
+      <linearGradient id="glassP" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0" stop-color="#ffffff" stop-opacity="0.55"></stop><stop offset="0.2" stop-color="#ffffff" stop-opacity="0.1"></stop>
+        <stop offset="0.78" stop-color="#ffffff" stop-opacity="0.1"></stop><stop offset="1" stop-color="#ffffff" stop-opacity="0.5"></stop>
+      </linearGradient>
+      <pattern id="oatsP" width="15" height="15" patternUnits="userSpaceOnUse">
+        <rect width="15" height="15" fill="#d9ab6d"></rect>
+        <ellipse cx="4" cy="4" rx="3.2" ry="2.2" fill="#c08f52"></ellipse>
+        <ellipse cx="11" cy="9" rx="2.8" ry="2" fill="#a3743c" transform="rotate(30 11 9)"></ellipse>
+        <circle cx="8" cy="13" r="1.5" fill="#7a5227"></circle>
+        <circle cx="13" cy="3" r="1.1" fill="#f0d8ae"></circle>
+      </pattern>
+      <filter id="grainP" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" stitchTiles="stitch"></feTurbulence><feColorMatrix type="saturate" values="0"></feColorMatrix><feComponentTransfer><feFuncA type="table" tableValues="0 0 0 0.05 0.09"></feFuncA></feComponentTransfer></filter>
+      <filter id="softP" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="14"></feGaussianBlur></filter>
+      <g id="cluster">
+        <ellipse rx="7" ry="5" fill="#c99553"></ellipse>
+        <ellipse cx="-3" cy="-2" rx="3.4" ry="2.4" fill="#e0b878"></ellipse>
+        <ellipse cx="3" cy="2" rx="2.6" ry="1.8" fill="#9a6c34"></ellipse>
+      </g>
+    </defs>
+  </svg>
+
+  <!-- THE SCENE -->
+  <div style="position: relative; height: 742px; overflow: hidden;">
+    <svg viewBox="0 0 1440 742" width="1440" height="742" style="display: block;">
+      <rect width="1440" height="742" fill="url(#airP)"></rect>
+
+      <!-- window light -->
+      <path d="M120 -40 L470 -40 L1000 742 L470 742 Z" fill="url(#shaftP)"></path>
+      <path d="M300 -40 L340 -40 L800 742 L740 742 Z" fill="#fffaf0" opacity="0.5"></path>
+
+      <!-- back wall shelf hint -->
+      <rect x="980" y="150" width="420" height="7" fill="#d9c9ab"></rect>
+      <rect x="1040" y="98" width="46" height="52" rx="4" fill="#e6d8bd" opacity="0.85"></rect>
+      <rect x="1108" y="86" width="38" height="64" rx="4" fill="#e6d8bd" opacity="0.7"></rect>
+      <rect x="1168" y="106" width="52" height="44" rx="4" fill="#e6d8bd" opacity="0.6"></rect>
+
+      <!-- counter -->
+      <rect x="0" y="556" width="1440" height="186" fill="url(#woodP)"></rect>
+      <g stroke="#8d6238" stroke-width="1.4" opacity="0.5">
+        <path d="M0 592 H1440"></path><path d="M0 636 H1440"></path><path d="M0 686 H1440"></path>
+      </g>
+      <g stroke="#c39a68" stroke-width="1" opacity="0.35">
+        <path d="M0 570 H1440"></path><path d="M0 614 H1440"></path><path d="M0 662 H1440"></path>
+      </g>
+      <rect x="0" y="556" width="1440" height="10" fill="#cba274" opacity="0.8"></rect>
+
+      <!-- contact shadow -->
+      <ellipse cx="958" cy="574" rx="190" ry="26" fill="#4a2f14" opacity="0.42" filter="url(#softP)"></ellipse>
+
+      <!-- scattered clusters on the counter -->
+      <g>
+        <use href="#cluster" transform="translate(700 566) rotate(12)"></use>
+        <use href="#cluster" transform="translate(736 578) rotate(-24) scale(0.8)"></use>
+        <use href="#cluster" transform="translate(1180 570) rotate(40) scale(0.9)"></use>
+        <use href="#cluster" transform="translate(1224 582) rotate(-8) scale(0.7)"></use>
+        <use href="#cluster" transform="translate(660 582) rotate(60) scale(0.6)"></use>
+      </g>
+
+      <!-- THE JAR -->
+      <g transform="translate(830 190)">
+        <!-- body -->
+        <path d="M22 96 v22 c0 12 -22 18 -22 42 v170 c0 20 16 30 34 30 h188 c18 0 34 -10 34 -30 V160 c0 -24 -22 -30 -22 -42 V96 Z" fill="#f7f1e4" opacity="0.55"></path>
+        <!-- granola fill -->
+        <clipPath id="jarClipP"><path d="M22 96 v22 c0 12 -22 18 -22 42 v170 c0 20 16 30 34 30 h188 c18 0 34 -10 34 -30 V160 c0 -24 -22 -30 -22 -42 V96 Z"></path></clipPath>
+        <g clip-path="url(#jarClipP)">
+          <rect x="-10" y="216" width="280" height="160" fill="url(#oatsP)"></rect>
+          <path d="M-10 226 q60 -26 130 -6 q70 20 150 -14 v-24 H-10 Z" fill="url(#oatsP)"></path>
+          <rect x="-10" y="216" width="280" height="160" fill="#5b3d1e" opacity="0.1"></rect>
+        </g>
+        <!-- glass edges + highlights -->
+        <path d="M22 96 v22 c0 12 -22 18 -22 42 v170 c0 20 16 30 34 30 h188 c18 0 34 -10 34 -30 V160 c0 -24 -22 -30 -22 -42 V96 Z" fill="url(#glassP)" stroke="#8a6a45" stroke-width="2"></path>
+        <rect x="16" y="140" width="10" height="200" rx="5" fill="#ffffff" opacity="0.62"></rect>
+        <rect x="238" y="150" width="6" height="180" rx="3" fill="#ffffff" opacity="0.4"></rect>
+        <!-- threaded neck -->
+        <rect x="16" y="56" width="228" height="42" rx="6" fill="#f4eee2" stroke="#8a6a45" stroke-width="2"></rect>
+        <path d="M24 68 h212 M24 86 h212" stroke="#c9b393" stroke-width="2"></path>
+        <!-- label -->
+        <rect x="52" y="214" width="156" height="112" rx="3" fill="#f4eee2" stroke="#8a6a45" stroke-width="1.4" opacity="0.96"></rect>
+        <rect x="59" y="221" width="142" height="98" rx="2" fill="none" stroke="#a9b18a" stroke-width="1" stroke-dasharray="3 3"></rect>
+        <text x="130" y="252" text-anchor="middle" font-family="Cinzel, Georgia, serif" font-size="12" font-weight="700" letter-spacing="1.6" fill="#5b3d1e">HEAVEN'S</text>
+        <text x="130" y="270" text-anchor="middle" font-family="Cinzel, Georgia, serif" font-size="12" font-weight="700" letter-spacing="1.6" fill="#5b3d1e">HARVEST</text>
+        <path d="M130 288 m0 12 c -5 -6 -14 -10 -14 -18 c 0 -5 4 -8 8 -8 c 3 0 5 2 6 4 c 1 -2 3 -4 6 -4 c 4 0 8 3 8 8 c 0 8 -9 12 -14 18 z" fill="#c9a06a"></path>
+      </g>
+
+      <!-- FALLING CLUSTERS with motion streaks -->
+      <g opacity="0.95">
+        <g stroke="#c99553" stroke-width="2" stroke-linecap="round" opacity="0.4">
+          <path d="M902 40 v56"></path><path d="M948 12 v72"></path><path d="M992 62 v44"></path>
+          <path d="M930 128 v40"></path><path d="M976 150 v32"></path><path d="M916 196 v26"></path>
+          <path d="M1000 214 v22"></path><path d="M944 246 v18"></path>
+        </g>
+        <use href="#cluster" transform="translate(902 104) rotate(18)"></use>
+        <use href="#cluster" transform="translate(948 92) rotate(-40) scale(1.1)"></use>
+        <use href="#cluster" transform="translate(992 114) rotate(66) scale(0.85)"></use>
+        <use href="#cluster" transform="translate(930 176) rotate(-12)"></use>
+        <use href="#cluster" transform="translate(976 190) rotate(34) scale(0.9)"></use>
+        <use href="#cluster" transform="translate(916 230) rotate(80) scale(0.75)"></use>
+        <use href="#cluster" transform="translate(1002 244) rotate(-56) scale(0.8)"></use>
+        <use href="#cluster" transform="translate(944 268) rotate(24) scale(1.05)"></use>
+        <use href="#cluster" transform="translate(890 300) rotate(-30) scale(0.7)"></use>
+        <use href="#cluster" transform="translate(1010 316) rotate(50) scale(0.65)"></use>
+        <!-- dust motes in the light -->
+        <g fill="#fff6e2">
+          <circle cx="600" cy="180" r="2.4"></circle><circle cx="672" cy="300" r="1.8"></circle>
+          <circle cx="540" cy="392" r="2"></circle><circle cx="746" cy="220" r="1.6"></circle>
+          <circle cx="820" cy="430" r="2.2"></circle><circle cx="618" cy="486" r="1.7"></circle>
+        </g>
+      </g>
+
+      <rect width="1440" height="742" filter="url(#grainP)" style="mix-blend-mode: multiply;"></rect>
+    </svg>
+
+    <!-- overlaid page chrome + headline -->
+    <div style="position: absolute; inset: 0; padding: 26px 64px 0; box-sizing: border-box; display: flex; flex-direction: column;">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <div class="caps" style="font-size: 14px; color: #5b3d1e;">Heaven's Harvest Pantry</div>
+        <div style="display: flex; gap: 34px; align-items: center;">
+          <div class="small" style="color: #6b5333;">Granola</div>
+          <div class="small" style="color: #6b5333;">Her story</div>
+          <div class="small" style="color: #6b5333;">Blessing bags</div>
+          <div class="small" style="color: #6b5333;">Basket &middot; 0</div>
+        </div>
+      </div>
+
+      <div style="margin-top: 132px; max-width: 620px;">
+        <div class="small" style="color: #6b7a4a; margin-bottom: 20px;">Baked Thursday mornings in Vistancia</div>
+        <h1 class="display" style="font-size: 104px; margin: 0; color: #3a2712;">Made slow,<br>in a real kitchen.</h1>
+        <div class="verse" style="font-size: 25px; color: #5b3d1e; margin-top: 26px; max-width: 470px; line-height: 1.32;">
+          Small-batch granola, hand-stirred, jarred by hand, and dropped at your door on Thursday.
+        </div>
+        <div style="display: flex; gap: 18px; align-items: center; margin-top: 34px;">
+          <div class="stamp">See this week's batch</div>
+          <div class="small" style="color: #8a6c45;">Bring the jar back &mdash; $2 off, every time</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- pointer callouts -->
+    <div style="position: absolute; left: 1128px; top: 246px; width: 250px;">
+      <div style="border-left: 2px solid #5b3d1e; padding-left: 14px;">
+        <div class="small" style="color: #5b3d1e;">Real glass</div>
+        <div class="body" style="color: #4a3520; margin-top: 5px;">Light bends through the jar and lands on the counter as a warm shadow. It moves when the granola moves.</div>
+      </div>
+    </div>
+    <div style="position: absolute; left: 1128px; top: 452px; width: 250px;">
+      <div style="border-left: 2px solid #5b3d1e; padding-left: 14px;">
+        <div class="small" style="color: #5b3d1e;">Four hundred pieces</div>
+        <div class="body" style="color: #4a3520; margin-top: 5px;">Each cluster is its own object with its own tumble. Worked out once, replayed every visit, identical and cheap.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BEAT STRIP -->
+  <div style="flex: 1; background: #5b3d1e; color: #f4eee2; padding: 22px 64px; box-sizing: border-box; display: grid; grid-template-columns: 168px repeat(4, minmax(0, 1fr)); gap: 30px; align-items: start;">
+    <div>
+      <div class="small" style="color: #c9a06a;">The Pour</div>
+      <div class="body" style="color: #cbb896; margin-top: 4px;">2.4 seconds, on load</div>
+    </div>
+    <div class="beat">
+      <div class="caps" style="font-size: 12px; color: #f4eee2;">0.0s &mdash; empty</div>
+      <div class="body" style="color: #d6c6a8; margin-top: 5px;">Jar, counter and morning light are already there. No spinner, no black screen.</div>
+    </div>
+    <div class="beat">
+      <div class="caps" style="font-size: 12px; color: #f4eee2;">0.3s &mdash; falling</div>
+      <div class="body" style="color: #d6c6a8; margin-top: 5px;">Clusters drop in from above the frame, catching the light on the way down.</div>
+    </div>
+    <div class="beat">
+      <div class="caps" style="font-size: 12px; color: #f4eee2;">1.6s &mdash; settling</div>
+      <div class="body" style="color: #d6c6a8; margin-top: 5px;">They pile, roll, and go still. The last two pieces bounce onto the counter and stay there.</div>
+    </div>
+    <div class="beat">
+      <div class="caps" style="font-size: 12px; color: #f4eee2;">2.4s &mdash; the words</div>
+      <div class="body" style="color: #d6c6a8; margin-top: 5px;">The headline rises into place and the button appears. Scroll now and the jar takes its label.</div>
+    </div>
+  </div>
+
+</div>
+</x-dc>
+</body>
+</html>

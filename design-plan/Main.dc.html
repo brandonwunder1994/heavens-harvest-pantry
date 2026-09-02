@@ -1,0 +1,263 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Karla:wght@400;500;600&display=swap">
+  <style>
+    body { margin: 0; background: #f4eee2; color: #3a2712; font-family: 'Cormorant Garamond', Georgia, 'Times New Roman', serif; -webkit-font-smoothing: antialiased; }
+    a { color: #6b7a4a; } a:hover { color: #5b3d1e; }
+    .eyebrow { font-family: 'Karla', system-ui, sans-serif; font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: #6b7a4a; font-weight: 600; }
+    .h1 { font-family: 'Cinzel', Georgia, serif; font-weight: 600; letter-spacing: 0.06em; }
+    .h2 { font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 500; font-size: 34px; line-height: 1.1; color: #3a2712; margin: 0; letter-spacing: -0.005em; }
+    .lead { font-size: 21px; line-height: 1.45; color: #4a3520; }
+    p { margin: 0; }
+    .num { font-family: 'Cinzel', Georgia, serif; color: #6b7a4a; font-size: 13px; letter-spacing: 0.1em; }
+    .rule { height: 1px; background: #cdbfa5; }
+    .card { background: #fbf8f1; border: 1px solid #e3d9c4; padding: 22px 24px; }
+    .ui { font-family: 'Karla', system-ui, sans-serif; }
+    .check { width: 18px; height: 18px; border: 1px solid #a9b18a; flex: none; margin-top: 3px; }
+    .mono { font-family: 'Karla', system-ui, sans-serif; font-size: 13px; color: #6b5a42; }
+  </style>
+</helmet>
+<div style="width: 1120px; box-sizing: border-box; padding: 64px 72px 80px; background: #f4eee2; position: relative;">
+
+  <div style="display: flex; align-items: center; gap: 28px;">
+    <img src="logo.webp" alt="" style="width: 132px; height: 132px; flex: none;">
+    <div style="display: flex; flex-direction: column; gap: 10px;">
+      <div class="eyebrow">Website plan · September 2026</div>
+      <div class="h1" style="font-size: 38px; line-height: 1.1;">Heaven's Harvest Pantry</div>
+      <div class="lead" style="font-style: italic; color: #6b7a4a;">A neighborhood granola shop that fits in a text message.</div>
+    </div>
+  </div>
+
+  <div class="rule" style="margin: 40px 0 36px;"></div>
+
+  <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 48px; align-items: start;">
+    <div style="display: flex; flex-direction: column; gap: 16px;">
+      <div class="eyebrow">What we are building</div>
+      <p class="lead">A website where neighbors in Vistancia and Anthem can see this week's granola, order in under a minute from their phone, choose a bag or a mason jar, pick delivery or a drop-off, and pay by card or Apple Pay.</p>
+      <p style="font-size: 18px; line-height: 1.5; color: #5a4530;">Behind it sits a private owner's page. Every order, today's delivery run, who owes a jar back, what to bake this week. No spreadsheets, no DMs to chase.</p>
+    </div>
+    <div class="card" style="display: flex; flex-direction: column; gap: 14px;">
+      <div class="eyebrow">The promise to a customer</div>
+      <div style="display: flex; flex-direction: column; gap: 10px; font-size: 19px; line-height: 1.35;">
+        <div style="display: flex; gap: 12px;"><span class="num">01</span><span>Scan the jar, see the flavors, order in three taps.</span></div>
+        <div style="display: flex; gap: 12px;"><span class="num">02</span><span>Bring the mason jar back and take $2 off.</span></div>
+        <div style="display: flex; gap: 12px;"><span class="num">03</span><span>Every dollar earns a point. 100 points is a free bag.</span></div>
+        <div style="display: flex; gap: 12px;"><span class="num">04</span><span>A text when it's on the way, and when it's on the porch.</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top: 56px; display: flex; flex-direction: column; gap: 18px;">
+    <div class="eyebrow">The pages a visitor sees</div>
+    <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px;">
+      <div class="card" style="display: flex; flex-direction: column; gap: 8px;">
+        <div class="h2" style="font-size: 26px;">Home</div>
+        <p style="font-size: 17px; line-height: 1.45; color: #5a4530;">Her story in two sentences, this week's flavors, one button: <em>Order</em>. Big photography, warm paper, the leaf motif from the logo.</p>
+      </div>
+      <div class="card" style="display: flex; flex-direction: column; gap: 8px;">
+        <div class="h2" style="font-size: 26px;">The Menu</div>
+        <p style="font-size: 17px; line-height: 1.45; color: #5a4530;">Every flavor with a photo, ingredients and allergens, and a jar-or-bag switch. Sold-out flavors show it. Prices change from her phone.</p>
+      </div>
+      <div class="card" style="display: flex; flex-direction: column; gap: 8px;">
+        <div class="h2" style="font-size: 26px;">Checkout</div>
+        <p style="font-size: 17px; line-height: 1.45; color: #5a4530;">One screen. Jar or bag, "returning a jar?", delivery or drop-off with the next date, then Apple Pay, Google Pay or card. No account needed.</p>
+      </div>
+      <div class="card" style="display: flex; flex-direction: column; gap: 8px;">
+        <div class="h2" style="font-size: 26px;">Rewards</div>
+        <p style="font-size: 17px; line-height: 1.45; color: #5a4530;">Sign in with a phone number and a code, no password. See points, jars returned, and the next reward. Birthday bag on the house.</p>
+      </div>
+      <div class="card" style="display: flex; flex-direction: column; gap: 8px;">
+        <div class="h2" style="font-size: 26px;">Reviews</div>
+        <p style="font-size: 17px; line-height: 1.45; color: #5a4530;">Star ratings and a few words from real customers, asked for by text two days after delivery. She approves each one before it shows.</p>
+      </div>
+      <div class="card" style="display: flex; flex-direction: column; gap: 8px;">
+        <div class="h2" style="font-size: 26px;">Our Story &amp; Where We Deliver</div>
+        <p style="font-size: 17px; line-height: 1.45; color: #5a4530;">Why she bakes, what goes in, the Vistancia and Anthem delivery days, and the drop-off spots on a simple map.</p>
+      </div>
+      <div class="card" style="display: flex; flex-direction: column; gap: 8px;">
+        <div class="h2" style="font-size: 26px;">The Verse Archive</div>
+        <p style="font-size: 17px; line-height: 1.45; color: #5a4530;">Every weekly verse card she has sent out, kept in one place, so someone can find the one from the week they needed it.</p>
+      </div>
+      <div class="card" style="display: flex; flex-direction: column; gap: 8px;">
+        <div class="h2" style="font-size: 26px;">Blessing Bags</div>
+        <p style="font-size: 17px; line-height: 1.45; color: #5a4530;">Buy a bag for a neighbor in a hard season. Suggest a name, or let her choose. Churches can request a batch at once.</p>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top: 56px; background: #5b3d1e; color: #f4eee2; padding: 40px 44px; display: grid; grid-template-columns: 1fr 1fr; gap: 44px;">
+    <div style="display: flex; flex-direction: column; gap: 16px;">
+      <div class="eyebrow" style="color: #c9a06a;">Faith, woven in rather than bolted on</div>
+      <div class="h2" style="color: #f4eee2; font-size: 30px;">The gospel shows up as hospitality, not as decoration.</div>
+      <p style="font-size: 18px; line-height: 1.5; color: #eadfcc;">Scripture belongs where it means something on a granola site: at the table, in the giving, and in the work of her hands. Six verses carry the page. Nothing is stacked up as ornament, and nothing is used as a sales tactic.</p>
+      <p style="font-size: 17px; line-height: 1.5; color: #c9a06a; font-style: italic;">She can change every verse herself, week by week, without calling anyone.</p>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 10px; font-size: 18px; line-height: 1.4; color: #eadfcc;">
+      <div style="display: flex; gap: 12px;"><span class="num" style="color: #c9a06a;">01</span><span><strong style="font-weight: 600;">Psalm 34:8</strong> anchors the homepage. Taste and see that the Lord is good. It is the reason a food business can be a ministry.</span></div>
+      <div style="display: flex; gap: 12px;"><span class="num" style="color: #c9a06a;">02</span><span><strong style="font-weight: 600;">A hand-written verse card</strong> goes in every order, printed from the owner's page, and every past card lives in an archive on the site.</span></div>
+      <div style="display: flex; gap: 12px;"><span class="num" style="color: #c9a06a;">03</span><span><strong style="font-weight: 600;">Blessing bags.</strong> $9 at checkout puts a bag on a neighbor's porch. Galatians 6:9 sits beside it, and she tracks the count.</span></div>
+      <div style="display: flex; gap: 12px;"><span class="num" style="color: #c9a06a;">04</span><span><strong style="font-weight: 600;">A prayer request line</strong> at checkout, optional, private to her. She prays over the order list before Monday's bake.</span></div>
+      <div style="display: flex; gap: 12px;"><span class="num" style="color: #c9a06a;">05</span><span><strong style="font-weight: 600;">A blessing closes the page</strong> and a verse rides on the jar tag and the flyer, so the faith travels with the granola.</span></div>
+    </div>
+  </div>
+
+  <div style="margin-top: 56px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px;">
+    <div style="background: #5b3d1e; color: #f4eee2; padding: 30px 32px; display: flex; flex-direction: column; gap: 16px;">
+      <div class="eyebrow" style="color: #c9a06a;">The jar system</div>
+      <div class="h2" style="color: #f4eee2; font-size: 30px;">Mason jar or bag. The jar comes back.</div>
+      <div style="display: flex; flex-direction: column; gap: 10px; font-size: 18px; line-height: 1.4; color: #eadfcc;">
+        <div style="display: flex; gap: 12px;"><span class="num" style="color: #c9a06a;">01</span><span>Every flavor is offered in a resealable bag or a glass mason jar, each with its own price.</span></div>
+        <div style="display: flex; gap: 12px;"><span class="num" style="color: #c9a06a;">02</span><span>At checkout: "Returning a jar? How many?" Each one takes $2 off the order right there.</span></div>
+        <div style="display: flex; gap: 12px;"><span class="num" style="color: #c9a06a;">03</span><span>She confirms the jars at the door with one tap. The owner's page shows who has jars out.</span></div>
+        <div style="display: flex; gap: 12px;"><span class="num" style="color: #c9a06a;">04</span><span>The jar tag itself carries the QR code, so the jar is the reorder button.</span></div>
+      </div>
+    </div>
+    <div style="background: #6b7a4a; color: #f4eee2; padding: 30px 32px; display: flex; flex-direction: column; gap: 16px;">
+      <div class="eyebrow" style="color: #e5e9d3;">Rewards that bring people back</div>
+      <div class="h2" style="color: #f4eee2; font-size: 30px;">A point per dollar. A free bag at 100.</div>
+      <div style="display: flex; flex-direction: column; gap: 10px; font-size: 18px; line-height: 1.4; color: #eef0e2;">
+        <div style="display: flex; gap: 12px;"><span class="num" style="color: #e5e9d3;">01</span><span>Points attach to a phone number, so the first order starts earning with nothing to fill in.</span></div>
+        <div style="display: flex; gap: 12px;"><span class="num" style="color: #e5e9d3;">02</span><span>A returned jar earns 5 bonus points on top of the $2. Sustainability gets rewarded twice.</span></div>
+        <div style="display: flex; gap: 12px;"><span class="num" style="color: #e5e9d3;">03</span><span>Refer a neighbor: both get a $3 credit after their first delivery.</span></div>
+        <div style="display: flex; gap: 12px;"><span class="num" style="color: #e5e9d3;">04</span><span>The numbers are hers to change. Point value, threshold, and bonuses live in the owner's page.</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top: 56px; display: flex; flex-direction: column; gap: 18px;">
+    <div class="eyebrow">What she gets on the owner's side</div>
+    <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0; border: 1px solid #e3d9c4; background: #fbf8f1;">
+      <div style="padding: 22px; border-right: 1px solid #e3d9c4; display: flex; flex-direction: column; gap: 8px;">
+        <div class="h2" style="font-size: 23px;">Sales</div>
+        <p style="font-size: 16px; line-height: 1.45; color: #5a4530;">Today, this week, this month. Top flavors, jar vs bag split, repeat customers, best neighborhood.</p>
+      </div>
+      <div style="padding: 22px; border-right: 1px solid #e3d9c4; display: flex; flex-direction: column; gap: 8px;">
+        <div class="h2" style="font-size: 23px;">Delivery run</div>
+        <p style="font-size: 16px; line-height: 1.45; color: #5a4530;">Today's orders grouped by Vistancia, Anthem and drop-off, in route order, with a "delivered" tap that texts the customer.</p>
+      </div>
+      <div style="padding: 22px; border-right: 1px solid #e3d9c4; display: flex; flex-direction: column; gap: 8px;">
+        <div class="h2" style="font-size: 23px;">Bake list</div>
+        <p style="font-size: 16px; line-height: 1.45; color: #5a4530;">How many of each flavor are ordered for the next run, so she bakes to demand instead of guessing.</p>
+      </div>
+      <div style="padding: 22px; display: flex; flex-direction: column; gap: 8px;">
+        <div class="h2" style="font-size: 23px;">Verse &amp; blessings</div>
+        <p style="font-size: 16px; line-height: 1.45; color: #5a4530;">This week's verse, a print sheet of cards, the blessing bags waiting on a name, and the prayer requests people sent.</p>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top: 56px; display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 48px; align-items: start;">
+    <div style="display: flex; flex-direction: column; gap: 18px;">
+      <div class="eyebrow">The QR code</div>
+      <div class="h2">One code on everything she hands out.</div>
+      <p style="font-size: 18px; line-height: 1.5; color: #5a4530;">Drawn in her colors with the heart from the logo in the middle, tested to scan from a jar lid, a sticker, a flyer or a business card. It opens the menu with a "Welcome back" for anyone who has ordered before. She can see how many scans turn into orders, and print fresh versions in any size from the owner's page.</p>
+      <div style="display: flex; gap: 10px; flex-wrap: wrap;" class="ui">
+        <span style="border: 1px solid #a9b18a; padding: 6px 12px; font-size: 13px; color: #4f5a35;">Jar tags</span>
+        <span style="border: 1px solid #a9b18a; padding: 6px 12px; font-size: 13px; color: #4f5a35;">Bag stickers</span>
+        <span style="border: 1px solid #a9b18a; padding: 6px 12px; font-size: 13px; color: #4f5a35;">4 × 6 flyers</span>
+        <span style="border: 1px solid #a9b18a; padding: 6px 12px; font-size: 13px; color: #4f5a35;">Business cards</span>
+        <span style="border: 1px solid #a9b18a; padding: 6px 12px; font-size: 13px; color: #4f5a35;">Farmers market sign</span>
+      </div>
+    </div>
+    <div style="display: flex; justify-content: center; align-items: center; background: #fbf8f1; border: 1px solid #e3d9c4; padding: 28px;">
+      <img src="qr.svg" alt="" style="width: 220px; height: 220px;">
+    </div>
+  </div>
+
+  <div class="rule" style="margin: 56px 0 40px;"></div>
+
+  <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 48px; align-items: start;">
+    <div style="display: flex; flex-direction: column; gap: 18px;">
+      <div class="eyebrow">How it is built, in plain terms</div>
+      <div style="display: flex; flex-direction: column; gap: 14px; font-size: 18px; line-height: 1.45; color: #4a3520;">
+        <div><strong style="font-weight: 600;">Lives on Brandon's Vercel account</strong> under her own domain. Public, fast, backed up, not sitting on a laptop.</div>
+        <div><strong style="font-weight: 600;">Money moves through Stripe</strong> straight into her bank. No monthly fee, about 2.9% plus 30¢ per order. Apple Pay and Google Pay come with it. She gets her own login to see payouts.</div>
+        <div><strong style="font-weight: 600;">Orders, customers, jars and reviews</strong> live in a hosted database that is free at her size and keeps daily backups.</div>
+        <div><strong style="font-weight: 600;">Texts and emails</strong> for order confirmations, "on the way", and the review ask. About a penny a text.</div>
+        <div><strong style="font-weight: 600;">Built to hand over.</strong> She never needs a developer to change a price, add a flavor, or pause deliveries for a week.</div>
+      </div>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 18px;">
+      <div class="eyebrow">What it costs to run</div>
+      <div class="card ui" style="display: flex; flex-direction: column; gap: 0; padding: 6px 24px;">
+        <div style="display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #e3d9c4; font-size: 15px;"><span>Domain name</span><span style="color: #5b3d1e; font-weight: 600;">about $15 / year</span></div>
+        <div style="display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #e3d9c4; font-size: 15px;"><span>Hosting on Vercel</span><span style="color: #5b3d1e; font-weight: 600;">$0 to $20 / month</span></div>
+        <div style="display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #e3d9c4; font-size: 15px;"><span>Database</span><span style="color: #5b3d1e; font-weight: 600;">free at this size</span></div>
+        <div style="display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #e3d9c4; font-size: 15px;"><span>Card processing</span><span style="color: #5b3d1e; font-weight: 600;">2.9% + 30¢ per order</span></div>
+        <div style="display: flex; justify-content: space-between; padding: 12px 0; font-size: 15px;"><span>Text messages</span><span style="color: #5b3d1e; font-weight: 600;">about 1¢ each</span></div>
+      </div>
+      <p style="font-size: 16px; line-height: 1.45; color: #6b5a42; font-style: italic;">On a $12 order, the card fee is about 65¢. No software subscriptions, no per-order platform cut.</p>
+    </div>
+  </div>
+
+  <div style="margin-top: 56px; display: flex; flex-direction: column; gap: 18px;">
+    <div class="eyebrow">How it gets built · four checkable steps</div>
+    <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px;">
+      <div style="display: flex; flex-direction: column; gap: 10px; border-top: 2px solid #5b3d1e; padding-top: 14px;">
+        <div class="num">Step 1</div>
+        <div class="h2" style="font-size: 24px;">The look, the menu</div>
+        <p style="font-size: 16px; line-height: 1.45; color: #5a4530;">Design system from the logo. Home and Menu live at a temporary address. Photos shot and placed.</p>
+        <p class="mono">You can see it and share it.</p>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 10px; border-top: 2px solid #5b3d1e; padding-top: 14px;">
+        <div class="num">Step 2</div>
+        <div class="h2" style="font-size: 24px;">Ordering and payment</div>
+        <p style="font-size: 16px; line-height: 1.45; color: #5a4530;">Cart, jar or bag, jar return, delivery or drop-off, Stripe checkout, confirmation texts.</p>
+        <p class="mono">You can place a real $1 test order.</p>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 10px; border-top: 2px solid #5b3d1e; padding-top: 14px;">
+        <div class="num">Step 3</div>
+        <div class="h2" style="font-size: 24px;">The owner's page</div>
+        <p style="font-size: 16px; line-height: 1.45; color: #5a4530;">Sales, delivery run, bake list, jar tracker, price and sold-out controls.</p>
+        <p class="mono">She can run a delivery day from it.</p>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 10px; border-top: 2px solid #5b3d1e; padding-top: 14px;">
+        <div class="num">Step 4</div>
+        <div class="h2" style="font-size: 24px;">Rewards, blessings, launch</div>
+        <p style="font-size: 16px; line-height: 1.45; color: #5a4530;">Points, referrals, reviews, the verse archive, blessing bags, QR downloads, her domain switched on.</p>
+        <p class="mono">Fresh reviewer signs off, then it goes live.</p>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top: 56px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 48px; align-items: start;">
+    <div style="display: flex; flex-direction: column; gap: 18px;">
+      <div class="eyebrow">What we need from her</div>
+      <div style="display: flex; flex-direction: column; gap: 11px; font-size: 18px; line-height: 1.35;">
+        <div style="display: flex; gap: 12px;"><span class="check"></span><span>Flavor names, ingredients, allergens, and the bag and jar price for each</span></div>
+        <div style="display: flex; gap: 12px;"><span class="check"></span><span>Delivery days for Vistancia and Anthem, and any drop-off spots</span></div>
+        <div style="display: flex; gap: 12px;"><span class="check"></span><span>A one-hour phone photoshoot: granola on a board, jars in window light</span></div>
+        <div style="display: flex; gap: 12px;"><span class="check"></span><span>Her bank details for Stripe, so the money is hers from order one</span></div>
+        <div style="display: flex; gap: 12px;"><span class="check"></span><span>The domain name she wants</span></div>
+        <div style="display: flex; gap: 12px;"><span class="check"></span><span>The phone number order texts should come from and go to</span></div>
+        <div style="display: flex; gap: 12px;"><span class="check"></span><span>Her story, in her words, even if it's rough</span></div>
+        <div style="display: flex; gap: 12px;"><span class="check"></span><span>The verses she wants on the page, and any translation she prefers</span></div>
+        <div style="display: flex; gap: 12px;"><span class="check"></span><span>Whether her church wants to be part of the blessing bags</span></div>
+      </div>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 18px;">
+      <div class="eyebrow">Arizona home kitchen rules · worth knowing</div>
+      <div style="display: flex; flex-direction: column; gap: 12px; font-size: 17px; line-height: 1.45; color: #4a3520;">
+        <p>Granola is a shelf-stable baked good, which Arizona's cottage food program allows to be sold online and delivered. Registration with the state health department is free: a short online food-safety course and a form.</p>
+        <p>Labels need the business name and address, the ingredients, allergens, and a "made in a home kitchen" line. The site will print matching labels from the same flavor list, so the label and the website never disagree.</p>
+        <p>There is no cap on how much she can sell. If she ever wants to ship out of state, that is a different license, and the site is ready for it.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="rule" style="margin: 56px 0 28px;"></div>
+  <div style="display: flex; justify-content: space-between; align-items: center;">
+    <div class="eyebrow" style="color: #8a7a62;">Wholesome ingredients, shared with love</div>
+    <div class="mono">Mockups on this canvas: Home, Menu, Checkout, Rewards, Owner's page, verse card, QR print pieces</div>
+  </div>
+</div>
+</x-dc>
+</body>
+</html>

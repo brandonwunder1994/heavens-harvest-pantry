@@ -1,0 +1,482 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=Karla:wght@400;500;600;700&display=swap">
+  <style>
+    body { margin: 0; background: #f4eee2; color: #3a2712; font-family: 'Cormorant Garamond', Georgia, serif; -webkit-font-smoothing: antialiased; }
+    a { color: #5b3d1e; text-decoration: none; } a:hover { color: #6b7a4a; }
+    p { margin: 0; }
+    .caps { font-family: 'Cinzel', Georgia, serif; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; }
+    .small { font-family: 'Karla', system-ui, sans-serif; font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: #6b7a4a; font-weight: 600; }
+    .display { font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 500; letter-spacing: -0.015em; line-height: 0.98; text-wrap: balance; }
+    .verse { font-family: 'Cormorant Garamond', Georgia, serif; font-style: italic; font-weight: 400; line-height: 1.2; }
+    .ref { font-family: 'Cinzel', Georgia, serif; font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase; font-size: 10px; }
+    .body { font-family: 'Karla', system-ui, sans-serif; font-size: 15px; line-height: 1.62; color: #4a3520; text-wrap: pretty; }
+    .chip { font-family: 'Karla', system-ui, sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; padding: 4px 9px; display: inline-block; }
+    .c-small { background: #e2e6cf; color: #4d5a33; }
+    .c-mid { background: #ecdfc6; color: #8a6524; }
+    .c-big { background: #5b3d1e; color: #f4eee2; }
+    .idea { display: grid; grid-template-columns: 250px 630px; gap: 40px; padding: 24px 0; border-top: 1px dotted #c2b393; align-items: start; }
+    .idea h4 { font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 600; font-size: 27px; line-height: 1.04; margin: 0 0 11px; color: #3a2712; letter-spacing: -0.01em; }
+    .feel { font-family: 'Cormorant Garamond', Georgia, serif; font-style: italic; font-size: 19px; line-height: 1.32; color: #5b3d1e; margin-bottom: 9px; }
+    .rule { display: flex; align-items: baseline; gap: 18px; }
+    .rule .dots { flex: 1; border-bottom: 2px dotted #b9a98a; transform: translateY(-5px); }
+  </style>
+</helmet>
+
+<div style="width: 1120px; box-sizing: border-box; background: #f4eee2; position: relative; overflow: hidden; padding: 0 0 90px;">
+
+  <svg width="0" height="0" style="position: absolute;">
+    <defs>
+      <filter id="grainM" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch"></feTurbulence><feColorMatrix type="saturate" values="0"></feColorMatrix><feComponentTransfer><feFuncA type="table" tableValues="0 0 0 0.05 0.08"></feFuncA></feComponentTransfer></filter>
+      <g id="cw" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round">
+        <path d="M30 8 v44 M18 22 h24"></path>
+        <path d="M9 52 c 1 -16 5 -24 13 -33"></path>
+        <path d="M51 52 c -1 -16 -5 -24 -13 -33"></path>
+        <g fill="#c9a06a" stroke="none">
+          <ellipse cx="12" cy="41" rx="3" ry="4.6" transform="rotate(-22 12 41)"></ellipse><ellipse cx="15" cy="32" rx="3" ry="4.6" transform="rotate(-22 15 32)"></ellipse><ellipse cx="19" cy="24" rx="3" ry="4.6" transform="rotate(-22 19 24)"></ellipse>
+          <ellipse cx="48" cy="41" rx="3" ry="4.6" transform="rotate(22 48 41)"></ellipse><ellipse cx="45" cy="32" rx="3" ry="4.6" transform="rotate(22 45 32)"></ellipse><ellipse cx="41" cy="24" rx="3" ry="4.6" transform="rotate(22 41 24)"></ellipse>
+        </g>
+      </g>
+    </defs>
+  </svg>
+  <svg style="position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; mix-blend-mode: multiply;"><rect width="100%" height="100%" filter="url(#grainM)"></rect></svg>
+
+  <div style="padding: 64px 72px 0; position: relative;">
+    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+      <div class="small">Heaven's Harvest Pantry &middot; what could make this unforgettable</div>
+      <div class="small" style="color: #a08a63;">Twenty-eight ideas, priced in days</div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 700px 1fr; gap: 48px; align-items: end; margin-top: 46px;">
+      <div>
+        <h1 class="display" style="font-size: 126px; margin: 0; color: #3a2712;">The Wow List</h1>
+        <div class="body" style="font-size: 19px; line-height: 1.55; max-width: 620px; margin-top: 26px;">
+          Most food sites are a photo, a price and a button. This one can be the place where you watch
+          the granola pour into the jar, put your own name on the label, and come back on Monday because
+          there is a new verse waiting. Every idea below is written as what a visitor <em>feels</em>,
+          then what it takes to build.
+        </div>
+      </div>
+      <div style="display: flex; justify-content: flex-end; color: #6b7a4a;">
+        <svg width="92" height="92" viewBox="0 0 60 60"><use href="#cw"></use></svg>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin: 62px 72px 0; background: #5b3d1e; color: #f4eee2; padding: 44px 52px 48px; position: relative; box-shadow: inset 0 0 0 5px #5b3d1e, inset 0 0 0 6px #c9a06a;">
+    <div class="small" style="color: #c9a06a;">If we do only one thing</div>
+    <div style="display: grid; grid-template-columns: 380px 1fr; gap: 44px; margin-top: 20px; align-items: start;">
+      <h2 class="display" style="font-size: 64px; margin: 0; color: #f4eee2;">The&nbsp;Pour</h2>
+      <div>
+        <div class="verse" style="font-size: 25px; color: #ecdfc6; line-height: 1.3;">
+          You land on the page and a real glass jar is sitting on a warm wooden counter. Clusters of
+          granola fall into it, tumble, settle, and go still. Then the words arrive.
+        </div>
+        <div class="body" style="color: #dfd2b8; margin-top: 18px; max-width: 600px;">
+          It runs for about two seconds and it is the whole brand argument in one gesture: real food,
+          made by hand, going into a jar you will bring back. Nobody who sees it forgets which granola
+          site they were on. Everything else on this list either supports that moment or gives someone
+          a reason to return to it.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="padding: 78px 72px 0;">
+    <div class="rule">
+      <h3 class="caps" style="font-size: 15px; margin: 0; color: #5b3d1e;">The counter and the light</h3>
+      <div class="dots"></div>
+      <div class="small" style="color: #a08a63;">Eight ideas &middot; real 3D on the page</div>
+    </div>
+    <div class="body" style="max-width: 640px; margin-top: 16px; font-size: 16px;">
+      These use genuine 3D in the browser. Not a video, not a looping GIF, but actual light, glass and
+      shadow that respond to the person looking at them. Done badly, this is the reason a site feels
+      slow. Done the way it is scoped here, it is the reason someone sends the link to a friend.
+    </div>
+
+    <div class="idea">
+      <div><h4>The Pour</h4><span class="chip c-big">A week or more</span></div>
+      <div>
+        <div class="feel">Granola falls into a glass jar and settles, once, as the page opens.</div>
+        <div class="body">Around four hundred individual clusters, each a real object catching light
+        through the glass. The physics is worked out once and replayed, so it plays identically every
+        time and costs a phone almost nothing. Scroll down and the jar seals, takes its label, and
+        becomes the product card. This is the signature.</div>
+      </div>
+    </div>
+
+    <div class="idea">
+      <div><h4>Morning light</h4><span class="chip c-mid">A few days</span></div>
+      <div>
+        <div class="feel">The site is lit by the sun at the hour you happen to be visiting.</div>
+        <div class="body">Open it at six and low gold light rakes across the counter with long shadows.
+        Noon is bright and overhead. Evening goes amber. Late night is one warm kitchen bulb. Same page,
+        never quite the same twice, and it makes a breakfast product feel like it belongs to your
+        morning. Almost free to build: it is one light's angle and color.</div>
+      </div>
+    </div>
+
+    <div class="idea">
+      <div><h4>Flavor as material</h4><span class="chip c-mid">A few days</span></div>
+      <div>
+        <div class="feel">Hover a flavor and the granola in the jar actually turns into it.</div>
+        <div class="body">Honey almond is glossy and amber. Dark chocolate sea salt is matte with tiny
+        salt sparkle. Pumpkin is dusty and soft. Not a photo swap: the surface itself changes, so the
+        pieces re-catch the light as they morph. This is the one people replay four or five times.</div>
+      </div>
+    </div>
+
+    <div class="idea">
+      <div><h4>Turn the jar</h4><span class="chip c-mid">A few days</span></div>
+      <div>
+        <div class="feel">Drag to spin the jar in your hands and read the real label.</div>
+        <div class="body">Product photography you can hold. Tilt it far enough and the granola inside
+        shifts and slides toward the glass. Ingredients and allergens are printed on the back of the
+        label, so turning it over is how you read them, exactly as you would in a shop.</div>
+      </div>
+    </div>
+
+    <div class="idea">
+      <div><h4>Walk her kitchen</h4><span class="chip c-big">A week or more</span></div>
+      <div>
+        <div class="feel">Scrolling moves a camera through the morning: bowl, oven, cooling tray, jar, porch.</div>
+        <div class="body">The page has no sections. It is one continuous room, and the scroll wheel is a
+        slow dolly through the five real steps of how it is made, with the story arriving at each stop.
+        It is the how-it-is-made film everybody wants and nobody has the budget to shoot, except this
+        one is live and never buffers. The most ambitious thing on the list.</div>
+      </div>
+    </div>
+
+    <div class="idea">
+      <div><h4>Steam and crumbs</h4><span class="chip c-small">An afternoon</span></div>
+      <div>
+        <div class="feel">Heat rises off the fresh tray. Crumbs scatter away from your cursor.</div>
+        <div class="body">Two small touches with a large payoff: they make the scene feel alive rather
+        than posed. The crumbs are the sort of thing a child plays with for a minute and an adult smiles
+        at once.</div>
+      </div>
+    </div>
+
+    <div class="idea">
+      <div><h4>The wheat hem</h4><span class="chip c-small">An afternoon</span></div>
+      <div>
+        <div class="feel">A field of oat grass along the bottom of the page bends away from your mouse.</div>
+        <div class="body">A wind you cause. It ties the footer back to the wheat in her logo and gives
+        the closing blessing a horizon to sit above.</div>
+      </div>
+    </div>
+
+    <div class="idea">
+      <div><h4>The mark draws itself</h4><span class="chip c-small">An afternoon</span></div>
+      <div>
+        <div class="feel">The cross-and-wheat mark inks itself onto the page once, on a first visit.</div>
+        <div class="body">Two seconds, and then never again for that person. The restraint is what makes
+        it feel expensive. An animation that repeats on every page load becomes furniture.</div>
+      </div>
+    </div>
+
+  </div>
+
+  <div style="padding: 74px 72px 0;">
+    <div class="rule">
+      <h3 class="caps" style="font-size: 15px; margin: 0; color: #5b3d1e;">Make it theirs</h3>
+      <div class="dots"></div>
+      <div class="small" style="color: #a08a63;">Five ideas &middot; customization</div>
+    </div>
+    <div class="body" style="max-width: 640px; margin-top: 16px; font-size: 16px;">
+      People pay more for a thing with their name on it, and they photograph it. Each of these also does
+      something practical for her: it tells her exactly what to make, on a ticket she can print.
+    </div>
+
+    <div class="idea">
+      <div><h4>Build your blend</h4><span class="chip c-big">A week or more</span></div>
+      <div>
+        <div class="feel">Choose your oats, three add-ins, how sweet and how dark you like it, and watch
+        the jar fill with it as you choose.</div>
+        <div class="body">Four decisions, no forms. The jar updates with every tap: pick pecans and
+        pecans fall in. Drag the roast slider toward dark and the clusters brown in front of you. The
+        price moves with the choices. At the end you name it, and the name goes on the label. She gets a
+        printed ticket with the recipe and the label ready to stick on. The biggest idea here, and the
+        one most likely to get shared.</div>
+      </div>
+    </div>
+
+    <div class="idea">
+      <div><h4>Your name on the glass</h4><span class="chip c-mid">A few days</span></div>
+      <div>
+        <div class="feel">Type "The Kellers &middot; Sunday Morning" and it appears on the label, in her type, live.</div>
+        <div class="body">You see your actual jar before you pay. Sold as a small add-on for gifts,
+        birthdays, teachers and church tables, which is the sort of thing people order six of.</div>
+      </div>
+    </div>
+
+    <div class="idea">
+      <div><h4>Send it with a verse</h4><span class="chip c-mid">A few days</span></div>
+      <div>
+        <div class="feel">Gift a jar, choose the verse that goes on the card, write the note.</div>
+        <div class="body">Whoever receives it gets a link that opens with the jar wrapped in paper and
+        string. They pull the string, it unwraps, and there is your note in your own words. Nothing else
+        on this list turns one customer into a second customer as directly.</div>
+      </div>
+    </div>
+
+    <div class="idea">
+      <div><h4>The bowl</h4><span class="chip c-mid">A few days</span></div>
+      <div>
+        <div class="feel">Drag granola, yogurt and berries into a bowl, then save the picture.</div>
+        <div class="body">A small toy with nothing to buy attached. It exists to be posted, and every
+        image that leaves it carries the wordmark in the corner.</div>
+      </div>
+    </div>
+
+    <div class="idea">
+      <div><h4>What should I try?</h4><span class="chip c-small">An afternoon</span></div>
+      <div>
+        <div class="feel">Four questions, crunchy or chewy, sweet or toasty, and it names your flavor.</div>
+        <div class="body">The page's color shifts toward the answer as you go, so by the last question
+        the site already looks like the flavor it is about to name. It removes the hesitation that kills
+        a first order.</div>
+      </div>
+    </div>
+
+  </div>
+
+  <div style="padding: 74px 72px 0;">
+    <div class="rule">
+      <h3 class="caps" style="font-size: 15px; margin: 0; color: #5b3d1e;">Reasons to come back</h3>
+      <div class="dots"></div>
+      <div class="small" style="color: #a08a63;">Eight ideas &middot; the return visit</div>
+    </div>
+    <div class="body" style="max-width: 640px; margin-top: 16px; font-size: 16px;">
+      A shop you visit when you need granola is a shop you visit four times a year. These make the site
+      somewhere you check in on, which is what turns a customer into a regular.
+    </div>
+
+    <div class="idea">
+      <div><h4>Monday's verse</h4><span class="chip c-mid">A few days</span></div>
+      <div>
+        <div class="feel">A new hand-written verse appears every Monday at five in the morning.</div>
+        <div class="body">The site knows which ones you have already read and puts a small wax seal on
+        the new one. It is a standing appointment, and it is the reason someone opens the site in a week
+        they are not buying anything.</div>
+      </div>
+    </div>
+
+    <div class="idea">
+      <div><h4>Your verse wall</h4><span class="chip c-mid">A few days</span></div>
+      <div>
+        <div class="feel">Every card you have received, hanging in order, with the date it arrived.</div>
+        <div class="body">After six months it is a wall you are attached to, and people do not abandon a
+        collection they can see. Printable as a set, too.</div>
+      </div>
+    </div>
+
+    <div class="idea">
+      <div><h4>The jar shelf</h4><span class="chip c-mid">A few days</span></div>
+      <div>
+        <div class="feel">A shelf that gains a small glass jar every time you bring one back.</div>
+        <div class="body">Underneath it: you have kept fourteen jars out of the landfill. Returning a jar
+        already earns two dollars off. This makes it feel like something you are good at, rather than a
+        discount you are claiming.</div>
+      </div>
+    </div>
+
+    <div class="idea">
+      <div><h4>The seasons turn</h4><span class="chip c-mid">A few days</span></div>
+      <div>
+        <div class="feel">The site looks different in October than it does in Lent.</div>
+        <div class="body">Harvest gold in autumn, deep violet through Advent, white and pale gold at
+        Easter, hot green through the Arizona monsoon. Not a theme picker, because nobody ever asked for
+        a theme picker. It is simply different when you come back, the way a house is.</div>
+      </div>
+    </div>
+
+    <div class="idea">
+      <div><h4>The porch light</h4><span class="chip c-small">An afternoon</span></div>
+      <div>
+        <div class="feel">A small warm light in the corner: lit when she is baking this week, out when she has sold out.</div>
+        <div class="body">She flips it from her phone. One glance answers the only question a returning
+        customer has, and it makes the site feel staffed by a person rather than a server.</div>
+      </div>
+    </div>
+
+    <div class="idea">
+      <div><h4>The blessing map</h4><span class="chip c-mid">A few days</span></div>
+      <div>
+        <div class="feel">Every blessing bag someone buys lights one warm point over Vistancia and Anthem.</div>
+        <div class="body">No names, no addresses. Just light gathering over the neighborhood, month
+        after month. It is the most moving thing we could put on this site, it costs a few days, and it
+        quietly proves the blessing bags are real.</div>
+      </div>
+    </div>
+
+    <div class="idea">
+      <div><h4>Welcome back</h4><span class="chip c-small">An afternoon</span></div>
+      <div>
+        <div class="feel">The second visit greets you by name and offers your usual in one tap.</div>
+        <div class="body">Welcome back, Sarah. Honey almond, two bags, Thursday drop at the Anthem
+        market? One button. A reorder should take four seconds, not four minutes.</div>
+      </div>
+    </div>
+
+    <div class="idea">
+      <div><h4>Sunday morning note</h4><span class="chip c-mid">A few days</span></div>
+      <div>
+        <div class="feel">A short email that opens your own page: this week's verse, your points, what she is baking.</div>
+        <div class="body">Written in her voice and sent from her, not out of a newsletter template. The
+        link goes to a page that is about you, which is why it gets opened.</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="padding: 74px 72px 0;">
+    <div class="rule">
+      <h3 class="caps" style="font-size: 15px; margin: 0; color: #5b3d1e;">The small things people feel</h3>
+      <div class="dots"></div>
+      <div class="small" style="color: #a08a63;">Six ideas &middot; craft</div>
+    </div>
+
+    <div class="idea">
+      <div><h4>One sound, once</h4><span class="chip c-small">An afternoon</span></div>
+      <div>
+        <div class="feel">A soft crunch when something goes into the basket. Nothing else makes a sound.</div>
+        <div class="body">Off until you switch it on, and the switch is where you can find it. A site with
+        one perfect sound is charming. A site with six is a site you close.</div>
+      </div>
+    </div>
+
+    <div class="idea">
+      <div><h4>Real paper</h4><span class="chip c-small">An afternoon</span></div>
+      <div>
+        <div class="feel">The verse card looks pressed into paper, with ink bleeding slightly into the fibre.</div>
+        <div class="body">Grain, a soft deboss along the edges, ink sitting in the paper rather than on
+        the screen. This is what separates designed from made.</div>
+      </div>
+    </div>
+
+    <div class="idea">
+      <div><h4>The oven timer</h4><span class="chip c-small">An afternoon</span></div>
+      <div>
+        <div class="feel">When something is loading, a small kitchen timer winds down.</div>
+        <div class="body">Instead of a spinner that belongs to every app on earth. Two seconds of waiting
+        becomes two seconds of her brand.</div>
+      </div>
+    </div>
+
+    <div class="idea">
+      <div><h4>Type that behaves</h4><span class="chip c-small">An afternoon</span></div>
+      <div>
+        <div class="feel">Headlines break in the right place, prices line up in a column, nothing jumps as it loads.</div>
+        <div class="body">Invisible when it is right and cheap-looking the moment it is wrong. This is the
+        difference people cannot name but always notice.</div>
+      </div>
+    </div>
+
+    <div class="idea">
+      <div><h4>The receipt</h4><span class="chip c-small">An afternoon</span></div>
+      <div>
+        <div class="feel">Your confirmation prints like a kitchen ticket, with the week's verse at the bottom.</div>
+        <div class="body">People screenshot a beautiful receipt. Nobody has ever screenshotted a payment
+        confirmation email.</div>
+      </div>
+    </div>
+
+    <div class="idea">
+      <div><h4>Everything, without the graphics</h4><span class="chip c-mid">A few days</span></div>
+      <div>
+        <div class="feel">On an old phone, a weak signal, or with motion switched off, the site is still beautiful.</div>
+        <div class="body">The 3D is replaced by a single still frame of the same scene and everything
+        still works. This is not a compromise. It is the thing that stops the ambitious version from ever
+        becoming a liability.</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="padding: 74px 72px 0;">
+    <div class="rule">
+      <h3 class="caps" style="font-size: 15px; margin: 0; color: #5b3d1e;">The open door</h3>
+      <div class="dots"></div>
+      <div class="small" style="color: #a08a63;">One idea &middot; the invitation</div>
+    </div>
+
+    <div class="idea">
+      <div><h4>Want to know Jesus?</h4><span class="chip c-mid">A few days</span></div>
+      <div>
+        <div class="feel">One quiet line under the closing blessing, and a page behind it.</div>
+        <div class="body">Nothing on the granola pages changes. At the very bottom, below the
+        blessing, sits a single line that is easy to walk past and easy to follow. The page behind it
+        says plainly what she believes, that being a Christian is mostly showing up for people and
+        telling them the good news, and that her family's church has a seat for anyone who wants one.
+        Service times and the address come straight from the church. There is a second door for anyone
+        not ready for a building: a private note to her, seen by nobody else, never added to a mailing
+        list. Nothing on the page is for sale.</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin: 84px 72px 0; border-top: 3px double #5b3d1e; padding-top: 34px;">
+    <div style="display: grid; grid-template-columns: 250px 630px; gap: 40px;">
+      <div>
+        <h3 class="display" style="font-size: 44px; margin: 0; color: #3a2712;">What this costs, honestly</h3>
+      </div>
+      <div class="body" style="font-size: 16px; display: flex; flex-direction: column; gap: 14px;">
+        <p>The 3D itself adds about 190KB to the page, and the whole thing, fonts and all, lands near half
+        a megabyte. One unoptimized photo off a phone is eight times that. It loads after the words, so
+        the site reads instantly and the scene arrives a beat later, which is also the more dramatic
+        entrance.</p>
+        <p>It runs on any phone made in the last five years. Older than that, or a weak signal, or a
+        visitor who has asked their phone to reduce motion: they get a still frame of the identical scene
+        and never know anything is missing.</p>
+        <p>Search engines read plain text and ordinary product pages, not the graphics, so the signature
+        moment costs nothing in findability.</p>
+        <p>The risk worth naming out loud: a 3D opener built carelessly makes a phone hot and a site
+        slow. That is the failure I intend to design against from the first day rather than discover at
+        launch.</p>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin: 62px 72px 0; background: #e2e6cf; padding: 42px 50px 46px;">
+    <div class="small" style="color: #4d5a33;">My recommendation</div>
+    <h3 class="display" style="font-size: 48px; margin: 12px 0 0; color: #2f3d1a;">Four things, in this order</h3>
+    <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 26px; margin-top: 28px;">
+      <div style="border-top: 2px solid #6b7a4a; padding-top: 14px;">
+        <div class="caps" style="font-size: 13px; color: #3f4d25;">The Pour</div>
+        <div class="body" style="font-size: 14px; margin-top: 8px; color: #445029;">The moment that makes the site memorable. Nothing else buys that.</div>
+      </div>
+      <div style="border-top: 2px solid #6b7a4a; padding-top: 14px;">
+        <div class="caps" style="font-size: 13px; color: #3f4d25;">The porch light</div>
+        <div class="body" style="font-size: 14px; margin-top: 8px; color: #445029;">An afternoon of work, and it answers a regular’s only question at a glance.</div>
+      </div>
+      <div style="border-top: 2px solid #6b7a4a; padding-top: 14px;">
+        <div class="caps" style="font-size: 13px; color: #3f4d25;">Monday's verse</div>
+        <div class="body" style="font-size: 14px; margin-top: 8px; color: #445029;">The reason to come back when you are not buying. Cheap, and it compounds.</div>
+      </div>
+      <div style="border-top: 2px solid #6b7a4a; padding-top: 14px;">
+        <div class="caps" style="font-size: 13px; color: #3f4d25;">Build your blend</div>
+        <div class="body" style="font-size: 14px; margin-top: 8px; color: #445029;">The one people share, and the one that lifts the average order.</div>
+      </div>
+    </div>
+    <div class="body" style="margin-top: 26px; max-width: 700px; font-size: 15px; color: #445029;">
+      Everything else here is real and buildable, but those four are what I would spend the first month
+      on. The rest can arrive one at a time, which is its own kind of reason to come back.
+    </div>
+  </div>
+
+  <div style="margin: 58px 72px 0; text-align: center; color: #6b7a4a;">
+    <svg width="46" height="46" viewBox="0 0 60 60"><use href="#cw"></use></svg>
+    <div class="verse" style="font-size: 25px; color: #5b3d1e; margin-top: 10px;">"Taste and see that the Lord is good."</div>
+    <div class="ref" style="color: #a08a63; margin-top: 8px;">Psalm 34:8</div>
+  </div>
+
+</div>
+</x-dc>
+</body>
+</html>

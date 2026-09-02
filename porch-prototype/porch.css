@@ -1,0 +1,239 @@
+/* The porch light.
+   Every rule is scoped under .porch, so dropping it into the site cannot
+   restyle anything already there. Colours are the shop's own tokens, read
+   from the site's stylesheet where it exists and given the same fallbacks
+   here so the standalone demo looks identical. */
+
+.porch {
+  --porch-lit: var(--color-gold, #c9a06a);
+  --porch-out: var(--color-sand, #cdbfa5);
+  --porch-ink: var(--color-brown, #5b3d1e);
+  --porch-quiet: var(--color-muted, #6b5a42);
+  --porch-glow: 201, 160, 106;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  font-family: var(--font-ui, 'Karla', system-ui, sans-serif);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  line-height: 1;
+  color: var(--porch-ink);
+}
+
+/* The lamp: a small filament in a glass shade. Drawn, not an image, so it
+   takes its colour from the page and costs nothing to load. */
+.porch-lamp {
+  position: relative;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  flex: 0 0 auto;
+  background: var(--porch-out);
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.09);
+}
+
+.porch-lamp::after {
+  content: '';
+  position: absolute;
+  inset: -7px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(var(--porch-glow), 0.5) 0%,
+    rgba(var(--porch-glow), 0) 68%
+  );
+  opacity: 0;
+  transition: opacity 500ms ease;
+}
+
+.porch.is-lit .porch-lamp {
+  background: var(--porch-lit);
+  box-shadow: inset 0 0 0 1px rgba(91, 61, 30, 0.22);
+}
+.porch.is-lit .porch-lamp::after { opacity: 1; }
+
+/* A filament settling, once, when the page opens. Not a pulse — a lamp that
+   blinks forever reads as a warning light, and this is the opposite of one. */
+@keyframes porch-warm {
+  0%   { opacity: 0; transform: scale(0.82); }
+  55%  { opacity: 1; transform: scale(1.06); }
+  100% { opacity: 1; transform: scale(1); }
+}
+.porch.is-lit .porch-lamp::after { animation: porch-warm 900ms ease-out both; }
+
+.porch.is-out { color: var(--porch-quiet); }
+.porch.is-out .porch-lamp { background: var(--porch-out); }
+
+.porch-note { white-space: nowrap; }
+
+@media (prefers-reduced-motion: reduce) {
+  .porch .porch-lamp::after { animation: none; }
+  .porch .porch-lamp::after { transition: none; }
+}
+
+/* ------------------------------------------------------------------------
+   Her switch. Lives on her own page and nowhere else. */
+
+.porch-switch {
+  --sw-paper: var(--color-paper, #fbf8f1);
+  --sw-rule: var(--color-rule, #e3d9c4);
+  --sw-ink: var(--color-ink, #3a2712);
+  --sw-brown: var(--color-brown, #5b3d1e);
+  --sw-brown-deep: var(--color-brown-deep, #3f2a14);
+  --sw-muted: var(--color-muted, #6b5a42);
+  --sw-faint: var(--color-faint, #8a7a62);
+  --sw-gold: var(--color-gold, #c9a06a);
+  --sw-moss: var(--color-moss, #eef0e2);
+  --sw-sage-deep: var(--color-sage-deep, #4f5a35);
+  --sw-sand: var(--color-sand, #cdbfa5);
+  --sw-cream: var(--color-cream, #f4eee2);
+
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  font-family: var(--font-ui, 'Karla', system-ui, sans-serif);
+  color: var(--sw-ink);
+}
+
+.porch-switch .status {
+  display: flex;
+  align-items: flex-start;
+  gap: 13px;
+  padding: 17px 19px;
+  background: var(--sw-paper);
+  border-left: 3px solid var(--sw-sand);
+}
+.porch-switch .status.is-lit { border-left-color: var(--sw-gold); }
+.porch-switch .status.is-out { border-left-color: var(--sw-sand); }
+.porch-switch .status.is-off { border-left-color: var(--sw-rule); }
+
+.porch-switch .status h4 {
+  margin: 0;
+  font-family: var(--font-serif, 'Cormorant Garamond', Georgia, serif);
+  font-weight: 600;
+  font-size: 25px;
+  line-height: 1.06;
+  color: var(--sw-ink);
+}
+.porch-switch .status p {
+  margin: 6px 0 0;
+  font-size: 13.5px;
+  line-height: 1.55;
+  color: var(--sw-muted);
+  max-width: 46ch;
+}
+
+.porch-switch .choices { display: flex; flex-wrap: wrap; gap: 12px; }
+
+.porch-switch .choice {
+  font-family: var(--font-display, 'Cinzel', Georgia, serif);
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  font-size: 12px;
+  min-height: 52px;
+  padding: 0 24px;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  border: 0;
+  cursor: pointer;
+  background: transparent;
+  color: var(--sw-brown);
+  box-shadow: inset 0 0 0 1px var(--sw-brown);
+  transition: background 160ms ease, color 160ms ease, box-shadow 160ms ease;
+}
+/* Hover must not out-rank the chosen state: without the :not() below, hovering
+   the button she has already picked lays cream text on a cream ground. */
+.porch-switch .choice:not([aria-pressed='true']):hover:not(:disabled) { background: var(--sw-paper); }
+.porch-switch .choice:disabled { cursor: default; opacity: 1; }
+
+.porch-switch .choice[aria-pressed='true'] {
+  background: var(--sw-brown);
+  color: var(--sw-cream);
+  box-shadow: inset 0 0 0 4px var(--sw-brown), inset 0 0 0 5px var(--sw-gold);
+}
+
+.porch-switch .choice[aria-pressed='true']:hover:not(:disabled) {
+  background: var(--sw-brown-deep, #3f2a14);
+  color: var(--sw-cream);
+  box-shadow: inset 0 0 0 4px var(--sw-brown-deep, #3f2a14), inset 0 0 0 5px var(--sw-gold);
+}
+
+.porch-switch .choice .dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--sw-sand);
+  flex: 0 0 auto;
+}
+.porch-switch .choice[data-state='lit'] .dot { background: var(--sw-gold); }
+
+.porch-switch .field { display: flex; flex-direction: column; gap: 7px; }
+.porch-switch .field > span {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--sw-muted);
+}
+.porch-switch .field input {
+  width: 100%;
+  max-width: 34rem;
+  border: 1px solid var(--sw-sand);
+  background: var(--sw-paper);
+  padding: 11px 13px;
+  font-family: inherit;
+  font-size: 15px;
+  color: var(--sw-ink);
+}
+.porch-switch .field input::placeholder { color: var(--sw-faint); }
+/* Flipping the switch does not change her words, so when they might no longer
+   fit she is asked to re-read them. It never edits them for her: guessing at
+   what she meant is how a light starts lying. */
+.porch-switch .field.recheck input { border-color: var(--sw-gold); box-shadow: inset 0 0 0 1px var(--sw-gold); }
+.porch-switch .recheck-note {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--sw-brown);
+}
+.porch-switch .field .hint {
+  font-size: 11.5px;
+  line-height: 1.5;
+  color: var(--sw-faint);
+  max-width: 46ch;
+}
+
+/* What the customer will see, shown to her before she saves it. */
+.porch-switch .preview {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  padding: 15px 19px;
+  background: var(--sw-cream);
+  border: 1px dashed var(--color-hedge, #a9b18a);
+}
+.porch-switch .preview > span {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-sage, #6b7a4a);
+}
+.porch-switch .preview .empty {
+  font-family: var(--font-serif, 'Cormorant Garamond', Georgia, serif);
+  font-style: italic;
+  font-size: 17px;
+  color: var(--sw-faint);
+  letter-spacing: 0;
+  text-transform: none;
+  font-weight: 400;
+}
+
+.porch-switch .saved {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--sw-sage-deep);
+}
+.porch-switch .saved[data-bad='yes'] { color: var(--sw-brown); }

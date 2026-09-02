@@ -1,0 +1,185 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=Karla:wght@400;500;600;700&display=swap">
+  <style>
+    body { margin: 0; background: #f4eee2; color: #3a2712; font-family: 'Karla', system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+    a { color: #5b3d1e; text-decoration: none; } a:hover { color: #6b7a4a; }
+    p { margin: 0; }
+    .small { font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; font-weight: 700; color: #6b7a4a; }
+    .caps { font-family: 'Cinzel', Georgia, serif; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; }
+    .display { font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 500; line-height: 1; letter-spacing: -0.018em; text-wrap: balance; }
+    .verse { font-family: 'Cormorant Garamond', Georgia, serif; font-style: italic; line-height: 1.28; }
+    .body { font-size: 12.5px; line-height: 1.58; color: #6b5333; text-wrap: pretty; }
+    .frame { background: #fbf5e8; box-shadow: inset 0 0 0 1px #d8c8a8; }
+  </style>
+</helmet>
+
+<div style="width: 1440px; height: 700px; box-sizing: border-box; background: #f4eee2; position: relative; overflow: hidden; padding: 40px 56px 0;">
+
+  <svg width="0" height="0" style="position: absolute;">
+    <defs>
+      <linearGradient id="lightC" x1="0" y1="0" x2="0.4" y2="1"><stop offset="0" stop-color="#fff6e0"></stop><stop offset="1" stop-color="#f0e3ca"></stop></linearGradient>
+      <pattern id="oatsC" width="11" height="11" patternUnits="userSpaceOnUse">
+        <rect width="11" height="11" fill="#d9ab6d"></rect>
+        <ellipse cx="3" cy="3" rx="2.4" ry="1.7" fill="#c08f52"></ellipse>
+        <ellipse cx="8" cy="7" rx="2" ry="1.5" fill="#a3743c" transform="rotate(30 8 7)"></ellipse>
+      </pattern>
+      <filter id="grainC" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch"></feTurbulence><feColorMatrix type="saturate" values="0"></feColorMatrix><feComponentTransfer><feFuncA type="table" tableValues="0 0 0 0.04 0.07"></feFuncA></feComponentTransfer></filter>
+    </defs>
+  </svg>
+  <svg style="position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; mix-blend-mode: multiply;"><rect width="100%" height="100%" filter="url(#grainC)"></rect></svg>
+
+  <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+    <div>
+      <div class="small">Idea &middot; Walk her kitchen</div>
+      <h2 class="display" style="font-size: 54px; margin: 12px 0 0; color: #3a2712;">The whole page is one room. Scrolling is the camera.</h2>
+    </div>
+    <div style="width: 330px; text-align: right;">
+      <div class="body">No sections, no bands, no "About Us". Five stops on one slow move through the morning she bakes, with the words arriving where they belong. The scroll bar becomes a timeline of how it is made.</div>
+    </div>
+  </div>
+
+  <div style="display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 22px; margin-top: 32px;">
+
+    <!-- 1 -->
+    <div style="display: flex; flex-direction: column; gap: 14px;">
+      <div class="frame" style="height: 214px; position: relative; overflow: hidden;">
+        <svg viewBox="0 0 248 214" width="248" height="214" style="display: block;">
+          <rect width="248" height="214" fill="url(#lightC)"></rect>
+          <rect x="0" y="158" width="248" height="56" fill="#a9794a"></rect>
+          <path d="M0 158 H248" stroke="#cba274" stroke-width="4"></path>
+          <ellipse cx="124" cy="164" rx="66" ry="9" fill="#6b4622" opacity="0.3"></ellipse>
+          <path d="M62 108 a62 62 0 0 0 124 0 Z" fill="#eae2d0" stroke="#8a6a45" stroke-width="2"></path>
+          <path d="M62 108 h124" stroke="#8a6a45" stroke-width="2"></path>
+          <path d="M70 108 a54 54 0 0 0 108 0 Z" fill="url(#oatsC)" opacity="0.9" transform="translate(0 6)"></path>
+          <g stroke="#5b3d1e" stroke-width="4" stroke-linecap="round" fill="none"><path d="M150 108 L188 40"></path><ellipse cx="146" cy="116" rx="12" ry="7" transform="rotate(-30 146 116)" fill="#8a6a45" stroke="none"></ellipse></g>
+          <g fill="#c9a06a"><circle cx="104" cy="74" r="3"></circle><circle cx="130" cy="60" r="2.4"></circle><circle cx="86" cy="90" r="2"></circle></g>
+        </svg>
+      </div>
+      <div>
+        <div class="caps" style="font-size: 10px; color: #a08a63;">Stop one</div>
+        <div class="display" style="font-size: 26px; margin-top: 6px; color: #3a2712;">The bowl</div>
+        <div class="body" style="margin-top: 8px;">Oats, honey, oil, salt. The camera looks straight down as it is folded by hand. Ingredients name themselves as they land.</div>
+      </div>
+    </div>
+
+    <!-- 2 -->
+    <div style="display: flex; flex-direction: column; gap: 14px;">
+      <div class="frame" style="height: 214px; position: relative; overflow: hidden;">
+        <svg viewBox="0 0 248 214" width="248" height="214" style="display: block;">
+          <rect width="248" height="214" fill="#e8dbc2"></rect>
+          <rect x="34" y="30" width="180" height="154" rx="6" fill="#8a6a45"></rect>
+          <rect x="46" y="42" width="156" height="112" rx="4" fill="#3a2712"></rect>
+          <rect x="52" y="48" width="144" height="100" rx="3" fill="#c98b3a"></rect>
+          <rect x="52" y="48" width="144" height="100" rx="3" fill="#f6c667" opacity="0.55"></rect>
+          <rect x="70" y="96" width="108" height="34" rx="3" fill="#a3743c"></rect>
+          <rect x="70" y="96" width="108" height="34" rx="3" fill="url(#oatsC)" opacity="0.8"></rect>
+          <g stroke="#e8b25a" stroke-width="3" opacity="0.55"><path d="M52 74 h144"></path></g>
+          <circle cx="70" cy="168" r="7" fill="#f4eee2" stroke="#5b3d1e" stroke-width="2"></circle>
+          <circle cx="98" cy="168" r="7" fill="#f4eee2" stroke="#5b3d1e" stroke-width="2"></circle>
+          <rect x="120" y="162" width="80" height="12" rx="6" fill="#f4eee2" stroke="#5b3d1e" stroke-width="2"></rect>
+        </svg>
+      </div>
+      <div>
+        <div class="caps" style="font-size: 10px; color: #a08a63;">Stop two</div>
+        <div class="display" style="font-size: 26px; margin-top: 6px; color: #3a2712;">The oven</div>
+        <div class="body" style="margin-top: 8px;">The glass goes warm and the whole page's light turns golden for a moment. Twenty-two minutes, stirred twice.</div>
+      </div>
+    </div>
+
+    <!-- 3 -->
+    <div style="display: flex; flex-direction: column; gap: 14px;">
+      <div class="frame" style="height: 214px; position: relative; overflow: hidden;">
+        <svg viewBox="0 0 248 214" width="248" height="214" style="display: block;">
+          <rect width="248" height="214" fill="url(#lightC)"></rect>
+          <rect x="0" y="150" width="248" height="64" fill="#a9794a"></rect>
+          <path d="M0 150 H248" stroke="#cba274" stroke-width="4"></path>
+          <rect x="28" y="94" width="192" height="62" rx="4" fill="#d8cdb4" stroke="#8a6a45" stroke-width="2"></rect>
+          <rect x="36" y="102" width="176" height="46" fill="url(#oatsC)"></rect>
+          <g stroke="#f4eee2" stroke-width="2" opacity="0.7"><path d="M36 102 v46 M78 102 v46 M120 102 v46 M162 102 v46 M204 102 v46"></path></g>
+          <g stroke="#e8dcc2" stroke-width="6" stroke-linecap="round" opacity="0.85" fill="none">
+            <path d="M92 88 c -8 -14 6 -20 -2 -34"></path>
+            <path d="M124 84 c -8 -16 6 -22 -2 -38"></path>
+            <path d="M156 88 c -8 -14 6 -20 -2 -34"></path>
+          </g>
+        </svg>
+      </div>
+      <div>
+        <div class="caps" style="font-size: 10px; color: #a08a63;">Stop three</div>
+        <div class="display" style="font-size: 26px; margin-top: 6px; color: #3a2712;">The cooling</div>
+        <div class="body" style="margin-top: 8px;">Steam rises and the clusters set. This is the stop where the flavors appear and you pick yours.</div>
+      </div>
+    </div>
+
+    <!-- 4 -->
+    <div style="display: flex; flex-direction: column; gap: 14px;">
+      <div class="frame" style="height: 214px; position: relative; overflow: hidden;">
+        <svg viewBox="0 0 248 214" width="248" height="214" style="display: block;">
+          <rect width="248" height="214" fill="url(#lightC)"></rect>
+          <rect x="0" y="160" width="248" height="54" fill="#a9794a"></rect>
+          <path d="M0 160 H248" stroke="#cba274" stroke-width="4"></path>
+          <ellipse cx="124" cy="166" rx="52" ry="8" fill="#6b4622" opacity="0.32"></ellipse>
+          <clipPath id="jarClipC"><path d="M92 66 v10 c0 6 -10 9 -10 20 v66 c0 9 7 13 15 13 h54 c8 0 15 -4 15 -13 V96 c0 -11 -10 -14 -10 -20 V66 Z"></path></clipPath>
+          <g clip-path="url(#jarClipC)"><rect x="78" y="102" width="96" height="76" fill="url(#oatsC)"></rect></g>
+          <path d="M92 66 v10 c0 6 -10 9 -10 20 v66 c0 9 7 13 15 13 h54 c8 0 15 -4 15 -13 V96 c0 -11 -10 -14 -10 -20 V66 Z" fill="#ffffff" opacity="0.16"></path>
+          <path d="M92 66 v10 c0 6 -10 9 -10 20 v66 c0 9 7 13 15 13 h54 c8 0 15 -4 15 -13 V96 c0 -11 -10 -14 -10 -20 V66 Z" fill="none" stroke="#8a6a45" stroke-width="1.8"></path>
+          <rect x="88" y="48" width="72" height="18" rx="3" fill="#f4eee2" stroke="#8a6a45" stroke-width="1.8"></rect>
+          <rect x="98" y="118" width="52" height="40" rx="2" fill="#f4eee2" stroke="#8a6a45" stroke-width="1.2"></rect>
+          <path d="M124 132 m0 10 c -4 -5 -11 -8 -11 -14 c 0 -4 3 -6 6 -6 c 2 0 4 1 5 3 c 1 -2 3 -3 5 -3 c 3 0 6 2 6 6 c 0 6 -7 9 -11 14 z" fill="#c9a06a"></path>
+          <rect x="86" y="88" width="4" height="66" rx="2" fill="#ffffff" opacity="0.6"></rect>
+        </svg>
+      </div>
+      <div>
+        <div class="caps" style="font-size: 10px; color: #a08a63;">Stop four</div>
+        <div class="display" style="font-size: 26px; margin-top: 6px; color: #3a2712;">The jar</div>
+        <div class="body" style="margin-top: 8px;">It fills, the lid seals, the label goes on with the batch date. This is where the price and the button live.</div>
+      </div>
+    </div>
+
+    <!-- 5 -->
+    <div style="display: flex; flex-direction: column; gap: 14px;">
+      <div class="frame" style="height: 214px; position: relative; overflow: hidden;">
+        <svg viewBox="0 0 248 214" width="248" height="214" style="display: block;">
+          <rect width="248" height="214" fill="#efe0c4"></rect>
+          <rect x="0" y="0" width="248" height="120" fill="#e3d3b4"></rect>
+          <rect x="60" y="24" width="128" height="150" rx="3" fill="#8a6a45"></rect>
+          <rect x="70" y="34" width="108" height="140" fill="#a9794a"></rect>
+          <rect x="82" y="48" width="84" height="52" rx="2" fill="#f6e6c4"></rect>
+          <path d="M124 48 v52 M82 74 h84" stroke="#8a6a45" stroke-width="2"></path>
+          <circle cx="160" cy="126" r="4" fill="#c9a06a"></circle>
+          <rect x="0" y="174" width="248" height="40" fill="#cbb694"></rect>
+          <ellipse cx="112" cy="188" rx="34" ry="7" fill="#8a6a45" opacity="0.32"></ellipse>
+          <path d="M92 152 h40 l6 34 h-52 z" fill="#e2e6cf" stroke="#6b7a4a" stroke-width="1.6"></path>
+          <path d="M96 152 c 0 -12 32 -12 32 0" fill="none" stroke="#6b7a4a" stroke-width="1.6"></path>
+          <path d="M104 168 h18" stroke="#6b7a4a" stroke-width="1.6"></path>
+          <g fill="none" stroke="#c9a06a" stroke-width="2" opacity="0.8"><path d="M196 60 a16 16 0 0 1 0 28"></path><path d="M204 52 a26 26 0 0 1 0 44"></path></g>
+          <circle cx="192" cy="74" r="5" fill="#f6c667"></circle>
+        </svg>
+      </div>
+      <div>
+        <div class="caps" style="font-size: 10px; color: #a08a63;">Stop five</div>
+        <div class="display" style="font-size: 26px; margin-top: 6px; color: #3a2712;">The porch</div>
+        <div class="body" style="margin-top: 8px;">Camera pulls back to a doorstep with the bag on it and the porch light on. The closing blessing sits here.</div>
+      </div>
+    </div>
+
+  </div>
+
+  <div style="position: absolute; left: 56px; right: 56px; bottom: 26px; display: flex; align-items: center; gap: 22px; border-top: 1px dotted #c2b393; padding-top: 16px;">
+    <div class="verse" style="font-size: 21px; color: #5b3d1e;">"Whatever you do, work at it with all your heart."</div>
+    <div class="caps" style="font-size: 9px; color: #a08a63;">Colossians 3:23</div>
+    <div style="flex: 1; border-bottom: 1px dotted #c2b393; transform: translateY(-4px);"></div>
+    <div class="body" style="width: 380px; text-align: right;">If this proves too heavy for phones, the same five stops work as five still frames that cross-fade. The story survives; only the camera move is lost.</div>
+  </div>
+
+</div>
+</x-dc>
+</body>
+</html>

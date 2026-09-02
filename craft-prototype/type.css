@@ -1,0 +1,101 @@
+/* Type that behaves.
+ *
+ * The one stylesheet here that is meant to be GLOBAL. Everything else in this
+ * folder is scoped, but this is the layer that makes every page set properly,
+ * and it is worth doing once now rather than page by page later.
+ *
+ * Four things, all of them invisible when they are right and cheap-looking the
+ * moment they are wrong:
+ *
+ *   1. Nothing jumps as the fonts load.
+ *   2. Headlines break where a person would break them.
+ *   3. Prices line up in a column.
+ *   4. Quotation marks hang outside the measure, so the text edge stays straight.
+ *
+ * Import `fallback-fonts.css` before this, and put each fallback into its stack
+ * where the tokens below already do.
+ */
+
+:root {
+  /* Each stack now carries its measured stand-in, so the swap barely moves. */
+  --font-display: 'Cinzel', 'Cinzel Fallback', Georgia, 'Times New Roman', serif;
+  --font-serif: 'Cormorant Garamond', 'Cormorant Fallback', Georgia, 'Times New Roman', serif;
+  --font-ui: 'Karla', 'Karla Fallback', Arial, Helvetica, sans-serif;
+
+  /* A line of running text somebody can actually track back along. */
+  --measure: 66ch;
+}
+
+/* --------------------------------------------------------- 2. the breaking */
+
+/* Headlines break to even lines rather than leaving one word alone on the last
+   one. Body copy avoids a single-word last line. Both are one property each and
+   both are the difference between set and typed. */
+h1, h2, h3, h4,
+.display, .verse, .lede, .standfirst, .promise {
+  text-wrap: balance;
+}
+
+p, li, dd, figcaption, blockquote, .body, .say, .note {
+  text-wrap: pretty;
+}
+
+/* Running text gets a measure. Anything wider is a paragraph nobody finishes. */
+.measure { max-width: var(--measure); }
+
+/* ---------------------------------------------------------- 3. the figures */
+
+/* Money, points, dates and counts: same height, same width, so a column of them
+   is a column. Cormorant sets old-style figures by default, which is beautiful
+   in a verse and wrong on a price. */
+.price, .amount, .points, .count, .tabular,
+td.num, th.num,
+[data-figures='lining'] {
+  font-variant-numeric: lining-nums tabular-nums;
+  font-feature-settings: 'lnum' 1, 'tnum' 1;
+}
+
+/* A price at the end of a dot leader never wraps away from its own row. */
+.leader .price,
+.leader .amount { white-space: nowrap; }
+
+/* ----------------------------------------------------- 4. hanging punctuation */
+
+/* An opening quote sits outside the text edge, so a quoted line looks aligned
+   with the line above it rather than indented by a stray mark.
+
+   Today this is Safari only — Chrome and Firefox ignore it. It is here because
+   it costs one line, it is free where it works, and everywhere else the page
+   looks exactly as it does now. It is not worth a hack to force it: the fix
+   would be measuring a quote glyph and pulling the first line back by hand, and
+   that breaks the moment the type size changes. */
+blockquote, .verse, .pull {
+  hanging-punctuation: first last;
+}
+
+/* ------------------------------------------------------------- and the rest */
+
+/* Long words — a flavour name, an address, an email — break rather than push
+   the page sideways. */
+.wrap-hard { overflow-wrap: anywhere; }
+
+/* Uppercase set at a small size needs the letters opened up, or it reads as one
+   long word. Every label on this site is uppercase. */
+.caps, .small-caps, .eyebrow, .ref {
+  letter-spacing: 0.18em;
+  /* The last letter's tracking pushes centred text off-centre by half a space.
+     Pulling it back is a two-pixel fix nobody can name and everybody sees. */
+  text-indent: 0.18em;
+}
+
+/* Optical sizes: a headline does not want the same tracking as a caption. */
+h1, .display { letter-spacing: -0.02em; }
+h2 { letter-spacing: -0.015em; }
+h3 { letter-spacing: -0.01em; }
+
+/* Italics in this serif sit slightly high against roman text beside them. */
+.verse em, .verse i { font-style: italic; }
+
+@media (prefers-reduced-motion: reduce) {
+  * { scroll-behavior: auto !important; }
+}

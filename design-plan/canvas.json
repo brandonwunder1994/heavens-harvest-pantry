@@ -1,0 +1,20 @@
+{
+  "artboards": [
+    { "file": "Main.dc.html", "x": 0, "y": 0, "w": 1120, "h": 4300, "title": "The Plan", "print": "flow" },
+    { "file": "Home.dc.html", "x": 1240, "y": 0, "w": 1440, "h": 6450, "title": "Home · desktop" },
+    { "file": "Menu.dc.html", "x": 2800, "y": 0, "w": 390, "h": 1400, "title": "Menu · phone" },
+    { "file": "Checkout.dc.html", "x": 3270, "y": 0, "w": 390, "h": 1700, "title": "Checkout · phone" },
+    { "file": "Rewards.dc.html", "x": 3740, "y": 0, "w": 390, "h": 1180, "title": "Rewards · phone" },
+    { "file": "Owner.dc.html", "x": 2800, "y": 2080, "w": 1440, "h": 980, "title": "Owner's page · desktop" },
+    { "file": "VerseCard.dc.html", "x": 2800, "y": 3220, "w": 336, "h": 480, "title": "Weekly verse card · 3.5 × 5 in" },
+    { "file": "QRCard.dc.html", "x": 3230, "y": 3220, "w": 384, "h": 576, "title": "QR flyer · 4 × 6 in" },
+    { "file": "JarTag.dc.html", "x": 3710, "y": 3220, "w": 240, "h": 336, "title": "Jar tag · 2.5 × 3.5 in" }
+  ],
+  "annotations": [
+    { "id": "start-here", "x": 0, "y": -150, "w": 360, "text": "Start with The Plan on the left. Everything to the right is a mockup of what gets built, in the logo's colors and type." },
+    { "id": "samples", "x": 1240, "y": -150, "w": 440, "text": "Flavor names, prices, delivery days and customer names are samples. They swap for hers the moment she sends them. The jars are drawn in the logo's style; her real photos slot in beside them once shot." },
+    { "id": "faith-note", "x": 1740, "y": -150, "w": 420, "text": "Six verses carry the site: Psalm 34:8, Colossians 3:23, Matthew 6:11, Galatians 6:9, Acts 2:46 and the blessing from Numbers 6. She can change any of them herself, week to week." },
+    { "id": "print-note", "x": 2800, "y": 3060, "w": 440, "text": "Three print pieces. The verse card goes in every order, the flyer is for markets and mailboxes, the tag hangs on every jar. The QR code is real and scans today; it points at a placeholder address until her domain is chosen." }
+  ],
+  "launch": { "view": "canvas" }
+}

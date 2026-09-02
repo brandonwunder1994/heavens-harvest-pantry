@@ -1,0 +1,42 @@
+/* Written by measure-fonts.mjs. Do not edit by hand.
+
+   Metric-matched stand-ins for the shop's three faces, measured in Chrome
+   against fonts already on the machine. Put each one immediately after its real
+   face in the font stack and the page stops lurching when the webfonts land:
+
+     font-family: 'Cormorant Garamond', 'Cormorant Fallback', Georgia, serif;
+
+   Re-run measure-fonts.mjs if a face or a weight ever changes. */
+
+/* Cinzel: a line of the fallback was 95.8% of
+   the real width before this, so it is squeezed to 104.4%. */
+@font-face {
+  font-family: 'Cinzel Fallback';
+  src: local(Georgia);
+  size-adjust: 104.4%;
+  ascent-override: 93.9%;
+  descent-override: 35.4%;
+  line-gap-override: 0%;
+}
+
+/* Cormorant Garamond: a line of the fallback was 112.6% of
+   the real width before this, so it is squeezed to 88.8%. */
+@font-face {
+  font-family: 'Cormorant Fallback';
+  src: local(Georgia);
+  size-adjust: 88.8%;
+  ascent-override: 103.6%;
+  descent-override: 32.7%;
+  line-gap-override: 0%;
+}
+
+/* Karla: a line of the fallback was 100.6% of
+   the real width before this, so it is squeezed to 99.4%. */
+@font-face {
+  font-family: 'Karla Fallback';
+  src: local(Arial);
+  size-adjust: 99.4%;
+  ascent-override: 92.6%;
+  descent-override: 25.2%;
+  line-gap-override: 0%;
+}

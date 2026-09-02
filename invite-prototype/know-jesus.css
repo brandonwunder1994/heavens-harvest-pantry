@@ -1,0 +1,137 @@
+/* Want to know Jesus? — page styles.
+   Generated from index.html by `node build-css.mjs`. Edit the prototype, not this file.
+   Every rule is scoped under .kj, so it cannot reach the rest of the site. */
+
+.kj {
+    --cream: #f4eee2;
+    --paper: #fbf5e8;
+    --sagepale: #eef0e0;
+    --brown: #5b3d1e;
+    --ink: #3a2712;
+    --sage: #6b7a4a;
+    --sagedark: #3f4d25;
+    --gold: #c9a06a;
+    --line: #ddcdae;
+    --muted: #8a6c45;
+    --measure: 62ch; }
+.kj * { box-sizing: border-box; }
+.kj { -webkit-text-size-adjust: 100%; }
+.kj {
+    margin: 0;
+    background: var(--cream);
+    color: var(--ink);
+    font-family: 'Karla', system-ui, -apple-system, sans-serif;
+    font-size: 16px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased; }
+.kj a { color: var(--brown); }
+.kj a:hover { color: var(--sage); }
+.kj :focus-visible { outline: 3px solid var(--sage); outline-offset: 3px; }
+.kj p { margin: 0; }
+.kj h1, .kj h2, .kj h3 { margin: 0; font-weight: 500; text-wrap: balance; }
+.kj .wrap { max-width: 1160px; margin: 0 auto; padding: 0 clamp(20px, 4vw, 56px); }
+.kj .display { font-family: 'Cormorant Garamond', Georgia, serif; letter-spacing: -0.018em; line-height: 1.02; }
+.kj .verse { font-family: 'Cormorant Garamond', Georgia, serif; font-style: italic; line-height: 1.26; }
+.kj .caps { font-family: 'Cinzel', Georgia, serif; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; }
+.kj .eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--sage); }
+.kj .ref { font-family: 'Cinzel', Georgia, serif; font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase; font-size: 10px; color: var(--muted); }
+.kj /* ---------- header ---------- */
+  .top {
+    display: flex; justify-content: space-between; align-items: center; gap: 20px;
+    padding: 22px 0; border-bottom: 1px dashed #a9b18a; }
+.kj .wordmark { font-family: 'Cinzel', Georgia, serif; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; font-size: 13px; color: var(--brown); text-decoration: none; }
+.kj .back { font-size: 11px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); text-decoration: none; display: inline-flex; align-items: center; gap: 9px; min-height: 44px; }
+.kj .back:hover { color: var(--brown); }
+.kj /* ---------- hero ---------- */
+  .hero { padding: clamp(48px, 8vw, 96px) 0 clamp(40px, 6vw, 72px); display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 48px; align-items: start; }
+.kj .hero h1 { font-size: clamp(48px, 8.6vw, 92px); color: var(--sagedark); margin-top: 18px; }
+.kj .lede { font-family: 'Cormorant Garamond', Georgia, serif; font-size: clamp(20px, 2.3vw, 26px); line-height: 1.44; color: #40311d; margin-top: 26px; max-width: 33em; }
+.kj .mark { color: var(--sage); }
+@media (max-width: 760px) {
+  .kj .hero { grid-template-columns: 1fr; gap: 24px; }
+  .kj .mark svg { width: 72px; height: 72px; }
+}
+
+.kj /* ---------- three ---------- */
+  .three { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(24px, 3vw, 44px); padding-bottom: clamp(48px, 6vw, 76px); }
+.kj .three h2 { font-family: 'Cormorant Garamond', Georgia, serif; font-size: clamp(26px, 2.6vw, 32px); color: var(--sagedark); line-height: 1.06; min-height: 2.12em; }
+.kj .three > div { border-top: 2px solid var(--sage); padding-top: 18px; }
+.kj .three p { margin-top: 12px; font-size: 15px; color: #4a3520; }
+@media (max-width: 860px) {
+  .kj .three { grid-template-columns: 1fr; }
+  .kj .three h2 { min-height: 0; }
+}
+
+.kj /* ---------- the church ---------- */
+  .church { background: var(--sagepale); padding: clamp(32px, 5vw, 56px) 0 clamp(36px, 5vw, 60px); }
+.kj .church-grid { display: grid; grid-template-columns: minmax(0, 1fr) 400px; gap: clamp(28px, 4vw, 56px); align-items: start; }
+.kj .church h2 { font-family: 'Cormorant Garamond', Georgia, serif; font-size: clamp(40px, 5.4vw, 62px); color: var(--ink); margin-top: 14px; line-height: 1; }
+.kj .church p.say { margin-top: 18px; font-size: 16px; color: #40311d; max-width: 34em; }
+.kj .actions { display: flex; gap: 14px; margin-top: 28px; flex-wrap: wrap; }
+.kj .btn {
+    font-family: 'Cinzel', Georgia, serif; font-weight: 600; letter-spacing: 0.16em;
+    text-transform: uppercase; font-size: 12px; text-decoration: none;
+    min-height: 52px; display: inline-flex; align-items: center; padding: 0 24px;
+    background: var(--sage); color: var(--cream); border: 0; cursor: pointer; }
+.kj .btn:hover { background: #5d6c3a; color: var(--cream); }
+.kj .btn.ghost { background: transparent; color: var(--brown); box-shadow: inset 0 0 0 1px #b9a98a; }
+.kj .btn.ghost:hover { background: rgba(107,122,74,0.09); color: var(--brown); }
+.kj .aside { background: var(--paper); box-shadow: inset 0 0 0 1px var(--line); padding: clamp(24px, 3vw, 34px); }
+.kj .row { display: flex; align-items: baseline; gap: 10px; padding: 13px 0; border-bottom: 1px dotted #c2b393; }
+.kj .row:last-of-type { border-bottom: none; }
+.kj .row .day { font-family: 'Cormorant Garamond', Georgia, serif; font-size: 23px; color: var(--ink); }
+.kj .row .dots { flex: 1; border-bottom: 1px dotted #c2b393; transform: translateY(-5px); }
+.kj .row .val { font-variant-numeric: tabular-nums; font-weight: 600; font-size: 15px; color: var(--ink); }
+.kj .pending { background: #ecdfc6; color: #8a6524; font-weight: 700; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; padding: 4px 8px; }
+.kj .aside h3 { font-size: 11px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--sage); font-family: 'Karla', sans-serif; }
+.kj .aside .gap { margin-top: 26px; }
+.kj .campus + .campus { margin-top: 24px; padding-top: 22px; border-top: 1px solid #d8c8a8; }
+.kj .campus h4 { margin: 0; font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 600; font-size: 27px; line-height: 1.05; color: var(--ink); }
+.kj .campus .near { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--sage); margin-top: 5px; }
+.kj .campus .home { display: inline-flex; align-items: center; gap: 6px; margin-top: 7px; font-size: 10.5px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--brown); background: #efe2c8; padding: 4px 9px; }
+.kj .campus .home::before { content: ''; width: 6px; height: 6px; background: var(--sage); border-radius: 50%; }
+.kj .campus.is-home h4 { color: var(--brown); }
+.kj .campus .addr { font-size: 14.5px; margin-top: 10px; color: #40311d; }
+.kj .campus .times { display: flex; align-items: baseline; gap: 10px; padding: 9px 0 0; }
+.kj .campus .times .day { font-family: 'Cormorant Garamond', Georgia, serif; font-size: 21px; color: var(--ink); }
+.kj .campus .kidsline { font-size: 12.5px; color: var(--muted); margin-top: 10px; line-height: 1.5; }
+.kj .elsewhere { font-size: 13.5px; color: #4a3520; }
+.kj .elsewhere + .elsewhere { margin-top: 8px; }
+.kj .fine { font-size: 12.5px; color: var(--muted); margin-top: 10px; }
+@media (max-width: 940px) {
+  .kj .church-grid { grid-template-columns: 1fr; align-items: start; }
+}
+
+.kj /* ---------- quieter door + verse ---------- */
+  .two { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(28px, 4vw, 52px); padding: clamp(44px, 6vw, 76px) 0; align-items: start; }
+.kj .quiet { background: var(--paper); box-shadow: inset 0 0 0 1px var(--line); padding: clamp(24px, 3vw, 34px); }
+.kj .quiet h2 { font-family: 'Cormorant Garamond', Georgia, serif; font-size: clamp(28px, 3vw, 36px); color: var(--ink); margin-top: 12px; }
+.kj .quiet p { margin-top: 12px; font-size: 15px; color: #4a3520; }
+.kj .bigverse { font-size: clamp(26px, 3.4vw, 36px); color: var(--sagedark); }
+.kj .two .after { margin-top: 24px; font-size: 15px; color: #445029; max-width: 34em; }
+@media (max-width: 860px) {
+  .kj .two { grid-template-columns: 1fr; }
+}
+
+.kj /* ---------- footer, .kj with the line in place ---------- */
+  footer { border-top: 1px dashed #a9b18a; padding: clamp(40px, 5vw, 64px) 0 40px; text-align: center; }
+.kj .blessing { max-width: 30em; margin: 14px auto 0; }
+.kj .invite-rule { display: flex; align-items: center; gap: 18px; margin-top: 36px; }
+.kj .invite-rule .dots { flex: 1; border-bottom: 1px dotted #c2b393; }
+.kj .invite-link {
+    display: inline-flex; align-items: center; gap: 11px; text-decoration: none;
+    min-height: 44px; padding: 0 6px; }
+.kj .invite-link .label { font-family: 'Cinzel', Georgia, serif; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; font-size: 12px; color: var(--brown); }
+.kj .invite-link:hover .label { color: var(--sage); }
+.kj .invite-link svg { color: var(--sage); flex: none; }
+.kj .invite-link .arrow { transition: transform 220ms cubic-bezier(.2,.7,.2,1); }
+.kj .invite-link:hover .arrow { transform: translateX(4px); }
+.kj .legal { display: flex; justify-content: space-between; gap: 20px; flex-wrap: wrap; margin-top: 30px; font-size: 11px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); }
+@media (prefers-reduced-motion: reduce) {
+  .kj * { transition: none !important; animation: none !important; }
+}
+
+@media print {
+  .kj .top, .kj .invite-rule, .kj .actions { display: none; }
+  .kj { background: #fff; }
+}

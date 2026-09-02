@@ -1,0 +1,338 @@
+/* The receipt.
+   Every rule is scoped under .ticket, so dropping it into the site cannot
+   restyle anything already there. Colours are the shop's own tokens, with the
+   same values as fallbacks so the standalone demo cannot drift. */
+
+.ticket {
+  --t-paper: #fffdf8;
+  --t-ink: var(--color-ink, #3a2712);
+  --t-brown: var(--color-brown, #5b3d1e);
+  --t-sage: var(--color-sage, #6b7a4a);
+  --t-gold: var(--color-gold, #c9a06a);
+  --t-muted: var(--color-muted, #6b5a42);
+  --t-faint: var(--color-faint, #8a7a62);
+  --t-rule: #e0d5be;
+  --t-sand: var(--color-sand, #cdbfa5);
+
+  /* The colour showing through the torn edges. Set this if the ticket ever
+     sits on something other than the cream ground. */
+  --t-behind: var(--color-cream, #f4eee2);
+  --tear: 9px;
+
+  position: relative;
+  width: 100%;
+  max-width: 380px;
+  margin: 0 auto;
+  padding: 34px 26px 30px;
+  background: var(--t-paper);
+  color: var(--t-ink);
+  font-family: var(--font-ui, 'Karla', system-ui, sans-serif);
+  font-size: 13px;
+  line-height: 1.5;
+  font-variant-numeric: tabular-nums;
+  box-shadow: 0 1px 2px rgba(58, 39, 18, 0.09), 0 12px 30px -14px rgba(58, 39, 18, 0.3);
+}
+
+/* Torn top and bottom, the way a docket comes off the roll. */
+.ticket::before,
+.ticket::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: var(--tear);
+  background:
+    linear-gradient(-45deg, var(--t-behind) 7px, transparent 0) 0 0,
+    linear-gradient(45deg, var(--t-behind) 7px, transparent 0) 0 0;
+  background-size: 14px var(--tear);
+  background-repeat: repeat-x;
+}
+.ticket::before { top: 0; transform: scaleY(-1); }
+.ticket::after { bottom: 0; }
+
+/* ---------------------------------------------------------------- head */
+
+.ticket .head { text-align: center; }
+
+.ticket .shop {
+  font-family: var(--font-display, 'Cinzel', Georgia, serif);
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--t-brown);
+  line-height: 1.3;
+  margin: 0;
+}
+
+.ticket .where {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--t-faint);
+  margin: 5px 0 0;
+}
+
+.ticket .kind {
+  margin: 18px 0 0;
+  padding: 7px 0;
+  border-top: 1px solid var(--t-ink);
+  border-bottom: 1px solid var(--t-ink);
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--t-ink);
+}
+
+.ticket .stamp {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 9px 0 0;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: var(--t-muted);
+}
+.ticket .stamp .no { color: var(--t-ink); letter-spacing: 0.14em; }
+
+/* ---------------------------------------------------------------- body */
+
+.ticket .who {
+  margin: 20px 0 0;
+  padding: 13px 0 0;
+  border-top: 1px dashed var(--t-sand);
+}
+.ticket .who .name {
+  font-family: var(--font-serif, 'Cormorant Garamond', Georgia, serif);
+  font-size: 27px;
+  line-height: 1.05;
+  color: var(--t-ink);
+  margin: 0;
+}
+.ticket .who .run {
+  margin: 5px 0 0;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--t-muted);
+}
+
+.ticket .lines {
+  margin: 18px 0 0;
+  padding: 15px 0 0;
+  border-top: 1px dashed var(--t-sand);
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+
+.ticket .line { display: flex; align-items: baseline; gap: 8px; }
+
+.ticket .line .qty {
+  flex: 0 0 auto;
+  min-width: 22px;
+  font-weight: 700;
+  color: var(--t-brown);
+}
+.ticket .line .what {
+  flex: 0 1 auto;
+  color: var(--t-ink);
+}
+.ticket .line .dots {
+  flex: 1 1 auto;
+  min-width: 12px;
+  border-bottom: 1px dotted var(--t-sand);
+  transform: translateY(-4px);
+}
+.ticket .line .amt {
+  flex: 0 0 auto;
+  font-weight: 600;
+  color: var(--t-ink);
+  white-space: nowrap;
+}
+
+.ticket .line.credit .what,
+.ticket .line.credit .qty { color: var(--t-sage); }
+.ticket .line.credit .amt { color: var(--t-sage); }
+
+.ticket .shortfall {
+  margin: 2px 0 0;
+  font-size: 11px;
+  line-height: 1.45;
+  color: var(--t-faint);
+}
+
+.ticket .total {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  margin: 16px 0 0;
+  padding: 13px 0 0;
+  border-top: 2px solid var(--t-ink);
+}
+.ticket .total .label {
+  font-family: var(--font-display, 'Cinzel', Georgia, serif);
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  flex: 1 1 auto;
+}
+.ticket .total .amt {
+  font-family: var(--font-serif, 'Cormorant Garamond', Georgia, serif);
+  font-size: 30px;
+  line-height: 1;
+  font-weight: 600;
+  color: var(--t-ink);
+  /* The garamond sets figures old-style by default, which is lovely in a verse
+     and wrong on a total: the 5 drops below the line and the money reads
+     unevenly. Lining figures, all the same height, all the same width. */
+  font-variant-numeric: lining-nums tabular-nums;
+}
+
+.ticket .points {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 12px 0 0;
+  font-size: 12px;
+  color: var(--t-muted);
+}
+.ticket .points b { color: var(--t-sage); font-weight: 700; }
+
+.ticket .next {
+  margin: 16px 0 0;
+  padding: 13px 0 0;
+  border-top: 1px dashed var(--t-sand);
+  font-size: 12.5px;
+  line-height: 1.55;
+  color: var(--t-muted);
+}
+
+.ticket .porch {
+  margin: 11px 0 0;
+  padding: 9px 11px;
+  background: var(--color-moss, #eef0e2);
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--color-sage-deep, #4f5a35);
+}
+.ticket .porch span {
+  display: block;
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--t-sage);
+  margin-bottom: 3px;
+}
+
+/* ------------------------------------------------------- the perforation */
+
+.ticket .perf {
+  margin: 22px -26px 0;
+  border-top: 1px dashed var(--t-sand);
+  position: relative;
+  height: 0;
+}
+.ticket .perf::before,
+.ticket .perf::after {
+  content: '';
+  position: absolute;
+  top: -7px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--t-behind);
+}
+.ticket .perf::before { left: -7px; }
+.ticket .perf::after { right: -7px; }
+
+.ticket .verse {
+  margin: 22px 0 0;
+  text-align: center;
+}
+.ticket .verse p {
+  font-family: var(--font-serif, 'Cormorant Garamond', Georgia, serif);
+  font-style: italic;
+  font-size: 20px;
+  line-height: 1.26;
+  color: var(--t-brown);
+  margin: 0;
+  text-wrap: balance;
+}
+.ticket .verse .ref {
+  font-family: var(--font-display, 'Cinzel', Georgia, serif);
+  font-weight: 600;
+  font-size: 9.5px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--t-sage);
+  margin: 11px 0 0;
+}
+.ticket .verse .aside {
+  font-size: 11px;
+  color: var(--t-faint);
+  margin: 9px 0 0;
+}
+
+.ticket .foot {
+  margin: 20px 0 0;
+  padding: 12px 0 0;
+  border-top: 1px dashed var(--t-sand);
+  text-align: center;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--t-faint);
+  line-height: 1.8;
+}
+
+/* ------------------------------------------------------------------ print
+
+   Printing gives you the ticket and only the ticket. Requires :has(), which
+   every browser this site supports has had for years. */
+
+@media print {
+  @page { margin: 10mm; }
+
+  body :not(:has(.ticket)):not(.ticket):not(.ticket *) { display: none !important; }
+  body :has(.ticket) {
+    display: block !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    background: none !important;
+    max-width: none !important;
+  }
+
+  html, body { background: #fff !important; }
+
+  .ticket {
+    --t-paper: #fff;
+    --t-ink: #000;
+    --t-brown: #000;
+    --t-muted: #333;
+    --t-faint: #555;
+    --t-sage: #333;
+    --t-sand: #999;
+    max-width: 78mm;
+    margin: 0;
+    padding: 0 0 6mm;
+    box-shadow: none;
+    font-size: 11px;
+  }
+  /* Torn edges and punched holes are paper, not ink. */
+  .ticket::before,
+  .ticket::after,
+  .ticket .perf::before,
+  .ticket .perf::after { display: none; }
+  .ticket .perf { margin-left: 0; margin-right: 0; }
+  .ticket .porch { background: none; border: 1px solid #999; }
+  .ticket .total .amt { font-size: 24px; }
+  .ticket .verse p { font-size: 17px; }
+  .ticket { break-inside: avoid; }
+}

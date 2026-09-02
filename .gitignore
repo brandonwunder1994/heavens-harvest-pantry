@@ -1,0 +1,16 @@
+# Dependencies and build output
+node_modules/
+.next/
+out/
+dist/
+
+# Secrets. The owner's password hash and every key live in Vercel, never here.
+.env
+.env.*
+!.env.example
+
+# Local noise
+.DS_Store
+Thumbs.db
+*.log
+.vercel

@@ -1,0 +1,118 @@
+{
+  "artboards": [
+    {
+      "file": "Main.dc.html",
+      "x": 0,
+      "y": 0,
+      "w": 1120,
+      "h": 8200,
+      "title": "The Wow List",
+      "print": "flow"
+    },
+    {
+      "file": "Plan.dc.html",
+      "x": 1240,
+      "y": 4740,
+      "w": 1440,
+      "h": 1460,
+      "title": "The order of work"
+    },
+    {
+      "file": "Pour.dc.html",
+      "x": 1240,
+      "y": 0,
+      "w": 1440,
+      "h": 900,
+      "title": "The Pour · the opening moment"
+    },
+    {
+      "file": "Counter.dc.html",
+      "x": 1240,
+      "y": 1020,
+      "w": 1440,
+      "h": 700,
+      "title": "Walk her kitchen · the scroll"
+    },
+    {
+      "file": "Ritual.dc.html",
+      "x": 1240,
+      "y": 1840,
+      "w": 1440,
+      "h": 1080,
+      "title": "A Monday for a regular"
+    },
+    {
+      "file": "Blend.dc.html",
+      "x": 1240,
+      "y": 3060,
+      "w": 390,
+      "h": 1560,
+      "title": "Build your blend · phone"
+    },
+    {
+      "file": "Matrix.dc.html",
+      "x": 1750,
+      "y": 3060,
+      "w": 900,
+      "h": 900,
+      "title": "All 27, cost against impact"
+    },
+    {
+      "file": "Toolkit.dc.html",
+      "x": 2760,
+      "y": 0,
+      "w": 1120,
+      "h": 2400,
+      "title": "What we build it out of",
+      "print": "flow"
+    },
+    {
+      "file": "Invite.dc.html",
+      "x": 2760,
+      "y": 2520,
+      "w": 1440,
+      "h": 1560,
+      "title": "Want to know Jesus? - the invitation"
+    }
+  ],
+  "annotations": [
+    {
+      "id": "start-here",
+      "x": 0,
+      "y": -170,
+      "w": 380,
+      "text": "Start here. The Wow List is every idea in plain English with what each one costs. The order of work board, below the mockups, says what gets built when and what is blocking it. Everything else to the right is a picture of one of the ideas."
+    },
+    {
+      "id": "mockups",
+      "x": 1240,
+      "y": -170,
+      "w": 460,
+      "text": "These are drawings of ideas, not the built site. Flavors, prices, names and numbers are stand-ins until she sends the real ones. The colors and type are her logo's."
+    },
+    {
+      "id": "toolkit-note",
+      "x": 2760,
+      "y": -170,
+      "w": 440,
+      "text": "The parts list. Nothing here needs inventing and nothing here has a monthly fee. Weights are what actually lands on a visitor's phone."
+    },
+    {
+      "id": "church-note",
+      "x": 2760,
+      "y": 2330,
+      "w": 470,
+      "text": "New, at Brandon's request. I have written the church as Pure Heart Church (two words) - please confirm the exact name and which campus. Service times, kids ages and the address are deliberately blank: I will not put invented times on a church page. They come from her or from the church's own site."
+    },
+    {
+      "id": "plan-note",
+      "x": 1240,
+      "y": 4550,
+      "w": 470,
+      "text": "The build order. Every one of the twenty-eight ideas is on this board in the wave it can actually be built in, with what is blocking it. One is built so far."
+    }
+  ],
+  "launch": {
+    "view": "canvas"
+  }
+}

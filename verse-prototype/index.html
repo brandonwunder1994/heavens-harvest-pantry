@@ -1,0 +1,334 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>This week's verse — Heaven's Harvest Pantry</title>
+<meta name="description" content="A new hand-written verse every Monday morning, and every one that has come before.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Karla:wght@400;500;600;700&display=swap">
+<style>
+  :root {
+    --cream: #f4eee2;
+    --paper: #fbf5e8;
+    --brown: #5b3d1e;
+    --ink: #3a2712;
+    --sage: #6b7a4a;
+    --gold: #c9a06a;
+    --wax: #a8442e;
+    --line: #ddcdae;
+    --muted: #8a6c45;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--cream); color: var(--ink);
+    font-family: 'Karla', system-ui, -apple-system, sans-serif;
+    font-size: 16px; line-height: 1.65; -webkit-font-smoothing: antialiased;
+  }
+  a { color: var(--brown); } a:hover { color: var(--sage); }
+  :focus-visible { outline: 3px solid var(--sage); outline-offset: 3px; }
+  p { margin: 0; }
+  h1, h2, h3 { margin: 0; font-weight: 500; text-wrap: balance; }
+
+  .wrap { max-width: 1160px; margin: 0 auto; padding: 0 clamp(20px, 4vw, 56px); }
+  .verse { font-family: 'Cormorant Garamond', Georgia, serif; font-style: italic; line-height: 1.24; }
+  .display { font-family: 'Cormorant Garamond', Georgia, serif; letter-spacing: -0.018em; line-height: 1.02; }
+  .eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--sage); }
+  .ref { font-family: 'Cinzel', Georgia, serif; font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase; font-size: 10px; color: var(--muted); }
+  .fine { font-size: 12.5px; color: var(--muted); }
+
+  .top { display: flex; justify-content: space-between; align-items: center; gap: 20px; padding: 22px 0; border-bottom: 1px dashed #a9b18a; }
+  .wordmark { font-family: 'Cinzel', Georgia, serif; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; font-size: 13px; color: var(--brown); text-decoration: none; }
+  .back { font-size: 11px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); text-decoration: none; min-height: 44px; display: inline-flex; align-items: center; gap: 9px; }
+
+  /* ---- this week ---- */
+  .now { display: grid; grid-template-columns: 430px minmax(0, 1fr); gap: clamp(28px, 5vw, 64px); align-items: center; padding: clamp(40px, 6vw, 76px) 0 clamp(36px, 5vw, 60px); }
+  .card {
+    position: relative; background: var(--paper); padding: 46px 40px 38px;
+    box-shadow: 0 1px 0 rgba(90,58,22,0.10), 0 14px 30px -22px rgba(58,39,18,0.5), inset 0 0 0 1px var(--line);
+  }
+  .card::after {
+    content: ""; position: absolute; inset: 14px; pointer-events: none;
+    box-shadow: inset 0 0 0 1px rgba(169,177,138,0.55);
+  }
+  .card .grain {
+    position: absolute; inset: 0; pointer-events: none; mix-blend-mode: multiply; opacity: 0.55;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3CfeComponentTransfer%3E%3CfeFuncA type='table' tableValues='0 0 0 0.05 0.1'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  .card .text { position: relative; font-size: clamp(26px, 3.2vw, 34px); color: var(--ink); }
+  .card .cite { position: relative; margin-top: 20px; }
+  .card .foot { position: relative; display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; margin-top: 30px; }
+
+  .seal { position: absolute; top: -20px; right: -18px; width: 78px; height: 78px; z-index: 2; }
+  .seal.gone { display: none; }
+
+  .now h1 { font-size: clamp(38px, 5.4vw, 60px); color: var(--ink); margin-top: 14px; }
+  .now .said { margin-top: 18px; font-size: 16px; color: #4a3520; max-width: 34em; }
+  .when { display: flex; gap: 26px; flex-wrap: wrap; margin-top: 26px; }
+  .when div { border-top: 2px solid var(--sage); padding-top: 10px; min-width: 132px; }
+  .when .k { font-size: 10px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--sage); }
+  .when .v { font-family: 'Cormorant Garamond', Georgia, serif; font-size: 22px; color: var(--ink); margin-top: 2px; }
+  .actions { display: flex; gap: 13px; margin-top: 28px; flex-wrap: wrap; }
+  .btn {
+    font-family: 'Cinzel', Georgia, serif; font-weight: 600; letter-spacing: 0.16em;
+    text-transform: uppercase; font-size: 12px; text-decoration: none;
+    min-height: 50px; display: inline-flex; align-items: center; padding: 0 22px;
+    background: var(--brown); color: var(--cream); border: 0; cursor: pointer;
+    box-shadow: inset 0 0 0 4px var(--brown), inset 0 0 0 5px var(--gold);
+  }
+  .btn.ghost { background: transparent; color: var(--brown); box-shadow: inset 0 0 0 1px #b9a98a; }
+  .btn.ghost:hover { background: rgba(107,122,74,0.09); }
+  @media (max-width: 900px) { .now { grid-template-columns: 1fr; } }
+
+  /* ---- the wall ---- */
+  .wall { border-top: 1px dashed #a9b18a; padding: clamp(36px, 5vw, 60px) 0 clamp(48px, 6vw, 80px); }
+  .wallhead { display: flex; justify-content: space-between; align-items: baseline; gap: 20px; flex-wrap: wrap; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(232px, 1fr)); gap: 16px; margin-top: 26px; }
+  .mini {
+    background: var(--paper); box-shadow: inset 0 0 0 1px var(--line);
+    padding: 18px 18px 16px; display: flex; flex-direction: column; justify-content: space-between;
+    min-height: 152px; gap: 14px;
+  }
+  .mini .t { font-family: 'Cormorant Garamond', Georgia, serif; font-style: italic; font-size: 17px; line-height: 1.3; color: var(--ink); }
+  .mini .b { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+  .mini .d { font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+  .mini.ahead { opacity: 0.42; }
+  .mini.ahead .t { font-style: normal; font-family: 'Karla', sans-serif; font-size: 13px; color: var(--muted); }
+
+  footer { border-top: 1px dashed #a9b18a; padding: 34px 0 42px; }
+  .legal { display: flex; justify-content: space-between; gap: 20px; flex-wrap: wrap; font-size: 11px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); }
+
+  /* the mark inks itself, once, on a first visit */
+  .inkmark path, .inkmark line { stroke-dasharray: var(--len, 120); stroke-dashoffset: var(--len, 120); }
+  .inkmark.draw path, .inkmark.draw line { animation: ink 1500ms cubic-bezier(.5,.05,.2,1) forwards; }
+  .inkmark.draw ellipse { opacity: 0; animation: fadein 700ms ease 900ms forwards; }
+  .inkmark.still path, .inkmark.still line { stroke-dashoffset: 0; }
+  @keyframes ink { to { stroke-dashoffset: 0; } }
+  @keyframes fadein { to { opacity: 1; } }
+
+  @media (prefers-reduced-motion: reduce) {
+    .inkmark path, .inkmark line { stroke-dashoffset: 0 !important; animation: none !important; }
+    .inkmark ellipse { opacity: 1 !important; animation: none !important; }
+    * { transition: none !important; }
+  }
+
+  /* printing a card, or the whole set */
+  @media print {
+    .top, .actions, .wallhead .btn, footer, .seal { display: none !important; }
+    body { background: #fff; }
+    .card { box-shadow: none; border: 1px solid #c2b393; break-inside: avoid; }
+    .now { display: block; }
+    .now .said, .when { display: none; }
+    .grid { grid-template-columns: repeat(2, 1fr); }
+    .mini { break-inside: avoid; box-shadow: none; border: 1px solid #d8c8a8; }
+  }
+  body.print-card .wall, body.print-card .now > div:last-child { display: none; }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <div class="top">
+    <a class="wordmark" href="/">Heaven's Harvest Pantry</a>
+    <a class="back" href="/">
+      <svg width="15" height="10" viewBox="0 0 15 10" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M14 5 H2 M6 1 L2 5 l4 4"></path></svg>
+      Back to the granola
+    </a>
+  </div>
+</div>
+
+<main class="wrap">
+  <section class="now">
+    <div style="position: relative;">
+      <svg class="seal" id="seal" viewBox="0 0 78 78" aria-label="New this week">
+        <circle cx="39" cy="39" r="34" fill="#a8442e"></circle>
+        <circle cx="39" cy="39" r="34" fill="#000" opacity="0.12"></circle>
+        <circle cx="39" cy="39" r="27" fill="none" stroke="#f4eee2" stroke-width="1.4" opacity="0.6"></circle>
+        <text x="39" y="35" text-anchor="middle" font-family="Cinzel, Georgia, serif" font-size="11" font-weight="700" letter-spacing="1.4" fill="#f4eee2">NEW</text>
+        <text x="39" y="50" text-anchor="middle" font-family="Cinzel, Georgia, serif" font-size="9" font-weight="600" letter-spacing="1.2" fill="#f4eee2">THIS WEEK</text>
+      </svg>
+
+      <article class="card" id="card">
+        <div class="grain"></div>
+        <p class="verse text" id="verse-text">&nbsp;</p>
+        <p class="ref cite" id="verse-ref"></p>
+        <div class="foot">
+          <p class="fine" id="verse-note"></p>
+          <svg class="inkmark" id="mark" width="40" height="40" viewBox="0 0 60 60" style="color: #6b7a4a; flex: none;" aria-hidden="true">
+            <g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+              <path d="M30 8 v44" style="--len: 46"></path>
+              <path d="M18 22 h24" style="--len: 26"></path>
+              <path d="M9 52 c 1 -16 5 -24 13 -33" style="--len: 42"></path>
+              <path d="M51 52 c -1 -16 -5 -24 -13 -33" style="--len: 42"></path>
+            </g>
+            <g fill="#c9a06a">
+              <ellipse cx="12" cy="41" rx="3" ry="4.6" transform="rotate(-22 12 41)"></ellipse>
+              <ellipse cx="15" cy="32" rx="3" ry="4.6" transform="rotate(-22 15 32)"></ellipse>
+              <ellipse cx="19" cy="24" rx="3" ry="4.6" transform="rotate(-22 19 24)"></ellipse>
+              <ellipse cx="48" cy="41" rx="3" ry="4.6" transform="rotate(22 48 41)"></ellipse>
+              <ellipse cx="45" cy="32" rx="3" ry="4.6" transform="rotate(22 45 32)"></ellipse>
+              <ellipse cx="41" cy="24" rx="3" ry="4.6" transform="rotate(22 41 24)"></ellipse>
+            </g>
+          </svg>
+        </div>
+      </article>
+    </div>
+
+    <div>
+      <p class="eyebrow">This week</p>
+      <h1 class="display">A verse a week, hand-written, in every order.</h1>
+      <p class="said">
+        It changes at five o'clock every Monday morning. The card in your box is this one,
+        written out by hand, and it is here whether you are ordering or not. Nothing to sign
+        up for.
+      </p>
+      <div class="when">
+        <div><div class="k">Week of</div><div class="v" id="week-of">&nbsp;</div></div>
+        <div><div class="k">Next one</div><div class="v" id="next-on">&nbsp;</div></div>
+        <div><div class="k">So far</div><div class="v" id="count">&nbsp;</div></div>
+      </div>
+      <div class="actions">
+        <button class="btn" type="button" id="print-card">Print this card</button>
+        <button class="btn ghost" type="button" id="print-set">Print every verse</button>
+      </div>
+    </div>
+  </section>
+</main>
+
+<section class="wall">
+  <div class="wrap">
+    <div class="wallhead">
+      <div>
+        <p class="eyebrow">The wall</p>
+        <h2 class="display" style="font-size: clamp(30px, 3.6vw, 42px); margin-top: 10px;">Every verse so far</h2>
+      </div>
+      <p class="fine" style="max-width: 30em;">
+        Newest first. Once you have an account this becomes yours &mdash; only the ones that came
+        with your orders, with the date each arrived.
+      </p>
+    </div>
+    <div class="grid" id="wall"></div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap legal">
+    <span>Heaven's Harvest Pantry &middot; Vistancia &amp; Anthem, Arizona</span>
+    <span id="translation"></span>
+  </div>
+</footer>
+
+<script>
+  // Which verse is "this week" is worked out from the date, so nobody has to
+  // remember to change it on a Monday and nothing can be missed. She edits
+  // verses.json and never touches anything else.
+  (async () => {
+    const el = (id) => document.getElementById(id);
+    const DAY = 86400000;
+
+    let data;
+    try { data = await (await fetch('./verses.json')).json(); }
+    catch { el('verse-text').textContent = 'Could not load the verses just now.'; return; }
+
+    // The Monday at or before a date, at the hour she has chosen.
+    const [h, m] = (data.changesAt || '05:00').split(':').map(Number);
+    function mondayOf(d) {
+      const x = new Date(d.getFullYear(), d.getMonth(), d.getDate(), h, m, 0, 0);
+      const back = (x.getDay() + 6) % 7;               // 0 = Monday
+      x.setDate(x.getDate() - back);
+      if (d < x) x.setDate(x.getDate() - 7);           // before 5am Monday is still last week
+      return x;
+    }
+
+    const anchor = mondayOf(new Date(data.anchorMonday + 'T12:00:00'));
+    const thisMonday = mondayOf(new Date());
+    const weeks = Math.max(0, Math.round((thisMonday - anchor) / (7 * DAY)));
+    const list = data.verses;
+
+    // Which week of the calendar a Monday belongs to, counted the way the rest
+    // of the world counts it: the week owning that Thursday.
+    function calendarWeek(d) {
+      const x = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+      x.setUTCDate(x.getUTCDate() + 4 - (x.getUTCDay() || 7));
+      const jan1 = new Date(Date.UTC(x.getUTCFullYear(), 0, 1));
+      return Math.ceil(((x - jan1) / DAY + 1) / 7);
+    }
+
+    // With a full year loaded, the list IS the calendar: verse one is the week
+    // of New Year, verse fifty-two is Christmas week. That is what keeps Advent
+    // in December for good, instead of sliding a day earlier every year the way
+    // a plain fifty-two-week loop does. A shorter list falls back to the loop.
+    const byCalendar = data.orderedBy === 'calendar-week' && list.length >= 52;
+    function indexFor(monday, w) {
+      if (data.pinned != null) return data.pinned;
+      if (byCalendar) return Math.min(calendarWeek(monday), list.length) - 1;
+      return w % list.length;
+    }
+
+    const index = indexFor(thisMonday, weeks);
+    const current = list[index];
+
+    const fmt = (d) => d.toLocaleDateString('en-US', { month: 'long', day: 'numeric' });
+    const nextMonday = new Date(thisMonday.getTime() + 7 * DAY);
+
+    el('verse-text').textContent = '“' + current.text + '”';
+    el('verse-ref').textContent = current.ref;
+    el('verse-note').textContent = current.note || '';
+    el('week-of').textContent = fmt(thisMonday);
+    el('next-on').textContent = fmt(nextMonday);
+    el('count').textContent = (weeks + 1) + (weeks === 0 ? ' week' : ' weeks');
+    el('translation').textContent = data.translation;
+
+    // The seal stays until this person has seen this week's verse. Kept in the
+    // browser for now; it moves to their account once sign-in exists.
+    const seen = 'hhp-verse-seen';
+    let already = null;
+    try { already = localStorage.getItem(seen); } catch {}
+    if (already === String(index) + '@' + thisMonday.getTime()) {
+      el('seal').classList.add('gone');
+    } else {
+      setTimeout(() => {
+        try { localStorage.setItem(seen, String(index) + '@' + thisMonday.getTime()); } catch {}
+      }, 4000);
+    }
+
+    // The mark inks itself once, on a first visit, and never again after.
+    const inked = 'hhp-mark-inked';
+    let hasInked = null;
+    try { hasInked = localStorage.getItem(inked); } catch {}
+    el('mark').classList.add(hasInked ? 'still' : 'draw');
+    if (!hasInked) { try { localStorage.setItem(inked, '1'); } catch {} }
+
+    // The wall: everything up to and including this week, newest first.
+    const wall = [];
+    for (let w = weeks; w >= 0; w--) {
+      const d = new Date(anchor.getTime() + w * 7 * DAY);
+      const v = list[indexFor(d, w)];
+      wall.push(`
+        <article class="mini">
+          <p class="t">“${v.text.length > 110 ? v.text.slice(0, 108).trim() + '…' : v.text}”</p>
+          <div class="b"><span class="ref">${v.ref}</span><span class="d">${fmt(d)}</span></div>
+        </article>`);
+    }
+    // A quiet look at what is still to come, so the rotation is never a mystery.
+    for (let w = weeks + 1; w <= weeks + 2; w++) {
+      const d = new Date(anchor.getTime() + w * 7 * DAY);
+      wall.unshift(`
+        <article class="mini ahead">
+          <p class="t">Still to come</p>
+          <div class="b"><span class="ref">&nbsp;</span><span class="d">${fmt(d)}</span></div>
+        </article>`);
+    }
+    el('wall').innerHTML = wall.join('');
+
+    el('print-card').addEventListener('click', () => {
+      document.body.classList.add('print-card');
+      window.print();
+      setTimeout(() => document.body.classList.remove('print-card'), 300);
+    });
+    el('print-set').addEventListener('click', () => window.print());
+  })();
+</script>
+</body>
+</html>

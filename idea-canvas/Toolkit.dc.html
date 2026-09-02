@@ -1,0 +1,175 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=Karla:wght@400;500;600;700&display=swap">
+  <style>
+    body { margin: 0; background: #f4eee2; color: #3a2712; font-family: 'Karla', system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+    a { color: #5b3d1e; text-decoration: none; } a:hover { color: #6b7a4a; }
+    p { margin: 0; }
+    .small { font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; font-weight: 700; color: #6b7a4a; }
+    .caps { font-family: 'Cinzel', Georgia, serif; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; }
+    .display { font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 500; line-height: 1; letter-spacing: -0.018em; text-wrap: balance; }
+    .body { font-size: 13.5px; line-height: 1.58; color: #6b5333; text-wrap: pretty; }
+    .row { display: grid; grid-template-columns: 210px 1fr 118px 92px; gap: 24px; padding: 15px 0; border-top: 1px dotted #c2b393; align-items: baseline; }
+    .name { font-family: 'Karla', system-ui, sans-serif; font-size: 15px; font-weight: 700; color: #3a2712; }
+    .sub { font-size: 11px; color: #a08a63; margin-top: 3px; }
+    .lic { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #4d5a33; }
+    .kb { font-size: 13px; font-weight: 700; color: #5b3d1e; text-align: right; font-variant-numeric: tabular-nums; }
+    .head { display: grid; grid-template-columns: 210px 1fr 118px 92px; gap: 24px; padding-bottom: 8px; }
+    .rule { display: flex; align-items: baseline; gap: 18px; margin-top: 46px; }
+    .rule .dots { flex: 1; border-bottom: 2px dotted #b9a98a; transform: translateY(-5px); }
+  </style>
+</helmet>
+
+<div style="width: 1120px; box-sizing: border-box; background: #f4eee2; position: relative; overflow: hidden; padding: 58px 72px 80px;">
+
+  <svg width="0" height="0" style="position: absolute;">
+    <defs>
+      <filter id="grainT" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch"></feTurbulence><feColorMatrix type="saturate" values="0"></feColorMatrix><feComponentTransfer><feFuncA type="table" tableValues="0 0 0 0.04 0.07"></feFuncA></feComponentTransfer></filter>
+    </defs>
+  </svg>
+  <svg style="position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; mix-blend-mode: multiply;"><rect width="100%" height="100%" filter="url(#grainT)"></rect></svg>
+
+  <div class="small">What we build it out of</div>
+  <h2 class="display" style="font-size: 76px; margin: 16px 0 0; color: #3a2712;">Free parts, already written</h2>
+  <div class="body" style="max-width: 660px; margin-top: 20px; font-size: 15px;">
+    None of the ideas on the Wow List need anything invented. Every piece below is open source, free to
+    use commercially, and maintained by people who do this full time. The weights are what actually
+    lands on a visitor's phone, compressed. The whole 3D stack is lighter than one large photograph.
+  </div>
+
+  <div class="rule">
+    <h3 class="caps" style="font-size: 14px; margin: 0; color: #5b3d1e;">The 3D itself</h3>
+    <div class="dots"></div>
+    <div class="small" style="color: #a08a63;">Open source, free to use</div>
+  </div>
+  <div class="head" style="margin-top: 18px;">
+    <div class="small" style="color: #a08a63;">Part</div>
+    <div class="small" style="color: #a08a63;">What it does for us</div>
+    <div class="small" style="color: #a08a63;">License</div>
+    <div class="small" style="color: #a08a63; text-align: right;">Weight</div>
+  </div>
+  <div class="row">
+    <div><div class="name">three.js</div><div class="sub">The engine everything sits on</div></div>
+    <div class="body">Draws the jar, the counter, the light and the shadows. Around since 2010, used by Google and the New York Times, and the reason any of this takes days rather than months.</div>
+    <div class="lic">MIT</div><div class="kb">~130&nbsp;KB</div>
+  </div>
+  <div class="row">
+    <div><div class="name">React Three Fiber</div><div class="sub">The bridge to the rest of the site</div></div>
+    <div class="body">Lets the 3D scene be written the same way as the rest of the site, so the jar and the "add to basket" button live in one codebase instead of two.</div>
+    <div class="lic">MIT</div><div class="kb">~18&nbsp;KB</div>
+  </div>
+  <div class="row">
+    <div><div class="name">Drei</div><div class="sub">The ready-made pieces</div></div>
+    <div class="body">The finished pieces: real glass that light passes through, soft contact shadows under the jar, and the trick that draws four hundred clusters at the cost of one.</div>
+    <div class="lic">MIT</div><div class="kb">~24&nbsp;KB</div>
+  </div>
+  <div class="row">
+    <div><div class="name">Rapier physics</div><div class="sub">Only while we build</div></div>
+    <div class="body">Works out how the granola tumbles and settles. Run once on my machine, recorded, and never shipped to the visitor. Their phone replays a recording.</div>
+    <div class="lic">Apache 2.0</div><div class="kb">0&nbsp;KB</div>
+  </div>
+  <div class="row">
+    <div><div class="name">Postprocessing</div><div class="sub">The polish pass</div></div>
+    <div class="body">Warm bloom where light hits the glass, a soft focus falloff behind the jar, and the faint vignette that makes the whole thing look photographed rather than rendered.</div>
+    <div class="lic">Zlib</div><div class="kb">~14&nbsp;KB</div>
+  </div>
+
+  <div class="rule">
+    <h3 class="caps" style="font-size: 14px; margin: 0; color: #5b3d1e;">Free materials, no photoshoot</h3>
+    <div class="dots"></div>
+    <div class="small" style="color: #a08a63;">Public domain</div>
+  </div>
+  <div class="row" style="border-top: none;">
+    <div><div class="name">Poly Haven</div><div class="sub">Light and sky</div></div>
+    <div class="body">Real captured kitchen and morning light, given away free with no restrictions. This is what makes the scene look like a room instead of a render, and it is why the light can follow the visitor's hour.</div>
+    <div class="lic">CC0</div><div class="kb">~60&nbsp;KB</div>
+  </div>
+  <div class="row">
+    <div><div class="name">ambientCG</div><div class="sub">Surfaces</div></div>
+    <div class="body">The oak counter, the linen cloth, the paper of the label. Thousands of photographed materials, free for any use, no credit required.</div>
+    <div class="lic">CC0</div><div class="kb">~40&nbsp;KB</div>
+  </div>
+  <div class="row">
+    <div><div class="name">The jar and clusters</div><div class="sub">Made, not downloaded</div></div>
+    <div class="body">Modeled to match her actual mason jar and squashed into a phone-sized file. Around a day of work, and the one asset on this page nobody else on the internet will have.</div>
+    <div class="lic">Ours</div><div class="kb">~110&nbsp;KB</div>
+  </div>
+
+  <div class="rule">
+    <h3 class="caps" style="font-size: 14px; margin: 0; color: #5b3d1e;">Motion and scroll</h3>
+    <div class="dots"></div>
+    <div class="small" style="color: #a08a63;">Free for commercial use</div>
+  </div>
+  <div class="row" style="border-top: none;">
+    <div><div class="name">Lenis</div><div class="sub">darkroom.engineering</div></div>
+    <div class="body">Smooths the scroll so the camera move through her kitchen glides instead of jerking. Tiny, and switches itself off for anyone who has asked their device to reduce motion.</div>
+    <div class="lic">MIT</div><div class="kb">~5&nbsp;KB</div>
+  </div>
+  <div class="row">
+    <div><div class="name">GSAP ScrollTrigger</div><div class="sub">Now free, including commercially</div></div>
+    <div class="body">Ties the scroll position to the camera, so stop three arrives exactly when the flavors do. The industry standard, and as of last year it costs nothing.</div>
+    <div class="lic">Free</div><div class="kb">~26&nbsp;KB</div>
+  </div>
+  <div class="row">
+    <div><div class="name">Motion</div><div class="sub">Formerly Framer Motion</div></div>
+    <div class="body">Everything that is not 3D: the headline rising into place, the wax seal peeling off Monday's verse, the jar sliding onto the shelf when you return one.</div>
+    <div class="lic">MIT</div><div class="kb">~17&nbsp;KB</div>
+  </div>
+
+  <div class="rule">
+    <h3 class="caps" style="font-size: 14px; margin: 0; color: #5b3d1e;">The type</h3>
+    <div class="dots"></div>
+    <div class="small" style="color: #a08a63;">Already chosen</div>
+  </div>
+  <div class="row" style="border-top: none;">
+    <div><div class="name">Cinzel, Cormorant, Karla</div><div class="sub">Google Fonts</div></div>
+    <div class="body">The three faces already chosen from her logo. Free, open licensed, and served in the four weights we actually use rather than all of them.</div>
+    <div class="lic">OFL</div><div class="kb">~52&nbsp;KB</div>
+  </div>
+
+  <div style="margin-top: 52px; background: #5b3d1e; color: #f4eee2; padding: 34px 40px 36px;">
+    <div style="display: grid; grid-template-columns: 260px 1fr 180px; gap: 36px; align-items: center;">
+      <div>
+        <div class="small" style="color: #c9a06a;">All of it together</div>
+        <div class="display" style="font-size: 62px; color: #f4eee2; margin-top: 10px; font-variant-numeric: tabular-nums;">~496&nbsp;KB</div>
+      </div>
+      <div class="body" style="color: #d6c6a8; font-size: 14px;">
+        Loaded after the words are already on screen, so the page reads in under a second and the scene
+        arrives a beat later. For comparison, one unoptimized phone photo of a jar is around 4,000&nbsp;KB.
+        The most beautiful part of this site is not the expensive part.
+      </div>
+      <div style="text-align: right;">
+        <div class="small" style="color: #c9a06a;">License cost</div>
+        <div class="display" style="font-size: 46px; color: #f4eee2; margin-top: 8px;">$0</div>
+        <div class="body" style="color: #a3825a; font-size: 11px; margin-top: 4px;">every part on this page, forever</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top: 34px; display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
+    <div>
+      <div class="small">Worth stealing from</div>
+      <div class="body" style="margin-top: 10px;">The official three.js example gallery is open source and free to build on, and it already contains
+      working versions of the pour, the material morph and the scroll-driven camera. Other demo archives
+      are worth studying but set their own terms, so we read those before borrowing. Either way we are
+      not starting from a blank page on any of the hard parts.</div>
+    </div>
+    <div>
+      <div class="small">One thing to avoid</div>
+      <div class="body" style="margin-top: 10px;">Spline and the other drag-and-drop 3D tools are quick to demo and then charge monthly, ship a heavy
+      player, and own the file. For a scene this specific, hand-built is lighter, cheaper and hers
+      permanently. I would not use one here.</div>
+    </div>
+  </div>
+
+</div>
+</x-dc>
+</body>
+</html>

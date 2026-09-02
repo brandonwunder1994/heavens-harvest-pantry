@@ -1,0 +1,314 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The receipt — Heaven's Harvest Pantry</title>
+<!-- the standalone demo has no icon of its own; this stops the browser asking -->
+<link rel="icon" href="data:,">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Karla:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="./receipt.css">
+<style>
+  /* The shop's own tokens, exactly as defined on the site. */
+  :root {
+    --color-cream: #f4eee2;
+    --color-paper: #fbf8f1;
+    --color-ink: #3a2712;
+    --color-brown: #5b3d1e;
+    --color-sage: #6b7a4a;
+    --color-sage-deep: #4f5a35;
+    --color-gold: #c9a06a;
+    --color-sand: #cdbfa5;
+    --color-moss: #eef0e2;
+    --color-muted: #6b5a42;
+    --color-faint: #8a7a62;
+    --color-hedge: #a9b18a;
+    --color-rule: #e3d9c4;
+    --font-display: 'Cinzel', Georgia, serif;
+    --font-serif: 'Cormorant Garamond', Georgia, serif;
+    --font-ui: 'Karla', system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--color-cream);
+    color: var(--color-ink);
+    font-family: var(--font-serif);
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 1120px; margin: 0 auto; padding: 0 clamp(20px, 5vw, 56px); }
+
+  .lead { padding: clamp(40px, 6vw, 72px) 0 clamp(22px, 3vw, 32px); }
+  .eyebrow {
+    font-family: var(--font-ui); font-size: 11px; font-weight: 700;
+    letter-spacing: 0.22em; text-transform: uppercase; color: var(--color-sage); margin: 0;
+  }
+  h1 {
+    font-family: var(--font-serif); font-weight: 500;
+    font-size: clamp(42px, 7vw, 76px); line-height: 0.96; letter-spacing: -0.02em;
+    margin: 12px 0 0; text-wrap: balance;
+  }
+  .lede {
+    font-family: var(--font-serif); font-style: italic;
+    font-size: clamp(19px, 2.2vw, 24px); line-height: 1.34; color: var(--color-brown);
+    max-width: 36ch; margin: 18px 0 0;
+  }
+  section { padding: clamp(30px, 4vw, 48px) 0; border-top: 1px solid var(--color-rule); }
+  h2 {
+    font-family: var(--font-serif); font-weight: 600;
+    font-size: clamp(26px, 3vw, 34px); line-height: 1.05; letter-spacing: -0.012em; margin: 10px 0 0;
+  }
+  .say {
+    font-family: var(--font-ui); font-size: 15px; line-height: 1.62;
+    color: var(--color-muted); max-width: 62ch; margin: 14px 0 0;
+  }
+
+  .gallery {
+    margin-top: 30px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: clamp(28px, 4vw, 44px);
+    align-items: start;
+  }
+  .case { display: flex; flex-direction: column; gap: 14px; }
+  .case > h3 {
+    font-family: var(--font-ui); font-size: 11px; font-weight: 700;
+    letter-spacing: 0.16em; text-transform: uppercase; color: var(--color-faint); margin: 0;
+  }
+  .case > p {
+    font-family: var(--font-ui); font-size: 12.5px; line-height: 1.55;
+    color: var(--color-faint); margin: 0; max-width: 46ch;
+  }
+
+  .sample {
+    font-family: var(--font-ui); font-size: 10px; font-weight: 700;
+    letter-spacing: 0.16em; text-transform: uppercase; color: var(--color-sage);
+    background: var(--color-moss); padding: 4px 9px; align-self: flex-start;
+  }
+
+  .stamp-btn {
+    font-family: var(--font-display); font-weight: 600;
+    letter-spacing: 0.16em; text-transform: uppercase; font-size: 12px;
+    background: var(--color-brown); color: var(--color-cream);
+    min-height: 52px; padding: 0 26px; border: 0; cursor: pointer;
+    display: inline-flex; align-items: center;
+    box-shadow: inset 0 0 0 4px var(--color-brown), inset 0 0 0 5px var(--color-gold);
+    margin-top: 20px;
+  }
+
+  /* Four tickets are here to be compared; the shop only ever has one on a page.
+     Printing shows what the shop would print. */
+  @media print { .gallery .case:not(:first-child) { display: none !important; } }
+
+  footer {
+    border-top: 1px dashed var(--color-hedge); padding: 28px 0 44px;
+    font-family: var(--font-ui); font-size: 11px; font-weight: 600;
+    letter-spacing: 0.18em; text-transform: uppercase; color: var(--color-faint);
+    display: flex; flex-wrap: wrap; gap: 12px; justify-content: space-between;
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="lead">
+    <p class="eyebrow">Phase one &middot; a wave-one idea</p>
+    <h1>The receipt</h1>
+    <p class="lede">The first thing every customer keeps. It prints like the ticket over her oven, with the week&rsquo;s verse below the fold.</p>
+  </header>
+</div>
+
+<section>
+  <div class="wrap">
+    <p class="eyebrow">Four real orders</p>
+    <h2>The same ticket, four ways</h2>
+    <p class="say">
+      Every number below is worked out from what was actually charged, so the ticket cannot disagree
+      with the payment. These four are made-up orders against the sample flavours, not anybody&rsquo;s
+      real ones.
+    </p>
+
+    <div class="gallery" id="gallery"></div>
+
+    <button class="stamp-btn" id="print" type="button">Print this ticket</button>
+    <p class="say" style="margin-top:12px">
+      Printing gives you the ticket and nothing else on this page: 78&nbsp;millimetres wide, black
+      on white, torn edges left off because those are paper, not ink.
+    </p>
+  </div>
+</section>
+
+<div class="wrap">
+  <footer>
+    <span>Heaven&rsquo;s Harvest Pantry</span>
+    <span>Prototype &middot; drops into the site unchanged</span>
+  </footer>
+</div>
+
+<script type="module">
+  import { receiptFrom, creditShortfallCents, stamp, whatHappensNext } from './receipt.js';
+
+  // Matches formatMoney in the shop's own cart, which the real component imports.
+  const money = (cents) => `$${(cents / 100).toFixed(2)}`;
+  const esc = (v) => String(v).replace(/[&<>"]/g, (c) => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;' }[c]));
+
+  const business = { name: "Heaven's Harvest Pantry", kitchen: 'Vistancia', phone: '[her number]' };
+  const verse = { text: 'Taste and see that the Lord is good.', reference: 'Psalm 34 : 8' };
+
+  // Four payments shaped exactly the way Stripe hands them back.
+  const CASES = [
+    {
+      title: 'The ordinary one',
+      note: 'Two bags, a jar, no jars back yet.',
+      session: {
+        id: 'cs_test_a1b2c3d4e5f6g7h8QK4T9K',
+        created: 1788350400,
+        amount_total: 4200,
+        metadata: {
+          customer_name: 'Sarah Keller', method: 'delivery',
+          run_area: 'Vistancia', run_date: 'Tue Sep 8',
+          jars_returned: '0', jar_credit_cents: '0', jar_credit_asked_cents: '0',
+          points_earned: '42', porch_note: '',
+        },
+      },
+      items: [
+        { description: 'Honey Almond Crunch · bag', quantity: 2, amount_total: 2600 },
+        { description: 'Maple Pecan · mason jar', quantity: 1, amount_total: 1600 },
+      ],
+      balance: 72,
+    },
+    {
+      title: 'Jars brought back',
+      note: 'Three jars returned, a blessing bag, and a note for her porch.',
+      session: {
+        id: 'cs_test_z9y8x7w6v5u4t3s2M7RP2B',
+        created: 1788436800,
+        amount_total: 5100,
+        metadata: {
+          customer_name: 'Dana Whitfield', method: 'delivery',
+          run_area: 'Anthem', run_date: 'Fri Sep 11',
+          jars_returned: '3', jar_credit_cents: '600', jar_credit_asked_cents: '600',
+          points_earned: '51',
+          porch_note: 'Side gate is unlocked, leave it by the blue pot please.',
+        },
+      },
+      items: [
+        { description: 'Dark Chocolate Sea Salt · mason jar', quantity: 2, amount_total: 3400 },
+        { description: 'Cinnamon Apple · bag', quantity: 1, amount_total: 1400 },
+        { description: 'Blessing bag for a neighbor', quantity: 1, amount_total: 900 },
+      ],
+      balance: 51,
+    },
+    {
+      title: 'More credit than the order',
+      note: 'Seven jars back against one bag. A card cannot be charged nothing, so some of the credit does not fit — and the ticket says so.',
+      session: {
+        id: 'cs_test_q1w2e3r4t5y6u7i8HH8N4C',
+        created: 1788523200,
+        amount_total: 100,
+        metadata: {
+          customer_name: 'Marcus Hale', method: 'dropoff',
+          run_area: 'the Anthem market', run_date: 'Fri Sep 11',
+          jars_returned: '7', jar_credit_cents: '1200', jar_credit_asked_cents: '1400',
+          points_earned: '1', porch_note: '',
+        },
+      },
+      items: [{ description: 'Honey Almond Crunch · bag', quantity: 1, amount_total: 1300 }],
+      balance: 108,
+    },
+    {
+      title: 'Before the points have landed',
+      note: 'The payment record arrives a moment after this page does, so the running total is simply left off until it is really there.',
+      session: {
+        id: 'cs_test_m0n9b8v7c6x5z4l3WD5X1F',
+        created: 1788609600,
+        amount_total: 1300,
+        metadata: {
+          customer_name: '', method: '',
+          run_area: '', run_date: '',
+          jars_returned: '0', jar_credit_cents: '0', jar_credit_asked_cents: '0',
+          points_earned: '13', porch_note: '',
+        },
+      },
+      items: [{ description: 'Cinnamon Apple · bag', quantity: 1, amount_total: 1300 }],
+      balance: null,
+    },
+  ];
+
+  function render(r) {
+    const shortfall = creditShortfallCents(r);
+    const lines = r.lines
+      .map(
+        (l) => `<div class="line"><span class="qty">${l.qty}&times;</span><span class="what">${esc(l.what)}</span><i class="dots"></i><span class="amt">${money(l.cents)}</span></div>`,
+      )
+      .join('');
+
+    const credit = r.jarCreditCents > 0
+      ? `<div class="line credit"><span class="qty">${r.jarsReturned}&times;</span><span class="what">Jar back, thank you</span><i class="dots"></i><span class="amt">&minus;${money(r.jarCreditCents)}</span></div>`
+      : '';
+
+    return `
+      <article class="ticket" aria-label="Your order">
+        <div class="head">
+          <p class="shop">${esc(business.name)}</p>
+          <p class="where">Baked Thursday mornings in ${esc(business.kitchen)}</p>
+          <p class="kind">Order ticket</p>
+          <p class="stamp"><span class="no">No. ${esc(r.number)}</span><span>${esc(stamp(r.placedAt))}</span></p>
+        </div>
+
+        <div class="who">
+          <p class="name">${r.firstName ? 'For ' + esc(r.firstName) : 'For you'}</p>
+          ${r.runArea && r.runDate
+            ? `<p class="run">${r.method === 'dropoff' ? 'Collect at' : 'Delivering to'} ${esc(r.runArea)} &middot; ${esc(r.runDate)}</p>`
+            : ''}
+        </div>
+
+        <div class="lines">${lines}${credit}</div>
+
+        ${shortfall > 0
+          ? `<p class="shortfall">${money(shortfall)} of your jar credit did not fit on this order &mdash; an order has to come to something.</p>`
+          : ''}
+
+        <div class="total"><span class="label">Paid</span><span class="amt">${money(r.totalCents)}</span></div>
+
+        ${r.pointsEarned > 0 ? `<p class="points"><span>Points earned</span><b>+${r.pointsEarned}</b></p>` : ''}
+        ${r.pointsBalance !== null && r.pointsBalance > 0 ? `<p class="points"><span>Your total</span><b>${r.pointsBalance}</b></p>` : ''}
+
+        <p class="next">${esc(whatHappensNext(r))}</p>
+
+        ${r.porchNote ? `<p class="porch"><span>Your note to her</span>${esc(r.porchNote)}</p>` : ''}
+
+        <div class="perf"></div>
+
+        <div class="verse">
+          <p>&ldquo;${esc(r.verse.text)}&rdquo;</p>
+          <p class="ref">${esc(r.verse.reference)}</p>
+          <p class="aside">This week&rsquo;s card, tucked in with your order.</p>
+        </div>
+
+        <p class="foot">${esc(business.name)}<br>${esc(business.phone)}</p>
+      </article>`;
+  }
+
+  const built = CASES.map((c) => receiptFrom(c.session, c.items, verse, c.balance));
+
+  document.getElementById('gallery').innerHTML = CASES.map(
+    (c, i) => `
+      <div class="case">
+        <span class="sample">Example order</span>
+        <h3>${esc(c.title)}</h3>
+        <p>${esc(c.note)}</p>
+        ${render(built[i])}
+      </div>`,
+  ).join('');
+
+  // Printing takes whichever ticket you were last looking at. Here it is the
+  // first; on the site there is only ever one on the page.
+  document.getElementById('print').addEventListener('click', () => window.print());
+
+  window.__receipt = { built, receiptFrom, creditShortfallCents, whatHappensNext, stamp };
+</script>
+</body>
+</html>

@@ -1,0 +1,205 @@
+@import "tailwindcss";
+
+@page {
+  size: letter;
+  margin: 0.3in;
+}
+
+@theme {
+  --color-cream: #f4eee2;
+  --color-paper: #fbf8f1;
+  --color-ink: #3a2712;
+  --color-brown: #5b3d1e;
+  --color-brown-deep: #3f2a14;
+  --color-sage: #6b7a4a;
+  --color-sage-deep: #4f5a35;
+  --color-gold: #c9a06a;
+  --color-sand: #cdbfa5;
+  --color-moss: #eef0e2;
+  --color-moss-line: #d7dbc0;
+  --color-bark: #4a3520;
+  --color-muted: #6b5a42;
+  --color-faint: #6f6047;
+  --color-hedge: #a9b18a;
+  --color-linen: #eadfcc;
+  --color-rule: #e3d9c4;
+
+  --font-display: var(--font-cinzel), Georgia, "Times New Roman", serif;
+  --font-serif: var(--font-cormorant), Georgia, "Times New Roman", serif;
+  --font-ui: var(--font-karla), system-ui, -apple-system, sans-serif;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background: var(--color-cream);
+  color: var(--color-ink);
+  font-family: var(--font-serif);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: var(--color-gold);
+  color: var(--color-ink);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-sage);
+  outline-offset: 3px;
+}
+
+@layer components {
+  .caps {
+    font-family: var(--font-display);
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+
+  .small-caps {
+    font-family: var(--font-ui);
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--color-sage);
+    font-weight: 600;
+  }
+
+  .display {
+    font-family: var(--font-serif);
+    font-weight: 500;
+    letter-spacing: -0.015em;
+    line-height: 0.98;
+  }
+
+  .verse {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 400;
+    line-height: 1.18;
+    text-wrap: balance;
+  }
+
+  .ref {
+    font-family: var(--font-display);
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-size: 11px;
+  }
+
+  /* Letterpress stamp button: a solid block with an inset keyline. */
+  .stamp {
+    font-family: var(--font-display);
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    font-size: 12px;
+    background: var(--color-brown);
+    color: var(--color-cream);
+    padding: 0 26px;
+    min-height: 52px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    box-shadow:
+      inset 0 0 0 4px var(--color-brown),
+      inset 0 0 0 5px var(--color-gold);
+    transition: background 160ms ease, box-shadow 160ms ease;
+  }
+
+  .stamp:hover {
+    background: var(--color-brown-deep);
+    box-shadow:
+      inset 0 0 0 4px var(--color-brown-deep),
+      inset 0 0 0 5px var(--color-gold);
+  }
+
+  .stamp-light {
+    background: transparent;
+    color: var(--color-brown);
+    box-shadow:
+      inset 0 0 0 1px var(--color-brown),
+      inset 0 0 0 4px transparent,
+      inset 0 0 0 5px var(--color-brown);
+  }
+
+  .stamp-light:hover {
+    background: var(--color-paper);
+    box-shadow:
+      inset 0 0 0 1px var(--color-brown),
+      inset 0 0 0 4px transparent,
+      inset 0 0 0 5px var(--color-brown);
+  }
+
+  .stamp-gold {
+    background: var(--color-gold);
+    color: var(--color-ink);
+    box-shadow:
+      inset 0 0 0 4px var(--color-gold),
+      inset 0 0 0 5px var(--color-brown);
+  }
+
+  .stamp-gold:hover {
+    background: #d8b382;
+    box-shadow:
+      inset 0 0 0 4px #d8b382,
+      inset 0 0 0 5px var(--color-brown);
+  }
+
+  .stamp-cream {
+    background: var(--color-cream);
+    color: var(--color-sage-deep);
+    box-shadow:
+      inset 0 0 0 4px var(--color-cream),
+      inset 0 0 0 5px var(--color-sage);
+  }
+
+  .stamp-cream:hover {
+    background: #fff;
+    box-shadow:
+      inset 0 0 0 4px #fff,
+      inset 0 0 0 5px var(--color-sage);
+  }
+
+  /* Menu row with dot leaders between the name and the price. */
+  .leader {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+  }
+
+  .leader-dots {
+    flex: 1;
+    border-bottom: 2px dotted #b9a98a;
+    transform: translateY(-6px);
+    min-width: 20px;
+  }
+
+  .dashed-frame {
+    border: 1px dashed var(--color-hedge);
+  }
+
+  .dropcap::first-letter {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 76px;
+    line-height: 0.72;
+    float: left;
+    margin: 8px 14px 0 0;
+    color: var(--color-sage);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

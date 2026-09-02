@@ -1,0 +1,278 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=Karla:wght@400;500;600;700&display=swap">
+  <style>
+    body { margin: 0; background: #f4eee2; color: #3a2712; font-family: 'Karla', system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+    a { color: #5b3d1e; text-decoration: none; } a:hover { color: #6b7a4a; }
+    p { margin: 0; }
+    .small { font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; font-weight: 700; color: #6b7a4a; }
+    .caps { font-family: 'Cinzel', Georgia, serif; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; }
+    .display { font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 500; line-height: 1; letter-spacing: -0.018em; text-wrap: balance; }
+    .body { font-size: 12.5px; line-height: 1.56; color: #6b5333; text-wrap: pretty; }
+    .card { background: #fbf5e8; box-shadow: inset 0 0 0 1px #ddcdae; padding: 11px 13px 12px; display: flex; flex-direction: column; gap: 5px; }
+    .card .nm { font-size: 13.5px; font-weight: 700; color: #3a2712; line-height: 1.2; }
+    .card .why { font-size: 11px; line-height: 1.45; color: #8a6c45; }
+    .tag { font-size: 9px; font-weight: 700; letter-spacing: 0.13em; text-transform: uppercase; padding: 3px 6px; display: inline-block; align-self: flex-start; }
+    .t-small { background: #e2e6cf; color: #4d5a33; }
+    .t-mid { background: #ecdfc6; color: #8a6524; }
+    .t-big { background: #5b3d1e; color: #f4eee2; }
+    .t-done { background: #6b7a4a; color: #f4eee2; }
+    .wave { display: flex; flex-direction: column; gap: 9px; }
+    .whead { border-top: 3px solid #5b3d1e; padding-top: 12px; margin-bottom: 3px; }
+    .need { display: flex; align-items: baseline; gap: 9px; padding: 7px 0; border-bottom: 1px dotted #c2b393; }
+    .need .lbl { font-size: 12.5px; color: #4a3520; }
+    .need .who { font-size: 9px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #a08a63; }
+  </style>
+</helmet>
+
+<div style="width: 1440px; height: 1460px; box-sizing: border-box; background: #f4eee2; position: relative; overflow: hidden; padding: 34px 52px 0;">
+
+  <svg width="0" height="0" style="position: absolute;">
+    <defs>
+      <filter id="grainP2" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch"></feTurbulence><feColorMatrix type="saturate" values="0"></feColorMatrix><feComponentTransfer><feFuncA type="table" tableValues="0 0 0 0.04 0.07"></feFuncA></feComponentTransfer></filter>
+    </defs>
+  </svg>
+  <svg style="position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; mix-blend-mode: multiply;"><rect width="100%" height="100%" filter="url(#grainP2)"></rect></svg>
+
+  <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+    <div>
+      <div class="small">The order of work</div>
+      <h2 class="display" style="font-size: 46px; margin: 12px 0 0; color: #3a2712;">All twenty-eight, in the order they can actually be built</h2>
+    </div>
+    <div style="width: 430px; text-align: right;">
+      <div class="body">Nothing here is a guess at a date. The order is set by what depends on what: a jar shelf needs sign-in, a receipt needs payments, and every 3D idea after the first is cheap because the first one paid for the scene.</div>
+    </div>
+  </div>
+
+  <!-- what is holding things up -->
+  <div style="margin-top: 24px; display: grid; grid-template-columns: 1fr 1fr 424px; gap: 26px;">
+    <div style="background: #fbf5e8; box-shadow: inset 0 0 0 1px #ddcdae; padding: 20px 24px 18px;">
+      <div class="small" style="color: #a8442e;">Waiting on her &mdash; blocks the launch</div>
+      <div style="margin-top: 10px;">
+        <div class="need"><div class="lbl">Flavors, ingredients, allergens</div><div style="flex:1; border-bottom: 1px dotted #c2b393; transform: translateY(-4px);"></div><div class="who">Menu</div></div>
+        <div class="need"><div class="lbl">Bag and jar prices</div><div style="flex:1; border-bottom: 1px dotted #c2b393; transform: translateY(-4px);"></div><div class="who">Menu</div></div>
+        <div class="need"><div class="lbl">Delivery days and drop-off spots</div><div style="flex:1; border-bottom: 1px dotted #c2b393; transform: translateY(-4px);"></div><div class="who">Checkout</div></div>
+        <div class="need"><div class="lbl">Stripe and bank details</div><div style="flex:1; border-bottom: 1px dotted #c2b393; transform: translateY(-4px);"></div><div class="who">Payments</div></div>
+        <div class="need"><div class="lbl">Domain name</div><div style="flex:1; border-bottom: 1px dotted #c2b393; transform: translateY(-4px);"></div><div class="who">Launch</div></div>
+        <div class="need" style="border-bottom: none;"><div class="lbl">Her story, photos, order phone number</div><div style="flex:1; border-bottom: 1px dotted #c2b393; transform: translateY(-4px);"></div><div class="who">Pages</div></div>
+      </div>
+    </div>
+
+    <div style="background: #fbf5e8; box-shadow: inset 0 0 0 1px #ddcdae; padding: 20px 24px 18px;">
+      <div class="small" style="color: #8a6524;">Waiting on the site itself</div>
+      <div style="margin-top: 10px;">
+        <div class="need"><div class="lbl">Menu and product pages</div><div style="flex:1; border-bottom: 1px dotted #c2b393; transform: translateY(-4px);"></div><div class="who">In build</div></div>
+        <div class="need"><div class="lbl">Checkout and payments</div><div style="flex:1; border-bottom: 1px dotted #c2b393; transform: translateY(-4px);"></div><div class="who">In build</div></div>
+        <div class="need"><div class="lbl">Her owner's page</div><div style="flex:1; border-bottom: 1px dotted #c2b393; transform: translateY(-4px);"></div><div class="who">In build</div></div>
+        <div class="need"><div class="lbl">Phone sign-in and rewards</div><div style="flex:1; border-bottom: 1px dotted #c2b393; transform: translateY(-4px);"></div><div class="who">In build</div></div>
+        <div class="need"><div class="lbl">Arizona cottage food registration</div><div style="flex:1; border-bottom: 1px dotted #c2b393; transform: translateY(-4px);"></div><div class="who">Free, hers</div></div>
+        <div class="need" style="border-bottom: none;"><div class="lbl">Which Pure Heart campus her family is at</div><div style="flex:1; border-bottom: 1px dotted #c2b393; transform: translateY(-4px);"></div><div class="who">Small</div></div>
+      </div>
+    </div>
+
+    <div style="background: #5b3d1e; color: #f4eee2; padding: 22px 26px 24px;">
+      <div class="small" style="color: #c9a06a;">Where we are today</div>
+      <div class="display" style="font-size: 40px; color: #f4eee2; margin-top: 12px;">4 of 28 built</div>
+      <div class="body" style="color: #d6c6a8; margin-top: 12px;">Four are finished and checked in a real browser on desktop and phone: the Pour, the "Want to know Jesus?" page carrying Pure Heart's real times and addresses, Monday's verse, and the mark that inks itself. Each sits in its own folder and touches nothing the site build is holding.</div>
+      <div class="body" style="color: #a3825a; margin-top: 12px; font-size: 11.5px;">Everything still open needs either the site itself or something from her. Nothing left on this board is waiting on me.</div>
+    </div>
+  </div>
+
+  <!-- the waves -->
+  <div style="margin-top: 30px; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 22px;">
+
+    <!-- WAVE 1 -->
+    <div class="wave">
+      <div class="whead">
+        <div class="caps" style="font-size: 12px; color: #5b3d1e;">Wave one &middot; launch</div>
+        <div class="body" style="margin-top: 6px;">Ships the day the site goes live. Nothing here needs anyone to sign in.</div>
+      </div>
+      <div class="card" style="box-shadow: inset 0 0 0 2px #6b7a4a;">
+        <span class="tag t-done">Built &middot; proven</span>
+        <div class="nm">The Pour</div>
+        <div class="why">The opening moment. Done, screenshotted, ready to drop in.</div>
+      </div>
+      <div class="card">
+        <span class="tag t-mid">A few days</span>
+        <div class="nm">Everything, without the graphics</div>
+        <div class="why">The still-frame fallback. Ships beside the Pour, never after it.</div>
+      </div>
+      <div class="card">
+        <span class="tag t-small">An afternoon</span>
+        <div class="nm">The porch light</div>
+        <div class="why">Needs one switch on her owner's page.</div>
+      </div>
+      <div class="card" style="box-shadow: inset 0 0 0 2px #6b7a4a;">
+        <span class="tag t-done">Built &middot; checked</span>
+        <div class="nm">Want to know Jesus?</div>
+        <div class="why">Page and footer line both done. Waiting only on the church's times and address, which are left blank on purpose.</div>
+      </div>
+      <div class="card">
+        <span class="tag t-small">An afternoon</span>
+        <div class="nm">The receipt</div>
+        <div class="why">Follows checkout. First thing every customer keeps.</div>
+      </div>
+      <div class="card">
+        <span class="tag t-small">An afternoon</span>
+        <div class="nm">Type that behaves</div>
+        <div class="why">Done once, across every page, before more pages exist.</div>
+      </div>
+      <div class="card" style="box-shadow: inset 0 0 0 2px #6b7a4a;">
+        <span class="tag t-done">Built &middot; checked</span>
+        <div class="nm">The mark draws itself</div>
+        <div class="why">Inks itself once on a first visit, then never again. Lives on the verse card.</div>
+      </div>
+    </div>
+
+    <!-- WAVE 2 -->
+    <div class="wave">
+      <div class="whead">
+        <div class="caps" style="font-size: 12px; color: #5b3d1e;">Wave two &middot; the reasons to return</div>
+        <div class="body" style="margin-top: 6px;">Starts the week after launch. Most of it needs phone sign-in working first.</div>
+      </div>
+      <div class="card" style="box-shadow: inset 0 0 0 2px #6b7a4a;">
+        <span class="tag t-done">Built &middot; checked</span>
+        <div class="nm">Monday's verse</div>
+        <div class="why">Changes itself every Monday at five, wax seal and all, with fifteen verses loaded and the whole wall printable.</div>
+      </div>
+      <div class="card">
+        <span class="tag t-small">An afternoon</span>
+        <div class="nm">Welcome back</div>
+        <div class="why">Needs sign-in. Turns a reorder into one tap.</div>
+      </div>
+      <div class="card">
+        <span class="tag t-mid">A few days</span>
+        <div class="nm">Your verse wall</div>
+        <div class="why">The public wall is built. Making it personal to each customer needs sign-in.</div>
+      </div>
+      <div class="card">
+        <span class="tag t-mid">A few days</span>
+        <div class="nm">The jar shelf</div>
+        <div class="why">Needs sign-in and the jar return already at checkout.</div>
+      </div>
+      <div class="card">
+        <span class="tag t-small">An afternoon</span>
+        <div class="nm">What should I try?</div>
+        <div class="why">Needs the real flavor list. Kills first-order hesitation.</div>
+      </div>
+      <div class="card">
+        <span class="tag t-small">An afternoon</span>
+        <div class="nm">Real paper</div>
+        <div class="why">The verse card and print pieces get their texture.</div>
+      </div>
+      <div class="card">
+        <span class="tag t-small">An afternoon</span>
+        <div class="nm">One sound, once</div>
+        <div class="why">The crunch in the basket. Off until switched on.</div>
+      </div>
+      <div class="card">
+        <span class="tag t-mid">A few days</span>
+        <div class="nm">Sunday morning note</div>
+        <div class="why">Last of the wave: needs verses, points and sign-in all live.</div>
+      </div>
+    </div>
+
+    <!-- WAVE 3 -->
+    <div class="wave">
+      <div class="whead">
+        <div class="caps" style="font-size: 12px; color: #5b3d1e;">Wave three &middot; the big ones</div>
+        <div class="body" style="margin-top: 6px;">A month of real work. Every 3D idea here is cheap now because the Pour paid for the scene.</div>
+      </div>
+      <div class="card" style="box-shadow: inset 0 0 0 2px #5b3d1e;">
+        <span class="tag t-big">A week or more</span>
+        <div class="nm">Build your blend</div>
+        <div class="why">The one people share. Needs the jar, the flavor list and a print ticket for her.</div>
+      </div>
+      <div class="card">
+        <span class="tag t-mid">A few days</span>
+        <div class="nm">Your name on the glass</div>
+        <div class="why">Straight after the blend builder &mdash; same label, same code.</div>
+      </div>
+      <div class="card">
+        <span class="tag t-mid">A few days</span>
+        <div class="nm">Flavor as material</div>
+        <div class="why">Reuses the Pour's jar. The bit people replay.</div>
+      </div>
+      <div class="card">
+        <span class="tag t-mid">A few days</span>
+        <div class="nm">Turn the jar</div>
+        <div class="why">Reuses the Pour's jar. Allergens go on the back of the label.</div>
+      </div>
+      <div class="card">
+        <span class="tag t-mid">A few days</span>
+        <div class="nm">Morning light</div>
+        <div class="why">Ten lines once the scene exists. Different at every hour.</div>
+      </div>
+      <div class="card">
+        <span class="tag t-small">An afternoon</span>
+        <div class="nm">Steam and crumbs</div>
+        <div class="why">Small, and it makes the scene feel alive rather than posed.</div>
+      </div>
+      <div class="card">
+        <span class="tag t-small">An afternoon</span>
+        <div class="nm">The wheat hem</div>
+        <div class="why">Gives the closing blessing a horizon to sit above.</div>
+      </div>
+    </div>
+
+    <!-- WAVE 4 -->
+    <div class="wave">
+      <div class="whead">
+        <div class="caps" style="font-size: 12px; color: #5b3d1e;">Wave four &middot; when there is room</div>
+        <div class="body" style="margin-top: 6px;">None of it is urgent, and arriving one at a time is its own reason to come back.</div>
+      </div>
+      <div class="card">
+        <span class="tag t-mid">A few days</span>
+        <div class="nm">The blessing map</div>
+        <div class="why">Waits on purpose: it needs months of real bags to look like anything.</div>
+      </div>
+      <div class="card">
+        <span class="tag t-mid">A few days</span>
+        <div class="nm">Send it with a verse</div>
+        <div class="why">Best timed for the run-up to Christmas.</div>
+      </div>
+      <div class="card">
+        <span class="tag t-mid">A few days</span>
+        <div class="nm">The seasons turn</div>
+        <div class="why">Build it once, in early autumn, so the first change lands with harvest.</div>
+      </div>
+      <div class="card">
+        <span class="tag t-small">An afternoon</span>
+        <div class="nm">The oven timer</div>
+        <div class="why">Replaces the loading spinner. Two seconds of her brand.</div>
+      </div>
+      <div class="card">
+        <span class="tag t-mid">A few days</span>
+        <div class="nm">The bowl</div>
+        <div class="why">A toy with nothing to buy. Exists to be posted.</div>
+      </div>
+      <div class="card" style="box-shadow: inset 0 0 0 2px #5b3d1e;">
+        <span class="tag t-big">A week or more</span>
+        <div class="nm">Walk her kitchen</div>
+        <div class="why">The most ambitious idea on the list, and the one to attempt last, once her real photographs exist.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- what depends on what -->
+  <div style="position: absolute; left: 52px; right: 52px; bottom: 26px; border-top: 1px dotted #c2b393; padding-top: 16px; display: grid; grid-template-columns: 168px 1fr; gap: 34px;">
+    <div class="caps" style="font-size: 12px; color: #5b3d1e;">What blocks what</div>
+    <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 26px;">
+      <div class="body"><strong style="color: #3a2712;">Phone sign-in</strong> comes before the verse wall, the jar shelf, welcome back and the Sunday note. Four ideas wait on one login.</div>
+      <div class="body"><strong style="color: #3a2712;">Checkout</strong> comes before the receipt, gift-with-a-verse, the blend builder and the blessing map.</div>
+      <div class="body"><strong style="color: #3a2712;">Her owner's page</strong> comes before the porch light, Monday's verse and the blessing bags she has to track.</div>
+      <div class="body"><strong style="color: #3a2712;">The Pour</strong> already paid for the jar, the counter and the light, so four later 3D ideas cost days instead of weeks.</div>
+    </div>
+  </div>
+
+</div>
+</x-dc>
+</body>
+</html>

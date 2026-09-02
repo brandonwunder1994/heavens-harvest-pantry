@@ -1,0 +1,403 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reasons to come back — Heaven's Harvest Pantry</title>
+<!-- the standalone demo has no icon of its own; this stops the browser asking -->
+<link rel="icon" href="data:,">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Karla:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="./return.css">
+<style>
+  /* The shop's own tokens, exactly as defined on the site. */
+  :root {
+    --color-cream: #f4eee2;
+    --color-paper: #fbf8f1;
+    --color-ink: #3a2712;
+    --color-brown: #5b3d1e;
+    --color-brown-deep: #3f2a14;
+    --color-sage: #6b7a4a;
+    --color-sage-deep: #4f5a35;
+    --color-gold: #c9a06a;
+    --color-sand: #cdbfa5;
+    --color-moss: #eef0e2;
+    --color-muted: #6b5a42;
+    --color-faint: #8a7a62;
+    --color-hedge: #a9b18a;
+    --color-rule: #e3d9c4;
+    --font-display: 'Cinzel', Georgia, serif;
+    --font-serif: 'Cormorant Garamond', Georgia, serif;
+    --font-ui: 'Karla', system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--color-cream); color: var(--color-ink);
+    font-family: var(--font-serif); -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 1000px; margin: 0 auto; padding: 0 clamp(20px, 5vw, 56px); }
+
+  .lead { padding: clamp(40px, 6vw, 72px) 0 clamp(22px, 3vw, 32px); }
+  .eyebrow-top {
+    font-family: var(--font-ui); font-size: 11px; font-weight: 700;
+    letter-spacing: 0.22em; text-transform: uppercase; color: var(--color-sage); margin: 0;
+  }
+  h1 {
+    font-family: var(--font-serif); font-weight: 500;
+    font-size: clamp(42px, 7vw, 76px); line-height: 0.96; letter-spacing: -0.02em;
+    margin: 12px 0 0; text-wrap: balance;
+  }
+  .lede {
+    font-family: var(--font-serif); font-style: italic;
+    font-size: clamp(19px, 2.2vw, 24px); line-height: 1.34; color: var(--color-brown);
+    max-width: 38ch; margin: 18px 0 0;
+  }
+  section.demo { padding: clamp(30px, 4vw, 48px) 0; border-top: 1px solid var(--color-rule); }
+  h2.title {
+    font-family: var(--font-serif); font-weight: 600;
+    font-size: clamp(26px, 3vw, 34px); line-height: 1.05; margin: 10px 0 0;
+  }
+  .say {
+    font-family: var(--font-ui); font-size: 15px; line-height: 1.62;
+    color: var(--color-muted); max-width: 62ch; margin: 14px 0 0;
+  }
+
+  .who-switch { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 22px; }
+  .who-switch button {
+    font-family: var(--font-ui); font-size: 12px; font-weight: 700;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    background: transparent; color: var(--color-brown); cursor: pointer;
+    border: 0; box-shadow: inset 0 0 0 1px var(--color-sand);
+    padding: 11px 16px;
+  }
+  .who-switch button[aria-pressed='true'] {
+    background: var(--color-brown); color: var(--color-cream);
+    box-shadow: inset 0 0 0 1px var(--color-brown);
+  }
+  .who-note {
+    font-family: var(--font-ui); font-size: 12.5px; line-height: 1.55;
+    color: var(--color-faint); margin: 12px 0 0; max-width: 56ch;
+  }
+
+  .stack { display: flex; flex-direction: column; gap: clamp(38px, 5vw, 58px); margin-top: 32px; }
+
+  .mail-frame {
+    margin-top: 28px; border: 1px solid var(--color-sand); background: #fff;
+    max-width: 620px;
+  }
+  .mail-frame .bar {
+    font-family: var(--font-ui); font-size: 11px; font-weight: 700;
+    letter-spacing: 0.14em; text-transform: uppercase; color: var(--color-faint);
+    padding: 11px 16px; border-bottom: 1px solid var(--color-sand);
+    display: flex; justify-content: space-between; gap: 14px;
+  }
+  .mail-frame iframe { display: block; width: 100%; height: 640px; border: 0; }
+
+  .plain {
+    margin-top: 20px; max-width: 620px;
+    font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+    font-size: 12px; line-height: 1.65; color: var(--color-muted);
+    background: var(--color-paper); border: 1px dashed var(--color-hedge);
+    padding: 18px 20px; white-space: pre-wrap; overflow-x: auto;
+  }
+
+  .sample {
+    font-family: var(--font-ui); font-size: 10px; font-weight: 700;
+    letter-spacing: 0.16em; text-transform: uppercase; color: var(--color-sage);
+    background: var(--color-moss); padding: 4px 9px; display: inline-block;
+  }
+
+  footer {
+    border-top: 1px dashed var(--color-hedge); padding: 28px 0 44px;
+    font-family: var(--font-ui); font-size: 11px; font-weight: 600;
+    letter-spacing: 0.18em; text-transform: uppercase; color: var(--color-faint);
+    display: flex; flex-wrap: wrap; gap: 12px; justify-content: space-between;
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="lead">
+    <p class="eyebrow-top">Phase two &middot; four ideas</p>
+    <h1>Reasons to come back</h1>
+    <p class="lede">The shop stops being somewhere you go when you need granola and starts being somewhere you check in on.</p>
+  </header>
+</div>
+
+<section class="demo">
+  <div class="wrap">
+    <p class="eyebrow-top">Three people</p>
+    <h2 class="title">The same page, whoever is looking</h2>
+    <p class="say">
+      All three pieces read from the same two things: what somebody has ordered, and their points.
+      Every one of them says something true when there is nothing to show, which is the state that
+      gets skipped and the state most people are in on their first visit.
+    </p>
+
+    <div class="who-switch" role="group" aria-label="Whose page" id="who"></div>
+    <p class="who-note" id="who-note"></p>
+
+    <div class="stack" id="stack"></div>
+  </div>
+</section>
+
+<section class="demo">
+  <div class="wrap">
+    <p class="eyebrow-top">Sunday, five past seven</p>
+    <h2 class="title">The note that opens their own page</h2>
+    <p class="say">
+      Written in her voice, sent from her. It never says she is baking unless the porch light says
+      so, and it carries an unsubscribe that actually works. Below the picture is the same note as
+      plain words &mdash; which is what a good half of the world will actually read.
+    </p>
+
+    <div class="mail-frame">
+      <div class="bar"><span id="mail-subject">Subject</span><span>Sunday</span></div>
+      <iframe id="mail" title="The Sunday note"></iframe>
+    </div>
+
+    <div class="plain" id="mail-text"></div>
+  </div>
+</section>
+
+<div class="wrap">
+  <footer>
+    <span>Heaven&rsquo;s Harvest Pantry</span>
+    <span>Prototype &middot; drops into the site unchanged</span>
+  </footer>
+</div>
+
+<script type="module">
+  import { welcome, describeBasket, howLong, jarsKept, shelf, shelfLine, verseWall } from './account.js';
+  import { sundayNote } from './sunday-note.js';
+
+  const esc = (v) => String(v).replace(/[&<>"]/g, (c) => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;' }[c]));
+  const el = (id) => document.getElementById(id);
+
+  // ---- the shop's own weekly rotation, the same one the verse page uses ----
+  const VERSES = [
+    { text: 'The Lord bless you and keep you; the Lord make his face shine on you and be gracious to you.', reference: 'Numbers 6:24-25' },
+    { text: 'See, I am doing a new thing! Now it springs up; do you not perceive it?', reference: 'Isaiah 43:19' },
+    { text: 'Because of the Lord’s great love we are not consumed, for his compassions never fail.', reference: 'Lamentations 3:22-23' },
+    { text: 'Give us today our daily bread.', reference: 'Matthew 6:11' },
+    { text: 'Commit to the Lord whatever you do, and he will establish your plans.', reference: 'Proverbs 16:3' },
+    { text: 'Let the morning bring me word of your unfailing love, for I have put my trust in you.', reference: 'Psalm 143:8' },
+    { text: 'Love is patient, love is kind. It does not envy, it does not boast, it is not proud.', reference: '1 Corinthians 13:4' },
+    { text: 'We love because he first loved us.', reference: '1 John 4:19' },
+    { text: 'Man shall not live on bread alone, but on every word that comes from the mouth of God.', reference: 'Matthew 4:4' },
+    { text: 'Create in me a pure heart, O God, and renew a steadfast spirit within me.', reference: 'Psalm 51:10' },
+    { text: 'Return to the Lord your God, for he is gracious and compassionate, slow to anger and abounding in love.', reference: 'Joel 2:13' },
+    { text: 'But he was pierced for our transgressions; by his wounds we are healed.', reference: 'Isaiah 53:5' },
+    { text: 'He is not here; he has risen!', reference: 'Luke 24:6' },
+    { text: 'Unless a kernel of wheat falls to the ground and dies, it remains only a single seed.', reference: 'John 12:24' },
+    { text: 'Therefore, if anyone is in Christ, the new creation has come: The old has gone, the new is here!', reference: '2 Corinthians 5:17' },
+    { text: 'In his great mercy he has given us new birth into a living hope.', reference: '1 Peter 1:3' },
+    { text: 'I am the vine; you are the branches. If you remain in me you will bear much fruit.', reference: 'John 15:5' },
+    { text: 'That person is like a tree planted by streams of water, which yields its fruit in season.', reference: 'Psalm 1:3' },
+    { text: 'She gets up while it is still night; she provides food for her family.', reference: 'Proverbs 31:15' },
+    { text: 'Whatever you do, work at it with all your heart, as working for the Lord.', reference: 'Colossians 3:23' },
+    { text: 'To act justly and to love mercy and to walk humbly with your God.', reference: 'Micah 6:8' },
+    { text: 'There is a time for everything, and a season for every activity under the heavens.', reference: 'Ecclesiastes 3:1' },
+    { text: 'But the fruit of the Spirit is love, joy, peace, forbearance, kindness, goodness.', reference: 'Galatians 5:22-23' },
+    { text: 'The Lord your God is with you. He will take great delight in you.', reference: 'Zephaniah 3:17' },
+    { text: 'Let your light shine before others, that they may see your good deeds.', reference: 'Matthew 5:16' },
+    { text: 'Taste and see that the Lord is good; blessed is the one who takes refuge in him.', reference: 'Psalm 34:8' },
+    { text: 'It is for freedom that Christ has set us free.', reference: 'Galatians 5:1' },
+    { text: 'Do not grieve, for the joy of the Lord is your strength.', reference: 'Nehemiah 8:10' },
+    { text: 'The Lord will guide you always; he will satisfy your needs in a sun-scorched land.', reference: 'Isaiah 58:11' },
+    { text: 'Whoever drinks the water I give them will never thirst.', reference: 'John 4:14' },
+    { text: 'The Lord is your shade at your right hand; the sun will not harm you by day.', reference: 'Psalm 121:5-6' },
+    { text: 'Come to me, all you who are weary and burdened, and I will give you rest.', reference: 'Matthew 11:28' },
+    { text: 'I thirst for you, my whole being longs for you, in a dry and parched land.', reference: 'Psalm 63:1' },
+    { text: 'Be still, and know that I am God.', reference: 'Psalm 46:10' },
+    { text: 'Those who hope in the Lord will renew their strength. They will soar on wings like eagles.', reference: 'Isaiah 40:31' },
+    { text: 'Two are better than one, because they have a good return for their labor.', reference: 'Ecclesiastes 4:9' },
+    { text: 'Every good and perfect gift is from above, coming down from the Father of the heavenly lights.', reference: 'James 1:17' },
+    { text: 'Let us consider how we may spur one another on toward love and good deeds.', reference: 'Hebrews 10:24-25' },
+    { text: 'Trust in the Lord with all your heart and lean not on your own understanding.', reference: 'Proverbs 3:5-6' },
+    { text: 'They broke bread in their homes and ate together with glad and sincere hearts.', reference: 'Acts 2:46' },
+    { text: 'Let us not become weary in doing good, for at the proper time we will reap a harvest.', reference: 'Galatians 6:9' },
+    { text: 'You crown the year with your bounty, and your carts overflow with abundance.', reference: 'Psalm 65:11' },
+    { text: 'I am the bread of life. Whoever comes to me will never go hungry.', reference: 'John 6:35' },
+    { text: 'Give, and it will be given to you. A good measure, pressed down, shaken together.', reference: 'Luke 6:38' },
+    { text: 'God loves a cheerful giver.', reference: '2 Corinthians 9:7' },
+    { text: 'Give thanks in all circumstances; for this is God’s will for you in Christ Jesus.', reference: '1 Thessalonians 5:18' },
+    { text: 'Give thanks to the Lord, for he is good; his love endures forever.', reference: 'Psalm 107:1' },
+    { text: 'Let the peace of Christ rule in your hearts. And be thankful.', reference: 'Colossians 3:15' },
+    { text: 'Do not be anxious about anything, but in every situation, by prayer and petition.', reference: 'Philippians 4:6' },
+    { text: 'The people walking in darkness have seen a great light.', reference: 'Isaiah 9:2' },
+    { text: 'For to us a child is born, to us a son is given.', reference: 'Isaiah 9:6' },
+    { text: 'I bring you good news that will cause great joy for all the people.', reference: 'Luke 2:10-11' },
+  ];
+
+  function calendarWeek(d) {
+    const x = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+    x.setUTCDate(x.getUTCDate() + 4 - (x.getUTCDay() || 7));
+    const jan1 = new Date(Date.UTC(x.getUTCFullYear(), 0, 1));
+    return Math.ceil(((x - jan1) / 86400000 + 1) / 7);
+  }
+  const verseFor = (on) => VERSES[Math.min(calendarWeek(on), VERSES.length) - 1];
+
+  // ---- three made-up histories, against the sample flavours ----
+  const NOW = new Date('2026-09-02T09:00:00');
+  const daysAgo = (n) => Math.floor(NOW.getTime() / 1000) - n * 86400;
+
+  const HA = 'Honey Almond Crunch', MP = 'Maple Pecan', DC = 'Dark Chocolate Sea Salt', CA = 'Cinnamon Apple';
+  const order = (id, days, items, jars, area = 'Vistancia', method = 'delivery') =>
+    ({ id, createdAt: daysAgo(days), method, area, runDate: '', jarsReturned: jars, items });
+
+  const PEOPLE = [
+    {
+      key: 'sarah',
+      label: 'Sarah, a regular',
+      note: 'Nine orders over seven months, mostly the same basket, twelve jars brought back. This is who all four ideas are for.',
+      name: 'Sarah Keller',
+      points: 372,
+      orders: [
+        order('o9', 6,   [{ qty: 2, name: HA, format: 'bag' }], 2),
+        order('o8', 27,  [{ qty: 2, name: HA, format: 'bag' }], 2),
+        order('o7', 48,  [{ qty: 2, name: HA, format: 'bag' }], 1),
+        order('o6', 72,  [{ qty: 1, name: DC, format: 'jar' }, { qty: 1, name: HA, format: 'bag' }], 2),
+        order('o5', 96,  [{ qty: 2, name: HA, format: 'bag' }], 1),
+        order('o4', 122, [{ qty: 2, name: HA, format: 'bag' }], 2),
+        order('o3', 150, [{ qty: 1, name: MP, format: 'jar' }], 0),
+        order('o2', 181, [{ qty: 2, name: HA, format: 'bag' }], 2),
+        order('o1', 214, [{ qty: 1, name: CA, format: 'bag' }], 0),
+      ],
+    },
+    {
+      key: 'dana',
+      label: 'Dana, ordered twice',
+      note: 'Two orders, one jar back, and the two baskets were different — so the offer is what she had last time, not a habit she has not formed.',
+      name: 'Dana Whitfield',
+      points: 88,
+      orders: [
+        order('d2', 19, [{ qty: 1, name: DC, format: 'jar' }, { qty: 1, name: CA, format: 'bag' }], 1, 'Anthem'),
+        order('d1', 63, [{ qty: 2, name: MP, format: 'bag' }], 0, 'Anthem'),
+      ],
+    },
+    {
+      key: 'new',
+      label: 'Somebody new',
+      note: 'Signed in, never ordered. Every piece has something honest to say and none of them shows an empty box.',
+      name: 'Marcus Hale',
+      points: 30,
+      orders: [],
+    },
+  ];
+
+  const RULES = { rewardAt: 100 };
+  const toNext = (p) => RULES.rewardAt - (Math.max(0, p) % RULES.rewardAt);
+  const bagsWaiting = (p) => Math.floor(Math.max(0, p) / RULES.rewardAt);
+
+  // ---- rendering ----
+  function renderWelcome(person) {
+    const { greeting, usual, sinceDays } = welcome(person.name, person.orders, NOW);
+    const body = usual
+      ? `<div class="again">
+           <div class="what">
+             <p>${esc(describeBasket(usual.items))}?</p>
+             <p class="when">${esc(
+               usual.times > 1
+                 ? `Your usual — ${usual.times} orders, the last ${howLong(sinceDays)}.`
+                 : `What you had last time, ${howLong(sinceDays)}.`,
+             )}${usual.area ? esc(` ${usual.method === 'dropoff' ? 'Collected at' : 'Delivered to'} ${usual.area}.`) : ''}</p>
+           </div>
+           <a class="stamp-btn" href="#basket">Put it in the basket</a>
+         </div>`
+      : `<p class="first-time">Nothing here yet. Once you have ordered once, this is where your usual sits, one tap away.</p>`;
+
+    return `<section class="rtn welcome"><p class="eyebrow">Your page</p><h2>${esc(greeting)}</h2>${body}</section>`;
+  }
+
+  const MAX_DRAWN = 70;
+
+  function renderShelf(person) {
+    const total = jarsKept(person.orders);
+    const jars = shelf(person.orders).slice(0, MAX_DRAWN);
+
+    const body = jars.length
+      ? `<div class="boards">${jars.map((j) => `<span class="jar" title="Jar ${j.nth}"></span>`).join('')}</div>`
+      : '<div class="empty-board">The shelf is empty, for now.</div>';
+
+    return `<section class="rtn shelf">
+      <p class="eyebrow">Your shelf</p>
+      <h3>Jars you have brought back</h3>
+      ${body}
+      <p class="count">${esc(shelfLine(total))}</p>
+      ${total > MAX_DRAWN ? `<p class="more">The shelf holds ${MAX_DRAWN}. The other ${total - MAX_DRAWN} are in the number.</p>` : ''}
+    </section>`;
+  }
+
+  function renderWall(person) {
+    const cards = verseWall(person.orders, verseFor);
+    const fmt = (d) => d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+
+    const body = cards.length
+      ? `<div class="cards">${cards
+          .map(
+            (c) => `<article class="card">
+              <p class="t">&ldquo;${esc(c.verse.text)}&rdquo;</p>
+              <div class="b"><span class="r">${esc(c.verse.reference)}</span><span class="d">${esc(fmt(c.on))}</span></div>
+            </article>`,
+          )
+          .join('')}</div>`
+      : `<p class="nothing">The first card arrives in your first box. They hang here after that, in order, with the date each one came.</p>`;
+
+    return `<section class="rtn wall">
+      <p class="eyebrow">Your wall</p>
+      <h3>Every card that came with an order</h3>
+      ${body}
+    </section>`;
+  }
+
+  function noteFor(person) {
+    return sundayNote({
+      firstName: person.name.split(' ')[0],
+      verse: verseFor(NOW),
+      points: person.points,
+      toNextBag: toNext(person.points),
+      bagsWaiting: bagsWaiting(person.points),
+      jarsKept: jarsKept(person.orders),
+      baking: true,
+      bakingNote: 'Baking Thursday, orders open until Sunday night.',
+      accountUrl: 'https://example.test/rewards/me',
+      unsubscribeUrl: 'https://example.test/rewards/stop?t=example',
+      shopName: "Heaven's Harvest Pantry",
+      ownerName: '[her name]',
+    });
+  }
+
+  let current = PEOPLE[0];
+
+  function draw() {
+    el('stack').innerHTML = renderWelcome(current) + renderShelf(current) + renderWall(current);
+    el('who-note').innerHTML = `<span class="sample">Example</span> ${esc(current.note)}`;
+
+    const note = noteFor(current);
+    el('mail-subject').textContent = note.subject;
+    el('mail').srcdoc = note.html;
+    el('mail-text').textContent = note.text;
+
+    for (const b of document.querySelectorAll('#who button')) {
+      b.setAttribute('aria-pressed', String(b.dataset.key === current.key));
+    }
+  }
+
+  el('who').innerHTML = PEOPLE.map(
+    (p) => `<button type="button" data-key="${p.key}" aria-pressed="false">${esc(p.label)}</button>`,
+  ).join('');
+  el('who').addEventListener('click', (e) => {
+    const key = e.target.closest('button')?.dataset.key;
+    if (!key) return;
+    current = PEOPLE.find((p) => p.key === key);
+    draw();
+  });
+
+  draw();
+  window.__return = { PEOPLE, verseFor, noteFor, NOW, get current() { return current; } };
+</script>
+</body>
+</html>
