@@ -19,6 +19,26 @@ export const JAR_X = 0.86;
 const LOOK_AT = new THREE.Vector3(0.12, 0.78, 0);
 
 /**
+ * Where the camera stands, and where the jar stands in front of it.
+ *
+ * `hero` is the opening pour: the jar to one side, the words beside or under
+ * it. `jar` is the one on the menu you can pick up and turn — centred, closer,
+ * and with the counter almost out of shot, because the label is the subject.
+ *
+ * The hero's numbers are exactly what they always were.
+ */
+const FRAMING = {
+  hero: {
+    wide: { at: [0, 1.18, 4.35], look: LOOK_AT, jarX: JAR_X },
+    narrow: { at: [0, 1.55, 6.6], look: new THREE.Vector3(0, 0.42, 0), jarX: 0 },
+  },
+  jar: {
+    wide: { at: [0, 1.12, 3.05], look: new THREE.Vector3(0, 0.8, 0), jarX: 0 },
+    narrow: { at: [0, 1.12, 3.7], look: new THREE.Vector3(0, 0.78, 0), jarX: 0 },
+  },
+};
+
+/**
  * The hours of her day, as light.
  *
  * Six in the morning is low and gold and rakes in from the left, which is where
@@ -39,7 +59,8 @@ export const HOURS = {
   night: { colour: '#ffd08a', at: [-1.1, 2.6, 1.1], power: 1.9, sky: '#c9ad84', ground: '#2a1a0c', bounce: 0.22, fill: 0.1, env: 0.26, exposure: 0.7 },
 };
 
-export function createStage({ canvas }) {
+export function createStage({ canvas, framing = 'hero' }) {
+  const frame = FRAMING[framing] ?? FRAMING.hero;
   const renderer = new THREE.WebGLRenderer({
     canvas,
     antialias: true,
@@ -127,11 +148,12 @@ export function createStage({ canvas }) {
     // words go underneath: the jar is centred, lifted into the top half of the
     // frame, and the camera pulls back far enough to hold all of it.
     narrow = w / h < 1;
-    camera.position.set(0, narrow ? 1.55 : 1.18, narrow ? 6.6 : 4.35);
-    camera.lookAt(narrow ? new THREE.Vector3(0, 0.42, 0) : LOOK_AT);
+    const shot = narrow ? frame.narrow : frame.wide;
+    camera.position.set(shot.at[0], shot.at[1], shot.at[2]);
+    camera.lookAt(shot.look);
     camera.updateProjectionMatrix();
 
-    for (const fn of listeners) fn({ narrow, jarX: narrow ? 0 : JAR_X, width: w, height: h });
+    for (const fn of listeners) fn({ narrow, jarX: shot.jarX, width: w, height: h });
   }
 
   window.addEventListener('resize', measure);

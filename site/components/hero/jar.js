@@ -10,7 +10,7 @@
 import * as THREE from 'three';
 import { contactTexture, labelTexture } from './textures.js';
 
-export function createJar({ radius }) {
+export function createJar({ radius, label = true }) {
   const group = new THREE.Group();
 
   const WALL = 0.035;
@@ -91,25 +91,33 @@ export function createJar({ radius }) {
     group.add(ring);
   }
 
-  // The label, wrapped around the front of the glass.
-  const labelMap = labelTexture();
-  const labelGeo = new THREE.CylinderGeometry(outer + 0.004, outer + 0.004, 0.58, 48, 1, true, -0.85, 1.7);
-  const labelMat = new THREE.MeshStandardMaterial({
-    map: labelMap,
-    transparent: true,
-    roughness: 0.92,
-    metalness: 0,
-    side: THREE.DoubleSide,
-  });
-  const label = new THREE.Mesh(labelGeo, labelMat);
-  label.position.y = 0.56;
-  group.add(label);
+  // The label, wrapped around the front of the glass. The jar on the menu turns
+  // in your hands and carries a sleeve with two panels instead, so it asks for
+  // no label here and adds its own.
+  const labelMap = label ? labelTexture() : null;
+  const labelGeo = labelMap
+    ? new THREE.CylinderGeometry(outer + 0.004, outer + 0.004, 0.58, 48, 1, true, -0.85, 1.7)
+    : null;
+  const labelMat = labelMap
+    ? new THREE.MeshStandardMaterial({
+        map: labelMap,
+        transparent: true,
+        roughness: 0.92,
+        metalness: 0,
+        side: THREE.DoubleSide,
+      })
+    : null;
+  const paper = labelGeo ? new THREE.Mesh(labelGeo, labelMat) : null;
+  if (paper) {
+    paper.position.y = 0.56;
+    group.add(paper);
+  }
 
   return {
     group,
     outer,
     neck: NECK,
-    label,
+    label: paper,
 
     dispose() {
       glassGeo.dispose();
@@ -119,9 +127,9 @@ export function createJar({ radius }) {
       contactMap.dispose();
       threadGeo.dispose();
       threadMat.dispose();
-      labelGeo.dispose();
-      labelMat.dispose();
-      labelMap.dispose();
+      labelGeo?.dispose();
+      labelMat?.dispose();
+      labelMap?.dispose();
     },
   };
 }

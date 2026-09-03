@@ -387,3 +387,111 @@
   height: 14px;
   background: linear-gradient(to top, var(--color-cream, #f4eee2), rgba(244, 238, 226, 0));
 }
+
+/* --- the jar you can pick up -----------------------------------------------
+   At the top of the menu: the glass on the left, her flavours on the right.
+   The drawing of three jars is still underneath it for anyone not being given
+   the real one, and every word on the label is written out further down the
+   page regardless. */
+
+.turn {
+  display: grid;
+  gap: 20px;
+  align-items: center;
+  width: 100%;
+  max-width: 900px;
+  margin: 24px auto 0;
+  padding: 0 24px;
+}
+
+@media (min-width: 800px) {
+  .turn { grid-template-columns: 360px 1fr; gap: 40px; padding: 0 40px; }
+}
+
+.turn-stage { display: flex; flex-direction: column; gap: 10px; }
+
+.turn-glass {
+  display: block;
+  width: 100%;
+  /* The jar is taller than it is wide, and it needs room over the lid. */
+  aspect-ratio: 4 / 5;
+  max-height: 460px;
+  background: var(--color-cream, #f4eee2);
+  cursor: grab;
+  touch-action: pan-y;
+  opacity: 0;
+  transition: opacity 600ms ease;
+}
+.turn[data-live='yes'] .turn-glass { opacity: 1; }
+.turn-glass:active { cursor: grabbing; }
+.turn-glass:focus-visible { outline: 2px solid var(--color-sage, #5f6d41); outline-offset: 3px; }
+
+.turn-tools {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 6px 14px;
+}
+
+.turn-round {
+  font-family: var(--font-ui);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-brown, #5b3d1e);
+  background: none;
+  border: 1px solid var(--color-sand, #ded2ba);
+  padding: 7px 12px;
+  cursor: pointer;
+}
+.turn-round:hover { border-color: var(--color-brown, #5b3d1e); }
+
+.turn-hint {
+  font-family: var(--font-ui);
+  font-size: 12px;
+  color: var(--color-faint, #7a6a52);
+}
+
+.turn-picks { display: flex; flex-direction: column; }
+
+.turn-pick {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 14px;
+  width: 100%;
+  padding: 11px 4px 11px 14px;
+  text-align: left;
+  background: none;
+  border: 0;
+  border-left: 3px solid transparent;
+  border-bottom: 1px solid var(--color-sand, #ded2ba);
+  cursor: pointer;
+  transition: border-color 180ms ease, background 180ms ease;
+}
+.turn-pick:last-child { border-bottom: 0; }
+.turn-pick[aria-pressed='true'] {
+  border-left-color: var(--color-sage, #5f6d41);
+  background: rgba(255, 255, 255, 0.42);
+}
+.turn-pick:focus-visible { outline: 2px solid var(--color-sage, #5f6d41); outline-offset: -2px; }
+
+.turn-pick-name {
+  font-family: var(--font-display);
+  font-size: 22px;
+  color: var(--color-bark, #4a3520);
+}
+.turn-pick[data-sold-out] .turn-pick-name { opacity: 0.55; }
+
+.turn-pick-price {
+  font-family: var(--font-ui);
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+  color: var(--color-faint, #7a6a52);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .turn-glass, .turn-pick { transition: none; }
+}

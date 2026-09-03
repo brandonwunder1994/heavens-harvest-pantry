@@ -7,6 +7,7 @@ import { AddToCart } from "@/components/cart/AddToCart";
 import { CartBar } from "@/components/cart/CartBar";
 import { ReorderOnArrival } from "@/components/cart/ReorderOnArrival";
 import { WhatShouldITry } from "@/components/suggest/WhatShouldITry";
+import { TurnTheJar } from "@/components/menu/TurnTheJar";
 import { amount, money } from "@/lib/content";
 import { getShop } from "@/lib/settings";
 
@@ -42,16 +43,21 @@ export default async function MenuPage() {
         </div>
       </section>
 
-      <div className="mx-auto mt-6 w-full max-w-[900px] px-6 sm:px-10">
-        <svg viewBox="0 0 900 250" className="h-auto w-full" aria-hidden focusable="false">
-          {/* Her three, not three she chose once. */}
-          <Jar x={140} y={40} scale={0.95} label={jarLabel(flavors[0]?.name ?? "")} />
-          <Jar x={370} y={14} scale={1.12} label={jarLabel(flavors[1]?.name ?? "")} />
-          <Jar x={620} y={40} scale={0.95} label={jarLabel(flavors[2]?.name ?? "")} />
-          <path d="M100 232 H800" stroke="#5b3d1e" strokeWidth="2.2" strokeLinecap="round" />
-          <path d="M130 240 H770" stroke="#5b3d1e" strokeWidth="0.9" opacity="0.4" />
-        </svg>
-      </div>
+      {/* Pick the jar up and turn it. The drawing it replaces is handed in as
+          the fallback, so anyone not being given the real one still gets the
+          shelf that was always here. */}
+      <TurnTheJar flavors={flavors}>
+        <div className="mx-auto mt-6 w-full max-w-[900px]">
+          <svg viewBox="0 0 900 250" className="h-auto w-full" aria-hidden focusable="false">
+            {/* Her three, not three she chose once. */}
+            <Jar x={140} y={40} scale={0.95} label={jarLabel(flavors[0]?.name ?? "")} />
+            <Jar x={370} y={14} scale={1.12} label={jarLabel(flavors[1]?.name ?? "")} />
+            <Jar x={620} y={40} scale={0.95} label={jarLabel(flavors[2]?.name ?? "")} />
+            <path d="M100 232 H800" stroke="#5b3d1e" strokeWidth="2.2" strokeLinecap="round" />
+            <path d="M130 240 H770" stroke="#5b3d1e" strokeWidth="0.9" opacity="0.4" />
+          </svg>
+        </div>
+      </TurnTheJar>
 
       <section className="mx-6 mt-4 flex flex-col items-center gap-1.5 bg-brown px-6 py-6 text-center text-cream shadow-[inset_0_0_0_4px_#5b3d1e,inset_0_0_0_5px_#c9a06a] sm:mx-10 lg:mx-auto lg:max-w-[900px]">
         <CrossWheat size={40} color="#c9a06a" />

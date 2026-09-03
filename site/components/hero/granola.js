@@ -19,7 +19,7 @@ import { JAR_X } from './stage.js';
  * One instanced mesh draws all four hundred at the cost of about one, which is
  * the whole reason a phone can hold this scene at all.
  */
-export function createGranola({ data }) {
+export function createGranola({ data, look }) {
   const geometry = clusterGeometry();
   const oat = oatTexture();
   const material = new THREE.MeshStandardMaterial({
@@ -39,8 +39,45 @@ export function createGranola({ data }) {
 
   const palette = data.palette.map((hex) => new THREE.Color(hex).convertSRGBToLinear());
   const clusters = buildClusters(data, palette);
-  for (let i = 0; i < clusters.length; i++) mesh.setColorAt(i, clusters[i].color);
-  mesh.instanceColor.needsUpdate = true;
+  const shade = new THREE.Color();
+
+  /**
+   * Repaint every cluster in a flavour's own shades.
+   *
+   * Which cluster gets which of the five is decided once, by the seed, and
+   * never moves — so honey almond and dark chocolate are the same pile of
+   * granola in different colours, rather than two different piles.
+   *
+   * Salt is the exception. A flake of it lands on a cluster or it does not, and
+   * that is worked out from the cluster's number rather than from the seeded
+   * random, so asking for salt cannot shift anything else by one.
+   */
+  function repaint(next) {
+    const shades = (next?.palette ?? data.palette).map((hex) =>
+      new THREE.Color(hex).convertSRGBToLinear(),
+    );
+    const salt = next?.sparkle ?? 0;
+    const pale = shades[shades.length - 1];
+
+    for (let i = 0; i < clusters.length; i++) {
+      const flake = salt > 0 && ((Math.imul(i + 1, 2654435761) >>> 8) % 1000) / 1000 < salt * 0.26;
+      shade.copy(flake ? pale : shades[clusters[i].shade] ?? shades[0]);
+      mesh.setColorAt(i, shade);
+    }
+    mesh.instanceColor.needsUpdate = true;
+
+    if (next) {
+      material.roughness = next.roughness;
+      material.envMapIntensity = 0.35 + next.gloss * 0.6;
+      material.needsUpdate = true;
+    }
+  }
+
+  if (look) repaint(look);
+  else {
+    for (let i = 0; i < clusters.length; i++) mesh.setColorAt(i, clusters[i].color);
+    mesh.instanceColor.needsUpdate = true;
+  }
 
   const dummy = new THREE.Object3D();
   const axis = new THREE.Vector3();
@@ -54,6 +91,11 @@ export function createGranola({ data }) {
     // draw call and no new texture.
     geometry,
     material,
+
+    /** Take on a flavour: its five shades, its finish, its salt. */
+    setLook(next) {
+      repaint(next);
+    },
 
     /** Move the whole pile sideways, when the frame changes shape. */
     recentre(x) {
@@ -141,7 +183,8 @@ export function buildClusters(data, palette) {
       euler: new THREE.Euler(rnd() * 6.28, rnd() * 6.28, rnd() * 6.28),
       spin: range(3, 9) * (rnd() < 0.5 ? -1 : 1),
       wx: range(0.78, 1.24), wy: range(0.72, 1.1), wz: range(0.8, 1.22),
-      color: palette[pickShade(rnd())],
+      shade: 0,
+      color: null,
       recentre(offset) {
         this.fx = this.fx0 + offset;
         this.fz = this.fz0;
@@ -149,6 +192,11 @@ export function buildClusters(data, palette) {
         this.sz = this.sz0;
       },
     };
+    // Drawn here rather than in the object literal so the shade can be kept
+    // alongside the colour, for repainting later. The draw order is unchanged.
+    c.shade = pickShade(rnd());
+    c.color = palette[c.shade];
+
     // pick the spin axis after the rest, so the seed stays stable
     const ax = gauss(), ay = gauss(), az = gauss();
     const len = Math.hypot(ax, ay, az) || 1;
