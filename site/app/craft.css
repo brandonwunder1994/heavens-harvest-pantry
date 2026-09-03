@@ -591,3 +591,37 @@
 @media (prefers-reduced-motion: reduce) {
   .blend-tile { transition: none; }
 }
+
+/* --- the blessing map ------------------------------------------------------
+   How many, never where. */
+
+.bmap {
+  width: 100%;
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.bmap-sheet { display: block; width: 100%; height: auto; }
+
+.bmap-name {
+  font-family: var(--font-display);
+  font-size: 19px;
+  fill: var(--color-brown, #5b3d1e);
+  letter-spacing: 0.02em;
+}
+
+.bmap-tally {
+  font-family: var(--font-ui);
+  font-size: 12px;
+  fill: var(--color-faint, #7a6a52);
+}
+
+.bmap-says {
+  margin-top: 10px;
+  font-family: var(--font-ui);
+  font-size: 13px;
+  line-height: 1.6;
+  text-align: center;
+  color: var(--color-faint, #7a6a52);
+}

@@ -1,0 +1,49 @@
+/* The seasons turn.
+   Accents only: the cream, the brown and the ink never move, because a shop
+   that repaints itself four times a year stops looking like one shop. What
+   changes is the green, the gold and the warmth of the paper.
+   Which one is on is decided in lib/season.ts and stamped on <html>. */
+
+[data-season="monsoon"] {
+  --color-sage: #57783f;
+  --color-sage-deep: #3f5729;
+  --color-moss: #e6f0dd;
+  --color-moss-line: #c6d6b4;
+  --color-hedge: #8fae7c;
+  --color-gold: #bf9a5c;
+}
+
+[data-season="harvest"] {
+  --color-sage: #6f7442;
+  --color-sage-deep: #52562d;
+  --color-gold: #b8863c;
+  --color-sand: #d3bb92;
+  --color-linen: #ecdcbf;
+  --color-rule: #e2d3b5;
+  --color-moss: #f1ecdd;
+  --color-moss-line: #dccfae;
+  --color-hedge: #bda87e;
+}
+
+[data-season="advent"] {
+  --color-sage: #5b4b7a;
+  --color-sage-deep: #423457;
+  --color-moss: #eeebf3;
+  --color-moss-line: #cfc7dd;
+  --color-hedge: #a79cc0;
+  --color-rule: #ddd6c6;
+}
+
+/* The twelve days of Christmas wear the same colours as Easter: the same
+   thing being celebrated from either end of it. */
+[data-season="easter"],
+[data-season="christmas"] {
+  --color-sage: #7e8a5c;
+  --color-sage-deep: #5d663f;
+  --color-gold: #d7b276;
+  --color-moss: #f7f5ec;
+  --color-moss-line: #e3ddc9;
+  --color-hedge: #c3c3a4;
+  --color-linen: #f3ebda;
+  --color-rule: #ece3d1;
+}

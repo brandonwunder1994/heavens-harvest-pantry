@@ -1,6 +1,7 @@
 import "server-only";
 import { getStripe } from "@/lib/stripe";
 import { toOrder, type Order } from "@/lib/orders";
+import type { Given } from "@/lib/blessings";
 
 export type OrdersResult =
   | { status: "ok"; orders: Order[] }
@@ -77,6 +78,44 @@ export async function blessingBagsThisYear(): Promise<number | null> {
     return total;
   } catch (error) {
     console.error("[orders] could not count blessing bags:", error);
+    return null;
+  }
+}
+
+/**
+ * Every blessing bag of the last year, as the little the map needs: which round
+ * it went out on, how many, and when. No name, no email, no address — the map
+ * cannot leak what it was never given.
+ */
+export async function blessingsGiven(): Promise<Given[] | null> {
+  const stripe = getStripe();
+  if (!stripe) return null;
+
+  const since = Math.floor((Date.now() - 365 * 86_400_000) / 1000);
+
+  try {
+    const given: Given[] = [];
+    let seen = 0;
+    for await (const session of stripe.checkout.sessions.list({
+      created: { gte: since },
+      limit: 100,
+    })) {
+      if (session.payment_status !== "paid") continue;
+      const bags = Number(session.metadata?.blessing_bags ?? 0) || 0;
+      if (bags > 0) {
+        given.push({
+          id: session.id,
+          // `run_area` is what the checkout writes; `toOrder` reads the same key.
+          area: String(session.metadata?.run_area ?? ""),
+          bags,
+          at: (session.created ?? 0) * 1000,
+        });
+      }
+      if (++seen >= 1000) break;
+    }
+    return given;
+  } catch (error) {
+    console.error("[orders] could not read the blessing bags:", error);
     return null;
   }
 }

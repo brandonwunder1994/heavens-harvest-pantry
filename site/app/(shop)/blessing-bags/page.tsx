@@ -4,7 +4,8 @@ import { paymentsConfigured } from "@/lib/stripe";
 import { ScriptureBand } from "@/components/ScriptureBand";
 import { business, filled, money, type Shop } from "@/lib/content";
 import { getShop } from "@/lib/settings";
-import { blessingBagsThisYear } from "@/lib/orders-source";
+import { blessingBagsThisYear, blessingsGiven } from "@/lib/orders-source";
+import { BlessingMap } from "@/components/BlessingMap";
 
 export async function generateMetadata(): Promise<Metadata> {
   const { blessingBag } = await getShop();
@@ -33,7 +34,11 @@ const howFor = ({ blessingBag }: Shop) => [
 ];
 
 export default async function BlessingBagsPage() {
-  const [shop, blessed] = await Promise.all([getShop(), blessingBagsThisYear()]);
+  const [shop, blessed, given] = await Promise.all([
+    getShop(),
+    blessingBagsThisYear(),
+    blessingsGiven(),
+  ]);
   const { blessingBag, verses } = shop;
   const how = howFor(shop);
 
@@ -77,6 +82,13 @@ export default async function BlessingBagsPage() {
             hospital visits. Text her and she will work out the count and the timing with you.
           </p>
         </div>
+      </section>
+
+      {/* One warm point for every bag that has gone out. No names, no
+          addresses — and empty for a long while, which is honest. */}
+      <section className="mt-16 flex flex-col items-center gap-4">
+        <div className="small-caps">Where they have gone</div>
+        <BlessingMap given={given} areas={shop.delivery.runs.map((run) => run.area)} />
       </section>
 
       <div className="mt-16">
