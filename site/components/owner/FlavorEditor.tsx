@@ -17,15 +17,18 @@ import { limits } from "@/lib/shop-schema";
  * without it snapping to zero under her fingers, and `id` is stable so removing
  * a row in the middle does not drop her cursor into somebody else's flavor.
  */
-type Row = Omit<Flavor, "bagPrice" | "jarPrice"> & {
+type Row = Omit<Flavor, "bagPrice" | "jarPrice" | "addIns"> & {
   id: string;
   bagPrice: string;
   jarPrice: string;
+  /** Never undefined here, or the field it fills would be uncontrolled. */
+  addIns: string;
 };
 
 const toRow = (flavor: Flavor, id: string): Row => ({
   ...flavor,
   id,
+  addIns: flavor.addIns ?? "",
   bagPrice: String(flavor.bagPrice),
   jarPrice: String(flavor.jarPrice),
 });
@@ -37,6 +40,7 @@ const blank = (id: string): Row => ({
   blurb: "",
   ingredients: "",
   allergens: "",
+  addIns: "",
   bagPrice: "9",
   jarPrice: "12",
   soldOut: false,
@@ -74,6 +78,7 @@ export function FlavorEditor({ flavors }: { flavors: Flavor[] }) {
     blurb: row.blurb,
     ingredients: row.ingredients,
     allergens: row.allergens,
+    addIns: row.addIns,
     soldOut: row.soldOut,
     // Sent exactly as typed, never coerced: an empty price box has to reach the
     // server as empty so it can be refused by name, rather than quietly
@@ -138,6 +143,19 @@ export function FlavorEditor({ flavors }: { flavors: Flavor[] }) {
               />
             </Labelled>
           </div>
+
+          <Labelled
+            label="What goes in it, besides the oats"
+            hint="Separated by commas: almonds, honey, sea salt. This is the list people build their own jar from, so only write what you actually bake with."
+          >
+            <input
+              className={inputClass}
+              maxLength={limits.addIns}
+              value={row.addIns}
+              onChange={(e) => update(index, { addIns: e.target.value })}
+              placeholder="almonds, honey, sea salt"
+            />
+          </Labelled>
 
           <div className="flex flex-wrap items-end gap-6">
             <label className="flex items-center gap-2.5 font-ui text-[14px]">

@@ -55,7 +55,9 @@ export async function POST(request: Request) {
       currency: "usd",
       unit_amount: p.unitCents,
       product_data: {
-        name: `${p.flavor.name} · ${p.line.format === "jar" ? "mason jar" : "bag"}`,
+        name: `${p.flavor.name}${p.line.name ? ` for ${p.line.name}` : ""} · ${
+          p.line.format === "jar" ? "mason jar" : "bag"
+        }`,
         description: p.flavor.blurb,
       },
     },

@@ -73,8 +73,9 @@ function fitted(g, text, wide, start) {
  * @param {string} o.name         the flavour, as she wrote it
  * @param {string} o.ingredients
  * @param {string} o.allergens
+ * @param {string} [o.forWhom]     a name somebody asked to have on the glass
  */
-export function wrapTexture({ name, ingredients, allergens }) {
+export function wrapTexture({ name, ingredients, allergens, forWhom = '' }) {
   return canvasTexture(W, H, (g) => {
     g.clearRect(0, 0, W, H);
 
@@ -102,9 +103,19 @@ export function wrapTexture({ name, ingredients, allergens }) {
       fitted(g, name || 'Granola', wide - 150, 50);
       g.fillText(name || 'Granola', mid, 350);
       heart(g, mid, 430, 26);
-      g.fillStyle = '#8a7a5c';
-      g.font = '600 22px Georgia, serif';
-      g.fillText('BAKED IN A HOME KITCHEN', mid, 520);
+
+      // A name goes where the kitchen line usually is, in her own hand, so a
+      // jar with somebody's name on it looks made for them rather than
+      // stickered afterwards.
+      if (forWhom) {
+        g.fillStyle = '#8a5f2e';
+        fitted(g, `for ${forWhom}`, wide - 200, 40);
+        g.fillText(`for ${forWhom}`, mid, 522);
+      } else {
+        g.fillStyle = '#8a7a5c';
+        g.font = '600 22px Georgia, serif';
+        g.fillText('BAKED IN A HOME KITCHEN', mid, 520);
+      }
       g.restore();
     }
 
@@ -138,8 +149,8 @@ export function wrapTexture({ name, ingredients, allergens }) {
  * The label as a sleeve all the way round the jar, rather than the hero's
  * single panel. The mesh is returned on its own so the jar can turn with it.
  */
-export function createWrap({ radius, flavor }) {
-  const map = wrapTexture(flavor);
+export function createWrap({ radius, flavor, forWhom = '' }) {
+  const map = wrapTexture({ ...flavor, forWhom });
   const geometry = new THREE.CylinderGeometry(radius + 0.004, radius + 0.004, 0.72, 96, 1, true);
   const material = new THREE.MeshStandardMaterial({
     map,
@@ -154,9 +165,9 @@ export function createWrap({ radius, flavor }) {
   return {
     mesh,
 
-    /** Redraw for a different flavour, reusing the mesh she is already turning. */
-    setFlavor(next) {
-      const fresh = wrapTexture(next);
+    /** Redraw for a different flavour or a different name on the glass. */
+    setFlavor(next, nextName) {
+      const fresh = wrapTexture({ ...next, forWhom: nextName });
       material.map?.dispose();
       material.map = fresh;
       material.needsUpdate = true;

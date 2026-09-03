@@ -10,6 +10,7 @@ import {
   type Format,
   type Totals,
 } from "@/lib/cart";
+import { cleanName } from "@/lib/blend";
 import type { Shop } from "@/lib/content";
 
 const STORAGE_KEY = "hhp-cart-v1";
@@ -27,9 +28,10 @@ type CartContextValue = CartState & {
   dropped: number;
   ready: boolean;
   totals: Totals;
-  qtyOf: (slug: string, format: Format) => number;
-  setQty: (slug: string, format: Format, qty: number) => void;
-  add: (slug: string, format: Format, qty?: number) => void;
+  /** A jar with a name on it is its own line, so the name is part of asking. */
+  qtyOf: (slug: string, format: Format, name?: string) => number;
+  setQty: (slug: string, format: Format, qty: number, name?: string) => void;
+  add: (slug: string, format: Format, qty?: number, name?: string) => void;
   setJarsReturned: (n: number) => void;
   setBlessingBags: (n: number) => void;
   clear: () => void;
@@ -79,12 +81,14 @@ export function CartProvider({ shop, children }: { shop: Shop; children: React.R
     }
   }, [state, ready]);
 
-  const setQty = useCallback((slug: string, format: Format, qty: number) => {
+  const setQty = useCallback((slug: string, format: Format, qty: number, name?: string) => {
     setState((prev) => {
-      const key = lineKey({ slug, format });
+      const named = cleanName(name);
+      const key = lineKey({ slug, format, name: named });
       const next = Math.max(0, Math.min(Math.floor(qty), MAX_QTY_PER_LINE));
       const without = prev.lines.filter((l) => lineKey(l) !== key);
-      return { ...prev, lines: next === 0 ? without : [...without, { slug, format, qty: next }] };
+      const line: CartLine = { slug, format, qty: next, ...(named ? { name: named } : {}) };
+      return { ...prev, lines: next === 0 ? without : [...without, line] };
     });
   }, []);
 
@@ -98,8 +102,10 @@ export function CartProvider({ shop, children }: { shop: Shop; children: React.R
       jarsReturned: state.jarsReturned,
       blessingBags: state.blessingBags,
     });
-    const qtyOf = (slug: string, format: Format) =>
-      lines.find((l) => l.slug === slug && l.format === format)?.qty ?? 0;
+    const qtyOf = (slug: string, format: Format, name?: string) => {
+      const key = lineKey({ slug, format, name: cleanName(name) });
+      return lines.find((l) => lineKey(l) === key)?.qty ?? 0;
+    };
 
     return {
       ...state,
@@ -110,7 +116,7 @@ export function CartProvider({ shop, children }: { shop: Shop; children: React.R
       totals,
       qtyOf,
       setQty,
-      add: (slug, format, qty = 1) => setQty(slug, format, qtyOf(slug, format) + qty),
+      add: (slug, format, qty = 1, name) => setQty(slug, format, qtyOf(slug, format, name) + qty, name),
       setJarsReturned: (n) => setState((p) => ({ ...p, jarsReturned: Math.max(0, Math.floor(n)) })),
       setBlessingBags: (n) => setState((p) => ({ ...p, blessingBags: Math.max(0, Math.floor(n)) })),
       clear: () => setState(empty),

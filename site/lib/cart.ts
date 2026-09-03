@@ -1,3 +1,4 @@
+import { cleanName } from "@/lib/blend";
 import type { Flavor, Shop } from "@/lib/content";
 
 /**
@@ -13,6 +14,14 @@ export type CartLine = {
   slug: string;
   format: Format;
   qty: number;
+  /**
+   * A name to go on the label of this jar, if somebody asked for one.
+   *
+   * It changes nothing about the price. What it does change is which line this
+   * is: two jars of the same flavour with two different names are two things
+   * she has to make, not one thing twice.
+   */
+  name?: string;
 };
 
 export type OrderOptions = {
@@ -68,8 +77,9 @@ export function unitPriceCents(flavor: Flavor, format: Format): number {
   return dollarsToCents(format === "jar" ? flavor.jarPrice : flavor.bagPrice);
 }
 
-export function lineKey(line: Pick<CartLine, "slug" | "format">): string {
-  return `${line.slug}:${line.format}`;
+export function lineKey(line: Pick<CartLine, "slug" | "format" | "name">): string {
+  const named = cleanName(line.name);
+  return named ? `${line.slug}:${line.format}:${named}` : `${line.slug}:${line.format}`;
 }
 
 /** Drops anything that no longer exists or is sold out, and clamps quantities. */
@@ -81,10 +91,16 @@ export function sanitizeCart(shop: Shop, lines: CartLine[]): CartLine[] {
     if (line.format !== "jar" && line.format !== "bag") continue;
     const qty = Math.floor(Number(line.qty));
     if (!Number.isFinite(qty) || qty < 1) continue;
-    const key = lineKey(line);
+    const named = cleanName(line.name);
+    const key = lineKey({ ...line, name: named });
     const existing = merged.get(key);
     const next = Math.min((existing?.qty ?? 0) + qty, MAX_QTY_PER_LINE);
-    merged.set(key, { slug: line.slug, format: line.format, qty: next });
+    merged.set(key, {
+      slug: line.slug,
+      format: line.format,
+      qty: next,
+      ...(named ? { name: named } : {}),
+    });
   }
   return [...merged.values()];
 }
@@ -140,5 +156,6 @@ function clamp(value: number, min: number, max: number): number {
 }
 
 export function describeLine(p: PricedLine): string {
-  return `${p.flavor.name}, ${p.line.format}${p.line.qty > 1 ? ` ×${p.line.qty}` : ""}`;
+  const named = p.line.name ? ` for ${p.line.name}` : "";
+  return `${p.flavor.name}${named}, ${p.line.format}${p.line.qty > 1 ? ` ×${p.line.qty}` : ""}`;
 }

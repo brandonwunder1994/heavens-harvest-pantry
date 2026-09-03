@@ -495,3 +495,99 @@
 @media (prefers-reduced-motion: reduce) {
   .turn-glass, .turn-pick { transition: none; }
 }
+
+/* --- build your own jar ----------------------------------------------------
+   The jar is a picture of the answer; the answer is the words and the buttons
+   beside it, so nobody who never gets the picture is stuck. */
+
+.blend {
+  display: grid;
+  gap: 24px;
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+@media (min-width: 800px) {
+  .blend { grid-template-columns: 340px 1fr; gap: 44px; padding: 0 40px; align-items: start; }
+}
+
+/* The glass fades in when the scene arrives. The menu's own rule is scoped to
+   `.turn`, which this page has no ancestor of, so it needs saying again here
+   or the jar sits at nought opacity for ever. */
+.blend-stage .turn-glass { max-height: 420px; }
+.blend-stage[data-live='yes'] .turn-glass { opacity: 1; }
+
+.blend-choices { display: flex; flex-direction: column; gap: 26px; }
+
+.blend-set { border: 0; margin: 0; padding: 0; }
+
+.blend-note {
+  margin: 5px 0 12px;
+  font-family: var(--font-ui);
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--color-faint, #7a6a52);
+}
+
+.blend-tiles { display: flex; flex-wrap: wrap; gap: 8px; }
+
+.blend-tile {
+  font-family: var(--font-ui);
+  font-size: 14px;
+  color: var(--color-bark, #4a3520);
+  background: var(--color-paper, #fbf8f1);
+  border: 1px solid var(--color-sand, #ded2ba);
+  padding: 9px 15px;
+  cursor: pointer;
+  transition: background 160ms ease, border-color 160ms ease, color 160ms ease;
+}
+.blend-tile:hover { border-color: var(--color-brown, #5b3d1e); }
+.blend-tile[aria-pressed='true'] {
+  background: var(--color-brown, #5b3d1e);
+  border-color: var(--color-brown, #5b3d1e);
+  color: var(--color-cream, #f4eee2);
+}
+.blend-tile:focus-visible { outline: 2px solid var(--color-sage, #5f6d41); outline-offset: 2px; }
+
+.blend-name {
+  width: 100%;
+  max-width: 320px;
+  font-family: var(--font-serif);
+  font-size: 21px;
+  color: var(--color-ink, #3a2712);
+  background: var(--color-paper, #fbf8f1);
+  border: 1px solid var(--color-sand, #ded2ba);
+  padding: 10px 13px;
+}
+.blend-name:focus-visible { outline: 2px solid var(--color-sage, #5f6d41); outline-offset: 1px; }
+
+.blend-verdict {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 14px;
+  border-top: 1px solid var(--color-sand, #ded2ba);
+  padding-top: 20px;
+}
+
+.blend-says {
+  margin: 0;
+  font-family: var(--font-serif);
+  font-size: 21px;
+  line-height: 1.35;
+  color: var(--color-bark, #4a3520);
+}
+.blend-says strong { font-weight: 600; color: var(--color-brown, #5b3d1e); }
+
+.blend-added {
+  margin: 0;
+  font-family: var(--font-ui);
+  font-size: 13px;
+  color: var(--color-sage, #5f6d41);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .blend-tile { transition: none; }
+}

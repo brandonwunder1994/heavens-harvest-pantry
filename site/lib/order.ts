@@ -142,7 +142,9 @@ export function orderMetadata(
     jar_credit_cents: String(totals.jarCreditAppliedCents),
     points_earned: String(totals.points),
     items: totals.lines
-      .map((p) => `${p.line.qty}x ${p.flavor.name} (${p.line.format})`)
+      // The name somebody asked for goes on the ticket she reads in the
+      // kitchen, because a label with the wrong name on it is worse than none.
+      .map((p) => `${p.line.qty}x ${p.flavor.name}${p.line.name ? ` for ${p.line.name}` : ""} (${p.line.format})`)
       .join("; ")
       .slice(0, 480),
   };

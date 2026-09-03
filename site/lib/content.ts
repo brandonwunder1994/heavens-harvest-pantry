@@ -48,6 +48,15 @@ export type Flavor = {
   jarPrice: number;
   soldOut?: boolean;
   backOn?: string;
+  /**
+   * What goes in it besides the oats, as she would say it: "almonds, honey".
+   *
+   * This is the whole of "build your blend". Somebody picks what they want in
+   * a jar, and the only jars they can be offered are the ones she already
+   * bakes — so the list of possible add-ins is not a separate thing to keep up
+   * to date, it is simply everything named here across her menu.
+   */
+  addIns?: string;
 };
 
 /** Sample flavors. These swap for hers the moment she sends the real list. */
@@ -58,6 +67,7 @@ export const flavors: Flavor[] = [
     blurb: "Local honey, toasted almonds, a little sea salt. The one people start with.",
     ingredients: "Rolled oats, local honey, almonds, olive oil, vanilla, sea salt.",
     allergens: "Tree nuts. Made in a kitchen that also handles wheat and peanuts.",
+    addIns: "almonds, honey, sea salt",
     bagPrice: 9,
     jarPrice: 12,
   },
@@ -67,6 +77,7 @@ export const flavors: Flavor[] = [
     blurb: "Real maple, Arizona pecans, cinnamon. Big clusters.",
     ingredients: "Rolled oats, maple syrup, pecans, olive oil, cinnamon, sea salt.",
     allergens: "Tree nuts. Made in a kitchen that also handles wheat and peanuts.",
+    addIns: "pecans, maple, cinnamon",
     bagPrice: 10,
     jarPrice: 13,
   },
@@ -76,6 +87,7 @@ export const flavors: Flavor[] = [
     blurb: "Cacao nibs and dark chocolate chunks. Dessert that counts as breakfast.",
     ingredients: "Rolled oats, honey, dark chocolate, cacao nibs, olive oil, sea salt.",
     allergens: "Milk, soy. Made in a kitchen that also handles wheat, peanuts and tree nuts.",
+    addIns: "dark chocolate, cacao nibs, sea salt",
     bagPrice: 10,
     jarPrice: 13,
   },
@@ -85,6 +97,7 @@ export const flavors: Flavor[] = [
     blurb: "Dried apple, cinnamon, brown sugar. Tastes like October.",
     ingredients: "Rolled oats, dried apple, brown sugar, olive oil, cinnamon, sea salt.",
     allergens: "Made in a kitchen that also handles wheat, peanuts, tree nuts and milk.",
+    addIns: "dried apple, cinnamon, brown sugar",
     bagPrice: 9,
     jarPrice: 12,
     soldOut: true,

@@ -7,6 +7,7 @@ import { business, filled, type Shop } from "@/lib/content";
 
 const shopLinks = [
   { href: "/menu", label: "This week's menu" },
+  { href: "/blend", label: "Build your own jar" },
   { href: "/jars", label: "Jar returns" },
   { href: "/blessing-bags", label: "Blessing bags" },
   { href: "/rewards", label: "Rewards" },

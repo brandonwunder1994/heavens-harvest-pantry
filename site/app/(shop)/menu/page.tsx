@@ -107,6 +107,19 @@ export default async function MenuPage() {
         ))}
       </section>
 
+      {/* Somebody who knows what they want in a jar rather than which of hers
+          they want. It can only ever build one she already bakes. */}
+      <section className="mx-auto mt-12 flex w-full max-w-[900px] flex-col items-center gap-2 px-6 text-center sm:px-10">
+        <div className="small-caps">Or start from what you like</div>
+        <p className="max-w-[520px] text-[19px] italic leading-snug text-muted">
+          Pick what you would like in it and she will tell you which of hers that is — with your name on the
+          label, if you want one.
+        </p>
+        <Link href="/blend" className="stamp !min-h-11 !px-6 !text-[11px]">
+          Build your own jar
+        </Link>
+      </section>
+
       {/* Read the list and still cannot choose? Four questions. It reads her
           real flavours, so it can never name one she has renamed or taken off. */}
       <div className="mt-14">

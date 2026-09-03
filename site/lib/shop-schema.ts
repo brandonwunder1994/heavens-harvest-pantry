@@ -53,6 +53,7 @@ export const limits = {
   verse: 600,
   reference: 60,
   porchNote: 64,
+  addIns: 160,
 } as const;
 
 // ---------------------------------------------------------------- merging
@@ -118,6 +119,7 @@ export function mergeFlavors(value: unknown): Flavor[] {
       blurb: text(f.blurb, "", limits.blurb),
       ingredients: text(f.ingredients),
       allergens: text(f.allergens),
+      addIns: text(f.addIns, "", limits.addIns),
       bagPrice: price(f.bagPrice, 0),
       jarPrice: price(f.jarPrice, 0),
       soldOut,

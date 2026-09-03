@@ -20,12 +20,12 @@ const SETTLE = 9;            // how quickly it closes the last of the distance
 const SLOW = 1.2;            // the speed at which it starts looking for a face
 const CREEP = 0.0022;        // below this it has stopped
 
-export function createTurn({ canvas, data, flavor, look, hour }) {
+export function createTurn({ canvas, data, flavor, look, hour, forWhom = '' }) {
   const stage = createStage({ canvas, framing: 'jar' });
   if (hour) stage.setHour(hour);
 
   const jar = createJar({ radius: data.jar.radius, label: false });
-  const wrap = createWrap({ radius: jar.outer, flavor });
+  const wrap = createWrap({ radius: jar.outer, flavor, forWhom });
   jar.group.add(wrap.mesh);
   stage.scene.add(jar.group);
 
@@ -178,9 +178,9 @@ export function createTurn({ canvas, data, flavor, look, hour }) {
       turnBy(radians);
     },
 
-    /** The jar is now this flavour: new label, new granola. */
-    setFlavor(next, nextLook) {
-      wrap.setFlavor(next);
+    /** The jar is now this flavour, with this name on it: new label, new granola. */
+    setFlavor(next, nextLook, nextName) {
+      wrap.setFlavor(next, nextName);
       if (nextLook) granola.setLook(nextLook);
       paint();
     },
