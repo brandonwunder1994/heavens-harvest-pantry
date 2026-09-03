@@ -47,6 +47,20 @@ const steps = [
   ["points ref guard", `create unique index if not exists points_ref_key on points (ref) where ref is not null`],
   ["points customer index", `create index if not exists points_customer_idx on points (customer_id)`],
   [
+    "gifts",
+    `create table if not exists gifts (
+       code       text primary key,
+       verse_ref  text not null,
+       verse_text text not null,
+       note       text not null default '',
+       from_name  text not null default '',
+       to_name    text not null default '',
+       created_at timestamptz not null default now(),
+       opened_at  timestamptz
+     )`,
+  ],
+  ["gifts age index", `create index if not exists gifts_created_idx on gifts (created_at desc)`],
+  [
     "reviews",
     `create table if not exists reviews (
        id         bigserial primary key,

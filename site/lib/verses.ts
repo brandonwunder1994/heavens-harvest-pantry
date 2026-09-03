@@ -72,6 +72,17 @@ export function wall(when: Date = new Date()) {
   return out;
 }
 
+/**
+ * Every verse she has, in the order she wrote them.
+ *
+ * For choosing one deliberately — the card you send with a jar — rather than
+ * being handed the week's. `pinned` is ignored here on purpose: pinning is how
+ * she holds one week still, not a way of shortening her own book.
+ */
+export function everyVerse(): Verse[] {
+  return (data.verses as Verse[]).slice();
+}
+
 /** How long the rotation runs before anyone sees a verse twice. */
 export function weeksUntilRepeat(): number {
   return (data.verses as Verse[]).length;

@@ -8,6 +8,8 @@ import { business, filled, type Shop } from "@/lib/content";
 const shopLinks = [
   { href: "/menu", label: "This week's menu" },
   { href: "/blend", label: "Build your own jar" },
+  { href: "/send", label: "Send it with a verse" },
+  { href: "/bowl", label: "Make a bowl" },
   { href: "/jars", label: "Jar returns" },
   { href: "/blessing-bags", label: "Blessing bags" },
   { href: "/rewards", label: "Rewards" },

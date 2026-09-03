@@ -625,3 +625,89 @@
   text-align: center;
   color: var(--color-faint, #7a6a52);
 }
+
+/* --- the bowl --------------------------------------------------------------
+   A toy with nothing to buy. Dragging is the nice part; every ingredient is
+   also a button, so a thumb or a keyboard can make a bowl too. */
+
+.bowl {
+  display: grid;
+  gap: 22px;
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+@media (min-width: 800px) {
+  .bowl { grid-template-columns: 210px 1fr; gap: 34px; padding: 0 40px; align-items: start; }
+}
+
+.bowl-tray { display: flex; flex-wrap: wrap; gap: 8px; }
+@media (min-width: 800px) { .bowl-tray { flex-direction: column; flex-wrap: nowrap; } }
+
+.bowl-thing {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1 1 auto;
+  text-align: left;
+  padding: 11px 14px;
+  background: var(--color-paper, #fbf8f1);
+  border: 1px solid var(--color-sand, #cdbfa5);
+  border-left: 3px solid var(--color-gold, #c9a06a);
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+}
+.bowl-thing:hover { border-color: var(--color-brown, #5b3d1e); }
+.bowl-thing:active { cursor: grabbing; }
+.bowl-thing:focus-visible { outline: 2px solid var(--color-sage, #6b7a4a); outline-offset: 2px; }
+.bowl-thing[data-kind="berries"] { border-left-color: #8d2f4a; }
+.bowl-thing[data-kind="yoghurt"] { border-left-color: #d8cdb8; }
+.bowl-thing[data-kind="granola"] { border-left-color: #94612c; }
+
+.bowl-thing-name {
+  font-family: var(--font-display);
+  font-size: 17px;
+  color: var(--color-bark, #4a3520);
+}
+.bowl-thing-hint {
+  font-family: var(--font-ui);
+  font-size: 11px;
+  color: var(--color-faint, #6f6047);
+}
+
+.bowl-middle { display: flex; flex-direction: column; gap: 12px; }
+
+.bowl-glass {
+  display: block;
+  width: 100%;
+  max-width: 560px;
+  aspect-ratio: 1 / 1;
+  margin: 0 auto;
+  touch-action: none;
+}
+.bowl[data-carrying] .bowl-glass { cursor: copy; }
+
+.bowl-tools { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+
+.bowl-quiet {
+  font-family: var(--font-ui);
+  font-size: 12px;
+  color: var(--color-brown, #5b3d1e);
+  background: none;
+  border: 1px solid var(--color-sand, #cdbfa5);
+  padding: 8px 12px;
+  cursor: pointer;
+}
+.bowl-quiet:hover:not(:disabled) { border-color: var(--color-brown, #5b3d1e); }
+.bowl-quiet:disabled { opacity: 0.4; cursor: default; }
+
+.bowl-hint {
+  margin: 0;
+  font-family: var(--font-ui);
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--color-faint, #6f6047);
+}

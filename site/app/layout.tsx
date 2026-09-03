@@ -18,6 +18,7 @@ import "@/components/hero/lqip.css";
 // Every rule in this one is scoped under .kj, so it cannot reach another page.
 import "./know-jesus.css";
 import "./return.css";
+import "./gift.css";
 
 const cinzel = Cinzel({
   subsets: ["latin"],
