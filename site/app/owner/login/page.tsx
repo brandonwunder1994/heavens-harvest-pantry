@@ -12,14 +12,14 @@ export default async function OwnerLoginPage({
 }) {
   if (await isSignedIn()) redirect("/owner");
   const { error } = await searchParams;
-  const configured = ownerConfigured();
+  const configured = await ownerConfigured();
 
   async function signIn(formData: FormData) {
     "use server";
     const username = String(formData.get("username") ?? "");
     const password = String(formData.get("password") ?? "");
 
-    if (!ownerConfigured()) redirect("/owner/login?error=setup");
+    if (!(await ownerConfigured())) redirect("/owner/login?error=setup");
 
     // One username, one password: without a brake this is an open invitation
     // to guess it a million times overnight.

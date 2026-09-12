@@ -72,6 +72,9 @@ export async function saveBlock(_previous: SaveState, formData: FormData): Promi
   }
 
   refreshTheShop();
+  if (key === "labelTemplates") {
+    return { ok: true, message: "Saved. This flavor's label is ready to print." };
+  }
   return { ok: true, message: "Saved. It is live on the site now." };
 }
 

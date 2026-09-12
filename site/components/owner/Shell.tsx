@@ -14,6 +14,7 @@ type Section = { href: string; label: string };
 const sections: Section[] = [
   { href: "/owner", label: "Today" },
   { href: "/owner/kitchen", label: "Flavors & prices" },
+  { href: "/owner/labels", label: "Labels" },
   { href: "/owner/verse", label: "Verse card" },
   { href: "/owner/reviews", label: "Reviews" },
   { href: "/owner/rewards", label: "Rewards" },

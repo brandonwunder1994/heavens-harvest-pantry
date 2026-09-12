@@ -47,6 +47,23 @@ const steps = [
   ["points ref guard", `create unique index if not exists points_ref_key on points (ref) where ref is not null`],
   ["points customer index", `create index if not exists points_customer_idx on points (customer_id)`],
   [
+    "owner access",
+    `create table if not exists owner_auth (
+       id               smallint primary key,
+       username         text unique,
+       password_hash    text,
+       session_secret   text,
+       setup_token_hash text unique,
+       setup_expires_at timestamptz,
+       updated_at       timestamptz not null default now(),
+       created_at       timestamptz not null default now()
+     )`,
+  ],
+  [
+    "owner access extra logins",
+    `alter table owner_auth drop constraint if exists owner_auth_id_check`,
+  ],
+  [
     "gifts",
     `create table if not exists gifts (
        code       text primary key,

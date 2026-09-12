@@ -146,6 +146,43 @@ export type Verse = {
   reference: string;
 };
 
+/**
+ * A granola label she has saved for the T50M Pro. Produced date and tracker
+ * code are typed at print time, not stored here — those change every bake.
+ */
+export type LabelSize = "bag" | "jar";
+
+export type LabelTemplate = {
+  flavorSlug: string;
+  title: string;
+  ingredients: string;
+  allergens: string;
+  scripture: Verse;
+  netWeight: string;
+  size: LabelSize;
+};
+
+export type LabelSettings = {
+  templates: LabelTemplate[];
+  scripture: Verse;
+  qrUrl: string;
+};
+
+/** The verse that ships on a new label until she writes her own. */
+export const labelScripture: Verse = {
+  text: "Rejoice in the Lord always; again I will say, rejoice.",
+  reference: "Philippians 4 : 4",
+};
+
+/** Same address as the footer QR, so a scan from a bag lands on the menu. */
+export const labelQrUrl = "https://heavens-harvest-pantry.vercel.app/menu?src=qr";
+
+export const defaultLabelSettings: LabelSettings = {
+  templates: [],
+  scripture: labelScripture,
+  qrUrl: labelQrUrl,
+};
+
 /** The verse card that goes into every order this week. She changes it weekly. */
 export const verseOfTheWeek: Verse = {
   text: "Taste and see that the Lord is good.",
@@ -213,6 +250,8 @@ export type Shop = {
   delivery: Delivery;
   verseOfTheWeek: Verse;
   verses: Record<string, Verse>;
+  /** Owner-only. Customer pages never read this. */
+  labelTemplates: LabelSettings;
 };
 
 export const defaultShop: Shop = {
@@ -224,4 +263,5 @@ export const defaultShop: Shop = {
   delivery,
   verseOfTheWeek,
   verses,
+  labelTemplates: defaultLabelSettings,
 };

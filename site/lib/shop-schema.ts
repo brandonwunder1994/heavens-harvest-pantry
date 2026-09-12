@@ -1,9 +1,13 @@
 import { noPorch, type Porch } from "@/lib/porch";
 import {
+  defaultLabelSettings,
   defaultShop,
   type BlessingBag,
   type Delivery,
   type Flavor,
+  type LabelSettings,
+  type LabelSize,
+  type LabelTemplate,
   type JarRules,
   type RewardRules,
   type Shop,
@@ -35,6 +39,7 @@ export const editableKeys = [
   "verseOfTheWeek",
   "verses",
   "porch",
+  "labelTemplates",
 ] as const;
 
 export type EditableKey = (typeof editableKeys)[number];
@@ -54,6 +59,9 @@ export const limits = {
   reference: 60,
   porchNote: 64,
   addIns: 160,
+  netWeight: 80,
+  tracker: 32,
+  qrUrl: 200,
 } as const;
 
 // ---------------------------------------------------------------- merging
@@ -199,6 +207,43 @@ export function mergePorch(value: unknown): Porch {
   return { lit, note: text(p.note, "", limits.porchNote), flippedAt };
 }
 
+const asSize = (value: unknown, fallback: LabelSize): LabelSize =>
+  value === "jar" || value === "bag" ? value : fallback;
+
+export function mergeLabelTemplates(value: unknown): LabelSettings {
+  if (!value || typeof value !== "object" || Array.isArray(value)) {
+    return defaultLabelSettings;
+  }
+
+  const v = asObject(value);
+  const scripture = mergeVerse(v.scripture, defaultLabelSettings.scripture);
+  const qrUrl = text(v.qrUrl, defaultLabelSettings.qrUrl, limits.qrUrl).trim() || defaultLabelSettings.qrUrl;
+
+  const seen = new Set<string>();
+  const templates: LabelTemplate[] = [];
+  if (Array.isArray(v.templates)) {
+    for (const raw of v.templates) {
+      const t = asObject(raw);
+      const flavorSlug = text(t.flavorSlug, "", limits.name).trim();
+      const title = text(t.title, "", limits.name).trim();
+      if (!flavorSlug || !title || seen.has(flavorSlug)) continue;
+      seen.add(flavorSlug);
+      const size = asSize(t.size, "bag");
+      templates.push({
+        flavorSlug,
+        title,
+        ingredients: text(t.ingredients),
+        allergens: text(t.allergens),
+        scripture: mergeVerse(t.scripture, scripture),
+        netWeight: text(t.netWeight, size === "jar" ? "Net Wt 16 oz (454 g)" : "Net Wt 12 oz (340 g)", limits.netWeight),
+        size,
+      });
+    }
+  }
+
+  return { templates, scripture, qrUrl };
+}
+
 /**
  * Her saved rows laid over the defaults, one block at a time.
  *
@@ -220,6 +265,7 @@ export function mergeShop(saved: Map<string, unknown>, weekly?: Verse): Shop {
     ),
     verses: mergeVerses(saved.get("verses")),
     porch: mergePorch(saved.get("porch")),
+    labelTemplates: mergeLabelTemplates(saved.get("labelTemplates")),
   };
   // The hero band always shows this week's card, whichever way she changed it.
   shop.verses = { ...shop.verses, hero: shop.verseOfTheWeek };
@@ -255,6 +301,8 @@ export function checkBlock(key: EditableKey, value: unknown): Check {
       return good;
     case "porch":
       return checkPorch(value);
+    case "labelTemplates":
+      return checkLabelTemplates(value);
   }
 }
 
@@ -336,6 +384,53 @@ function checkPorch(value: unknown): Check {
   if (typeof p.note === "string" && p.note.length > limits.porchNote) {
     return bad(`Those words are too long for the top of the page. Keep them under ${limits.porchNote} letters.`);
   }
+  return good;
+}
+
+function checkLabelTemplates(value: unknown): Check {
+  const v = asObject(value);
+  if (!Array.isArray(v.templates)) {
+    return bad("The labels could not be read. Try saving again.");
+  }
+
+  const seen = new Set<string>();
+  for (const raw of v.templates) {
+    const t = asObject(raw);
+    const title = typeof t.title === "string" ? t.title.trim() : "";
+    if (!title) return bad("One of the labels has no granola name. Give it one, or pick a flavor.");
+    if (title.length > limits.name) {
+      return bad(`"${title.slice(0, 30)}…" is too long a name. Keep it under ${limits.name} letters.`);
+    }
+
+    const slug = typeof t.flavorSlug === "string" ? t.flavorSlug.trim() : "";
+    if (!slug) return bad(`The label for "${title}" is missing which flavor it belongs to.`);
+    if (seen.has(slug)) return bad("Two labels are both for the same flavor. Keep one of each.");
+    seen.add(slug);
+
+    if (typeof t.ingredients === "string" && t.ingredients.length > limits.prose) {
+      return bad(`The ingredients on ${title} will not fit a label. Keep them under ${limits.prose} letters.`);
+    }
+    if (typeof t.allergens === "string" && t.allergens.length > limits.prose) {
+      return bad(`The allergen line on ${title} will not fit a label. Keep it under ${limits.prose} letters.`);
+    }
+    if (typeof t.netWeight === "string" && t.netWeight.length > limits.netWeight) {
+      return bad(`The net weight on ${title} is too long. Keep it under ${limits.netWeight} letters.`);
+    }
+
+    const verse = asObject(t.scripture);
+    if (typeof verse.text === "string" && verse.text.trim() === "") {
+      return bad(`The verse on ${title} is empty. Type the words you want printed.`);
+    }
+    if (typeof verse.text === "string" && verse.text.length > limits.verse) {
+      return bad(`The verse on ${title} is longer than a label will hold. Keep it under ${limits.verse} letters.`);
+    }
+  }
+
+  const shared = asObject(v.scripture);
+  if (typeof shared.text === "string" && shared.text.trim() === "") {
+    return bad("The verse on the label is empty. Type the words you want printed.");
+  }
+
   return good;
 }
 

@@ -15,6 +15,7 @@ import {
   mergeShop,
   mergeVerse,
   slugify,
+  mergeLabelTemplates,
 } from "../lib/shop-schema.ts";
 
 const flavor = (over = {}) => ({
@@ -170,4 +171,65 @@ test("names become web addresses the same way every time", () => {
   assert.equal(slugify("Dark Chocolate & Sea Salt"), "dark-chocolate-sea-salt");
   assert.equal(slugify("  Maple  Pecan  "), "maple-pecan");
   assert.equal(slugify("!!!"), "");
+});
+
+test("a label with no granola name is refused", () => {
+  const result = checkBlock("labelTemplates", {
+    templates: [{ flavorSlug: "honey", title: "  ", ingredients: "oats", allergens: "", scripture: { text: "Rejoice", reference: "Phil 4:4" }, netWeight: "Net Wt 12 oz", size: "bag" }],
+    scripture: { text: "Rejoice in the Lord always; again I will say, rejoice.", reference: "Philippians 4 : 4" },
+  });
+  assert.equal(result.ok, false);
+  assert.match(result.problem, /granola name/i);
+});
+
+test("two labels for the same flavor are refused", () => {
+  const row = {
+    flavorSlug: "honey-almond-crunch",
+    title: "Honey Almond Crunch",
+    ingredients: "Oats.",
+    allergens: "Tree nuts.",
+    scripture: { text: "Rejoice", reference: "Phil 4:4" },
+    netWeight: "Net Wt 12 oz (340 g)",
+    size: "bag",
+  };
+  const result = checkBlock("labelTemplates", { templates: [row, { ...row, title: "Honey" }] });
+  assert.equal(result.ok, false);
+  assert.match(result.problem, /same flavor/i);
+});
+
+test("an empty label list is allowed, so she can save before she has printed", () => {
+  assert.equal(checkBlock("labelTemplates", { templates: [], scripture: { text: "Rejoice", reference: "Phil 4:4" } }).ok, true);
+});
+
+test("her saved label copy is what comes back, junk rows dropped", () => {
+  const shop = mergeShop(
+    new Map([
+      [
+        "labelTemplates",
+        {
+          templates: [
+            {
+              flavorSlug: "maple-pecan",
+              title: "Maple Pecan",
+              ingredients: "Oats, maple, pecans.",
+              allergens: "Tree nuts.",
+              scripture: { text: "Rejoice in the Lord always.", reference: "Philippians 4 : 4" },
+              netWeight: "Net Wt 12 oz (340 g)",
+              size: "bag",
+            },
+            { flavorSlug: "", title: "Nameless" },
+          ],
+          scripture: { text: "Rejoice in the Lord always.", reference: "Philippians 4 : 4" },
+        },
+      ],
+    ]),
+  );
+  assert.equal(shop.labelTemplates.templates.length, 1);
+  assert.equal(shop.labelTemplates.templates[0].title, "Maple Pecan");
+});
+
+test("missing label settings fall back to Philippians 4:4, not a blank verse", () => {
+  const merged = mergeLabelTemplates("not an object");
+  assert.equal(merged.scripture.reference, "Philippians 4 : 4");
+  assert.equal(merged.templates.length, 0);
 });
