@@ -8,6 +8,7 @@ import {
   normaliseEmail,
   pointsToNext,
   progress,
+  punchesFilled,
   standing,
 } from "../lib/rewards.ts";
 import { averageRating, checkReview, starLine } from "../lib/reviews.ts";
@@ -57,8 +58,18 @@ test("the progress bar fills across one bag", () => {
   assert.equal(progress(150, rules), 0.5);
 });
 
+test("the punch card fills a hole every tenth of the bag", () => {
+  assert.equal(punchesFilled(0, rules), 0);
+  assert.equal(punchesFilled(9, rules), 0);
+  assert.equal(punchesFilled(10, rules), 1);
+  assert.equal(punchesFilled(90, rules), 9);
+  assert.equal(punchesFilled(99, rules), 9);
+  assert.equal(punchesFilled(100, rules), 10);
+  assert.equal(punchesFilled(140, rules), 4);
+});
+
 test("where someone stands reads as a sentence", () => {
-  assert.match(standing(40, rules), /60 points to your first free bag/);
+  assert.match(standing(40, rules), /6 more bags or jars to your first free one/);
   assert.match(standing(120, rules), /1 free bag waiting/);
 });
 

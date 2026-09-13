@@ -2,33 +2,31 @@ import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { PageHeader } from "@/components/PageHeader";
 import { SignInBox } from "@/components/rewards/SignInBox";
+import { RewardsCard } from "@/components/rewards/RewardsCard";
 import { signedInEmail } from "@/lib/rewards-auth";
 import { mailReady } from "@/lib/mailer";
-import { money, type Shop } from "@/lib/content";
+import { money, rewardOffer, type Shop } from "@/lib/content";
 import { getShop } from "@/lib/settings";
 
 export async function generateMetadata(): Promise<Metadata> {
-  // Read from her settings, so the search result cannot promise a free bag at a
-  // number she has since changed.
-  const { rewards } = await getShop();
   return {
     title: "Pantry Rewards",
-    description: `A point for every dollar, a free bag at ${rewards.rewardAt}, and extra points for every mason jar you bring back.`,
+    description: `${rewardOffer.sentence} Every bag or jar punches the card, and returned jars help too.`,
   };
 }
 
 const waysFor = ({ jarRules, rewards }: Shop) => [
   {
-    title: `${rewards.pointsPerDollar} point${rewards.pointsPerDollar === 1 ? "" : "s"} per dollar`,
-    body: "Every order earns automatically. Nothing to scan, nothing to remember.",
+    title: "Every bag or jar",
+    body: "Ten punches, then one is free. Nothing to scan, nothing to remember. It starts on your first order.",
   },
   {
-    title: `${jarRules.bonusPoints} points a jar`,
-    body: `Returned jars earn points on top of the ${money(jarRules.creditDollars)} they take off the order.`,
+    title: `${money(jarRules.creditDollars)} a jar back`,
+    body: `Returned jars take ${money(jarRules.creditDollars)} off the order and still help punch the card.`,
   },
   {
-    title: `${rewards.welcomeBonus} to start`,
-    body: `Your first order comes with a welcome bonus, so you start ${rewards.welcomeBonus} of the way there rather than at nothing.`,
+    title: "A head start",
+    body: "Your first order starts the card, so you are already on your way rather than at nothing.",
   },
   {
     title: `${money(rewards.referralCredit)} each way`,
@@ -48,7 +46,6 @@ export default async function RewardsPage({
   const { link } = await searchParams;
 
   const shop = await getShop();
-  const { rewards } = shop;
   const ways = waysFor(shop);
 
   return (
@@ -57,12 +54,17 @@ export default async function RewardsPage({
         eyebrow="Pantry Rewards"
         title={
           <>
-            {rewards.pointsPerDollar === 1 ? "A point a dollar." : `${rewards.pointsPerDollar} points a dollar.`}
-            <br />A free bag at {rewards.rewardAt}.
+            {rewardOffer.lead}
+            <br />
+            {rewardOffer.close}
           </>
         }
-        standfirst="No app, no plastic card, no points that quietly expire. The email your order goes to is your account, and it starts counting on your first order without you doing anything."
+        standfirst="No app, no plastic card, nothing that quietly expires. The email your order goes to is your card, and the first bag or jar punches it without you doing anything."
       />
+
+      <div className="mx-auto mt-10 flex w-full max-w-[1100px] justify-center px-6 sm:px-10">
+        <RewardsCard punched={9} />
+      </div>
 
       <section className="mx-auto mt-14 grid w-full max-w-[1100px] gap-5 px-6 sm:px-10 lg:grid-cols-4">
         {ways.map((way) => (
@@ -77,7 +79,7 @@ export default async function RewardsPage({
         {link === "spent" ? (
           <p role="alert" className="dashed-frame mb-5 bg-paper px-6 py-4 text-center text-[17px] leading-snug text-bark">
             That link had already been used. They work once and last an hour, which is what keeps
-            somebody else out of your points. Ask for a fresh one below.
+            somebody else out of your card. Ask for a fresh one below.
           </p>
         ) : null}
         {link === "trouble" ? (
@@ -89,7 +91,7 @@ export default async function RewardsPage({
             and only then be told it cannot send. */}
         {!mailReady ? (
           <p className="dashed-frame mb-5 bg-paper px-6 py-4 text-center text-[17px] leading-snug text-bark">
-            Your points are counting from your very first order. Looking them up needs her email account
+            Your card is counting from your very first order. Looking it up needs her email account
             connected, which is one signup away.
           </p>
         ) : null}

@@ -57,6 +57,12 @@ export type Flavor = {
    * to date, it is simply everything named here across her menu.
    */
   addIns?: string;
+  /**
+   * Up to three pictures of what it is, for the bag label. Leave this off and
+   * the name is read instead: Apple Maple Pecan becomes an apple, a maple leaf,
+   * and a pecan. A new flavor does the same, so the pictures stay current.
+   */
+  icons?: string[];
 };
 
 /** Sample flavors. These swap for hers the moment she sends the real list. */
@@ -132,6 +138,13 @@ export const rewards: RewardRules = {
   welcomeBonus: 30,
   referralCredit: 3,
 };
+
+/** What the shop tells neighbors. Ten bags or jars, then one is free. */
+export const rewardOffer = {
+  sentence: "Buy 10 bags or jars, get one free.",
+  lead: "Buy 10 bags or jars,",
+  close: "get one free.",
+} as const;
 
 export type BlessingBag = { price: number; blurb: string };
 

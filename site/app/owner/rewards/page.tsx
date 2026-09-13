@@ -24,10 +24,10 @@ export default async function OwnerRewardsPage() {
             : owed.length > 0
               ? `${owed.length} ${owed.length === 1 ? "person has" : "people have"} earned a free bag.`
               : standings.length > 0
-                ? `${standings.length} ${standings.length === 1 ? "customer" : "customers"} collecting points.`
+                ? `${standings.length} ${standings.length === 1 ? "customer" : "customers"} punching a card.`
                 : "No points yet."
         }
-        note={`${shop.rewards.pointsPerDollar} point${shop.rewards.pointsPerDollar === 1 ? "" : "s"} for every dollar, ${shop.jarRules.bonusPoints} for every jar handed back, and a free bag at ${shop.rewards.rewardAt}. Points are counted from paid orders only, so nothing here can be gamed from the shop.`}
+        note="Buy 10 bags or jars, get one free. Returned jars still help. Counts are from paid orders only, so nothing here can be gamed from the shop."
       />
 
       {result.status === "error" ? <CannotReach what="points" /> : null}

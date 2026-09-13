@@ -37,7 +37,7 @@ export async function POST(request: Request) {
     return NextResponse.json(
       {
         error: "not_configured",
-        message: "Signing in is not switched on yet. Your points are still counting.",
+        message: "Signing in is not switched on yet. Your card is still counting.",
       },
       { status: 503 },
     );
@@ -54,17 +54,17 @@ export async function POST(request: Request) {
       const link = `${origin}/api/rewards/open?token=${token}`;
       const sent = await sendMail(
         email,
-        `Your ${business.shortName} points`,
+        `Your ${business.shortName} rewards card`,
         [
-          "Here is the link to your points. It works once, for the next hour.",
+          "Here is the link to your rewards card. It works once, for the next hour.",
           "",
           link,
           "",
           "If you did not ask for this, nothing has happened and you can ignore it.",
         ].join("\n"),
         [
-          `<p style="font:16px Georgia,serif;color:#3a2712">Here is the link to your points. It works once, for the next hour.</p>`,
-          `<p><a href="${link}" style="font:15px Helvetica,Arial,sans-serif;color:#5b3d1e">See my points</a></p>`,
+          `<p style="font:16px Georgia,serif;color:#3a2712">Here is the link to your rewards card. It works once, for the next hour.</p>`,
+          `<p><a href="${link}" style="font:15px Helvetica,Arial,sans-serif;color:#5b3d1e">See my card</a></p>`,
           `<p style="font:13px Helvetica,Arial,sans-serif;color:#8a7a62">If you did not ask for this, nothing has happened and you can ignore it.</p>`,
         ].join(""),
       );

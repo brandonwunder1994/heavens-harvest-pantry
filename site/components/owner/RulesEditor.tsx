@@ -54,8 +54,8 @@ export function RulesEditor({
         </Labelled>
       </Block>
 
-      <Block heading="Points" keyName="rewards" value={points} button="Save points">
-        <Labelled label="Points per dollar spent" hint="One is the usual.">
+      <Block heading="Rewards" keyName="rewards" value={points} button="Save rewards">
+        <Labelled label="Points per dollar spent" hint="The shop says buy 10 bags or jars, get one free. Leave this unless you mean to change the math.">
           <input
             className={inputClass}
             type="number"
@@ -64,7 +64,7 @@ export function RulesEditor({
             onChange={(e) => setPoints((p) => ({ ...p, pointsPerDollar: Number(e.target.value) }))}
           />
         </Labelled>
-        <Labelled label="Free bag at" hint="Points. Reach this and a free bag is owed.">
+        <Labelled label="Free bag at" hint="Ten punches on the card. Leave this at 100 unless you change the offer.">
           <input
             className={inputClass}
             type="number"

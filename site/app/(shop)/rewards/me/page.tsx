@@ -3,8 +3,9 @@ import { redirect } from "next/navigation";
 import { PageHeader } from "@/components/PageHeader";
 import { CrossWheat } from "@/components/Sprite";
 import { SignOutButton } from "@/components/rewards/SignOutButton";
-import { money } from "@/lib/content";
-import { bagsEarned, pointsToNext, progress, standing } from "@/lib/rewards";
+import { rewardOffer } from "@/lib/content";
+import { bagsEarned, bagsToNext, progress, punchesFilled, standing } from "@/lib/rewards";
+import { RewardsCard } from "@/components/rewards/RewardsCard";
 import { accountFor } from "@/lib/rewards-source";
 import { ordersFor } from "@/lib/orders-source";
 import { JarShelf, VerseWall, WelcomeBack } from "@/components/rewards/ReturnPieces";
@@ -13,7 +14,7 @@ import { verseForWeek, weekNumber } from "@/lib/verses";
 import { signedInEmail } from "@/lib/rewards-auth";
 import { getShop } from "@/lib/settings";
 
-export const metadata: Metadata = { title: "Your points", robots: { index: false } };
+export const metadata: Metadata = { title: "Your card", robots: { index: false } };
 export const dynamic = "force-dynamic";
 
 export default async function MyRewardsPage() {
@@ -36,38 +37,46 @@ export default async function MyRewardsPage() {
   // Anything she has renamed or sold out since simply is not in the link.
   const reorderHref = (items: { qty: number; name: string; format: "jar" | "bag" }[]) =>
     reorderLink(items, shop.flavors) ?? "/menu";
-  const { rewardAt } = shop.rewards;
   const points = account?.points ?? 0;
   const owed = bagsEarned(points, shop.rewards);
   const filled = Math.round(progress(points, shop.rewards) * 100);
+  const punched = punchesFilled(points, shop.rewards);
+  const togo = bagsToNext(points, shop.rewards);
 
   return (
     <>
       <PageHeader
         eyebrow={account?.name ? `Hello ${account.name.split(" ")[0]}` : "Your account"}
-        title={`${points} points.`}
+        title={owed > 0 ? "A free bag is waiting." : rewardOffer.sentence}
         standfirst={standing(points, shop.rewards)}
       />
 
       <section className="mx-auto mt-12 w-full max-w-[620px] px-6 sm:px-10">
+        <div className="mb-8 flex justify-center">
+          <RewardsCard
+            punched={punched}
+            line={
+              punched >= 10
+                ? "A free bag is waiting"
+                : punched === 9
+                  ? "One more for a free bag"
+                  : "Ten punches, a free bag"
+            }
+          />
+        </div>
         <div className="flex flex-col gap-3 border border-rule bg-paper px-7 py-7">
           <div className="flex items-baseline justify-between font-ui text-[12px] font-semibold uppercase tracking-[0.18em] text-faint">
             <span>Toward the next free bag</span>
             <span className="tabular-nums">
-              {rewardAt > 0 ? Math.max(0, points) % rewardAt : 0} / {rewardAt}
+              {punched >= 10 ? 10 : punched} / 10
             </span>
           </div>
           <div className="h-3 w-full bg-cream" role="img" aria-label={`${filled}% of the way`}>
             <div className="h-full bg-sage" style={{ width: `${filled}%` }} />
           </div>
           <p className="font-ui text-[13px] leading-relaxed text-muted">
-            {pointsToNext(points, shop.rewards)} more points, which is about{" "}
-            {money(Math.ceil(pointsToNext(points, shop.rewards) / Math.max(1, shop.rewards.pointsPerDollar)))} of
-            granola
-            {shop.jarRules.bonusPoints > 0
-              ? `, or ${Math.ceil(pointsToNext(points, shop.rewards) / shop.jarRules.bonusPoints)} jars handed back`
-              : ""}
-            .
+            {rewardOffer.sentence}
+            {togo > 0 ? ` ${togo} more bag${togo === 1 ? "" : "s"} or jar${togo === 1 ? "" : "s"} punches the card.` : ""}
           </p>
         </div>
 

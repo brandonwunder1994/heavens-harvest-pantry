@@ -58,7 +58,7 @@ export function SignInBox({ disabled = false }: { disabled?: boolean }) {
       onSubmit={submit}
       className="bg-brown px-8 py-10 text-center text-cream shadow-[inset_0_0_0_4px_#5b3d1e,inset_0_0_0_5px_#c9a06a]"
     >
-      <div className="small-caps !text-gold">Check your points</div>
+      <div className="small-caps !text-gold">Check your card</div>
       <p className="mx-auto mt-3 max-w-md text-[19px] leading-relaxed text-linen">
         Type the email your order went to. We send you a link. There is no password to forget and no
         account to make.

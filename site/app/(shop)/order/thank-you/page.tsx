@@ -3,10 +3,10 @@ import Link from "next/link";
 import { CrossWheat, HeartSeal } from "@/components/Sprite";
 import { ClearCartOnMount } from "@/components/checkout/ClearCartOnMount";
 import { formatMoney } from "@/lib/cart";
-import { business, filled } from "@/lib/content";
+import { business, filled, rewardOffer } from "@/lib/content";
 import { getShop } from "@/lib/settings";
 import { accountFor } from "@/lib/rewards-source";
-import { bagsEarned, pointsToNext } from "@/lib/rewards";
+import { bagsEarned, standing } from "@/lib/rewards";
 import { getStripe } from "@/lib/stripe";
 
 export const metadata: Metadata = {
@@ -86,16 +86,10 @@ export default async function ThankYouPage({
                 <dd className="m-0 text-right font-semibold text-ink">{jars}</dd>
               </>
             ) : null}
-            {points > 0 ? (
+            {points > 0 || balance > 0 ? (
               <>
-                <dt className="text-muted">Points earned</dt>
-                <dd className="m-0 text-right font-semibold text-sage">+{points}</dd>
-              </>
-            ) : null}
-            {balance > 0 ? (
-              <>
-                <dt className="text-muted">Your total</dt>
-                <dd className="m-0 text-right font-semibold text-ink">{balance}</dd>
+                <dt className="text-muted">Rewards</dt>
+                <dd className="m-0 text-right font-semibold text-sage">{rewardOffer.sentence}</dd>
               </>
             ) : null}
           </dl>
@@ -104,9 +98,9 @@ export default async function ThankYouPage({
             <p className="max-w-md font-ui text-[14px] leading-relaxed text-muted">
               {owed > 0
                 ? `That is ${owed} free bag${owed === 1 ? "" : "s"} earned. She will add ${owed === 1 ? "it" : "them"} to your next delivery.`
-                : `${pointsToNext(balance, shop.rewards)} points to your first free bag.`}{" "}
+                : standing(balance, shop.rewards)}{" "}
               <Link href="/rewards" className="font-semibold text-sage underline underline-offset-4">
-                Check your points any time
+                See your card any time
               </Link>
               .
             </p>

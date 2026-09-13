@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import { PageHeader } from "@/components/PageHeader";
 import { Jar } from "@/components/Sprite";
-import { business, money, type Shop } from "@/lib/content";
+import { business, money, rewardOffer, type Shop } from "@/lib/content";
 import { getShop } from "@/lib/settings";
 
 export const metadata: Metadata = {
@@ -25,13 +24,13 @@ const stepsFor = ({ jarRules }: Shop) => [
   {
     numeral: "III",
     title: "Hand it back.",
-    body: `Say how many at checkout and leave them out for her. Each one takes ${money(jarRules.creditDollars)} off that order, plus ${jarRules.bonusPoints} reward points.`,
+    body: `Say how many at checkout and leave them out for her. Each one takes ${money(jarRules.creditDollars)} off that order and helps punch your rewards card.`,
   },
 ];
 
 export default async function JarsPage() {
   const shop = await getShop();
-  const { jarRules, rewards } = shop;
+  const { jarRules } = shop;
   const steps = stepsFor(shop);
 
   return (
@@ -74,7 +73,8 @@ export default async function JarsPage() {
               </p>
             </div>
             <div className="border border-brown bg-white p-1">
-              <Image src="/qr.svg" alt="" width={104} height={104} className="block h-[104px] w-[104px]" />
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/qr.svg?v=4" alt="" width={104} height={104} className="block h-[104px] w-[104px]" />
             </div>
             <div className="flex flex-col items-center gap-0.5">
               <p className="text-center text-[11px] italic leading-tight text-brown">
@@ -120,8 +120,8 @@ export default async function JarsPage() {
         <div className="small-caps">Worth knowing</div>
         <p className="text-[18px] leading-relaxed text-bark sm:text-[20px]">
           There is no deposit and no penalty. If a jar breaks, or you decide to keep one for the pantry, that is
-          completely fine. The {money(jarRules.creditDollars)} is a thank you, not a refund, and returned jars also earn{" "}
-          {jarRules.bonusPoints} points toward the free bag at {rewards.rewardAt}.
+          completely fine. The {money(jarRules.creditDollars)} is a thank you, not a refund, and returned jars also help
+          toward a free one. {rewardOffer.sentence}
         </p>
       </section>
     </>

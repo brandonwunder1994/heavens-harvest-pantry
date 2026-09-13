@@ -43,6 +43,14 @@ export function progress(points: number, rules: RewardRules): number {
   return (Math.max(0, points) % rules.rewardAt) / rules.rewardAt;
 }
 
+/** Whole punches on a ten-hole card. A finished bag shows every hole cut. */
+export function punchesFilled(points: number, rules: RewardRules, slots = 10): number {
+  if (rules.rewardAt <= 0 || slots <= 0) return 0;
+  const into = Math.max(0, points) % rules.rewardAt;
+  if (into === 0 && points > 0) return slots;
+  return Math.min(slots, Math.floor((into / rules.rewardAt) * slots));
+}
+
 /** Emails are the account key, so they are compared with case ignored. */
 export const normaliseEmail = (value: string): string => value.trim().toLowerCase();
 
@@ -54,12 +62,19 @@ export function describeEntry(entry: PointEntry): string {
   return `${entry.reason} (−${Math.abs(entry.delta)})`;
 }
 
+/** How many bags or jars still to buy before the next free one. */
+export function bagsToNext(points: number, rules: RewardRules, slots = 10): number {
+  const punched = punchesFilled(points, rules, slots);
+  return punched >= slots ? slots : slots - punched;
+}
+
 /** Plain-English summary of where someone stands. */
 export function standing(points: number, rules: RewardRules): string {
   const earned = bagsEarned(points, rules);
-  const togo = pointsToNext(points, rules);
+  const togo = bagsToNext(points, rules);
   if (earned > 0) {
-    return `${earned} free bag${earned === 1 ? "" : "s"} waiting, and ${togo} points to the next one.`;
+    return `${earned} free bag${earned === 1 ? "" : "s"} waiting, and ${togo} more bag${togo === 1 ? "" : "s"} or jar${togo === 1 ? "" : "s"} to the next one.`;
   }
-  return `${togo} points to your first free bag.`;
+  if (togo === 1) return "One more bag or jar for your first free one.";
+  return `${togo} more bags or jars to your first free one.`;
 }

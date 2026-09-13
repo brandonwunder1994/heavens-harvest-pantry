@@ -1,11 +1,14 @@
+import { Suspense } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { CrossWheat, HeartSeal, Jar } from "@/components/Sprite";
-import { HeroShelf, jarLabel } from "@/components/HeroShelf";
+import { HeroShelf } from "@/components/HeroShelf";
+import { FloatingJar } from "@/components/FloatingJars";
 import ThePour from "@/components/hero/ThePour";
+import { KitchenPhoto } from "@/components/KitchenPhoto";
 import { ScriptureBand } from "@/components/ScriptureBand";
 import { MenuList } from "@/components/MenuList";
-import { business, filled, money, type Shop } from "@/lib/content";
+import { RewardsCard } from "@/components/rewards/RewardsCard";
+import { business, filled, money, rewardOffer, type Flavor, type Shop } from "@/lib/content";
 import { getShop } from "@/lib/settings";
 import { publishedReviews } from "@/lib/reviews-source";
 import { blessingBagsThisYear } from "@/lib/orders-source";
@@ -31,24 +34,21 @@ const stepsFor = (shop: Shop) => [
 ];
 
 export default async function HomePage() {
-  const [shop, reviews, blessed] = await Promise.all([
-    getShop(),
-    publishedReviews(1),
-    blessingBagsThisYear(),
-  ]);
-  const { blessingBag, delivery, jarRules, rewards, verses } = shop;
+  // The hero does not need Stripe or reviews. Those wait below, in their own
+  // holes, so a slow order book cannot keep the headline off the screen.
+  const shop = await getShop();
+  const { blessingBag, delivery, jarRules, verses } = shop;
   const steps = stepsFor(shop);
-  // The front page quotes whatever she has most recently put on the site, so it
-  // is never a bracketed placeholder once a real one exists.
-  const lead = reviews[0];
 
   return (
     <>
-      {/* Granola falls into a real jar, settles, and then the words arrive.
-          The jar sits to the right and the words to its left, so nothing is
-          read through the glass. Anyone on an old phone, a metered connection,
-          or with motion switched off gets a photograph of the same scene and is
-          never told they missed anything — see components/hero/still.js. */}
+      {/* Granola falls into a real jar. The words are already there, so nobody
+          waits on the graphics. The jar sits to the right and the words to its
+          left, so nothing is read through the glass. Anyone on an old phone, a
+          metered connection, or with motion switched off gets a photograph of
+          the same scene and is never told they missed anything — see
+          components/hero/still.js. */}
+      <link rel="preload" href="/pour.json" as="fetch" crossOrigin="anonymous" />
       <ThePour className="min-h-[84vh] w-full lg:min-h-[78vh]">
         <div className="mx-auto flex min-h-[84vh] w-full max-w-[1296px] items-end px-6 pb-10 sm:px-10 lg:min-h-[78vh] lg:items-center lg:px-18 lg:pb-0">
           <div className="flex max-w-[600px] flex-col items-start gap-5 text-left">
@@ -75,7 +75,7 @@ export default async function HomePage() {
       </ThePour>
 
       <div className="mx-auto mt-5 w-full max-w-[1296px] px-6 sm:px-10 lg:px-18">
-        <HeroShelf labels={shop.flavors.slice(0, 3).map((f) => f.name)} />
+        <HeroShelf flavors={shop.flavors.slice(0, 3)} />
       </div>
 
       <div className="mt-10">
@@ -104,9 +104,14 @@ export default async function HomePage() {
 
         <aside className="dashed-frame flex flex-col gap-4 bg-paper px-7 pb-6 pt-7">
           <div className="small-caps">Jar or bag?</div>
-          <svg viewBox="0 0 160 220" className="mx-auto h-auto w-[120px]" aria-hidden focusable="false">
-            <Jar x={0} y={0} label={["Any", "flavor"]} />
-          </svg>
+          <div className="flex items-end justify-center gap-3 pt-1">
+            <div className="w-[46%]">
+              <FloatingJar flavor={samplePack(shop)} featured mark="logo" />
+            </div>
+            <div className="w-[46%]">
+              <FloatingJar flavor={samplePack(shop)} featured format="bag" mark="logo" />
+            </div>
+          </div>
           <p className="text-[18px] leading-snug text-bark">
             The <strong className="font-semibold">bag</strong> is a resealable pouch, {jarRules.bagSize}.
           </p>
@@ -137,11 +142,7 @@ export default async function HomePage() {
 
       <section className="grid gap-10 px-6 pt-20 sm:px-10 lg:grid-cols-[420px_1fr] lg:items-start lg:gap-[72px] lg:px-18 lg:pt-[88px]">
         <div className="flex flex-col gap-3.5">
-          <div className="dashed-frame flex h-[380px] items-center justify-center bg-paper p-2.5 lg:h-[500px]">
-            <p className="px-8 text-center text-[19px] italic text-muted">
-              A photograph of her kitchen belongs here.
-            </p>
-          </div>
+          <KitchenPhoto />
           {filled(business.ownerName) ? (
             <p className="small-caps text-muted">{filled(business.ownerName)} · founder, baker, jar washer</p>
           ) : null}
@@ -172,7 +173,7 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <section className="mx-6 mt-20 grid overflow-hidden bg-brown text-cream sm:mx-10 lg:mx-18 lg:mt-[88px] lg:grid-cols-[1.1fr_0.9fr]">
+      <section className="mx-6 mt-20 grid bg-brown text-cream sm:mx-10 lg:mx-18 lg:mt-[88px] lg:grid-cols-[1.1fr_0.9fr]">
         <div className="flex flex-col gap-5 px-8 py-12 sm:px-12 lg:px-16 lg:py-[72px]">
           <div className="small-caps !text-gold">The jar promise</div>
           <h2 className="display m-0 text-[48px] text-cream sm:text-[64px] lg:text-[76px]">
@@ -192,12 +193,11 @@ export default async function HomePage() {
           </Link>
         </div>
 
-        <div className="relative min-h-[420px] lg:min-h-[500px]">
-          <svg viewBox="0 0 560 500" className="absolute inset-0 h-full w-full" aria-hidden focusable="false">
-            <path d="M244 0 v60 c 0 40 -30 60 -20 100" stroke="#c9a06a" strokeWidth="1.5" fill="none" />
-            <Jar x={330} y={130} scale={1.4} label={jarLabel(shop.flavors[1]?.name ?? shop.flavors[0]?.name ?? "")} />
-          </svg>
-          <div className="absolute left-[18%] top-[32%] w-[168px] -rotate-6 bg-cream p-2 shadow-[0_18px_30px_rgba(0,0,0,0.25)]">
+        <div className="relative flex min-h-[560px] items-center justify-center overflow-visible px-8 py-16">
+          <div className="w-[200px] sm:w-[230px] lg:w-[250px]">
+            <FloatingJar flavor={candiedJar(shop)} featured tone="brown" />
+          </div>
+          <div className="absolute left-[10%] top-[34%] z-[2] w-[168px] -rotate-6 bg-cream p-2 shadow-[0_18px_30px_rgba(0,0,0,0.25)] sm:left-[14%]">
             <div className="dashed-frame flex h-[214px] flex-col items-center justify-between px-2 pb-2.5 pt-2">
               <div className="h-2.5 w-2.5 rounded-full border-[1.4px] border-brown" />
               <div className="flex flex-col items-center gap-0.5">
@@ -210,7 +210,8 @@ export default async function HomePage() {
                 <div className="text-[11px] italic text-muted">Bring it back next order.</div>
               </div>
               <div className="bg-white p-[3px]">
-                <Image src="/qr.svg" alt="" width={56} height={56} className="block h-14 w-14" />
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src="/qr.svg?v=4" alt="" width={56} height={56} className="block h-14 w-14" />
               </div>
             </div>
           </div>
@@ -269,46 +270,34 @@ export default async function HomePage() {
           <p className="verse max-w-[460px] text-[30px] text-cream sm:text-[40px]">&ldquo;{verses.giving.text}&rdquo;</p>
           <div className="ref text-moss">{verses.giving.reference}</div>
           {/* Counted from paid orders. Left out entirely rather than guessed. */}
-          {blessed !== null && blessed > 0 ? (
-            <div className="border-t border-cream/35 pt-4 font-ui text-[15px] text-moss">
-              {blessed} blessing bag{blessed === 1 ? "" : "s"} delivered so far this year
-            </div>
-          ) : null}
+          <Suspense>
+            <BlessedCount />
+          </Suspense>
         </div>
       </section>
 
       <section className="grid gap-12 px-6 pt-20 sm:px-10 lg:grid-cols-2 lg:items-center lg:gap-20 lg:px-18 lg:pt-24">
         <div className="flex flex-col gap-4">
           <HeartSeal />
-          <p className="display text-[32px] italic leading-tight text-ink sm:text-[44px]">
-            &ldquo;{lead ? lead.body : "The first review will go here, in a neighbor's own words, once the first deliveries land."}&rdquo;
-          </p>
-          <svg width="220" height="14" viewBox="0 0 220 14" aria-hidden focusable="false">
-            <path
-              d="M2 8 C 40 3, 80 12, 120 6 S 190 4, 218 9"
-              fill="none"
-              stroke="#6b7a4a"
-              strokeWidth="2.5"
-              strokeLinecap="round"
-            />
-          </svg>
-          <div className="small-caps">
-            {lead ? `${lead.name}${lead.flavor ? ` · ${lead.flavor}` : ""} · a neighbor` : "Waiting on the first one"}
-          </div>
+          <Suspense fallback={<NeighborQuoteBody />}>
+            <NeighborQuote />
+          </Suspense>
           <Link href="/reviews" className="mt-2 font-ui text-[14px] font-semibold text-sage hover:text-brown">
             Read the rest, or leave yours
           </Link>
         </div>
 
-        <div className="flex flex-col items-start gap-5">
+        <div id="rewards" className="flex flex-col items-start gap-5">
           <div className="small-caps">Pantry Rewards</div>
           <h2 className="display m-0 text-[40px] sm:text-[54px]">
-            {rewards.pointsPerDollar === 1 ? "A point a dollar." : `${rewards.pointsPerDollar} points a dollar.`}
-            <br />A free bag at {rewards.rewardAt}.
+            {rewardOffer.lead}
+            <br />
+            {rewardOffer.close}
           </h2>
-          <RewardsCard />
+          <RewardsCard punched={9} href="/rewards" />
           <p className="max-w-[420px] text-[18px] leading-snug text-bark">
-            Your phone number is your card. Returned jars earn extra, and so does sending a neighbor our way.
+            Every bag or jar punches the card. Your email is the card. Returned jars still help, and so does sending a
+            neighbor our way.
           </p>
         </div>
       </section>
@@ -320,46 +309,65 @@ export default async function HomePage() {
   );
 }
 
-function RewardsCard() {
-  const filled = 9;
+function NeighborQuoteBody({
+  body = "The first review will go here, in a neighbor's own words, once the first deliveries land.",
+  byline = "Waiting on the first one",
+}: {
+  body?: string;
+  byline?: string;
+}) {
   return (
-    <svg viewBox="0 0 420 210" className="h-auto w-full max-w-[420px]" aria-hidden focusable="false">
-      <rect x="1" y="1" width="418" height="208" fill="#fbf8f1" stroke="#5b3d1e" strokeWidth="1.5" />
-      <rect x="9" y="9" width="402" height="192" fill="none" stroke="#a9b18a" strokeWidth="1" strokeDasharray="3 3" />
-      <text
-        x="210"
-        y="40"
-        textAnchor="middle"
-        fontFamily="var(--font-display)"
-        fontSize="11"
-        fontWeight="700"
-        letterSpacing="3"
-        fill="#5b3d1e"
-      >
-        PANTRY REWARDS
-      </text>
-      <text x="210" y="60" textAnchor="middle" fontFamily="var(--font-serif)" fontSize="14" fontStyle="italic" fill="#6b5a42">
-        One more for a free bag
-      </text>
-      {Array.from({ length: 10 }, (_, i) => {
-        const cx = 60 + (i % 5) * 75;
-        const cy = i < 5 ? 105 : 160;
-        const stamped = i < filled;
-        return (
-          <g key={i}>
-            <circle
-              cx={cx}
-              cy={cy}
-              r="18"
-              fill="none"
-              stroke="#5b3d1e"
-              strokeWidth={stamped ? 1 : 1.2}
-              strokeDasharray={stamped ? undefined : "3 3"}
-            />
-            {stamped ? <use href="#heart" transform={`translate(${cx - 12} ${cy - 12})`} fill="#c9a06a" /> : null}
-          </g>
-        );
-      })}
-    </svg>
+    <>
+      <p className="display text-[32px] italic leading-tight text-ink sm:text-[44px]">
+        &ldquo;{body}&rdquo;
+      </p>
+      <svg width="220" height="14" viewBox="0 0 220 14" aria-hidden focusable="false">
+        <path
+          d="M2 8 C 40 3, 80 12, 120 6 S 190 4, 218 9"
+          fill="none"
+          stroke="#6b7a4a"
+          strokeWidth="2.5"
+          strokeLinecap="round"
+        />
+      </svg>
+      <div className="small-caps">{byline}</div>
+    </>
   );
 }
+
+async function NeighborQuote() {
+  const reviews = await publishedReviews(1);
+  const lead = reviews[0];
+  if (!lead) return <NeighborQuoteBody />;
+  return (
+    <NeighborQuoteBody
+      body={lead.body}
+      byline={`${lead.name}${lead.flavor ? ` · ${lead.flavor}` : ""} · a neighbor`}
+    />
+  );
+}
+
+async function BlessedCount() {
+  const blessed = await blessingBagsThisYear();
+  if (blessed === null || blessed <= 0) return null;
+  return (
+    <div className="border-t border-cream/35 pt-4 font-ui text-[15px] text-moss">
+      {blessed} blessing bag{blessed === 1 ? "" : "s"} delivered so far this year
+    </div>
+  );
+}
+
+function candiedJar(shop: Shop): Flavor {
+  return (
+    shop.flavors.find((flavor) => /candied/i.test(`${flavor.slug} ${flavor.name}`)) ?? {
+      slug: "candied-almonds",
+      name: "Candied Almonds",
+      blurb: "",
+      ingredients: "",
+      allergens: "",
+      bagPrice: 9,
+      jarPrice: 12,
+    }
+  );
+}
+

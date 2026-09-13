@@ -1,13 +1,16 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useCart } from "@/components/cart/CartProvider";
+import { SoundSwitch } from "@/components/craft/SoundSwitch";
 import { Stepper } from "@/components/cart/Stepper";
 import { MAX_JARS_RETURNED, describeLine, formatMoney } from "@/lib/cart";
+import { packPhotoFor } from "@/lib/jars";
 
-import { filled, money } from "@/lib/content";
+import { filled, money, rewardOffer } from "@/lib/content";
 import type { FulfilmentMethod } from "@/lib/order";
 
 type Errors = Record<string, string>;
@@ -16,7 +19,7 @@ export function CheckoutForm({ paymentsLive, testMode }: { paymentsLive: boolean
   const router = useRouter();
   const cart = useCart();
   const { totals, shop } = cart;
-  const { blessingBag, delivery, jarRules, rewards } = shop;
+  const { blessingBag, delivery, jarRules } = shop;
 
   const [method, setMethod] = useState<FulfilmentMethod>("delivery");
   const [runIndex, setRunIndex] = useState(0);
@@ -117,15 +120,29 @@ export function CheckoutForm({ paymentsLive, testMode }: { paymentsLive: boolean
     <form onSubmit={submit} className="mx-auto flex w-full max-w-[560px] flex-col gap-0" noValidate>
       <Section title="Your order">
         <div className="flex flex-col gap-2.5">
-          {totals.lines.map((p) => (
-            <div key={`${p.line.slug}-${p.line.format}`} className="leader">
-              <span className="text-[19px]">{describeLine(p)}</span>
-              <span className="leader-dots" />
-              <span className="whitespace-nowrap font-ui text-[13px] font-semibold">
-                {formatMoney(p.totalCents)}
-              </span>
-            </div>
-          ))}
+          {totals.lines.map((p) => {
+            const src = packPhotoFor(p.flavor, p.line.format);
+            return (
+              <div key={`${p.line.slug}-${p.line.format}-${p.line.name ?? ""}`} className="flex items-center gap-3">
+                {src ? (
+                  <Image
+                    src={src}
+                    alt=""
+                    width={54}
+                    height={75}
+                    className="h-[72px] w-auto shrink-0"
+                  />
+                ) : null}
+                <div className="leader min-w-0 flex-1">
+                  <span className="text-[19px]">{describeLine(p)}</span>
+                  <span className="leader-dots" />
+                  <span className="whitespace-nowrap font-ui text-[13px] font-semibold">
+                    {formatMoney(p.totalCents)}
+                  </span>
+                </div>
+              </div>
+            );
+          })}
           {cart.blessingBags > 0 ? (
             <div className="leader text-sage">
               <span className="text-[19px]">
@@ -169,8 +186,8 @@ export function CheckoutForm({ paymentsLive, testMode }: { paymentsLive: boolean
         {totals.jarCreditRequestedCents > totals.jarCreditAppliedCents ? (
           <p className="mt-3 border-t border-dashed border-gold/50 pt-3 font-ui text-[12px] leading-relaxed text-linen">
             That is more credit than this order can take. We have applied{" "}
-            {formatMoney(totals.jarCreditAppliedCents)} now, and every jar still earns its{" "}
-            {jarRules.bonusPoints} points. Mention the rest to her at the door.
+            {formatMoney(totals.jarCreditAppliedCents)} now, and every jar still punches the card.
+            Mention the rest to her at the door.
           </p>
         ) : null}
       </div>
@@ -247,7 +264,7 @@ export function CheckoutForm({ paymentsLive, testMode }: { paymentsLive: boolean
           type="tel"
           autoComplete="tel"
           error={errors.phone}
-          hint="For the text when she sets out. Your points are kept against your email."
+          hint="For the text when she sets out. Your rewards card is kept against your email."
         />
         {method === "delivery" ? (
           <Field
@@ -304,7 +321,7 @@ export function CheckoutForm({ paymentsLive, testMode }: { paymentsLive: boolean
           <span className="display text-[30px]">{formatMoney(totals.totalCents)}</span>
         </div>
         <p className="font-ui text-[12px] font-semibold leading-relaxed text-sage">
-          You&apos;ll earn {totals.points} points toward the free bag at {rewards.rewardAt}.
+          {rewardOffer.sentence} This order punches the card.
         </p>
       </div>
 
@@ -349,6 +366,9 @@ export function CheckoutForm({ paymentsLive, testMode }: { paymentsLive: boolean
             : "Card payments are not connected yet, so this button will tell you so rather than charging anything."}
           {testMode ? " Running in test mode: no real money moves." : ""}
         </p>
+        <div className="flex justify-center pt-1">
+          <SoundSwitch label="Basket sound" />
+        </div>
       </div>
     </form>
   );
