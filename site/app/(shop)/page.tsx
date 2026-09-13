@@ -289,11 +289,7 @@ export default async function HomePage() {
 
         <div id="rewards" className="flex flex-col items-start gap-5">
           <div className="small-caps">Pantry Rewards</div>
-          <h2 className="display m-0 text-[40px] sm:text-[54px]">
-            {rewardOffer.lead}
-            <br />
-            {rewardOffer.close}
-          </h2>
+          <h2 className="display m-0 text-[40px] sm:text-[54px]">{rewardOffer.sentence}</h2>
           <RewardsCard punched={9} href="/rewards" />
           <p className="max-w-[420px] text-[18px] leading-snug text-bark">
             Every bag or jar punches the card. Your email is the card. Returned jars still help, and so does sending a

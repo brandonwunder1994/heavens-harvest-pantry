@@ -75,7 +75,7 @@ export function pointsLine(input: NoteInput): string {
     return `You have ${bags} waiting. She will put ${input.bagsWaiting === 1 ? "it" : "them"} in with your next order.`;
   }
   if (input.points > 0) {
-    return `Buy 10 bags or jars, get one free. You are getting closer.`;
+    return `Buy 10 Get 1 Free. You are getting closer.`;
   }
   return "";
 }

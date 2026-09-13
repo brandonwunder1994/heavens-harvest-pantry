@@ -55,7 +55,7 @@ export function RulesEditor({
       </Block>
 
       <Block heading="Rewards" keyName="rewards" value={points} button="Save rewards">
-        <Labelled label="Points per dollar spent" hint="The shop says buy 10 bags or jars, get one free. Leave this unless you mean to change the math.">
+        <Labelled label="Points per dollar spent" hint="The shop says Buy 10 Get 1 Free. Leave this unless you mean to change the math.">
           <input
             className={inputClass}
             type="number"

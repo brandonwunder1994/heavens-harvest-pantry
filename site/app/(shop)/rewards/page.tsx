@@ -52,13 +52,7 @@ export default async function RewardsPage({
     <>
       <PageHeader
         eyebrow="Pantry Rewards"
-        title={
-          <>
-            {rewardOffer.lead}
-            <br />
-            {rewardOffer.close}
-          </>
-        }
+        title={rewardOffer.sentence}
         standfirst="No app, no plastic card, nothing that quietly expires. The email your order goes to is your card, and the first bag or jar punches it without you doing anything."
       />
 

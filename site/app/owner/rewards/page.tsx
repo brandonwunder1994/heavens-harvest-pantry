@@ -27,7 +27,7 @@ export default async function OwnerRewardsPage() {
                 ? `${standings.length} ${standings.length === 1 ? "customer" : "customers"} punching a card.`
                 : "No points yet."
         }
-        note="Buy 10 bags or jars, get one free. Returned jars still help. Counts are from paid orders only, so nothing here can be gamed from the shop."
+        note="Buy 10 Get 1 Free. Returned jars still help. Counts are from paid orders only, so nothing here can be gamed from the shop."
       />
 
       {result.status === "error" ? <CannotReach what="points" /> : null}

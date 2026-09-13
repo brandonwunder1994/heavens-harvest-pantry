@@ -107,7 +107,7 @@ and the page will not let her forget it.
 | **proof** | 6 | Reviews, messages, repeat rate. All real, all flagged |
 | **origin** | 5 | Why she started, what it costs, why not in stores |
 | **jar** | 5 | The returnable jar. Teaches the mechanic, does sustainability |
-| **rewards / blend** | 4 | Buy 10 get one free, referrals, build-your-own jar |
+| **rewards / blend** | 4 | Buy 10 Get 1 Free, referrals, build-your-own jar |
 
 ### The weekly rhythm
 

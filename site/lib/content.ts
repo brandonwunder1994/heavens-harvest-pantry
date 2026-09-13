@@ -141,9 +141,7 @@ export const rewards: RewardRules = {
 
 /** What the shop tells neighbors. Ten bags or jars, then one is free. */
 export const rewardOffer = {
-  sentence: "Buy 10 bags or jars, get one free.",
-  lead: "Buy 10 bags or jars,",
-  close: "get one free.",
+  sentence: "Buy 10 Get 1 Free",
 } as const;
 
 export type BlessingBag = { price: number; blurb: string };
