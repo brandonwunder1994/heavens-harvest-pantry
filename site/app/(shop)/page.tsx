@@ -33,6 +33,14 @@ const stepsFor = (shop: Shop) => [
   },
 ];
 
+function samplePack(shop: Shop): Flavor {
+  const flavor = shop.flavors.find((row) => !row.soldOut) ?? shop.flavors[0];
+  if (!flavor) {
+    throw new Error("The shop has no flavors to show.");
+  }
+  return flavor;
+}
+
 export default async function HomePage() {
   // The hero does not need Stripe or reviews. Those wait below, in their own
   // holes, so a slow order book cannot keep the headline off the screen.
