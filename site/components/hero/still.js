@@ -1,13 +1,12 @@
 // Everything, without the graphics.
 //
-// This file decides — before a single byte of three.js has been asked for —
-// whether this visitor gets the pour or the photograph of it. That order
-// matters. A fallback that only appears after the download has already failed
-// has cost the visitor the download.
+// This file decides — before the moving pour is asked for — whether this
+// visitor gets the pour or the photograph of it. That order matters. A
+// fallback that only appears after the download has already failed has cost
+// the visitor the download.
 //
-// The photograph is the same scene, rendered once here in the kitchen by
-// bake-still.mjs and frozen at the moment the granola stops moving. Nobody
-// seeing it is told they are missing anything, because they are not.
+// The photograph is the same scene, settled, with the lid on. Nobody seeing
+// it is told they are missing anything, because they are not.
 
 /**
  * Why this visitor should not be given the 3D, or null to go ahead with it.

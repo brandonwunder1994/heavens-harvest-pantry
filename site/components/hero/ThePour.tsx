@@ -7,19 +7,13 @@
 //     ...
 //   </ThePour>
 //
-// The children are the words. They stay hidden until the granola has settled,
-// then rise into place.
+// The words are in the first paint. The granola pours behind them. Anyone on
+// an old phone, a metered connection, or with motion switched off is shown a
+// photograph of the identical scene instead, and the moving pieces are never
+// requested.
 //
 // The light follows the visitor's own clock: low gold in the morning, overhead
 // at midday, amber before dinner, one warm bulb after dark.
-//
-// Everything, without the graphics: before three.js is asked for, still.js
-// decides whether this visitor should get it at all. Anyone on an old phone, a
-// metered connection, or with motion switched off is shown a photograph of the
-// identical scene instead, and the 177 KB is never requested. The page reads
-// the same either way, and nobody is told they are missing anything.
-//
-// See README.md for the files this needs beside it.
 
 import { useEffect, useRef, useState } from 'react';
 import { stillReason, showStill } from './still';
@@ -28,8 +22,23 @@ import { hourFor, isHour } from '@/lib/hour';
 type Pour = {
   dispose(): void;
   seek(t: number): void;
+  start(): void;
   stage: { setHour(name: string): boolean };
 };
+
+let pourAssets: ReturnType<typeof loadPour> | null = null;
+
+function loadPour() {
+  return import('./live-pour').then(async (mod) => {
+    const flakes = await mod.preloadPour();
+    return { mod, flakes };
+  });
+}
+
+function loadPourAssets() {
+  pourAssets ??= loadPour();
+  return pourAssets;
+}
 
 export default function ThePour({
   children,
@@ -38,93 +47,65 @@ export default function ThePour({
   children: React.ReactNode;
   className?: string;
 }) {
+  const sceneRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const stillRef = useRef<HTMLDivElement>(null);
-  const [shown, setShown] = useState(false);
   const [still, setStill] = useState<string | null>(null);
   const [hour, setHour] = useState<string | null>(null);
 
   useEffect(() => {
+    const scene = sceneRef.current;
     const canvas = canvasRef.current;
     const ground = stillRef.current;
-    if (!canvas || !ground) return;
+    if (!scene || !canvas || !ground) return;
 
-    // Asked first, and answered without downloading anything.
     const reason = stillReason();
     if (reason) {
-      // Deciding this needs the browser, so it cannot happen any earlier than
-      // here. Setting it once on mount is the whole point of the effect.
       // eslint-disable-next-line react-hooks/set-state-in-effect
       setStill(reason);
-      setShown(true);
-      ground.classList.add('on');
       showStill(ground, { base: '/still/' });
       return;
     }
 
+    const assets = loadPourAssets();
+
     let pour: Pour | null = null;
     let cancelled = false;
 
-    // The blurred ground is already the right colour and costs no request, so
-    // there is no empty rectangle while the scene boots.
-    ground.classList.add('on');
-
     (async () => {
       try {
-        const [{ createPour }, data] = await Promise.all([
-          import('./pour.js'),
-          fetch('/pour.json').then((r) => r.json()),
-        ]);
+        const { mod, flakes } = await assets;
         if (cancelled) return;
-        pour = createPour({ canvas, data, onFinish: () => setShown(true) });
+        pour = mod.createPour({ scene, canvas, flakes });
 
-        // Her kitchen, at the hour the visitor is standing in it. The clock is
-        // the visitor's own, which is why this cannot be decided on the server:
-        // the page is cached for everyone and the hour is not.
         const search = new URLSearchParams(window.location.search);
         const asked = search.get('hour');
         const lit = isHour(asked) ? asked : hourFor(new Date());
         pour.stage.setHour(lit);
         setHour(lit);
 
-        // A review hatch, the same way still.js has one: `?pour=1.4` freezes the
-        // scene at that second so a screenshot is the same image every time.
-        // The site never sets it, and without it nothing here runs.
         const frozen = search.get('pour');
         if (frozen !== null) {
           const at = Number(frozen);
-          if (Number.isFinite(at)) {
-            pour.seek(at);
-            setShown(true);
-          }
+          if (Number.isFinite(at)) pour.seek(at);
         }
-        // Two frames, so the first real one is already on screen.
+        pour.start();
         requestAnimationFrame(() =>
-          requestAnimationFrame(() => ground.classList.remove('on'))
+          requestAnimationFrame(() => ground.classList.add('off'))
         );
       } catch (error) {
         if (cancelled) return;
-        // The photograph covers the visitor either way, but a scene that fails
-        // silently is a scene nobody ever fixes.
         console.error('[pour] the scene could not start', error);
         setStill('failed');
-        setShown(true);
-        ground.classList.add('on');
+        ground.classList.remove('off');
         showStill(ground, { base: '/still/' });
       }
     })();
 
-    // If anything stalls, the words arrive on their own and the photograph is
-    // fetched then, and only then. Nobody waits for a scene that is not coming.
     const failsafe = window.setTimeout(() => {
-      if (cancelled) return;
-      setShown(true);
-      if (!pour) {
-        setStill('stalled');
-        ground.classList.add('on');
-        showStill(ground, { base: '/still/' });
-      }
-    }, 4000);
+      if (cancelled || pour) return;
+      showStill(ground, { base: '/still/' });
+    }, 2500);
 
     return () => {
       cancelled = true;
@@ -136,21 +117,33 @@ export default function ThePour({
   return (
     <section
       className={className ? `the-pour ${className}` : 'the-pour'}
-      data-pour={shown ? 'settled' : 'pouring'}
       data-still={still ?? undefined}
       data-hour={hour ?? undefined}
     >
-      <canvas
-        ref={canvasRef}
+      <div
+        ref={sceneRef}
         className="scene"
         aria-hidden="true"
-        style={{ display: still ? 'none' : 'block' }}
-      />
+        style={{ display: still ? 'none' : undefined }}
+      >
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img className="plate wide" src="/hero/plate-wide.webp" alt="" />
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img className="plate tall" src="/hero/plate-tall.webp" alt="" />
+        <div className="jar-stack">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img className="jar-empty" src="/hero/jar-empty.png" alt="" />
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img className="jar-fill" src="/hero/jar-filled.png" alt="" />
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img className="jar-lid" src="/hero/lid.png" alt="" />
+          <div className="steam" />
+        </div>
+        <canvas ref={canvasRef} className="flakes" />
+      </div>
       <div className="still" ref={stillRef} aria-hidden="true" />
       <noscript>
-        {/* With JavaScript off there is no scene and nothing to wait for, so
-            the words are simply there, over the photograph. */}
-        <style>{'.the-pour canvas.scene{display:none}.the-pour .words{opacity:1;transform:none}'}</style>
+        <style>{'.the-pour .scene{display:none}.the-pour .words{animation:none}'}</style>
         <picture>
           <source media="(orientation: portrait)" srcSet="/still/counter-tall.webp" />
           <img className="still-photo in" src="/still/counter-wide.webp" alt="" aria-hidden="true" />
