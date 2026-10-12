@@ -91,6 +91,7 @@ export async function reconcileOpenOrders(): Promise<void> {
     else await releaseExpired(session);
   }
 }
+const OWNER_COPY_TO = "heavensharvestpantry@gmail.com";
 export async function emailOrder(id: string): Promise<boolean> {
   // Resend remembers an idempotency key for 24 hours. An uncertain send older
   // than that needs provider review, rather than risking a second email.
@@ -113,7 +114,10 @@ export async function emailOrder(id: string): Promise<boolean> {
     const sent=await sendMail(row.email,copy.subject,payload.text,payload.html,`order-confirmation/${id}`,payload.from);
     if(!sent.ok&&(sent.reason==='network'||sent.uncertain))await sql()`update checkout_orders set email_uncertain=true where id=${id}::uuid`;
     if (!sent.ok) throw new Error(sent.reason);
-    await sql()`update checkout_orders set email_status='sent',email_error='' where id=${id}::uuid`; return true;
+    await sql()`update checkout_orders set email_status='sent',email_error='' where id=${id}::uuid`;
+    // Her own copy, so she sees exactly what each customer was sent. A copy that fails never touches the order.
+    await sendMail(OWNER_COPY_TO,`Receipt has gone out for ${row.snapshot.order.details.name}`,payload.text,payload.html,`order-confirmation-copy/${id}`,payload.from).catch(()=>undefined);
+    return true;
   } catch(error) {
     const reason=error instanceof Error?error.message:"Email could not send";
     await sql()`update checkout_orders set email_status='error',email_error=${reason.slice(0,200)} where id=${id}::uuid`; return false;

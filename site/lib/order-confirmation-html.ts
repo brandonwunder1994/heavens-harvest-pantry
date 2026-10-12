@@ -91,25 +91,32 @@ export function confirmationHtml(
 
   // Where and when, split by where each item waits: the fridge or the table.
   const personal = totals.lines.filter((p) => !p.line.gift);
-  const fridge = personal.filter((p) => p.flavor.requiresCooling).map((p) => p.flavor.name);
-  const table = personal.filter((p) => !p.flavor.requiresCooling).map((p) => p.flavor.name);
+  // It all goes in one bag, so a single chocolate flavor puts the whole order in the fridge.
+  const names = personal.map((p) => p.flavor.name);
+  const anyCooling = personal.some((p) => p.flavor.requiresCooling);
+  const fridge = anyCooling ? names : [];
+  const table = anyCooling ? [] : names;
   const chip = (label: string, bg: string, fg: string) =>
-    `<span style="display:inline-block;min-width:104px;text-align:center;background:${bg};color:${fg};font:700 11px ${SANS};letter-spacing:1.5px;text-transform:uppercase;padding:7px 8px;border-radius:3px;">${label}</span>`;
-  const spot = (label: string, bg: string, fg: string, names: string[]) =>
-    names.length
-      ? `<tr><td style="padding:12px 18px;border-top:1px solid #d7dbc0;"><table role="presentation" cellpadding="0" cellspacing="0" width="100%"><tr>
-<td width="120" valign="middle">${chip(label, bg, fg)}</td><td valign="middle" style="font:700 16px ${SANS};color:${INK};line-height:1.35;">${names.map(esc).join(", ")}</td></tr></table></td></tr>`
+    `<span style="display:inline-block;background:${bg};color:${fg};font:700 11px ${SANS};letter-spacing:1.5px;text-transform:uppercase;padding:7px 12px;border-radius:3px;">${label}</span>`;
+  // One clear storage card: where it waits, and what is in the bag, one flavor per line.
+  const storage = (label: string, bg: string, fg: string, note: string, list: string[]) =>
+    list.length
+      ? `<tr><td style="padding:20px 22px;border-top:1px solid #d7dbc0;">${chip(label, bg, fg)}
+<div style="font:15px/1.5 ${SANS};color:${INK};margin-top:12px;">${esc(note)}</div>
+<div style="font:700 15px/1.7 ${SANS};color:${INK};margin-top:8px;">${list.map((n) => `&bull;&nbsp;${esc(n)}`).join("<br>")}</div></td></tr>`
       : "";
+  const mapsUrl = pickup ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(pickup.address.replace(/\n/g, " "))}` : "";
   const pickupBlock = pickup
     ? `<tr><td style="padding:22px 24px 0;"><table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="background:${MOSS};border:1px solid #d7dbc0;border-radius:6px;">
-<tr><td style="background:${SAGE};color:#fbf8f1;padding:12px 18px;border-radius:6px 6px 0 0;"><table role="presentation" cellpadding="0" cellspacing="0" width="100%"><tr>
-<td style="font:700 12px ${SANS};letter-spacing:3px;text-transform:uppercase;color:#fbf8f1;">Porch pickup</td>
-<td align="right" style="font:700 19px ${SERIF};color:#fbf8f1;">${esc(pickupDateLabel(order.details.runDate))}</td></tr></table></td></tr>
-<tr><td style="padding:12px 18px 4px;font:15px ${SANS};color:${SAGE};">${esc(order.details.pickupPeriod === "afternoon" ? "Afternoon, from noon." : "Morning.")}</td></tr>
-${spot("In the fridge", "#dfe7ee", "#2f4a63", fridge)}${spot("On the table", "#f1e2c6", "#6b4a1b", table)}
-<tr><td style="padding:14px 18px;border-top:1px solid #d7dbc0;"><div style="font:700 11px ${SANS};letter-spacing:2px;text-transform:uppercase;color:${SAGE};margin-bottom:6px;">Pickup address</div>
-<div style="font:700 18px/1.4 ${SERIF};color:${INK};">${esc(pickup.address).replace(/\n/g, "<br>")}</div>
-<div style="font:italic 12px/1.5 ${SANS};color:${MUTED};margin-top:6px;">${esc(ADDRESS_NOTE)}</div>${pickup.contact ? `<div style="font:14px ${SANS};color:${MUTED};margin-top:8px;">Questions? ${esc(pickup.contact)}</div>` : ""}</td></tr>
+<tr><td style="background:${SAGE};color:#fbf8f1;padding:20px 22px;border-radius:6px 6px 0 0;">
+<div style="font:700 12px ${SANS};letter-spacing:3px;text-transform:uppercase;color:#dfe5c8;">Porch pickup</div>
+<div style="font:700 26px/1.2 ${SERIF};color:#fbf8f1;margin-top:6px;">${esc(pickupDateLabel(order.details.runDate))}</div>
+<div style="font:16px ${SANS};color:#fbf8f1;margin-top:4px;">${esc(order.details.pickupPeriod === "afternoon" ? "Afternoon, from noon" : "Morning")}</div></td></tr>
+${storage("In the fridge", "#dfe7ee", "#2f4a63", "Your whole order is bagged together, so it all goes in the fridge:", fridge)}${storage("On the table", "#f1e2c6", "#6b4a1b", "Waiting for you on the porch table:", table)}
+<tr><td style="padding:20px 22px;border-top:1px solid #d7dbc0;"><div style="font:700 11px ${SANS};letter-spacing:2px;text-transform:uppercase;color:${SAGE};margin-bottom:8px;">Pickup address</div>
+<div style="font:700 20px/1.4 ${SERIF};color:${INK};"><a href="${esc(mapsUrl)}" style="color:${INK};text-decoration:none;">${esc(pickup.address).replace(/\n/g, "<br>")}</a></div>
+<table role="presentation" cellpadding="0" cellspacing="0" style="margin-top:14px;"><tr><td style="background:${SAGE};border-radius:4px;"><a href="${esc(mapsUrl)}" style="display:inline-block;color:#fbf8f1;text-decoration:none;font:700 14px ${SANS};padding:11px 20px;">Get directions</a></td></tr></table>
+<div style="font:italic 13px/1.5 ${SANS};color:${MUTED};margin-top:14px;">${esc(ADDRESS_NOTE)}</div>${pickup.contact ? `<div style="font:14px ${SANS};color:${MUTED};margin-top:10px;">Questions? <span style="color:${INK};">${esc(pickup.contact)}</span></div>` : ""}</td></tr>
 </table></td></tr>`
     : "";
 

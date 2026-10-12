@@ -9,7 +9,7 @@ export const ORDERS_PAUSED_MESSAGE = "Online ordering is temporarily paused. Ple
 export const FIRST_PICKUP_DATE = "2026-10-16";
 export const CAPACITY_OZ = 768;
 export type PickupPeriod = "morning" | "afternoon";
-export const ADDRESS_NOTE = "Please keep our home address private. It’s just for your pickup.";
+export const ADDRESS_NOTE = "Thanks for keeping our home address between us. It’s just for your pickup. 🙂";
 export const storageMessage = (chocolate: boolean) => chocolate ? "Your order will be in the porch fridge." : "Your order will be on the porch table.";
 export function pickupDate(now = Date.now()): string {
   const parts = new Intl.DateTimeFormat("en-US", { timeZone: "America/Phoenix", year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", hourCycle: "h23" }).formatToParts(new Date(now));
