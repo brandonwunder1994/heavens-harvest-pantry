@@ -135,8 +135,6 @@ export default function ThePour({
           <img className="jar-empty" src="/hero/jar-empty.png" alt="" />
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img className="jar-fill" src="/hero/jar-filled.png" alt="" />
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img className="jar-lid" src="/hero/lid.png" alt="" />
           <div className="steam" />
         </div>
         <canvas ref={canvasRef} className="flakes" />

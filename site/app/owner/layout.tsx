@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import "./owner.css";
 
 export const metadata: Metadata = {
   title: "Owner's page",

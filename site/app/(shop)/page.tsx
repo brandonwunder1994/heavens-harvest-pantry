@@ -1,52 +1,48 @@
+import type { Metadata } from "next";
+import { REWARDS_ENABLED } from "@/lib/features";
 import { Suspense } from "react";
-import Link from "next/link";
-import { CrossWheat, HeartSeal, Jar } from "@/components/Sprite";
+import Link from "@/components/ShopLink";
+import { CrossWheat, HeartSeal } from "@/components/Sprite";
 import { HeroShelf } from "@/components/HeroShelf";
 import { FloatingJar } from "@/components/FloatingJars";
 import ThePour from "@/components/hero/ThePour";
 import { KitchenPhoto } from "@/components/KitchenPhoto";
+import { StoryNarrative } from "@/components/StoryNarrative";
 import { ScriptureBand } from "@/components/ScriptureBand";
 import { MenuList } from "@/components/MenuList";
 import { RewardsCard } from "@/components/rewards/RewardsCard";
 import { business, filled, money, rewardOffer, type Flavor, type Shop } from "@/lib/content";
 import { getShop } from "@/lib/settings";
-import { publishedReviews } from "@/lib/reviews-source";
+import { josephReview } from "@/lib/customer-testimonial";
+import { DELIVERY_ENABLED, PICKUP_LABEL } from "@/lib/fulfilment";
 import { blessingBagsThisYear } from "@/lib/orders-source";
 
-const stepsFor = (shop: Shop) => [
+const stepsFor = () => [
   {
     numeral: "I",
-    title: "Order by Sunday night.",
+    title: "Order by Tuesday at 9 p.m.",
     body: "Three taps from your phone. No account, no app.",
   },
   {
     numeral: "II",
-    title: "She bakes Monday.",
+    title: "Made fresh for Friday and Saturday.",
     body: "Only what was ordered, and she prays over each name on the list.",
   },
   {
     numeral: "III",
-    title: "On your porch, with a text.",
-    body: `${shop.delivery.runs
-      .map((run) => `${run.day} in ${run.area}`)
-      .join(", ")}, or a drop-off spot.`,
+    title: PICKUP_LABEL,
+    body: "Choose morning or afternoon. Pickup details arrive with your paid confirmation.",
   },
 ];
 
-function samplePack(shop: Shop): Flavor {
-  const flavor = shop.flavors.find((row) => !row.soldOut) ?? shop.flavors[0];
-  if (!flavor) {
-    throw new Error("The shop has no flavors to show.");
-  }
-  return flavor;
-}
+export const metadata: Metadata = { alternates: { canonical: "/" } };
 
 export default async function HomePage() {
   // The hero does not need Stripe or reviews. Those wait below, in their own
   // holes, so a slow order book cannot keep the headline off the screen.
   const shop = await getShop();
-  const { blessingBag, delivery, jarRules, verses } = shop;
-  const steps = stepsFor(shop);
+  const { blessingBag, jarRules, verses } = shop;
+  const steps = stepsFor();
 
   return (
     <>
@@ -56,7 +52,10 @@ export default async function HomePage() {
           metered connection, or with motion switched off gets a photograph of
           the same scene and is never told they missed anything — see
           components/hero/still.js. */}
-      <link rel="preload" href="/pour.json" as="fetch" crossOrigin="anonymous" />
+      <link rel="preload" href="/hero/plate-wide.webp" as="image" media="(orientation: landscape)" />
+      <link rel="preload" href="/hero/plate-tall.webp" as="image" media="(orientation: portrait)" />
+      <link rel="preload" href="/hero/jar-filled.png" as="image" />
+      <link rel="preload" href="/hero/jar-empty.png" as="image" />
       <ThePour className="min-h-[84vh] w-full lg:min-h-[78vh]">
         <div className="mx-auto flex min-h-[84vh] w-full max-w-[1296px] items-end px-6 pb-10 sm:px-10 lg:min-h-[78vh] lg:items-center lg:px-18 lg:pb-0">
           <div className="flex max-w-[600px] flex-col items-start gap-5 text-left">
@@ -67,15 +66,15 @@ export default async function HomePage() {
               <br />a few streets away.
             </h1>
             <p className="max-w-[460px] text-[18px] leading-relaxed text-bark sm:text-[20px]">
-              Oats, honey, nuts and not much else. Made in small batches in a {business.kitchen} kitchen,
-              prayed over, and left on your porch in a bag or a mason jar you can bring back.
+              Organic rolled oats, organic natural sweeteners, organic nuts/fruit and not much else. Made in small
+              batches in a local kitchen, with ingredients that are simple and pure, and fresh for porch pickup weekly.
             </p>
             <div className="mt-1 flex flex-wrap items-center gap-4">
               <Link href="/menu" className="stamp">
                 See this week&apos;s flavors
               </Link>
-              <Link href="/delivery" className="stamp stamp-light">
-                How delivery works
+              <Link href="/pickup" className="stamp stamp-light">
+                How porch pickup works
               </Link>
             </div>
           </div>
@@ -83,7 +82,7 @@ export default async function HomePage() {
       </ThePour>
 
       <div className="mx-auto mt-5 w-full max-w-[1296px] px-6 sm:px-10 lg:px-18">
-        <HeroShelf flavors={shop.flavors.slice(0, 3)} />
+        <HeroShelf flavors={shop.flavors} />
       </div>
 
       <div className="mt-10">
@@ -102,32 +101,23 @@ export default async function HomePage() {
           <MenuList shop={shop} />
           <div className="mt-2 flex flex-wrap items-center gap-4">
             <Link href="/menu" className="stamp">
-              Start an order
+              Browse the menu
             </Link>
             <span className="font-ui text-[14px] text-muted">
-              Ingredients and allergens on every flavor. {delivery.cutoff}.
+              Ingredients and allergens on every flavor. Ordering is open.
             </span>
           </div>
         </div>
 
         <aside className="dashed-frame flex flex-col gap-4 bg-paper px-7 pb-6 pt-7">
-          <div className="small-caps">Jar or bag?</div>
-          <div className="flex items-end justify-center gap-3 pt-1">
-            <div className="w-[46%]">
-              <FloatingJar flavor={samplePack(shop)} featured mark="logo" />
-            </div>
-            <div className="w-[46%]">
-              <FloatingJar flavor={samplePack(shop)} featured format="bag" mark="logo" />
-            </div>
+          <div className="small-caps">Choose your bag</div>
+          <div className="pack-pair">
+            <FloatingJar flavor={samplePack(shop)} format="bag" mark="none" />
           </div>
           <p className="text-[18px] leading-snug text-bark">
-            The <strong className="font-semibold">bag</strong> is a resealable pouch, {jarRules.bagSize}.
+            Choose a 3 oz, 8 oz, or 1 lb bag. First pickups: Friday, October 16, and Saturday, October 17.
           </p>
-          <p className="text-[18px] leading-snug text-bark">
-            The <strong className="font-semibold">jar</strong> is a {jarRules.jarSize}. It costs $3 more, stays fresh
-            longer, and every time you hand one back you take {money(jarRules.creditDollars)} off.
-          </p>
-          <p className="text-[15px] italic text-sage">Most regulars end up on jars.</p>
+          <p className="text-[15px] italic text-sage">Order by Tuesday at 9 p.m. for Friday or Saturday porch pickup.</p>
         </aside>
       </section>
 
@@ -159,20 +149,11 @@ export default async function HomePage() {
         <div className="flex flex-col gap-6">
           <div className="small-caps">Why this kitchen exists</div>
           <h2 className="display m-0 text-[40px] sm:text-[56px]">
-            A pantry is a small
+            It started at home, in the mundane moments, and the ordinary chaos.
             <br />
-            way to love people.
           </h2>
           <div className="max-w-[620px] text-[19px] leading-relaxed text-bark sm:text-[21px]">
-            <p className="dropcap mb-4">
-              It started the way these things usually do. A neighbor was having a hard week, so she baked a batch and
-              walked it over. Then someone else asked for a jar, and then their sister did, and the oven has not really
-              cooled since.
-            </p>
-            <p>
-              Everything that leaves this kitchen is made the same way it would be for family: honest ingredients,
-              nothing hurried, and a prayer over the list before the first tray goes in.
-            </p>
+            <StoryNarrative />
           </div>
           <div className="flex max-w-[620px] flex-col gap-2 border-l-[3px] border-gold py-1.5 pl-6">
             <p className="verse text-[26px] text-ink sm:text-[32px]">&ldquo;{verses.work.text}&rdquo;</p>
@@ -181,7 +162,8 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <section className="mx-6 mt-20 grid bg-brown text-cream sm:mx-10 lg:mx-18 lg:mt-[88px] lg:grid-cols-[1.1fr_0.9fr]">
+      {/* Jar-return messaging is intentionally paused while the shop moves to sealable bags. */}
+      {false && <section className="mx-6 mt-20 grid bg-brown text-cream sm:mx-10 lg:mx-18 lg:mt-[88px] lg:grid-cols-[1.1fr_0.9fr]">
         <div className="flex flex-col gap-5 px-8 py-12 sm:px-12 lg:px-16 lg:py-[72px]">
           <div className="small-caps !text-gold">The jar promise</div>
           <h2 className="display m-0 text-[48px] text-cream sm:text-[64px] lg:text-[76px]">
@@ -191,7 +173,7 @@ export default async function HomePage() {
           </h2>
           <p className="max-w-[460px] text-[19px] leading-relaxed text-linen sm:text-[21px]">
             Every jar goes out with a tag. When you reorder, tell us how many you are handing back and each one comes
-            off the total before you pay. She counts them at the door.
+            off the total before you pay. Bring them with you to pickup.
           </p>
           <p className="max-w-[460px] text-[17px] italic leading-relaxed text-gold sm:text-[18px]">
             We were given a good earth to look after. Washing a jar and using it again is a small piece of that.
@@ -203,7 +185,7 @@ export default async function HomePage() {
 
         <div className="relative flex min-h-[560px] items-center justify-center overflow-visible px-8 py-16">
           <div className="w-[200px] sm:w-[230px] lg:w-[250px]">
-            <FloatingJar flavor={candiedJar(shop)} featured tone="brown" />
+            <FloatingJar flavor={candiedJar(shop)} featured tone="brown" linked={shop.flavors.some((flavor) => /candied/i.test(`${flavor.slug} ${flavor.name}`))} />
           </div>
           <div className="absolute left-[10%] top-[34%] z-[2] w-[168px] -rotate-6 bg-cream p-2 shadow-[0_18px_30px_rgba(0,0,0,0.25)] sm:left-[14%]">
             <div className="dashed-frame flex h-[214px] flex-col items-center justify-between px-2 pb-2.5 pt-2">
@@ -219,14 +201,14 @@ export default async function HomePage() {
               </div>
               <div className="bg-white p-[3px]">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src="/qr.svg?v=4" alt="" width={56} height={56} className="block h-14 w-14" />
+                <img src="/qr.svg?v=6" alt="" width={56} height={56} className="block h-14 w-14" />
               </div>
             </div>
           </div>
         </div>
-      </section>
+      </section>}
 
-      <section className="grid gap-10 px-6 pt-20 sm:px-10 lg:grid-cols-[1fr_440px] lg:items-center lg:gap-[72px] lg:px-18 lg:pt-24">
+      {false && <section className="grid gap-10 px-6 pt-20 sm:px-10 lg:grid-cols-[1fr_440px] lg:items-center lg:gap-[72px] lg:px-18 lg:pt-24">
         <div className="flex flex-col gap-5">
           <div className="small-caps">In every order</div>
           <h2 className="display m-0 text-[40px] sm:text-[56px]">
@@ -254,9 +236,9 @@ export default async function HomePage() {
             </div>
           </div>
         </div>
-      </section>
+      </section>}
 
-      <section className="mx-6 mt-20 grid gap-10 bg-sage px-8 py-14 text-cream sm:mx-10 sm:px-12 lg:mx-18 lg:mt-24 lg:grid-cols-2 lg:items-center lg:gap-16 lg:px-18 lg:py-[68px]">
+      {DELIVERY_ENABLED ? <section className="mx-6 mt-20 grid gap-10 bg-sage px-8 py-14 text-cream sm:mx-10 sm:px-12 lg:mx-18 lg:mt-24 lg:grid-cols-2 lg:items-center lg:gap-16 lg:px-18 lg:py-[68px]">
         <div className="flex flex-col gap-5">
           <div className="small-caps !text-moss">Blessing bags</div>
           <h2 className="display m-0 text-[44px] text-cream sm:text-[60px]">
@@ -282,28 +264,25 @@ export default async function HomePage() {
             <BlessedCount />
           </Suspense>
         </div>
-      </section>
+      </section> : null}
 
-      <section className="grid gap-12 px-6 pt-20 sm:px-10 lg:grid-cols-2 lg:items-center lg:gap-20 lg:px-18 lg:pt-24">
+      <section className={`grid gap-12 px-6 pt-20 sm:px-10 ${REWARDS_ENABLED ? "lg:grid-cols-2" : "max-w-[900px] mx-auto"} lg:items-center lg:gap-20 lg:px-18 lg:pt-24`}>
         <div className="flex flex-col gap-4">
           <HeartSeal />
-          <Suspense fallback={<NeighborQuoteBody />}>
-            <NeighborQuote />
-          </Suspense>
+          <NeighborQuoteBody />
           <Link href="/reviews" className="mt-2 font-ui text-[14px] font-semibold text-sage hover:text-brown">
             Read the rest, or leave yours
           </Link>
         </div>
 
-        <div id="rewards" className="flex flex-col items-start gap-5">
+        {REWARDS_ENABLED && <div id="rewards" className="flex flex-col items-start gap-5">
           <div className="small-caps">Pantry Rewards</div>
           <h2 className="display m-0 text-[40px] sm:text-[54px]">{rewardOffer.sentence}</h2>
           <RewardsCard punched={9} href="/rewards" />
           <p className="max-w-[420px] text-[18px] leading-snug text-bark">
-            Every bag or jar punches the card. Your email is the card. Returned jars still help, and so does sending a
-            neighbor our way.
+            Every bag and sampler bag counts toward Pantry Rewards. Your email is the card.
           </p>
-        </div>
+        </div>}
       </section>
 
       <div className="mt-20 lg:mt-24">
@@ -313,17 +292,11 @@ export default async function HomePage() {
   );
 }
 
-function NeighborQuoteBody({
-  body = "The first review will go here, in a neighbor's own words, once the first deliveries land.",
-  byline = "Waiting on the first one",
-}: {
-  body?: string;
-  byline?: string;
-}) {
+function NeighborQuoteBody() {
   return (
     <>
       <p className="display text-[32px] italic leading-tight text-ink sm:text-[44px]">
-        &ldquo;{body}&rdquo;
+        &ldquo;{josephReview.body}&rdquo;
       </p>
       <svg width="220" height="14" viewBox="0 0 220 14" aria-hidden focusable="false">
         <path
@@ -334,20 +307,8 @@ function NeighborQuoteBody({
           strokeLinecap="round"
         />
       </svg>
-      <div className="small-caps">{byline}</div>
+      <div className="small-caps">{josephReview.name} · a neighbor</div>
     </>
-  );
-}
-
-async function NeighborQuote() {
-  const reviews = await publishedReviews(1);
-  const lead = reviews[0];
-  if (!lead) return <NeighborQuoteBody />;
-  return (
-    <NeighborQuoteBody
-      body={lead.body}
-      byline={`${lead.name}${lead.flavor ? ` · ${lead.flavor}` : ""} · a neighbor`}
-    />
   );
 }
 
@@ -358,6 +319,21 @@ async function BlessedCount() {
     <div className="border-t border-cream/35 pt-4 font-ui text-[15px] text-moss">
       {blessed} blessing bag{blessed === 1 ? "" : "s"} delivered so far this year
     </div>
+  );
+}
+
+function samplePack(shop: Shop): Flavor {
+  return (
+    shop.flavors.find((flavor) => !flavor.soldOut) ??
+    shop.flavors[0] ?? {
+      slug: "apple-maple-pecan",
+      name: "Apple Maple Pecan",
+      blurb: "",
+      ingredients: "",
+      allergens: "",
+      bagPrice: 15,
+      jarPrice: 17,
+    }
   );
 }
 
@@ -374,4 +350,3 @@ function candiedJar(shop: Shop): Flavor {
     }
   );
 }
-

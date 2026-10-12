@@ -4,6 +4,8 @@ import { databaseReady } from "@/lib/db";
 import { award, findOrCreateCustomer } from "@/lib/rewards-source";
 import { getShop } from "@/lib/settings";
 import type Stripe from "stripe";
+import { REWARDS_ENABLED } from "@/lib/features";
+import { recordPaid, emailOrder, releaseExpired } from "@/lib/order-store";
 
 /**
  * Stripe tells us here, server to server, that money actually moved. Stripe
@@ -34,11 +36,20 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "invalid_signature" }, { status: 400 });
   }
 
-  if (event.type === "checkout.session.completed") {
+  if (event.livemode !== !(process.env.STRIPE_SECRET_KEY ?? "").startsWith("sk_test_") || (event.data.object as {metadata?:Record<string,string>}).metadata?.practice === "true") {
+    return NextResponse.json({error:"wrong_payment_mode"},{status:400});
+  }
+
+  if (event.type === "checkout.session.completed" || event.type === "checkout.session.async_payment_succeeded") {
     const session = event.data.object;
     const meta = session.metadata ?? {};
 
-    const recorded = await awardPoints(session, meta);
+    let recorded = true;
+    try {
+      const stored = await recordPaid(session);
+      if (stored) await emailOrder(stored.id);
+      if (REWARDS_ENABLED) recorded = await awardPoints(session, meta);
+    } catch { recorded = false; }
     if (!recorded) {
       // Telling Stripe this failed makes it try again, and the unique index on
       // the session id means a repeat cannot pay anyone twice. Swallowing it
@@ -46,6 +57,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "not_recorded" }, { status: 500 });
     }
 
+    if (session.payment_status !== "paid") return NextResponse.json({ received: true });
     // Deliberately no name and no address: these lines are kept by the host for
     // weeks, and the order itself already lives in Stripe.
     console.log(
@@ -58,6 +70,11 @@ export async function POST(request: Request) {
         points: meta.points_earned,
       }),
     );
+  }
+
+  if (event.type === "checkout.session.expired") {
+    try { await releaseExpired(event.data.object); }
+    catch { return NextResponse.json({ error: "release_failed" }, { status: 500 }); }
   }
 
   return NextResponse.json({ received: true });

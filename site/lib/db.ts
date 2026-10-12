@@ -1,5 +1,5 @@
 import "server-only";
-import { neon } from "@neondatabase/serverless";
+import { neon, type NeonQueryFunction } from "@neondatabase/serverless";
 
 /**
  * The one place the database is opened. Everything writable the owner controls
@@ -10,15 +10,23 @@ import { neon } from "@neondatabase/serverless";
  * an empty or unreachable database renders the site exactly as it looks today
  * rather than a blank page.
  */
-export const databaseReady = Boolean(process.env.DATABASE_URL);
+// Previews can show the owner's current content, but must never use the
+// production write credential inherited from the Neon integration.
+const databaseUrl = process.env.VERCEL_ENV === "preview"
+  ? process.env.REVIEW_DATABASE_URL
+  : process.env.DATABASE_URL;
 
-let client: ReturnType<typeof neon> | null = null;
+export const databaseReady = Boolean(databaseUrl);
 
-export function sql() {
-  if (!process.env.DATABASE_URL) {
-    throw new Error("DATABASE_URL is not set");
+let client: NeonQueryFunction<false,false> | null = null;
+
+export function sql(): NeonQueryFunction<false,false> {
+  if (!databaseUrl) {
+    throw new Error(process.env.VERCEL_ENV === "preview"
+      ? "REVIEW_DATABASE_URL is not set for this preview"
+      : "DATABASE_URL is not set");
   }
-  client ??= neon(process.env.DATABASE_URL);
+  client ??= neon(databaseUrl);
   return client;
 }
 

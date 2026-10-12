@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import Link from "@/components/ShopLink";
 import { HeartSeal } from "@/components/Sprite";
 import { SendWithAVerse } from "@/components/gift/SendWithAVerse";
 import { everyVerse } from "@/lib/verses";
+import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
   title: "Send it with a verse",
@@ -11,6 +12,7 @@ export const metadata: Metadata = {
 };
 
 export default function SendPage() {
+  redirect("/blessing-bags");
   const verses = everyVerse().map((v) => ({ ref: v.ref, text: v.text }));
 
   return (

@@ -1,6 +1,7 @@
 import "server-only";
 import { databaseReady, sql } from "@/lib/db";
 import type { Review, ReviewDraft } from "@/lib/reviews";
+import {guideSample} from "@/lib/handoff-sample";
 
 /** Reading and writing reviews. All the arithmetic lives in `lib/reviews.ts`. */
 
@@ -13,6 +14,13 @@ type Row = {
   approved: boolean;
   created_at: string;
 };
+
+export async function pendingReviewCount(): Promise<number | null> {
+  if (guideSample) return 1;
+  if (!databaseReady) return null;
+  try { const rows = await sql()`select count(*)::int as count from reviews where approved = false`; return Number(rows[0].count); }
+  catch { return null; }
+}
 
 const toReview = (row: Row): Review => ({
   id: Number(row.id),
@@ -52,6 +60,7 @@ export async function publishedReviews(limit = 60): Promise<Review[]> {
 
 /** What she sees: everything, waiting ones first. */
 export async function allReviews(limit = 200): Promise<ReviewsResult> {
+  if(guideSample)return {status:"ok",reviews:[{id:0,name:"Sample Neighbor",flavor:"Apple Maple Pecan Granola",rating:5,body:"Our family loved the crunch. This is a sample review.",approved:false,createdAt:1792108800}]};
   if (!databaseReady) return { status: "not_configured" };
   try {
     const rows = (await sql()`

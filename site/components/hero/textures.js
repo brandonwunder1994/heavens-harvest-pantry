@@ -21,27 +21,27 @@ export function canvasTexture(w, h, draw) {
 }
 
 export function woodTexture() {
-  const tex = canvasTexture(1024, 1024, (g, w, h) => {
+  const tex = canvasTexture(512, 512, (g, w, h) => {
     g.fillStyle = '#87643c';
     g.fillRect(0, 0, w, h);
     // planks
-    for (let y = 0; y < h; y += 168) {
+    for (let y = 0; y < h; y += 84) {
       g.fillStyle = 'rgba(58,33,12,0.45)';
-      g.fillRect(0, y, w, 4);
+      g.fillRect(0, y, w, 3);
       g.fillStyle = 'rgba(226,186,132,0.22)';
-      g.fillRect(0, y + 4, w, 3);
+      g.fillRect(0, y + 3, w, 2);
     }
     // grain
     const rnd = mulberry32(9182);
-    for (let i = 0; i < 5200; i++) {
+    for (let i = 0; i < 1600; i++) {
       const y = rnd() * h;
       const x = rnd() * w;
-      const len = 40 + rnd() * 220;
+      const len = 28 + rnd() * 140;
       g.strokeStyle = `rgba(${rnd() < 0.5 ? '86,52,20' : '214,176,124'},${0.05 + rnd() * 0.13})`;
-      g.lineWidth = 0.6 + rnd() * 1.6;
+      g.lineWidth = 0.6 + rnd() * 1.4;
       g.beginPath();
       g.moveTo(x, y);
-      g.bezierCurveTo(x + len * 0.35, y + (rnd() - 0.5) * 5, x + len * 0.7, y + (rnd() - 0.5) * 5, x + len, y);
+      g.bezierCurveTo(x + len * 0.35, y + (rnd() - 0.5) * 4, x + len * 0.7, y + (rnd() - 0.5) * 4, x + len, y);
       g.stroke();
     }
   });
@@ -136,7 +136,7 @@ export function kitchenEnvironment() {
   // A stand-in for a captured kitchen: warm sky, a bright window to the left,
   // a wooden floor bounce below. Enough for the glass to have something to
   // refract until a real photographed environment is dropped in.
-  const tex = canvasTexture(1024, 512, (g, w, h) => {
+  const tex = canvasTexture(512, 256, (g, w, h) => {
     const grad = g.createLinearGradient(0, 0, 0, h);
     grad.addColorStop(0, '#fff6e4');
     grad.addColorStop(0.48, '#f0e2c8');

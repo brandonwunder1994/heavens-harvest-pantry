@@ -1,0 +1,44 @@
+{
+  "sessionId": "cs_live_b1TECKXctLMCEV6JUJeZ7wUWuzC9es2VKWq4ocFLGfIBRpwd42geeaO7mY",
+  "marker": "Launch Verification 2026-10-08",
+  "displayed": "Subtotal\n$27.00\nSales tax\n$0.89\nTotal including tax\n$27.89",
+  "request": {
+    "lines": [
+      {
+        "slug": "maple-pecan",
+        "format": "bag",
+        "qty": 1,
+        "sizeOz": 8
+      },
+      {
+        "slug": "maple-pecan",
+        "format": "jar",
+        "qty": 1,
+        "sizeOz": 8,
+        "gift": {
+          "id": "a9df0c93-55d9-48ec-b93b-d1ec12de84c5",
+          "recipientName": "Sample Recipient",
+          "address": "Sample Vistancia address for browser checks",
+          "inVistancia": true,
+          "verseRef": "",
+          "verseNote": ""
+        }
+      }
+    ],
+    "jarsReturned": 0,
+    "blessingBags": 0,
+    "expectedTotalCents": 2700,
+    "details": {
+      "method": "dropoff",
+      "runArea": "Porch pickup",
+      "runDate": "2026-10-16",
+      "pickupPeriod": "morning",
+      "name": "Launch Verification 2026-10-08",
+      "phone": "6235550100",
+      "note": "",
+      "prayer": "",
+      "address": ""
+    },
+    "attemptId": "4d124215-bc5d-4d0a-b0f3-33e95c7c0cef"
+  }
+}

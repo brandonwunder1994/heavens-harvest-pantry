@@ -3,6 +3,7 @@ import { Cinzel, Cormorant_Garamond, Karla } from "next/font/google";
 import { Sprite, Grain } from "@/components/Sprite";
 import { TheSeason } from "@/components/TheSeason";
 import { business } from "@/lib/content";
+import { PUBLIC_SITE_URL } from "@/lib/public-site";
 import { seasonFor } from "@/lib/season";
 import "./globals.css";
 // After globals, so the typographic layer wins where the two overlap.
@@ -43,16 +44,17 @@ const karla = Karla({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(PUBLIC_SITE_URL),
   title: {
-    default: `${business.name} · Small-batch granola in Vistancia & Anthem`,
+    default: `${business.name} · Small-batch granola for Friday and Saturday porch pickup`,
     template: `%s · ${business.name}`,
   },
   description:
-    "Small-batch granola baked in a home kitchen in Vistancia, Arizona, and delivered to porches in Vistancia and Anthem. Choose a bag or a mason jar you can bring back for $2 off.",
+    "Small-batch granola made with simple ingredients and ready for Friday and Saturday porch pickup. Browse this week’s flavors and sampler bags.",
   openGraph: {
     title: business.name,
     description:
-      "Small-batch granola baked in a Vistancia home kitchen and delivered to porches in Vistancia and Anthem.",
+      "Small-batch granola made with simple ingredients and ready for Friday and Saturday porch pickup.",
     type: "website",
   },
 };

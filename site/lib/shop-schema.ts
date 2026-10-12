@@ -13,6 +13,8 @@ import {
   type Shop,
   type Verse,
 } from "@/lib/content";
+import { sanitizeFlavorMarks } from "@/lib/flavor-marks";
+import { cleanOmissions } from "@/lib/products";
 
 /**
  * Reading her saved settings back, and checking what she is about to save.
@@ -121,6 +123,7 @@ export function mergeFlavors(value: unknown): Flavor[] {
     seen.add(slug);
 
     const soldOut = Boolean(f.soldOut);
+    const icons = sanitizeFlavorMarks(f.icons);
     cleaned.push({
       slug,
       name,
@@ -128,10 +131,16 @@ export function mergeFlavors(value: unknown): Flavor[] {
       ingredients: text(f.ingredients),
       allergens: text(f.allergens),
       addIns: text(f.addIns, "", limits.addIns),
-      bagPrice: price(f.bagPrice, 0),
-      jarPrice: price(f.jarPrice, 0),
+      bagPrice: f.sizePrices ? price(asObject(f.sizePrices)[16], price(f.bagPrice, 0)) : price(f.bagPrice, 0),
+      jarPrice: f.sizePrices ? price(asObject(f.sizePrices)[16], price(f.bagPrice, 0)) : price(f.jarPrice, 0),
+      samplerPrice: f.sizePrices ? price(asObject(f.sizePrices)[3], price(f.samplerPrice, 5)) : price(f.samplerPrice, price(f.bagPrice, 0)),
+      ...(f.sizePrices ? { sizePrices: { 3: price(asObject(f.sizePrices)[3], price(f.samplerPrice, 5)), 8: price(asObject(f.sizePrices)[8], 10), 16: price(asObject(f.sizePrices)[16], price(f.bagPrice, 16)) } } : {}),
+      allowedOmissions: cleanOmissions(f.allowedOmissions),
+      requiresCooling: f.requiresCooling === true,
+      category: f.category === "almonds" ? "almonds" : "granola",
       soldOut,
       backOn: soldOut ? text(f.backOn, "", limits.day) || undefined : undefined,
+      ...(icons.length ? { icons } : {}),
     });
   }
 
@@ -157,7 +166,7 @@ export function mergeDelivery(value: unknown): Delivery {
   return {
     cutoff: text(d.cutoff, defaultShop.delivery.cutoff, limits.name),
     bakeDay: text(d.bakeDay, defaultShop.delivery.bakeDay, limits.day),
-    dropOff: text(d.dropOff, defaultShop.delivery.dropOff, limits.name),
+    dropOff: "Vistancia",
     runs: runs.length > 0 ? runs : defaultShop.delivery.runs,
   };
 }
@@ -312,6 +321,7 @@ function checkFlavors(value: unknown): Check {
   }
 
   const seen = new Set<string>();
+  const identifiers = new Set<string>();
   for (const raw of value) {
     const f = asObject(raw);
     const name = typeof f.name === "string" ? f.name.trim() : "";
@@ -322,16 +332,25 @@ function checkFlavors(value: unknown): Check {
     if (!slug) return bad(`"${name}" needs at least one letter or number in its name.`);
     if (seen.has(slug)) return bad(`Two flavors are both called "${name}". They need different names.`);
     seen.add(slug);
+    const productId = text(f.slug, slug, limits.name).trim() || slug;
+    if (!/^[a-z0-9-]+$/.test(productId)) return bad(`${name} has an invalid product identifier.`);
+    if (identifiers.has(productId)) return bad(`${name} shares a product identifier with another item.`);
+    identifiers.add(productId);
 
-    for (const [label, raw2] of [
+    if (!f.sizePrices) for (const [label, raw2] of [
       ["bag", f.bagPrice],
       ["jar", f.jarPrice],
+      ["3 oz sampler", f.samplerPrice ?? f.bagPrice],
     ] as const) {
       const n = Number(raw2);
       if (!Number.isFinite(n) || n <= 0) {
         return bad(`${name} has no ${label} price. Every flavor needs one, or it sells for nothing.`);
       }
       if (n > 999) return bad(`${name}'s ${label} price looks like a slip. Keep it under $999.`);
+    }
+    if (f.sizePrices) for (const size of [3, 8, 16]) {
+      const n = Number(asObject(f.sizePrices)[size]);
+      if (!Number.isFinite(n) || n < 0.01 || n > 999 || Math.abs(n * 100 - Math.round(n * 100)) > 0.00001) return bad(`${name} needs a price between $0.01 and $999, using cents, for its ${size} oz bag.`);
     }
   }
   return good;
@@ -437,7 +456,8 @@ function checkLabelTemplates(value: unknown): Check {
 function checkBlessingBag(value: unknown): Check {
   const b = asObject(value);
   const n = Number(b.price);
-  if (!Number.isFinite(n) || n <= 0) return bad("A blessing bag needs a price, or it costs nothing to send one.");
+  if (!Number.isFinite(n) || n < 0.01) return bad("A blessing bag needs a price, or it costs nothing to send one.");
   if (n > 999) return bad("That blessing bag price looks like a slip. Keep it under $999.");
+  if (Math.abs(n * 100 - Math.round(n * 100)) > 0.000001) return bad("Use dollars and cents for the blessing surcharge.");
   return good;
 }

@@ -192,8 +192,8 @@
    ONE SOUND, ONCE
 
    A soft crunch when something goes into the basket. Nothing else on the site
-   makes a sound, and it is off until you switch it on. A site with one perfect
-   sound is charming; a site with six is a site you close. */
+   makes a sound. On unless you switch it off. A site with one perfect sound is
+   charming; a site with six is a site you close. */
 
 .sound {
   display: inline-flex;
@@ -408,7 +408,26 @@
   .turn { grid-template-columns: 360px 1fr; gap: 40px; padding: 0 40px; }
 }
 
-.turn-stage { display: flex; flex-direction: column; gap: 10px; }
+.turn-stage { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+
+.turn-photo {
+  width: min(280px, 100%);
+}
+
+.menu-leader {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  min-width: 0;
+}
+.menu-leader .leader-dots { display: none; }
+
+@media (min-width: 1200px) {
+  .menu-leader { flex-direction: row; align-items: baseline; }
+  .menu-leader .leader-dots { display: block; }
+  .menu-leader > span:last-child { flex: none; }
+}
 
 .turn-glass {
   display: block;
@@ -453,6 +472,78 @@
   color: var(--color-faint, #7a6a52);
 }
 
+.flavor-dialog {
+  width: min(720px, calc(100vw - 24px));
+  max-height: calc(100dvh - 24px);
+  margin: auto;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  overflow: visible;
+}
+.flavor-dialog:not([open]) { display: none; }
+.flavor-dialog::backdrop {
+  background: rgba(58, 39, 18, 0.5);
+}
+
+.flavor-sheet {
+  position: relative;
+  display: grid;
+  gap: 28px;
+  max-height: calc(100dvh - 24px);
+  overflow: auto;
+  padding: 60px 24px 24px;
+  background: #fbf8f1;
+  box-shadow: 0 24px 48px rgba(58, 39, 18, 0.28);
+}
+
+@media (min-width: 700px) {
+  .flavor-sheet {
+    grid-template-columns: minmax(180px, 240px) minmax(0, 1fr);
+    align-items: center;
+    padding: 64px 32px 32px;
+  }
+}
+
+.flavor-sheet-jar {
+  width: min(220px, 100%);
+  min-width: 0;
+  margin: 0 auto;
+  padding: 0;
+}
+
+.flavor-sheet-copy {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 14px;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.flavor-close {
+  position: sticky;
+  top: 0;
+  grid-column: 1 / -1;
+  justify-self: end;
+  z-index: 3;
+  min-width: 64px;
+  min-height: 44px;
+  margin: -52px -8px -20px 0;
+  padding: 10px;
+  font-family: var(--font-ui);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-brown, #5b3d1e);
+  background: var(--color-paper);
+  border: 0;
+  cursor: pointer;
+}
+.flavor-close:hover { color: var(--color-sage, #6b7a4a); }
+.flavor-close:focus-visible { outline: 2px solid var(--color-sage, #5f6d41); outline-offset: 3px; }
+
 .turn-picks { display: flex; flex-direction: column; }
 
 .turn-pick {
@@ -461,6 +552,7 @@
   justify-content: space-between;
   gap: 14px;
   width: 100%;
+  min-height: 44px;
   padding: 11px 4px 11px 14px;
   text-align: left;
   background: none;
@@ -481,6 +573,7 @@
   font-family: var(--font-display);
   font-size: 22px;
   color: var(--color-bark, #4a3520);
+  min-width: 0;
 }
 .turn-pick[data-sold-out] .turn-pick-name { opacity: 0.55; }
 
@@ -494,6 +587,11 @@
 
 @media (prefers-reduced-motion: reduce) {
   .turn-glass, .turn-pick { transition: none; }
+}
+
+@media (max-width: 479px) {
+  .turn-pick { flex-direction: column; gap: 6px; }
+  .flavor-sheet-jar { width: min(180px, 100%); }
 }
 
 /* --- build your own jar ----------------------------------------------------
@@ -516,6 +614,10 @@
 /* The glass fades in when the scene arrives. The menu's own rule is scoped to
    `.turn`, which this page has no ancestor of, so it needs saying again here
    or the jar sits at nought opacity for ever. */
+.blend-stage {
+  display: flex;
+  justify-content: center;
+}
 .blend-stage .turn-glass { max-height: 420px; }
 .blend-stage[data-live='yes'] .turn-glass { opacity: 1; }
 

@@ -4,240 +4,48 @@ import { useActionState, useCallback, useId, useState } from "react";
 import { saveBlock } from "@/app/owner/actions";
 import { idle } from "@/lib/save-state";
 import { Labelled, PriceInput, SaveBar, inputClass } from "@/components/owner/SaveBar";
+import { FlavorMarkPicker } from "@/components/owner/FlavorMarks";
 import type { Flavor } from "@/lib/content";
+import { flavorMarksFor, sanitizeFlavorMarks, type FlavorMarkId } from "@/lib/flavor-marks";
+import { OMISSIONS, omissionLabel } from "@/lib/products";
 import { limits } from "@/lib/shop-schema";
 
-/**
- * Her flavor list, exactly as the shop reads it. Prices are dollars, because
- * that is what she thinks in; the site turns them into cents at the till.
- */
-
-/**
- * A row on screen. Prices are held as text so she can clear a box and retype it
- * without it snapping to zero under her fingers, and `id` is stable so removing
- * a row in the middle does not drop her cursor into somebody else's flavor.
- */
-type Row = Omit<Flavor, "bagPrice" | "jarPrice" | "addIns"> & {
-  id: string;
-  bagPrice: string;
-  jarPrice: string;
-  /** Never undefined here, or the field it fills would be uncontrolled. */
-  addIns: string;
-};
-
-const toRow = (flavor: Flavor, id: string): Row => ({
-  ...flavor,
-  id,
-  addIns: flavor.addIns ?? "",
-  bagPrice: String(flavor.bagPrice),
-  jarPrice: String(flavor.jarPrice),
-});
-
-const blank = (id: string): Row => ({
-  id,
-  slug: "",
-  name: "",
-  blurb: "",
-  ingredients: "",
-  allergens: "",
-  addIns: "",
-  bagPrice: "9",
-  jarPrice: "12",
-  soldOut: false,
-  backOn: "",
-});
-
-const slugify = (name: string): string =>
-  name
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-|-$/g, "");
-
+type Row = Omit<Flavor, "bagPrice" | "jarPrice" | "samplerPrice" | "sizePrices" | "icons"> & { id: string; prices: Record<3 | 8 | 16, string>; icons: FlavorMarkId[] };
+const toRow = (f: Flavor): Row => ({ ...f, id: f.slug, prices: { 3: String(f.sizePrices?.[3] ?? f.samplerPrice ?? 5), 8: String(f.sizePrices?.[8] ?? (f.category === "almonds" ? 12 : 10)), 16: String(f.sizePrices?.[16] ?? f.bagPrice) }, icons: sanitizeFlavorMarks(f.icons) });
 export function FlavorEditor({ flavors }: { flavors: Flavor[] }) {
   const base = useId();
-  const [rows, setRows] = useState<Row[]>(() => flavors.map((f, i) => toRow(f, base + "-" + i)));
+  const [rows, setRows] = useState<Row[]>(() => flavors.map(toRow));
   const [added, setAdded] = useState(0);
+  const [editing, setEditing] = useState<string | null>(null);
+  const [removing, setRemoving] = useState<string | null>(null);
   const [dirty, setDirty] = useState(false);
   const [state, action] = useActionState(saveBlock, idle);
   const settled = useCallback(() => setDirty(false), []);
-
-  const update = (index: number, patch: Partial<Row>) => {
-    setDirty(true);
-    setRows((prev) => prev.map((row, i) => (i === index ? { ...row, ...patch } : row)));
-  };
-
-  // A brand new flavor gets its web address from its name. An existing one
-  // keeps the address it has, so a link someone saved does not break.
-  const rename = (index: number, name: string) =>
-    update(index, { name, slug: rows[index].slug || slugify(name) });
-
-  // `id` is only for React's benefit on screen, so it is left behind here.
-  const payload = rows.map((row) => ({
-    slug: row.slug.trim() || slugify(row.name),
-    name: row.name,
-    blurb: row.blurb,
-    ingredients: row.ingredients,
-    allergens: row.allergens,
-    addIns: row.addIns,
-    soldOut: row.soldOut,
-    // Sent exactly as typed, never coerced: an empty price box has to reach the
-    // server as empty so it can be refused by name, rather than quietly
-    // becoming free granola.
-    bagPrice: row.bagPrice.trim() === "" ? "" : Number(row.bagPrice),
-    jarPrice: row.jarPrice.trim() === "" ? "" : Number(row.jarPrice),
-    backOn: row.soldOut ? row.backOn : "",
-  }));
-
-  return (
-    <form action={action} className="flex flex-col gap-5">
-      <input type="hidden" name="key" value="flavors" />
-      <input type="hidden" name="value" value={JSON.stringify(payload)} />
-
-      {rows.map((row, index) => (
-        <fieldset key={row.id} className="dashed-frame flex flex-col gap-4 bg-paper px-5 py-5">
-          <legend className="px-2 font-ui text-[12px] font-semibold uppercase tracking-[0.18em] text-faint">
-            {row.name || "New flavor"}
-          </legend>
-
-          <div className="grid gap-4 md:grid-cols-[2fr_1fr_1fr]">
-            <Labelled label="Name" hint="What it is called on the menu.">
-              <input
-                className={inputClass}
-                maxLength={limits.name}
-                value={row.name}
-                onChange={(e) => rename(index, e.target.value)}
-                placeholder="Honey Almond Crunch"
-              />
-            </Labelled>
-            <Labelled label="Bag price" hint="Cents are fine, like 9.75.">
-              <PriceInput value={row.bagPrice} onChange={(v) => update(index, { bagPrice: v })} />
-            </Labelled>
-            <Labelled label="Jar price" hint="Cents are fine, like 12.50.">
-              <PriceInput value={row.jarPrice} onChange={(v) => update(index, { jarPrice: v })} />
-            </Labelled>
-          </div>
-
-          <Labelled label="One line about it" hint="This is what people read on the menu.">
-            <input
-              className={inputClass}
-              maxLength={limits.blurb}
-              value={row.blurb}
-              onChange={(e) => update(index, { blurb: e.target.value })}
-              placeholder="Local honey, toasted almonds, a little sea salt."
-            />
-          </Labelled>
-
-          <div className="grid gap-4 md:grid-cols-2">
-            <Labelled label="Ingredients" hint="In order, most first. Arizona requires this on the label.">
-              <textarea
-                className={`${inputClass} min-h-[76px]`}
-                value={row.ingredients}
-                onChange={(e) => update(index, { ingredients: e.target.value })}
-              />
-            </Labelled>
-            <Labelled label="Allergens" hint="Say what is in the kitchen as well as what is in the jar.">
-              <textarea
-                className={`${inputClass} min-h-[76px]`}
-                value={row.allergens}
-                onChange={(e) => update(index, { allergens: e.target.value })}
-              />
-            </Labelled>
-          </div>
-
-          <Labelled
-            label="What goes in it, besides the oats"
-            hint="Separated by commas: almonds, honey, sea salt. This is the list people build their own jar from, so only write what you actually bake with."
-          >
-            <input
-              className={inputClass}
-              maxLength={limits.addIns}
-              value={row.addIns}
-              onChange={(e) => update(index, { addIns: e.target.value })}
-              placeholder="almonds, honey, sea salt"
-            />
-          </Labelled>
-
-          <div className="flex flex-wrap items-end gap-6">
-            <label className="flex items-center gap-2.5 font-ui text-[14px]">
-              <input
-                type="checkbox"
-                className="h-4 w-4 accent-[#5b3d1e]"
-                checked={Boolean(row.soldOut)}
-                onChange={(e) => update(index, { soldOut: e.target.checked })}
-              />
-              Sold out
-            </label>
-
-            {row.soldOut ? (
-              <Labelled label="Back on">
-                <input
-                  className={inputClass}
-                  maxLength={limits.day}
-                  value={row.backOn ?? ""}
-                  onChange={(e) => update(index, { backOn: e.target.value })}
-                  placeholder="Friday"
-                />
-              </Labelled>
-            ) : null}
-
-            <RemoveFlavor
-              name={row.name}
-              onRemove={() => {
-                setDirty(true);
-                setRows((prev) => prev.filter((_, i) => i !== index));
-              }}
-            />
-          </div>
-        </fieldset>
-      ))}
-
-      <button
-        type="button"
-        onClick={() => {
-          setDirty(true);
-          setRows((prev) => [...prev, blank(base + "-new-" + added)]);
-          setAdded((n) => n + 1);
-        }}
-        className="stamp stamp-light w-fit"
-      >
-        Add a flavor
-      </button>
-
-      <p className="font-ui text-[12px] leading-relaxed text-faint">
-        Taking a flavor off for a week? Tick sold out rather than removing it, so the page it lives on
-        keeps working and anyone who bookmarked it still lands somewhere.
-      </p>
-
-      <SaveBar state={state} label="Save the menu" dirty={dirty} onSaved={settled} />
-    </form>
-  );
-}
-
-/** Removing a flavor asks first, because there is no way to get it back. */
-function RemoveFlavor({ name, onRemove }: { name: string; onRemove: () => void }) {
-  const [asking, setAsking] = useState(false);
-
-  if (!asking) {
-    return (
-      <button
-        type="button"
-        onClick={() => setAsking(true)}
-        className="ml-auto font-ui text-[13px] text-brown underline underline-offset-4 hover:text-brown-deep"
-      >
-        Remove this flavor
-      </button>
-    );
-  }
-
-  return (
-    <span className="ml-auto flex flex-wrap items-center gap-3 font-ui text-[13px]">
-      <span className="font-semibold text-brown">Remove {name || "this flavor"}?</span>
-      <button type="button" onClick={onRemove} className="text-brown underline underline-offset-4">
-        Yes, remove
-      </button>
-      <button type="button" onClick={() => setAsking(false)} className="underline underline-offset-4">
-        Keep it
-      </button>
-    </span>
-  );
+  function update(id: string, patch: Partial<Row>) { setDirty(true); setRows(prev => prev.map(row => row.id === id ? { ...row, ...patch } : row)); }
+  const payload = rows.map(row => ({ slug: row.slug || row.name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, ""), name: row.name, blurb: row.blurb, ingredients: row.ingredients, allergens: row.allergens, sizePrices: Object.fromEntries(Object.entries(row.prices).map(([size, price]) => [size, price.trim() === "" ? "" : Number(price)])), icons: row.icons, allowedOmissions: row.allowedOmissions ?? [], requiresCooling: row.requiresCooling ?? false, category: row.category ?? "granola", soldOut: !!row.soldOut, backOn: row.soldOut ? row.backOn : "" }));
+  return <form action={action} className="flex flex-col gap-4">
+    <input type="hidden" name="key" value="flavors" /><input type="hidden" name="value" value={JSON.stringify(payload)} />
+    <p className="owner-muted">Prices are before tax. Change the sizes or availability here; open Edit for recipes and label artwork.</p>
+    <div>{rows.map(row => <section key={row.id} className="owner-product" aria-label={row.name || "New product"}>
+      <div className="owner-product-row">
+        <div className="owner-product-name"><h2 className="font-semibold text-[15px]">{row.name || "New product"}</h2><p className="owner-muted mt-1 text-[12px]">{row.category === "almonds" ? "Candied almonds" : "Granola"}{row.requiresCooling ? " · Refrigerated pickup" : ""}</p></div>
+        {([3, 8, 16] as const).map(size => <Labelled key={size} label={size === 16 ? "1 lb" : `${size} oz`}><PriceInput value={row.prices[size]} onChange={price => update(row.id, { prices: { ...row.prices, [size]: price } })} /></Labelled>)}
+        <label className="owner-product-availability flex min-h-11 items-center gap-2"><input type="checkbox" checked={!row.soldOut} onChange={e => update(row.id, { soldOut: !e.target.checked })} className="h-4 w-4 accent-[#5b3d1e]" />Available</label>
+        <button type="button" aria-expanded={editing === row.id} aria-controls={`product-${row.id}`} className="owner-link min-h-11" onClick={() => setEditing(editing === row.id ? null : row.id)}>{editing === row.id ? "Close" : "Edit"}</button>
+      </div>
+      {!state.ok && row.name && state.message.startsWith(row.name) && <p role="alert" className="mt-3 text-brown">{state.message}</p>}
+      {row.soldOut && <div className="mt-3 max-w-[300px]"><Labelled label="Back on · optional"><input className={inputClass} value={row.backOn ?? ""} maxLength={limits.day} onChange={e => update(row.id, { backOn: e.target.value })} placeholder="Friday" /></Labelled></div>}
+      {editing === row.id && <div id={`product-${row.id}`} className="owner-product-detail">
+        <div className="grid gap-4 sm:grid-cols-2"><Labelled label="Product name"><input required className={inputClass} value={row.name} maxLength={limits.name} onChange={e => update(row.id, { name: e.target.value })} /></Labelled><Labelled label="Category"><select className={inputClass} value={row.category ?? "granola"} onChange={e => update(row.id, { category: e.target.value === "almonds" ? "almonds" : "granola" })}><option value="granola">Granola</option><option value="almonds">Candied almonds</option></select></Labelled></div>
+        <Labelled label="Menu description"><input className={inputClass} value={row.blurb} maxLength={limits.blurb} onChange={e => update(row.id, { blurb: e.target.value })} /></Labelled>
+        <div className="grid gap-4 sm:grid-cols-2"><Labelled label="Ingredients"><textarea className={inputClass} value={row.ingredients} maxLength={limits.prose} onChange={e => update(row.id, { ingredients: e.target.value })} /></Labelled><Labelled label="Allergens" hint="Include ingredients and any kitchen cross-contact notes."><textarea className={inputClass} value={row.allergens} maxLength={limits.prose} onChange={e => update(row.id, { allergens: e.target.value })} /></Labelled></div>
+        <fieldset><legend className="mb-2 font-semibold">Permitted recipe omissions</legend><div className="flex flex-wrap gap-4">{OMISSIONS.map(o => <label key={o} className="flex min-h-11 items-center gap-2"><input type="checkbox" checked={row.allowedOmissions?.includes(o) ?? false} onChange={e => update(row.id, { allowedOmissions: e.target.checked ? [...(row.allowedOmissions ?? []), o] : (row.allowedOmissions ?? []).filter(v => v !== o) })} />{omissionLabel[o]}</label>)}</div></fieldset>
+        <label className="flex min-h-11 items-center gap-2"><input type="checkbox" checked={!!row.requiresCooling} onChange={e => update(row.id, { requiresCooling: e.target.checked })} />Keep pickup orders in the porch fridge</label>
+        <div><h3 className="mb-2 font-semibold">Pictures on the label</h3><p className="owner-muted mb-3 text-[12px]">Choose up to three, or leave empty to choose from the product name.</p><FlavorMarkPicker selected={row.icons} preview={flavorMarksFor({ name: row.name })} onChange={icons => update(row.id, { icons })} /></div>
+        <div className="border-t border-rule pt-4">{removing === row.id ? <div className="flex flex-wrap items-center gap-4"><p>Remove {row.name || "this product"} from the menu? Paid orders stay intact.</p><button type="button" className="owner-link min-h-11" onClick={() => { setRows(prev => prev.filter(r => r.id !== row.id)); setDirty(true); setEditing(null); setRemoving(null); }}>Yes, remove</button><button type="button" className="owner-link min-h-11" onClick={() => setRemoving(null)}>Keep product</button></div> : <button type="button" className="owner-link min-h-11" onClick={() => setRemoving(row.id)}>Remove product</button>}</div>
+      </div>}
+    </section>)}</div>
+    <div className="flex flex-wrap items-center gap-4"><button type="button" className="stamp stamp-light" onClick={() => { const id = `${base}-new-${added}`; setRows(prev => [...prev, { id, slug: "", name: "", blurb: "", ingredients: "", allergens: "", prices: { 3: "5", 8: "10", 16: "16" }, icons: [], soldOut: false, category: "granola", allowedOmissions: [], requiresCooling: false }]); setAdded(n => n + 1); setEditing(id); setDirty(true); }}>Add product</button><p className="owner-muted text-[12px]">Taking a week off? Clear Available to mark a product sold out.</p></div>
+    <SaveBar state={state} label="Save products & prices" dirty={dirty} onSaved={settled} />
+  </form>;
 }

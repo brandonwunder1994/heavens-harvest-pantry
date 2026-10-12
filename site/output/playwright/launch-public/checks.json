@@ -1,0 +1,114 @@
+{
+  "checks": [
+    {
+      "path": "/",
+      "width": 1280,
+      "overflow": false,
+      "brokenImages": []
+    },
+    {
+      "path": "/menu",
+      "width": 1280,
+      "overflow": false,
+      "brokenImages": []
+    },
+    {
+      "path": "/story",
+      "width": 1280,
+      "overflow": false,
+      "brokenImages": []
+    },
+    {
+      "path": "/pickup",
+      "width": 1280,
+      "overflow": false,
+      "brokenImages": []
+    },
+    {
+      "path": "/reviews",
+      "width": 1280,
+      "overflow": false,
+      "brokenImages": []
+    },
+    {
+      "path": "/bowl",
+      "width": 1280,
+      "overflow": false,
+      "brokenImages": []
+    },
+    {
+      "path": "/blessing-bags",
+      "width": 1280,
+      "overflow": false,
+      "brokenImages": []
+    },
+    {
+      "path": "/verses",
+      "width": 1280,
+      "overflow": false,
+      "brokenImages": []
+    },
+    {
+      "path": "/checkout",
+      "width": 1280,
+      "overflow": false,
+      "brokenImages": []
+    },
+    {
+      "path": "/",
+      "width": 390,
+      "overflow": false,
+      "brokenImages": []
+    },
+    {
+      "path": "/menu",
+      "width": 390,
+      "overflow": false,
+      "brokenImages": []
+    },
+    {
+      "path": "/story",
+      "width": 390,
+      "overflow": false,
+      "brokenImages": []
+    },
+    {
+      "path": "/pickup",
+      "width": 390,
+      "overflow": false,
+      "brokenImages": []
+    },
+    {
+      "path": "/reviews",
+      "width": 390,
+      "overflow": false,
+      "brokenImages": []
+    },
+    {
+      "path": "/bowl",
+      "width": 390,
+      "overflow": false,
+      "brokenImages": []
+    },
+    {
+      "path": "/blessing-bags",
+      "width": 390,
+      "overflow": false,
+      "brokenImages": []
+    },
+    {
+      "path": "/verses",
+      "width": 390,
+      "overflow": false,
+      "brokenImages": []
+    },
+    {
+      "path": "/checkout",
+      "width": 390,
+      "overflow": false,
+      "brokenImages": []
+    }
+  ],
+  "interactions": "passed",
+  "errors": []
+}

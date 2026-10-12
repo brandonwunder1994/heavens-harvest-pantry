@@ -1,15 +1,14 @@
 "use client";
 
-import { useActionState, useCallback, useEffect, useId, useRef, useState } from "react";
-import QRCode from "qrcode";
+import { useActionState, useCallback, useId, useRef, useState } from "react";
 import { saveBlock } from "@/app/owner/actions";
 import { LabelPreview } from "@/components/owner/LabelPreview";
 import { Labelled, SaveBar, inputClass } from "@/components/owner/SaveBar";
 import type { Flavor, LabelSettings, LabelSize } from "@/lib/content";
+import { flavorMarksFor } from "@/lib/flavor-marks";
 import {
   LABEL_HEIGHT_PX,
   LABEL_WIDTH_PX,
-  defaultNetWeight,
   pngFilename,
   templateFor,
   todayIso,
@@ -19,38 +18,47 @@ import {
 } from "@/lib/label";
 import { idle } from "@/lib/save-state";
 import { limits } from "@/lib/shop-schema";
+import { SIZES, netWeight as purchasedWeight, ingredientsWithout, omissionLabel, type SizeOz, type Omission } from "@/lib/products";
+import type { OrderItem } from "@/lib/orders";
 
 export type LabelOrderOption = {
   id: string;
   name: string;
   runDate: string;
-  items: { name: string; format: LabelSize; qty: number }[];
+  items: OrderItem[];
 };
 
 export function LabelEditor({
   flavors,
   settings,
   orders,
+  initialOrderId,
+  initialItemIndex = 0,
 }: {
   flavors: Flavor[];
   settings: LabelSettings;
   orders: LabelOrderOption[];
+  initialOrderId?: string;
+  initialItemIndex?: number;
 }) {
-  const first = flavors[0];
+  const initialOrder = orders.find(o => o.id === initialOrderId);
+  const initialItem = initialOrder?.items[initialItemIndex];
+  const first = (initialItem ? flavors.find(f => f.slug === initialItem.slug) : null) ?? flavors[0];
   const opening = first ? templateFor(settings, first) : null;
 
   const [slug, setSlug] = useState(opening?.flavorSlug ?? "");
-  const [title, setTitle] = useState(opening?.title ?? "");
-  const [ingredients, setIngredients] = useState(opening?.ingredients ?? "");
-  const [allergens, setAllergens] = useState(opening?.allergens ?? "");
+  const [title, setTitle] = useState(initialItem?.name ?? opening?.title ?? "");
+  const [ingredients, setIngredients] = useState(initialItem?.ingredients ?? opening?.ingredients ?? "");
+  const [allergens, setAllergens] = useState(initialItem?.allergens ?? opening?.allergens ?? "");
   const [scriptureText, setScriptureText] = useState(opening?.scripture.text ?? settings.scripture.text);
   const [scriptureRef, setScriptureRef] = useState(opening?.scripture.reference ?? settings.scripture.reference);
-  const [size, setSize] = useState<LabelSize>(opening?.size ?? "bag");
-  const [netWeight, setNetWeight] = useState(opening?.netWeight ?? defaultNetWeight("bag"));
+  const [size, setSize] = useState<LabelSize>(initialItem ? initialItem.gift ? "jar" : "bag" : opening?.size ?? "bag");
+  const [sizeOz, setSizeOz] = useState<SizeOz>(initialItem?.sizeOz ?? 16);
+  const [omissions,setOmissions]=useState<Omission[]>(initialItem?.omissions ?? []);
+  const [netWeight, setNetWeight] = useState(purchasedWeight(initialItem?.sizeOz ?? 16));
   const [producedDate, setProducedDate] = useState(todayIso);
-  const [tracker, setTracker] = useState("");
-  const [orderId, setOrderId] = useState("");
-  const [qrDataUrl, setQrDataUrl] = useState("");
+  const [tracker, setTracker] = useState(initialItem ? trackerFrom(initialItem.gift?.recipientName ?? initialOrder!.name, initialItem.name, todayIso()) : "");
+  const [orderId, setOrderId] = useState(initialItem ? `${initialOrder!.id}::${initialItemIndex}` : "");
   const [downloading, setDownloading] = useState(false);
   const [downloadMessage, setDownloadMessage] = useState("");
   const [dirty, setDirty] = useState(false);
@@ -73,22 +81,6 @@ export function LabelEditor({
       })
     : settings;
 
-  useEffect(() => {
-    let cancelled = false;
-    const url = settings.qrUrl.trim() || "https://heavens-harvest-pantry.vercel.app/menu?src=qr";
-    QRCode.toDataURL(url, {
-      width: 256,
-      margin: 1,
-      errorCorrectionLevel: "M",
-      color: { dark: "#1a1208", light: "#ffffff" },
-    }).then((dataUrl) => {
-      if (!cancelled) setQrDataUrl(dataUrl);
-    });
-    return () => {
-      cancelled = true;
-    };
-  }, [settings.qrUrl]);
-
   const touch = () => setDirty(true);
 
   const loadFlavor = (nextSlug: string) => {
@@ -102,27 +94,34 @@ export function LabelEditor({
     setScriptureText(saved.scripture.text);
     setScriptureRef(saved.scripture.reference);
     setSize(saved.size);
-    setNetWeight(saved.netWeight);
+    setNetWeight(purchasedWeight(sizeOz));
+    setOmissions([]);
   };
 
-  const chooseSize = (next: LabelSize) => {
+  const chooseSize = (next: SizeOz) => {
     touch();
-    setSize(next);
-    setNetWeight(defaultNetWeight(next));
+    setSizeOz(next);
+    setNetWeight(purchasedWeight(next));
   };
 
   const chooseOrder = (id: string) => {
     setOrderId(id);
     if (!id) return;
-    const order = orders.find((row) => row.id === id);
+    const [parentId,index]=id.split("::");
+    const order = orders.find((row) => row.id === parentId);
     if (!order) return;
-    const only = order.items.length === 1 ? order.items[0] : null;
-    const matched = only ? flavors.find((row) => row.name === only.name) : undefined;
+    const only = order.items[Number(index)||0];
+    const matched = only ? flavors.find((row) => row.slug===only.slug || row.name.replace(/\s*[·-]?\s*(?:1 lb|16 oz).*$/i,"") === only.name.replace(/\s*[·-]?\s*(?:1 lb|16 oz).*$/i,"")) : undefined;
     if (matched && only) {
       loadFlavor(matched.slug);
-      setSize(only.format);
-      setNetWeight(defaultNetWeight(only.format));
-      setTracker(trackerFrom(order.name, matched.name, producedDate));
+      setSize(only.gift?"jar":"bag");
+      setSizeOz(only.sizeOz??(only.format==="sampler"?3:16));
+      setNetWeight(purchasedWeight(only.sizeOz??(only.format==="sampler"?3:16)));
+      setOmissions(only.omissions??[]);
+      setTitle(only.name);
+      setIngredients(only.ingredients??ingredientsWithout(matched.ingredients,only.omissions));
+      setAllergens(only.allergens??matched.allergens);
+      setTracker(trackerFrom(only.gift?.recipientName??order.name, matched.name, producedDate));
       touch();
       return;
     }
@@ -141,16 +140,21 @@ export function LabelEditor({
   };
 
   const downloadPng = async () => {
-    if (!qrDataUrl) {
-      setDownloadMessage("The QR code is still drawing. Try again in a second.");
-      return;
-    }
     const node = printRef.current;
     if (!node) return;
     setDownloading(true);
     setDownloadMessage("");
     try {
       await document.fonts.ready;
+      await Promise.all(
+        [...node.querySelectorAll("img")].map((img) => {
+          if (img.complete && img.naturalWidth > 0) return Promise.resolve();
+          return new Promise<void>((resolve, reject) => {
+            img.addEventListener("load", () => resolve(), { once: true });
+            img.addEventListener("error", () => reject(new Error("qr")), { once: true });
+          });
+        }),
+      );
       const { toPng } = await import("html-to-image");
       const dataUrl = await toPng(node, {
         width: LABEL_WIDTH_PX,
@@ -181,6 +185,16 @@ export function LabelEditor({
     );
   }
 
+  const flavor = flavors.find((row) => row.slug === slug);
+  const previewMarks = flavorMarksFor(
+    {
+      icons: flavor?.icons,
+      name: title,
+      addIns: flavor?.addIns,
+    },
+    title,
+  );
+
   const preview = (
     <LabelPreview
       title={title}
@@ -190,13 +204,26 @@ export function LabelEditor({
       netWeight={netWeight}
       producedDate={producedDate}
       tracker={tracker}
-      qrDataUrl={qrDataUrl}
       tone="preview"
+      marks={previewMarks}
     />
   );
 
   return (
-    <div className="grid items-start gap-8 xl:grid-cols-[minmax(0,1fr)_420px]">
+    <div className="flex flex-col gap-8">
+      <aside className="flex flex-col items-center gap-3">
+        <div className="owner-label-preview">
+          <div className="owner-label-preview-stage">
+            {preview}
+          </div>
+        </div>
+        <p className="max-w-[640px] text-center font-ui text-[12px] leading-relaxed text-muted">
+          Landscape, 80 mm × 50 mm at 203 DPI — brand up top, the flavor a little
+          below it, then the pictures of what it is. The download is black on white
+          for the thermal printer.
+        </p>
+      </aside>
+
       <form action={action} className="flex flex-col gap-5">
         <input type="hidden" name="key" value="labelTemplates" />
         <input type="hidden" name="value" value={JSON.stringify(payload)} />
@@ -236,29 +263,21 @@ export function LabelEditor({
           </Labelled>
 
           <div>
-            <span className="font-ui text-[12px] font-semibold text-muted">Bag or jar</span>
+            <span className="font-ui text-[12px] font-semibold text-muted">Purchased net weight · bags and gift jars</span>
             <div className="mt-1.5 flex gap-2">
-              <SizeButton current={size} value="bag" onChoose={chooseSize}>
-                Bag · 12 oz
-              </SizeButton>
-              <SizeButton current={size} value="jar" onChoose={chooseSize}>
-                Jar · 16 oz
-              </SizeButton>
+              {SIZES.map(oz=><SizeButton key={oz} current={sizeOz} value={oz} onChoose={chooseSize}>{oz} oz</SizeButton>)}
             </div>
           </div>
+          {!!flavor?.allowedOmissions?.length&&<fieldset><legend className="font-ui text-[12px] font-semibold">Recipe choices</legend>{flavor.allowedOmissions.map(o=><label key={o} className="mt-2 flex items-center gap-2 font-ui text-[13px]"><input type="checkbox" checked={omissions.includes(o)} onChange={e=>{const next=e.target.checked?[...omissions,o]:omissions.filter(v=>v!==o);setOmissions(next);setIngredients(ingredientsWithout(flavor.ingredients,next));setAllergens(flavor.allergens);touch();}}/>{omissionLabel[o]}</label>)}<p className="mt-2 font-ui text-[12px] text-muted">Coconut oil and allergen notes stay included.</p></fieldset>}
 
           {orders.length > 0 ? (
             <Labelled
               label="Whose order this is"
-              hint="Picking a name fills the tracker code. A single-flavor order also switches the label to that granola."
+              hint="Choose the exact item. Gift labels use the recipient’s name, keeping the giver private."
             >
               <select className={inputClass} value={orderId} onChange={(event) => chooseOrder(event.target.value)}>
                 <option value="">Type a code yourself</option>
-                {orders.map((order) => (
-                  <option key={order.id} value={order.id}>
-                    {orderLabel(order)}
-                  </option>
-                ))}
+                {orders.flatMap(order=>order.items.map((item,index)=><option key={`${order.id}::${index}`} value={`${order.id}::${index}`}>{item.gift?.recipientName??order.name} · {item.qty}× {item.name} · {item.sizeOz??(item.format==="sampler"?3:16)} oz{item.omissions?.length?` · ${item.omissions.map(o=>omissionLabel[o]).join(", ")}`:""}</option>))}
               </select>
             </Labelled>
           ) : null}
@@ -362,8 +381,8 @@ export function LabelEditor({
             {downloading ? "Making the picture…" : "Download PNG for T50M Pro"}
           </button>
           <p className="max-w-[52ch] font-ui text-[13px] leading-relaxed text-muted">
-            Katasymbol app → 50×80 mm tape → Import image → Print. The file is 384×640 pixels, the exact
-            size that printer can mark.
+            Katasymbol app → 50×80 mm tape → Import image → turn it landscape if the app stands it up →
+            Print. The file is 640×384 pixels.
           </p>
         </div>
         <p role="status" aria-live="polite" className="font-ui text-[13px] text-sage-deep">
@@ -373,29 +392,13 @@ export function LabelEditor({
         <SaveBar state={state} label="Save this flavor's label" dirty={dirty} onSaved={settled} />
       </form>
 
-      <aside className="flex flex-col items-center gap-3 xl:sticky xl:top-6">
-        <div
-          className="bg-brown-deep p-3"
-          style={{
-            boxShadow: "0 18px 36px -24px rgba(58, 39, 18, 0.55)",
-          }}
-        >
-          {preview}
-        </div>
-        <p className="max-w-[384px] text-center font-ui text-[12px] leading-relaxed text-muted">
-          50 mm × 80 mm at 203 DPI — cream here so you can see the branding. The download is black on white
-          for the thermal printer.
-        </p>
-      </aside>
-
       <div
         aria-hidden
         id={`${formId}-print`}
         style={{
           position: "fixed",
-          left: 0,
+          left: -10000,
           top: 0,
-          transform: "translateX(-100vw)",
           pointerEvents: "none",
         }}
       >
@@ -408,8 +411,8 @@ export function LabelEditor({
             netWeight={netWeight}
             producedDate={producedDate}
             tracker={tracker}
-            qrDataUrl={qrDataUrl}
             tone="print"
+            marks={previewMarks}
           />
         </div>
       </div>
@@ -423,9 +426,9 @@ function SizeButton({
   onChoose,
   children,
 }: {
-  current: LabelSize;
-  value: LabelSize;
-  onChoose: (value: LabelSize) => void;
+  current: SizeOz;
+  value: SizeOz;
+  onChoose: (value: SizeOz) => void;
   children: React.ReactNode;
 }) {
   const selected = current === value;
@@ -443,10 +446,3 @@ function SizeButton({
   );
 }
 
-function orderLabel(order: LabelOrderOption): string {
-  const items = order.items.map((item) => `${item.qty}× ${item.name}`).join(", ");
-  const who = order.name.trim() || "An order";
-  if (items && order.runDate) return `${who} · ${items} · ${order.runDate}`;
-  if (items) return `${who} · ${items}`;
-  return who;
-}

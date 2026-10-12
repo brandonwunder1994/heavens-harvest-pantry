@@ -1,9 +1,13 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import Link from "next/link";
+import Link from "@/components/ShopLink";
 import { CheckoutForm } from "@/components/checkout/CheckoutForm";
-import { isTestMode, paymentsConfigured } from "@/lib/stripe";
+import { getStripe, isTestMode, paymentsConfigured } from "@/lib/stripe";
+import { pickupDate } from "@/lib/fulfilment";
+import { checkoutTaxConfiguration } from "@/lib/checkout-tax";
 import { business } from "@/lib/content";
+import { mailReady } from "@/lib/mailer";
+import { readCheckoutTaxDisplay } from "@/lib/checkout-tax-source";
 
 export const metadata: Metadata = {
   title: "Checkout",
@@ -17,6 +21,8 @@ export default async function CheckoutPage({
   searchParams: Promise<{ cancelled?: string }>;
 }) {
   const { cancelled } = await searchParams;
+  const tax = checkoutTaxConfiguration(process.env);
+  const taxDisplay = await readCheckoutTaxDisplay(tax, getStripe(), !isTestMode());
 
   return (
     <div className="mx-auto w-full max-w-[640px] px-6 pb-16 sm:px-10">
@@ -37,7 +43,7 @@ export default async function CheckoutPage({
         </div>
       ) : null}
 
-      <CheckoutForm paymentsLive={paymentsConfigured()} testMode={isTestMode()} />
+      <CheckoutForm paymentsLive={paymentsConfigured() && tax.ready} taxDisplay={taxDisplay} confirmationEmailAvailable={mailReady} testMode={isTestMode()} pickupDate={pickupDate()} />
     </div>
   );
 }

@@ -1,11 +1,13 @@
 import { NextResponse } from "next/server";
 import { isSignedIn } from "@/lib/owner-auth";
 import { markDelivered } from "@/lib/orders-source";
+import { guideSample } from "@/lib/handoff-sample";
 
 export async function POST(request: Request) {
   if (!(await isSignedIn())) {
     return NextResponse.json({ error: "not_signed_in" }, { status: 401 });
   }
+  if (guideSample) return NextResponse.json({ error: "sample_preview_read_only" }, { status: 403 });
 
   let body: { orderId?: unknown; delivered?: unknown };
   try {

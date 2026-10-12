@@ -12,6 +12,7 @@
 import church from '@/content/church.json';
 import Link from "next/link";
 import { Mark, ArrowLeft } from "@/components/know-jesus/marks";
+import { redirect } from "next/navigation";
 
 export const metadata = {
   title: 'Want to know Jesus? — Heaven’s Harvest Pantry',
@@ -24,6 +25,7 @@ function Pending({ label }: { label: string }) {
 }
 
 export default function KnowJesus() {
+  redirect("/");
   // Her family's own campus is listed first and marked. The other one still
   // shows in full: this is an invitation, not a redirect.
   const campuses = [...church.campuses].sort(

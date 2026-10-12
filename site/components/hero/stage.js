@@ -67,7 +67,7 @@ export function createStage({ canvas, framing = 'hero' }) {
     alpha: false,
     powerPreference: 'high-performance',
   });
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
   renderer.toneMappingExposure = 1.06;
@@ -87,7 +87,7 @@ export function createStage({ canvas, framing = 'hero' }) {
   const key = new THREE.DirectionalLight('#ffe6b8', 3.6);
   key.position.set(-4.2, 3.4, 2.6);
   key.castShadow = true;
-  key.shadow.mapSize.set(1024, 1024);
+  key.shadow.mapSize.set(512, 512);
   key.shadow.camera.left = -3.5;
   key.shadow.camera.right = 3.5;
   key.shadow.camera.top = 3.5;

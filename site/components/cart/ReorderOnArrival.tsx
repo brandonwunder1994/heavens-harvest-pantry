@@ -1,5 +1,6 @@
 "use client";
 
+import { usePractice } from "@/components/ShopLink";
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCart } from "@/components/cart/CartProvider";
@@ -15,6 +16,7 @@ import { readReorder, reorderNote } from "@/lib/reorder";
  */
 export function ReorderOnArrival() {
   const router = useRouter();
+  const practice = usePractice();
   const params = useSearchParams();
   const cart = useCart();
   const [note, setNote] = useState("");
@@ -31,8 +33,8 @@ export function ReorderOnArrival() {
     const asked = again.split(",").length;
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setNote(reorderNote(asked, lines.length));
-    router.replace("/menu", { scroll: false });
-  }, [again, ready, shop, setQty, router]);
+    router.replace(practice ? "/mockorder/menu" : "/menu", { scroll: false });
+  }, [again, ready, shop, setQty, router, practice]);
 
   if (!note) return null;
 

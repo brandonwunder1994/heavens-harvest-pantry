@@ -1,9 +1,12 @@
 import { LABEL_COTTAGE, LABEL_HEIGHT_PX, LABEL_WIDTH_PX, formatPackedDate } from "@/lib/label";
 import type { Verse } from "@/lib/content";
+import type { FlavorMarkId } from "@/lib/flavor-marks";
+import { FlavorMarkRow } from "@/components/owner/FlavorMarks";
 
 /**
- * One 50mm × 80mm T50M Pro label, drawn at the printer's own 203 DPI canvas
- * (384 × 640). Preview uses the shop's cream and brown; print is black on
+ * Landscape 80mm × 50mm T50M Pro label at 203 DPI (640 × 384). Letterhead:
+ * brand up top, flavor name a little below it, custom botanical stamps for
+ * what it is, verse, then legal copy balanced with the QR. Print is black on
  * white so the thermal head does not dither.
  */
 
@@ -15,8 +18,8 @@ export type LabelPreviewProps = {
   netWeight: string;
   producedDate: string;
   tracker: string;
-  qrDataUrl: string;
   tone: "preview" | "print";
+  marks?: FlavorMarkId[];
 };
 
 type Palette = {
@@ -52,285 +55,260 @@ export function LabelPreview({
   netWeight,
   producedDate,
   tracker,
-  qrDataUrl,
   tone,
+  marks = [],
 }: LabelPreviewProps) {
   const color = palettes[tone];
+  const qrSrc = tone === "print" ? "/qr-print.svg?v=6" : "/qr.svg?v=6";
   const packed = formatPackedDate(producedDate);
-  const longTitle = title.trim().length > 22;
+  const name = title.trim() || "Granola";
+  const longTitle = name.length > 22;
+  const verse = scripture.text.trim();
+  const reference = scripture.reference.trim();
 
   return (
     <article
       data-label-tone={tone}
-      aria-label={`${title} granola label`}
+      aria-label={`${name} granola label`}
       style={{
         boxSizing: "border-box",
         width: LABEL_WIDTH_PX,
         height: LABEL_HEIGHT_PX,
-        padding: "16px 18px 14px",
-        display: "flex",
-        flexDirection: "column",
+        padding: 8,
         background: color.paper,
         color: color.ink,
         overflow: "hidden",
         isolation: "isolate",
       }}
     >
-      <header style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6 }}>
-        <LabelMark color={color.rule} />
-        <p
-          style={{
-            margin: 0,
-            fontFamily: "var(--font-ui), Karla, sans-serif",
-            fontSize: 8,
-            fontWeight: 600,
-            letterSpacing: "0.22em",
-            textTransform: "uppercase",
-            color: color.rule,
-          }}
-        >
-          Heaven&apos;s Harvest Pantry
-        </p>
-      </header>
-
-      <Hairline color={color.rule} solid={tone === "print"} />
-
-      <h1
-        style={{
-          margin: "8px 0 0",
-          fontFamily: "var(--font-display), Cinzel, serif",
-          fontSize: longTitle ? 20 : 24,
-          fontWeight: 600,
-          letterSpacing: "0.04em",
-          lineHeight: 1.08,
-          textAlign: "center",
-          textWrap: "balance",
-          color: color.ink,
-        }}
-      >
-        {title.trim() || "Granola"}
-      </h1>
-
-      <section style={{ marginTop: 10, display: "flex", flexDirection: "column", gap: 8, flex: "1 1 auto", minHeight: 0, overflow: "hidden" }}>
-        <Block label="Ingredients" body={ingredients} color={color} />
-        <Block label="Allergens" body={allergens} color={color} />
-      </section>
-
       <div
         style={{
-          marginTop: 8,
+          boxSizing: "border-box",
+          height: "100%",
+          border: `1.5px solid ${color.rule}`,
+          padding: 14,
           display: "flex",
-          justifyContent: "space-between",
-          gap: 12,
-          fontFamily: "var(--font-ui), Karla, sans-serif",
-          fontSize: 10,
-          fontWeight: 600,
-          letterSpacing: "0.04em",
-          fontVariantNumeric: "tabular-nums",
-          color: color.mute,
-        }}
-      >
-        <span>{netWeight.trim() || "Net Wt"}</span>
-        <span>Packed {packed}</span>
-      </div>
-
-      <Hairline color={color.rule} solid={tone === "print"} />
-
-      {scripture.text.trim() ? (
-        <blockquote style={{ margin: "8px 0 0", padding: 0, border: 0 }}>
-          <p
-            className="verse"
-            style={{
-              margin: 0,
-              fontFamily: "var(--font-serif), 'Cormorant Garamond', Georgia, serif",
-              fontStyle: "italic",
-              fontSize: 13,
-              lineHeight: 1.22,
-              textAlign: "center",
-              color: color.ink,
-            }}
-          >
-            &ldquo;{scripture.text.trim()}&rdquo;
-          </p>
-          {scripture.reference.trim() ? (
-            <p
-              style={{
-                margin: "5px 0 0",
-                fontFamily: "var(--font-display), Cinzel, serif",
-                fontSize: 8,
-                fontWeight: 600,
-                letterSpacing: "0.18em",
-                textTransform: "uppercase",
-                textAlign: "center",
-                color: color.rule,
-              }}
-            >
-              {scripture.reference.trim()}
-            </p>
-          ) : null}
-        </blockquote>
-      ) : null}
-
-      <Hairline color={color.rule} solid={tone === "print"} />
-
-      <footer
-        style={{
-          marginTop: 8,
-          display: "grid",
-          gridTemplateColumns: "108px 1fr",
-          gap: 10,
-          alignItems: "center",
+          flexDirection: "row",
+          gap: 16,
         }}
       >
         <div
           style={{
-            width: 108,
-            height: 108,
-            background: color.paper,
-            border: `1px solid ${color.rule}`,
+            flex: 1,
+            minWidth: 0,
             display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
+            flexDirection: "column",
           }}
         >
-          {qrDataUrl ? (
-            // The QR is generated as a data URL so html-to-image can rasterize it.
-            // eslint-disable-next-line @next/next/no-img-element
-            <img src={qrDataUrl} alt="" width={100} height={100} style={{ display: "block", width: 100, height: 100 }} />
-          ) : (
-            <span style={{ fontFamily: "var(--font-ui), Karla, sans-serif", fontSize: 8, color: color.faint }}>QR</span>
-          )}
-        </div>
-        <div style={{ display: "flex", flexDirection: "column", gap: 4, minWidth: 0 }}>
-          <p
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+            <Lockup color={color} />
+
+            <h1
+              style={{
+                margin: "16px 0 0",
+                fontFamily: "var(--font-display), Cinzel, serif",
+                fontSize: longTitle ? 22 : 26,
+                fontWeight: 600,
+                letterSpacing: "0.04em",
+                lineHeight: 1.08,
+                textAlign: "center",
+                textWrap: "balance",
+                maxWidth: "18ch",
+                color: color.ink,
+              }}
+            >
+              {name}
+            </h1>
+
+            <FlavorMarkRow ids={marks} color={color.rule} paper={color.paper} size={42} />
+
+            {verse ? (
+              <blockquote
+                style={{
+                  margin: "8px auto 0",
+                  padding: 0,
+                  border: 0,
+                  maxWidth: "36ch",
+                  textAlign: "center",
+                }}
+              >
+                <p
+                  className="verse"
+                  style={{
+                    margin: 0,
+                    fontFamily: "var(--font-serif), 'Cormorant Garamond', Georgia, serif",
+                    fontStyle: "italic",
+                    fontSize: 12,
+                    lineHeight: 1.25,
+                    color: color.ink,
+                  }}
+                >
+                  &ldquo;{verse}&rdquo;
+                </p>
+                {reference ? (
+                  <p
+                    style={{
+                      margin: "4px 0 0",
+                      fontFamily: "var(--font-display), Cinzel, serif",
+                      fontSize: 8,
+                      fontWeight: 600,
+                      letterSpacing: "0.18em",
+                      textTransform: "uppercase",
+                      color: color.rule,
+                    }}
+                  >
+                    {reference}
+                  </p>
+                ) : null}
+              </blockquote>
+            ) : null}
+          </div>
+
+          <div style={{ flex: 1, minHeight: 12 }} />
+
+          <div
             style={{
-              margin: 0,
-              fontFamily: "var(--font-ui), Karla, sans-serif",
-              fontSize: 10,
-              fontWeight: 600,
-              letterSpacing: "0.12em",
-              textTransform: "uppercase",
-              color: color.rule,
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              textAlign: "center",
             }}
           >
-            Scan to reorder
-          </p>
+            <p
+              style={{
+                margin: 0,
+                maxWidth: "52ch",
+                fontFamily: "var(--font-ui), Karla, sans-serif",
+                fontSize: 9,
+                lineHeight: 1.28,
+                color: color.mute,
+              }}
+            >
+              {ingredients.trim() || "—"}
+            </p>
+            <p
+              style={{
+                margin: "4px 0 0",
+                maxWidth: "52ch",
+                fontFamily: "var(--font-ui), Karla, sans-serif",
+                fontSize: 8,
+                lineHeight: 1.25,
+                color: color.faint,
+              }}
+            >
+              Contains {allergens.trim() || "—"}
+            </p>
+            <p
+              style={{
+                margin: "8px 0 0",
+                fontFamily: "var(--font-ui), Karla, sans-serif",
+                fontSize: 10,
+                fontWeight: 600,
+                letterSpacing: "0.04em",
+                fontVariantNumeric: "tabular-nums",
+                color: color.mute,
+              }}
+            >
+              {netWeight.trim() || "Net Wt"} · Packed {packed}
+            </p>
+            <p
+              style={{
+                margin: "4px 0 0",
+                fontFamily: "var(--font-ui), Karla, sans-serif",
+                fontSize: 8,
+                letterSpacing: "0.08em",
+                textTransform: "uppercase",
+                color: color.rule,
+              }}
+            >
+              {LABEL_COTTAGE}
+            </p>
+          </div>
+        </div>
+
+        <div aria-hidden style={{ width: 1, alignSelf: "stretch", background: color.rule }} />
+
+        <div
+          style={{
+            width: 128,
+            flexShrink: 0,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: 8,
+          }}
+        >
+          <div
+            style={{
+              width: 112,
+              height: 112,
+              boxSizing: "border-box",
+              padding: 4,
+              border: `1px solid ${color.rule}`,
+              background: color.paper,
+            }}
+          >
+            {/* Gold heart in the quiet center. Print is a 1-bit twin. */}
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={qrSrc} alt="" width={104} height={104} style={{ display: "block", width: 104, height: 104 }} />
+          </div>
           {tracker.trim() ? (
             <p
               style={{
                 margin: 0,
                 fontFamily: "var(--font-ui), Karla, sans-serif",
-                fontSize: 12,
+                fontSize: 8,
                 fontWeight: 600,
-                letterSpacing: "0.08em",
+                letterSpacing: "0.1em",
                 fontVariantNumeric: "tabular-nums",
+                textAlign: "center",
                 color: color.ink,
                 overflowWrap: "anywhere",
               }}
             >
               {tracker.trim()}
             </p>
-          ) : (
-            <p
-              style={{
-                margin: 0,
-                fontFamily: "var(--font-ui), Karla, sans-serif",
-                fontSize: 10,
-                color: color.faint,
-              }}
-            >
-              No tracker yet
-            </p>
-          )}
+          ) : null}
         </div>
-      </footer>
-
-      <p
-        style={{
-          margin: "8px 0 0",
-          fontFamily: "var(--font-ui), Karla, sans-serif",
-          fontSize: 8,
-          letterSpacing: "0.06em",
-          textAlign: "center",
-          color: color.faint,
-        }}
-      >
-        {LABEL_COTTAGE}
-      </p>
+      </div>
     </article>
   );
 }
 
-function Hairline({ color, solid = false }: { color: string; solid?: boolean }) {
+function Lockup({ color }: { color: Palette }) {
   return (
-    <div
-      aria-hidden
-      style={{
-        marginTop: 8,
-        height: 1,
-        background: color,
-        opacity: solid ? 1 : 0.55,
-      }}
-    />
-  );
-}
-
-function Block({
-  label,
-  body,
-  color,
-}: {
-  label: string;
-  body: string;
-  color: Palette;
-}) {
-  return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 3, minHeight: 0 }}>
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4 }}>
       <p
         style={{
           margin: 0,
-          fontFamily: "var(--font-ui), Karla, sans-serif",
-          fontSize: 8,
+          fontFamily: "var(--font-display), Cinzel, serif",
+          fontSize: 9,
           fontWeight: 600,
-          letterSpacing: "0.18em",
+          letterSpacing: "0.28em",
           textTransform: "uppercase",
-          color: color.rule,
-        }}
-      >
-        {label}
-      </p>
-      <p
-        style={{
-          margin: 0,
-          fontFamily: "var(--font-ui), Karla, sans-serif",
-          fontSize: 10.5,
-          lineHeight: 1.32,
           color: color.ink,
         }}
       >
-        {body.trim() || "—"}
+        Heaven&apos;s Harvest
       </p>
+      <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+        <span style={{ display: "block", width: 24, height: 1, background: color.rule }} />
+        <p
+          style={{
+            margin: 0,
+            fontFamily: "var(--font-display), Cinzel, serif",
+            fontSize: 7,
+            fontWeight: 600,
+            letterSpacing: "0.32em",
+            textTransform: "uppercase",
+            color: color.rule,
+          }}
+        >
+          Pantry
+        </p>
+        <span style={{ display: "block", width: 24, height: 1, background: color.rule }} />
+      </div>
     </div>
-  );
-}
-
-/** Cross and wheat, inlined so a PNG capture does not depend on the page sprite. */
-function LabelMark({ color }: { color: string }) {
-  return (
-    <svg width={26} height={26} viewBox="0 0 60 60" aria-hidden focusable="false">
-      <g fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round">
-        <path d="M30 8 v44 M18 22 h24" />
-        <path d="M9 52 c 1 -16 5 -24 13 -33" />
-        <path d="M51 52 c -1 -16 -5 -24 -13 -33" />
-      </g>
-      <g fill={color}>
-        <ellipse cx="12" cy="41" rx="3" ry="4.6" transform="rotate(-22 12 41)" />
-        <ellipse cx="15" cy="32" rx="3" ry="4.6" transform="rotate(-22 15 32)" />
-        <ellipse cx="19" cy="24" rx="3" ry="4.6" transform="rotate(-22 19 24)" />
-        <ellipse cx="48" cy="41" rx="3" ry="4.6" transform="rotate(22 48 41)" />
-        <ellipse cx="45" cy="32" rx="3" ry="4.6" transform="rotate(22 45 32)" />
-        <ellipse cx="41" cy="24" rx="3" ry="4.6" transform="rotate(22 41 24)" />
-      </g>
-    </svg>
   );
 }

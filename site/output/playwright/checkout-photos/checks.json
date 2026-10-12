@@ -1,0 +1,17 @@
+{
+  "origin": "https://heavensharvestpantry.com",
+  "results": [
+    {
+      "width": 1280,
+      "overflow": false,
+      "brokenImages": []
+    },
+    {
+      "width": 390,
+      "overflow": false,
+      "brokenImages": []
+    }
+  ],
+  "errors": [],
+  "interactions": "quantity updates, persistence, matching bag/jar images, gift validation, optional verse unchanged"
+}

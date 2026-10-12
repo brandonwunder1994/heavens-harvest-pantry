@@ -1,0 +1,198 @@
+[
+  {
+    "id": "start",
+    "title": "Start here",
+    "steps": [
+      "Open your website. Add /owner to the end of its address.",
+      "Type your Username and Password. Tap Sign in.",
+      "Pick a tab from the menu. On a phone, tap Menu to open the navigation.",
+      "Tap Sign out when you are done. Keep your password private."
+    ],
+    "tip": "This guide uses sample people and orders. It never shows your home address."
+  },
+  {
+    "id": "dashboard",
+    "title": "Dashboard",
+    "steps": [
+      "Open Dashboard. Read sales and order counts for the past seven days. Sales include tax.",
+      "Read the bake space and work still to do.",
+      "Tap an alert to see what needs help.",
+      "Open Orders to find a customer. Open Bake & pickup to plan your work."
+    ],
+    "tip": "If payment data will not load, try again. A blank list does not mean there are no orders."
+  },
+  {
+    "id": "today",
+    "title": "Bake & pickup",
+    "steps": [
+      "Open Bake & pickup. Choose the bake you want to work on.",
+      "Read Paid, Held in checkout, and Remaining. All three add up to 48 lb. Held means someone is still paying.",
+      "Open Bake list. It puts Friday and Saturday orders together. Read each flavor, size, and No ingredient note.",
+      "Open Pickups to see Friday morning, Friday afternoon, Saturday morning, and Saturday afternoon. Afternoon starts at noon.",
+      "Put the whole pickup order in the porch fridge if it has any chocolate. Put other pickup orders on the porch table. The list tells you which place to use.",
+      "After the customer collects the order, tap Mark picked up. Tap Undo completion if you made a mistake.",
+      "Use Friday blessing deliveries for gifts. Read the recipient and address. Tap Mark delivered after delivery. Keep the giver’s name private.",
+      "Check Confirmation email. If it says error, tap Retry confirmation email. The order is still paid. Never ask the customer to pay again."
+    ],
+    "tip": "Finished pickups, deliveries, and refunds still count in that bake. Do not bake unpaid holds. If payment data will not load, refresh before you bake."
+  },
+  {
+    "id": "orders",
+    "title": "Find and finish orders",
+    "steps": [
+      "Open Orders. It starts with outstanding paid orders.",
+      "Type a name, phone, email, receipt, or gift recipient. Choose a bake and status if needed. Tap Find orders.",
+      "Choose Completed or All paid orders to find old orders. Tap Next or Previous to see more.",
+      "Tap Print label beside the item. Mark the pickup or gift done after it is finished. Tap Undo completion to fix a mistake.",
+      "If an email failed, the order is still paid. Read the error. Tap Retry confirmation email to try again."
+    ],
+    "tip": "Find practice receipts under Settings. If payment data will not load, try again before you bake."
+  },
+  {
+    "id": "settings",
+    "title": "Settings",
+    "steps": [
+      "Open Settings to edit the private pickup address and contact. These details appear only after payment.",
+      "The storefront message is the note beside the porch light. Change it and save. This note cannot stop orders or mark a flavor sold out.",
+      "Use the links for weekly verses, customer reviews, practice orders, historical rewards and this guide."
+    ],
+    "tip": "Ask for help to change bake days, the 48 lb limit, payments, or tax."
+  },
+  {
+    "id": "mock",
+    "title": "Mock orders",
+    "steps": [
+      "Open Settings, then Practice orders. Mock orders do not enter real sales, bake capacity, pickups, or gifts.",
+      "Tap Open practice shop or Practice menu. Make sure the page says MOCK before you use it.",
+      "Choose items and pickup. Tap Continue to secure payment. The practice screen uses a sample card. Tap Complete practice payment to see what comes next. Or tap Try a declined payment to practice a card problem.",
+      "Read the receipt and pickup notes. Tap Preview confirmation email. No charge or email is sent. The tax is just an example.",
+      "Find saved practice receipts in Mock orders. Tap Reopen mock confirmation to see one again.",
+      "In the practice shop, use Start over for a new empty basket. Leave practice mode before taking a real order."
+    ],
+    "tip": "Never bake or deliver a mock order. The simulation works without Stripe keys. Optional Stripe test checkout needs its own setup."
+  },
+  {
+    "id": "kitchen",
+    "title": "Products & prices",
+    "steps": [
+      "Open Products & prices. Change 3 oz, 8 oz, and 16 oz prices directly in the product list. Prices are before tax.",
+      "Clear Available to mark a product sold out. Enter Back on if useful. Check Available to sell it again.",
+      "Tap Edit beside a product. Change its name, words, ingredients, allergens, or label pictures. You can also choose No ingredient options and whether it needs the fridge.",
+      "Use only omissions that fit the recipe. No shredded coconut still includes coconut oil.",
+      "Tap Save products & prices and wait for Saved before leaving.",
+      "Tap Add product to make a new one. Check each field before saving. Old paid orders keep the details the customer bought.",
+      "Below the list, change the gift surcharge if needed and tap Save gift surcharge. This charge covers the jar and anonymous Friday delivery in Vistancia."
+    ],
+    "tip": "Private pickup details moved to Settings. Friday and Saturday share a 48 lb bake; the cutoff is Tuesday at 9 p.m. Arizona time."
+  },
+  {
+    "id": "labels",
+    "title": "Labels",
+    "steps": [
+      "Open Print studio, then Product labels. Or tap Print label beside an item in Orders or Bake & pickup. Its bought recipe and size stay saved, even if you removed that product.",
+      "Under Whose order this is, choose the exact item. This fills its flavor, purchased size, and No ingredient choices.",
+      "For an extra label, choose a Flavor, then 3 oz, 8 oz, or 16 oz. Gift jars use the same food weight as bags.",
+      "Check Ingredients, Allergens, Produced date, and Tracker code. For gifts, use the recipient’s name. Never print the giver’s name.",
+      "Tap Save this flavor’s label if you want to keep its words for next time.",
+      "Tap Download PNG for T50M Pro. Open the picture in the Katasymbol app.",
+      "Choose 50×80 mm tape. Turn the picture sideways if needed. Print one test label. Check that every word fits, then print the rest."
+    ],
+    "tip": "Food weights: 3 oz / 85 g, 8 oz / 227 g, 16 oz / 454 g. Check the order choices again when printing the next item."
+  },
+  {
+    "id": "qr",
+    "title": "QR",
+    "steps": [
+      "Open Print studio, then choose this tool.",
+      "Tap Download the color QR for a color printer.",
+      "Tap Download for the thermal printer for a black and white picture.",
+      "Or tap Print tags. A new page opens. Use your browser’s Print button.",
+      "Scan one printed code with your phone. Make sure it opens the menu."
+    ],
+    "tip": "Print at actual size. Keep the white space around the code."
+  },
+  {
+    "id": "thank-you",
+    "title": "Thank-you cards",
+    "steps": [
+      "Open Print studio, then choose this tool.",
+      "Tap Print eight thank-you cards.",
+      "In the new page, open Print. Choose letter paper. Turn off page headers and footers.",
+      "Check the preview. Print one sheet. Cut along the dotted lines.",
+      "Put one card in each order. Scan a card to check that the review link works."
+    ],
+    "tip": "These cards ask for an honest review. They do not name a gift’s giver."
+  },
+  {
+    "id": "verse",
+    "title": "Verse card",
+    "steps": [
+      "Open Settings, then Weekly verse & site verses. You can print the current weekly card directly from Print studio.",
+      "Read the verse marked In use. The site picks a new weekly verse on its own.",
+      "To change it, type the words and Where it is from. Tap Make this week’s verse.",
+      "To go back to the site’s weekly choice, tap Use this week’s verse instead. This button shows only when you have changed the weekly verse.",
+      "Tap Print this week’s cards. Check the print preview, print, and cut the cards.",
+      "The closing verse on the home and story pages is below. Change it only when needed, then tap Save these verses."
+    ],
+    "tip": "A blessing gift can include the verse the customer chose. Read that gift’s card note in Bake & pickup."
+  },
+  {
+    "id": "reviews",
+    "title": "Reviews",
+    "steps": [
+      "Open Settings, then Customer reviews, or follow the review alert on Dashboard.",
+      "Read the reviews under Waiting on you. They are private until you approve them.",
+      "Tap Put it on the site to show a review to customers.",
+      "To remove a review, tap Delete for good. Then tap Yes, delete.",
+      "Tap Keep it if you change your mind before deleting."
+    ],
+    "tip": "A deleted review cannot be brought back. A review already on the site is marked On the site."
+  },
+  {
+    "id": "rewards",
+    "title": "Rewards · paused",
+    "steps": [
+      "Open Settings, then Historical reward balances. This page is read-only.",
+      "Rewards remain paused. Customers cannot join or earn new points.",
+      "Saved point balances remain intact. Ask for help before changing the rewards program."
+    ],
+    "tip": "Pausing rewards does not delete anyone’s saved points."
+  },
+  {
+    "id": "help",
+    "title": "Help",
+    "steps": [
+      "Open Settings, then Pantry guide. Tap a topic to jump to its instructions.",
+      "Tap Download the easy guide (PDF) to save a copy.",
+      "Open the saved file. Print all pages or just the page you need.",
+      "Keep the guide near your packing table. Keep your password and pickup address out of it."
+    ],
+    "tip": "The Help tab and this PDF use the same set of instructions."
+  },
+  {
+    "id": "week",
+    "title": "Your weekly checklist",
+    "steps": [
+      "Check Products & prices, including size prices and Available boxes. Save changes.",
+      "Check the verse. Print cards and scan a QR code.",
+      "Before baking, refresh Bake & pickup. Read paid weight and the Combined bake list.",
+      "Bake and pack by flavor, size, and No ingredient notes. Check every label.",
+      "Stock the four pickup groups. Keep chocolate orders in the fridge.",
+      "Deliver blessing gifts on Friday. Mark each gift Delivered and each collected order Picked up."
+    ],
+    "tip": "The next bake opens after Tuesday’s 9 p.m. cutoff. A customer who has already started paying may finish during their short payment hold."
+  },
+  {
+    "id": "trouble",
+    "title": "When something goes wrong",
+    "steps": [
+      "Save did not work: keep the page open. Read the message. Check the fields and try Save again. Wait for Saved.",
+      "Payment data did not load: refresh Bake & pickup. If it still fails, ask for help. Do not treat an empty list as proof that there are no orders.",
+      "Email failed: use Retry confirmation email in Bake & pickup. The paid order stays paid. If the retry still fails, ask for help and give the order code, never a password.",
+      "This bake is full: no more new orders fit. Four pickup groups share the same 48 lb limit.",
+      "Checkout is paused: ask for help checking payment, email, and bake space. Do not ask a customer to send card details by text.",
+      "Printed words are cut off: check the size in Katasymbol and print one test label again."
+    ],
+    "tip": "When asking for help, say which tab you used and what the message says."
+  }
+]

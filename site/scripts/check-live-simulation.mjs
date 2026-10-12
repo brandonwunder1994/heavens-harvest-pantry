@@ -1,0 +1,13 @@
+import assert from 'node:assert/strict';
+const origin='https://heavensharvestpantry.com';
+const payment=await fetch(origin+'/api/mock/simulate',{method:'POST',headers:{origin,'Content-Type':'application/json'},body:JSON.stringify({action:'prepare'})});
+assert.equal(payment.status,401);assert.equal((await payment.json()).error,'owner_login_required');
+assert.match(payment.headers.get('cache-control'),/no-store/);
+const crossOrigin=await fetch(origin+'/api/mock/simulate',{method:'POST',headers:{origin:'https://example.com','Content-Type':'application/json'},body:'{}'});
+assert.equal(crossOrigin.status,403);
+const checkout=await fetch(origin+'/mock/checkout',{redirect:'manual'});
+assert.ok([303,307,308].includes(checkout.status));assert.match(checkout.headers.get('location'),/\/owner\/login/);
+const capacity=await fetch(origin+'/api/capacity');assert.equal(capacity.status,200);
+const space=await capacity.json();assert.equal(space.capacityOz,768);
+const home=await fetch(origin);assert.equal(home.status,200);
+console.log('PASS: live simulated-payment route deployed; owner login and same-origin required; private no-store; practice checkout redirects to sign-in; public shop and shared 48 lb capacity healthy.');

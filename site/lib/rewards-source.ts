@@ -1,6 +1,7 @@
 import "server-only";
 import { databaseReady, safely, sql } from "@/lib/db";
 import { normaliseEmail, type Account } from "@/lib/rewards";
+import {guideSample} from "@/lib/handoff-sample";
 
 /** Reading and writing points. All the arithmetic lives in `lib/rewards.ts`. */
 
@@ -97,6 +98,7 @@ export type StandingsResult =
  * "nobody has points yet" apart from "the points could not be read".
  */
 export async function everyStanding(limit = 200): Promise<StandingsResult> {
+  if(guideSample)return {status:"ok",standings:[{email:"sample@example.com",name:"Sample Neighbor",points:12}]};
   if (!databaseReady) return { status: "not_configured" };
   try {
     const rows = (await sql()`

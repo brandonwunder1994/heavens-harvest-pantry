@@ -14,11 +14,7 @@ import { limits } from "@/lib/shop-schema";
  */
 
 const slots: { key: string; where: string }[] = [
-  { key: "work", where: "Her story" },
-  { key: "card", where: "The verse card panel on the home page" },
-  { key: "giving", where: "Blessing bags" },
-  { key: "table", where: "The closing band" },
-  { key: "blessing", where: "The footer blessing" },
+  { key: "table", where: "The closing verse on the home and story pages" },
 ];
 
 export function WeeklyVerseEditor({ verse }: { verse: Verse }) {
@@ -91,7 +87,7 @@ export function WeeklyVerseEditor({ verse }: { verse: Verse }) {
           <span className="small-caps">How it will look</span>
           <CrossWheat size={26} color="#4f5a35" />
         </div>
-        <p className="verse text-[21px] text-ink">&ldquo;{value.text || "…"}&rdquo;</p>
+        <p className="verse text-[21px] text-ink">&ldquo;{value.text || "â€¦"}&rdquo;</p>
         <div className="ref !text-[10px] text-sage-deep">{value.reference || "reference"}</div>
       </aside>
     </form>

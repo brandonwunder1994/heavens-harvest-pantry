@@ -1,14 +1,15 @@
 import type { Metadata } from "next";
 import { PageHeader } from "@/components/PageHeader";
-import { HeartSeal } from "@/components/Sprite";
 import { ReviewForm } from "@/components/reviews/ReviewForm";
 import { averageRating, starLine } from "@/lib/reviews";
 import { publishedReviews } from "@/lib/reviews-source";
 import { getShop } from "@/lib/settings";
+import { josephReview } from "@/lib/customer-testimonial";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/reviews" },
   title: "Reviews",
-  description: "What neighbors say after a delivery. Every review is read and published by hand.",
+  description: "What neighbors say after an order. Every review is read and published by hand.",
 };
 
 export default async function ReviewsPage({
@@ -29,7 +30,7 @@ export default async function ReviewsPage({
       <PageHeader
         eyebrow="From the neighborhood"
         title="What people say at the door."
-        standfirst="She reads every one of these herself before it goes up, and nothing is edited except to take out an address or a phone number."
+        standfirst="Words from neighbors who have tried the granola. New reviews are read before they appear here."
       />
 
       {reviews.length > 0 ? (
@@ -44,18 +45,11 @@ export default async function ReviewsPage({
       ) : null}
 
       <section className="mx-auto mt-10 w-full max-w-[820px] px-6 sm:px-10">
-        {reviews.length === 0 ? (
-          <div className="dashed-frame flex flex-col items-center gap-4 bg-paper px-8 py-14 text-center">
-            <HeartSeal size={44} />
-            <p className="display text-[30px] italic leading-tight text-ink sm:text-[38px]">
-              No reviews yet. Be the first.
-            </p>
-            <p className="max-w-md text-[18px] leading-relaxed text-muted">
-              If a bag has already landed on your porch, the form below goes straight to her.
-            </p>
-          </div>
-        ) : (
-          <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-6">
+          <article className="dashed-frame flex flex-col gap-3 bg-paper px-6 py-7 sm:px-8">
+            <p className="text-[20px] italic leading-snug text-ink sm:text-[24px]">&ldquo;{josephReview.body}&rdquo;</p>
+            <div className="small-caps">{josephReview.name} · a neighbor</div>
+          </article>
             {reviews.map((review) => (
               <article key={review.id} className="dashed-frame flex flex-col gap-2.5 bg-paper px-6 py-6 sm:px-8">
                 <div className="text-[15px] tracking-[0.18em] text-gold">
@@ -69,12 +63,11 @@ export default async function ReviewsPage({
                 </div>
               </article>
             ))}
-          </div>
-        )}
+        </div>
       </section>
 
       <section id="leave-one" className="mx-auto mt-14 w-full max-w-[820px] px-6 pb-16 sm:px-10">
-        <h2 className="display mb-4 text-center text-[32px] sm:text-[40px]">Had a delivery?</h2>
+        <h2 className="display mb-4 text-center text-[32px] sm:text-[40px]">Tried the granola?</h2>
         <ReviewForm flavors={shop.flavors.map((f) => f.name)} presetFlavor={flavor} />
       </section>
     </>

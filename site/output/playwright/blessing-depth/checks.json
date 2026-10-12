@@ -1,0 +1,23 @@
+{
+  "origin": "https://heavensharvestpantry.com",
+  "results": [
+    {
+      "width": 1280,
+      "animation": "blessing-gift-float",
+      "filter": "drop-shadow(rgba(58, 39, 18, 0.18) 0px 12px 12px)",
+      "shadow": "blur(9px)",
+      "overflow": false,
+      "reducedMotion": "passed",
+      "errors": []
+    },
+    {
+      "width": 390,
+      "animation": "blessing-gift-float",
+      "filter": "drop-shadow(rgba(58, 39, 18, 0.18) 0px 12px 12px)",
+      "shadow": "blur(9px)",
+      "overflow": false,
+      "reducedMotion": "passed",
+      "errors": []
+    }
+  ]
+}

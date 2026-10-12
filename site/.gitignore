@@ -43,3 +43,17 @@ next-env.d.ts
 .vercel
 .env*.local
 .env.local.local-owner
+
+/.next-handoff/
+/.handoff-tests.log
+/.mock-deploy/
+
+/.next-owner-*/
+/.next-simulation/
+/.mock-simulation-tests.log
+/.next-blessing-check/
+/.playwright-cli/
+
+/.next-mockorder/
+
+/.next-launch-*/

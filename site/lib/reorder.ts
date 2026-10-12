@@ -20,7 +20,7 @@ const MAX_QTY = 20;
 
 /** Builds the link, or null when nothing on the old order can still be bought. */
 export function reorderLink(
-  items: { qty: number; name: string; format: "jar" | "bag" }[],
+  items: { qty: number; name: string; format: Format }[],
   flavors: Flavor[],
 ): string | null {
   const bySlug = new Map(flavors.filter((f) => !f.soldOut).map((f) => [f.name.toLowerCase(), f.slug]));
@@ -47,7 +47,7 @@ export function readReorder(raw: string | null | undefined, flavors: Flavor[]): 
   for (const part of raw.split(",").slice(0, MAX_LINES)) {
     const [slug, format, qty] = part.split(":");
     if (!sellable.has(slug)) continue;
-    if (format !== "jar" && format !== "bag") continue;
+    if (format !== "jar" && format !== "bag" && format !== "sampler") continue;
 
     const key = `${slug}:${format}`;
     if (seen.has(key)) continue;

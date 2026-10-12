@@ -1,3 +1,4 @@
+import { REWARDS_ENABLED } from "@/lib/features";
 import { NextResponse } from "next/server";
 import { databaseReady } from "@/lib/db";
 import { mailReady, sendMail } from "@/lib/mailer";
@@ -17,6 +18,7 @@ import { business } from "@/lib/content";
  * addresses and gives up, and nobody ever finds out the mail was broken.
  */
 export async function POST(request: Request) {
+  if (!REWARDS_ENABLED) return NextResponse.json({ error: "rewards_paused", message: "Rewards are paused." }, { status: 404 });
   let body: unknown;
   try {
     body = await request.json();

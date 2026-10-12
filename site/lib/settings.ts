@@ -2,8 +2,9 @@ import "server-only";
 import { cache } from "react";
 import { defaultShop, type Shop, type Verse } from "@/lib/content";
 import { databaseReady, sql } from "@/lib/db";
-import { checkBlock, mergeShop, mergeVerse, type EditableKey } from "@/lib/shop-schema";
+import { checkBlock, mergeShop, mergeVerse, mergeFlavors, type EditableKey } from "@/lib/shop-schema";
 import { weeklyVerse } from "@/lib/verses";
+import { guideSample } from "@/lib/handoff-sample";
 
 export { editableKeys, isEditableKey, type EditableKey } from "@/lib/shop-schema";
 
@@ -30,12 +31,13 @@ export const readShop = cache(async function readShop(): Promise<ShopRead> {
   // Whatever happens below, the week's verse is worked out from the date. There
   // is no Monday morning task and nothing that can be forgotten.
   const weekly = weeklyVerse();
+  if (guideSample) return { shop: { ...defaultShop, verseOfTheWeek: weekly }, live: true };
 
   if (!databaseReady) return { shop: { ...defaultShop, verseOfTheWeek: weekly }, live: false };
 
   try {
-    const rows = (await sql()`select key, value from settings`) as Row[];
-    const saved = new Map(rows.map((row) => [row.key, row.value] as const));
+    const rows = (await sql()`select key, value from settings where key <> 'privatePickup'`) as Row[];
+    const saved = new Map(rows.filter(row => row.key !== "privatePickup").map((row) => [row.key, row.value] as const));
     return { shop: mergeShop(saved, weekly), live: true };
   } catch (error) {
     console.error("[settings] could not read her settings, showing the built-in defaults", error);
@@ -74,10 +76,15 @@ export async function clearWeeklyVerse(): Promise<void> {
 export async function saveSetting(key: EditableKey, value: unknown): Promise<SaveOutcome> {
   const check = checkBlock(key, value);
   if (!check.ok) return check;
+  // Persist current product prices once. Legacy aliases are derived on read.
+  const saved = key === "flavors" ? mergeFlavors(value).map(f => ({ ...f,
+    sizePrices: f.sizePrices ?? { 3: f.samplerPrice ?? 5, 8: f.category === "almonds" ? 12 : 10, 16: f.bagPrice },
+    bagPrice: undefined, jarPrice: undefined, samplerPrice: undefined, addIns: undefined,
+  })) : value;
 
   await sql()`
     insert into settings (key, value, updated_at)
-    values (${key}, ${JSON.stringify(value)}::jsonb, now())
+    values (${key}, ${JSON.stringify(saved)}::jsonb, now())
     on conflict (key) do update set value = excluded.value, updated_at = now()
   `;
   return { ok: true };

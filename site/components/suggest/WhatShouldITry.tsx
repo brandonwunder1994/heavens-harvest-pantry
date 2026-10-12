@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
+import Link from "@/components/ShopLink";
 import { HeartSeal } from "@/components/Sprite";
 import { money, type Flavor } from "@/lib/content";
 import { QUESTIONS, TINTS, reason, suggest, type Answers } from "@/lib/suggest";

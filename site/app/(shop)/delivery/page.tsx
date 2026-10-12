@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import { redirect } from "next/navigation";
 import { PageHeader } from "@/components/PageHeader";
-import { business, filled, money } from "@/lib/content";
+import { business, filled } from "@/lib/content";
 import { getShop } from "@/lib/settings";
+import { DELIVERY_ENABLED } from "@/lib/fulfilment";
 
 export async function generateMetadata(): Promise<Metadata> {
+  if (!DELIVERY_ENABLED) return { title: "Porch pickup", robots: { index: false } };
   const { delivery } = await getShop();
   const where = delivery.runs.map((run) => `${run.area} on ${run.day}`).join(", or ");
   return {
@@ -32,7 +34,8 @@ const stepsFor = (cutoff: string, bakeDay: string) => [
 ];
 
 export default async function DeliveryPage() {
-  const { delivery, jarRules } = await getShop();
+  if (!DELIVERY_ENABLED) redirect("/pickup");
+  const { delivery } = await getShop();
   const steps = stepsFor(delivery.cutoff, delivery.bakeDay);
 
   return (
@@ -89,14 +92,10 @@ export default async function DeliveryPage() {
           </p>
         </div>
         <div className="dashed-frame flex flex-col gap-2 bg-paper px-6 py-6">
-          <div className="display text-[26px]">Jars come back</div>
+          <div className="display text-[26px]">Sealable bags</div>
           <p className="text-[17px] leading-snug text-muted">
-            Leave your empty jars out when the next order arrives. Each one takes {money(jarRules.creditDollars)} off, and
-            she rinses and reuses them.
+            Choose regular resealable bags or 3 oz sampler bags. Order now for the first porch pickup on Friday, October 16.
           </p>
-          <Link href="/jars" className="font-ui text-[13px] font-semibold text-sage hover:text-brown">
-            How the jar system works
-          </Link>
         </div>
         <div className="dashed-frame flex flex-col gap-2 bg-paper px-6 py-6">
           <div className="display text-[26px]">Need a different day?</div>

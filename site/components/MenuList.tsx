@@ -1,8 +1,8 @@
-import Link from "next/link";
-import { money, type Shop } from "@/lib/content";
+import Link from "@/components/ShopLink";
+import { type Shop } from "@/lib/content";
 
 /**
- * The menu as a printed bill of fare: name, dot leaders, price. Used on the
+ * The menu as a printed bill of fare: name and dot leaders. Used on the
  * home page and, in a denser form, on the menu page itself.
  */
 export function MenuList({ shop }: { shop: Shop }) {
@@ -10,16 +10,16 @@ export function MenuList({ shop }: { shop: Shop }) {
     <div className="flex flex-col gap-6 sm:gap-7">
       {shop.flavors.map((flavor) => (
         <div key={flavor.slug} className="relative flex flex-col gap-1.5">
-          <div className={`leader ${flavor.soldOut ? "opacity-55" : ""}`}>
+          <div className={`menu-leader ${flavor.soldOut ? "opacity-55" : ""}`}>
             <Link
               href={`/menu#${flavor.slug}`}
-              className="display text-[26px] hover:text-sage sm:text-[32px]"
+              className="display min-w-0 text-[26px] hover:text-sage sm:text-[32px]"
             >
               {flavor.name}
             </Link>
-            <span className="leader-dots hidden sm:block" />
-            <span className="whitespace-nowrap font-ui text-[13px] font-semibold text-brown sm:text-[15px]">
-              bag {money(flavor.bagPrice)} · jar {money(flavor.jarPrice)}
+            <span className="leader-dots" aria-hidden="true" />
+            <span className="font-ui text-[11px] font-semibold uppercase tracking-[0.12em] text-sage sm:text-[12px]">
+              3 oz · 8 oz · 1 lb
             </span>
           </div>
           <p

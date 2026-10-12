@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import Link from "@/components/ShopLink";
 import { PageHeader } from "@/components/PageHeader";
 import { Jar } from "@/components/Sprite";
 import { business, money, rewardOffer, type Shop } from "@/lib/content";
 import { getShop } from "@/lib/settings";
+import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
   title: "The jar system",
@@ -24,11 +25,12 @@ const stepsFor = ({ jarRules }: Shop) => [
   {
     numeral: "III",
     title: "Hand it back.",
-    body: `Say how many at checkout and leave them out for her. Each one takes ${money(jarRules.creditDollars)} off that order and helps punch your rewards card.`,
+    body: `Say how many at checkout and bring them to Friday pickup. Each one takes ${money(jarRules.creditDollars)} off that order and helps punch your rewards card.`,
   },
 ];
 
 export default async function JarsPage() {
+  redirect("/menu");
   const shop = await getShop();
   const { jarRules } = shop;
   const steps = stepsFor(shop);
@@ -74,7 +76,7 @@ export default async function JarsPage() {
             </div>
             <div className="border border-brown bg-white p-1">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/qr.svg?v=4" alt="" width={104} height={104} className="block h-[104px] w-[104px]" />
+              <img src="/qr.svg?v=6" alt="" width={104} height={104} className="block h-[104px] w-[104px]" />
             </div>
             <div className="flex flex-col items-center gap-0.5">
               <p className="text-center text-[11px] italic leading-tight text-brown">

@@ -1,0 +1,3 @@
+# Owner portal — Operate
+
+Approved implementation plan: six destinations; balanced snapshot; quick prices plus detail editor; equal support for phone and computer. Extend the existing brand rather than creating a new visual world. Use a quiet work surface, compact tables, descriptive sections, and clear next actions. No decorative motion or new raster assets. Business totals cover seven Arizona calendar days and the previous seven, and explicitly include tax. Existing paid snapshots and all owner/print URLs remain compatible. Errors, empty states and unsaved changes must remain visible and actionable.

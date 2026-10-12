@@ -1,46 +1,12 @@
 import { redirect } from "next/navigation";
 import { CannotReach, OwnerHeading, OwnerShell } from "@/components/owner/Shell";
 import { FlavorEditor } from "@/components/owner/FlavorEditor";
-import { DeliveryEditor } from "@/components/owner/DeliveryEditor";
-import { RulesEditor } from "@/components/owner/RulesEditor";
+import { GiftPriceEditor } from "@/components/owner/GiftPriceEditor";
 import { isSignedIn } from "@/lib/owner-auth";
 import { readShop } from "@/lib/settings";
-
 export const dynamic = "force-dynamic";
-
 export default async function KitchenPage() {
   if (!(await isSignedIn())) redirect("/owner/login");
-
   const { shop, live } = await readShop();
-
-  return (
-    <OwnerShell active="/owner/kitchen">
-      <OwnerHeading
-        eyebrow="Flavors & prices"
-        title="What you are selling this week."
-        note="Change anything here and the shop shows it straight away. Prices are in dollars; a customer who already has something in their basket gets the new price at checkout, never the old one."
-      />
-
-      {!live ? (
-        <CannotReach what="menu" />
-      ) : (
-        <>
-          <section className="flex flex-col gap-5">
-            <h2 className="display m-0 text-[26px]">Flavors and prices</h2>
-            <FlavorEditor flavors={shop.flavors} />
-          </section>
-
-          <section className="mt-6 flex flex-col gap-5">
-            <h2 className="display m-0 text-[26px]">Delivery days</h2>
-            <DeliveryEditor delivery={shop.delivery} />
-          </section>
-
-          <section className="mt-6 flex flex-col gap-5">
-            <h2 className="display m-0 text-[26px]">The rules behind the numbers</h2>
-            <RulesEditor jarRules={shop.jarRules} rewards={shop.rewards} blessingBag={shop.blessingBag} />
-          </section>
-        </>
-      )}
-    </OwnerShell>
-  );
+  return <OwnerShell active="/owner/kitchen"><OwnerHeading title="Products & prices" note="Saved changes appear on the shop immediately. Customers review any changed total before paying; paid orders keep their original prices." />{live ? <><FlavorEditor flavors={shop.flavors} /><section className="border-t border-rule pt-7"><GiftPriceEditor price={shop.blessingBag.price} /></section></> : <CannotReach what="menu" />}</OwnerShell>;
 }

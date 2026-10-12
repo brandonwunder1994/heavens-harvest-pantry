@@ -2,18 +2,19 @@ import type { Flavor, LabelSettings, LabelSize, LabelTemplate, Verse } from "@/l
 import { defaultLabelSettings, labelScripture } from "@/lib/content";
 
 /**
- * The T50M Pro prints 203 DPI on a 50mm × 80mm tape. Max print width is 48mm
- * (384 dots). Height at 80mm is 640 dots. The PNG we hand her is this canvas.
+ * The T50M Pro prints 203 DPI on 50mm-wide tape. This label is landscape:
+ * 80mm along the feed (640 dots) by 48mm of printable height (384 dots).
  */
-export const LABEL_WIDTH_PX = 384;
-export const LABEL_HEIGHT_PX = 640;
+export const LABEL_WIDTH_PX = 640;
+export const LABEL_HEIGHT_PX = 384;
 
 export const LABEL_COTTAGE = "Made in a home kitchen · Peoria, AZ";
 
 const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
 export function defaultNetWeight(size: LabelSize): string {
-  return size === "jar" ? "Net Wt 16 oz (454 g)" : "Net Wt 12 oz (340 g)";
+  void size; // Legacy bag/jar templates both default to one pound.
+  return "Net Wt 16 oz (454 g)";
 }
 
 export function todayIso(now = new Date()): string {

@@ -1,5 +1,5 @@
 /* Written by process-hero.py. Twenty pixels of the settled scene. */
 :root {
-  --still-blur-wide: url("data:image/webp;base64,UklGRmAAAABXRUJQVlA4IFQAAACQAwCdASoUAAwAPu1iqk4ppaQiMAgBMB2JQBOgBDsSjEYGvvTmAP7x2thqfjynZ/BlNJUu8r2iYGI4W8LHT0k8y9jmZUnFC1mQ8/w5gIFMcm8wAAA=");
-  --still-blur-tall: url("data:image/webp;base64,UklGRmIAAABXRUJQVlA4IFYAAADwAwCdASoMABQAPu1iqk2ppaQiMAgBMB2JQBOmUABp0sY9ybt86hMAAP7tV71iRhtgo+f1O353ZvvcT/xjJmV3eb93QoXf/elghCVC3EL8xDATFbAAAA==");
+  --still-blur-wide: url("data:image/webp;base64,UklGRmQAAABXRUJQVlA4IFgAAADQAwCdASoUAAwAPu1iqk4ppaQiMAgBMB2JQBOl6gA6KPtAX2S7lkAA/vHa2GTqsil/VM2/F7zCCSPxbwmOEE4x8xGUomabb3rBrg3HaSLxEYQ3M/eNzOAA");
+  --still-blur-tall: url("data:image/webp;base64,UklGRmAAAABXRUJQVlA4IFQAAADQAwCdASoMABQAPu1iqk2ppaQiMAgBMB2JQBWABDva7HdnKpcLwVgA/u1XqJ+vgoDeDRsSVJIVSuZ9jyNPgJOVwXua4se08OztyidOwwwsGRYgAAA=");
 }

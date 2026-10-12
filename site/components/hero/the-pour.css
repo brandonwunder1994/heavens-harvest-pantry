@@ -56,26 +56,7 @@
 .the-pour .jar-empty { z-index: 0; }
 .the-pour .jar-fill {
   z-index: 1;
-  clip-path: inset(100% 0 0 0);
-}
-
-.the-pour .jar-lid {
-  position: absolute;
-  left: 50%;
-  top: 1.2%;
-  z-index: 2;
-  width: 78%;
-  height: auto;
-  transform: translate(-50%, -160%);
-  opacity: 0;
-  pointer-events: none;
-}
-.the-pour .jar-lid.on {
-  transform: translate(-50%, 0);
-  opacity: 1;
-  transition:
-    transform 480ms cubic-bezier(.2, .85, .2, 1),
-    opacity 160ms ease;
+  clip-path: polygon(0 100%, 0 100%, 100% 100%, 100% 100%);
 }
 
 .the-pour .steam {

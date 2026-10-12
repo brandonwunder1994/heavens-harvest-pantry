@@ -1,3 +1,4 @@
+import "server-only";
 import Stripe from "stripe";
 
 let cached: Stripe | null | undefined;
@@ -15,7 +16,7 @@ export function getStripe(): Stripe | null {
 }
 
 export function paymentsConfigured(): boolean {
-  return Boolean(process.env.STRIPE_SECRET_KEY);
+  return Boolean(process.env.STRIPE_SECRET_KEY && process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY && process.env.STRIPE_WEBHOOK_SECRET);
 }
 
 export function isTestMode(): boolean {

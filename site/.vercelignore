@@ -1,0 +1,17 @@
+.npm-cache/
+.review-setup.mjs
+.env.local
+.env*.local
+node_modules/
+.next/
+output/
+.checkout-tests.log
+
+.next-handoff/
+.next-*/
+.next-graphics-check/
+.next-mock-check/
+.handoff-tests.log
+.mock-deploy/
+.mock-simulation-tests.log
+.playwright-cli/

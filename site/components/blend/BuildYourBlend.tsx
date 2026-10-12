@@ -13,20 +13,12 @@
 // so somebody who never gets the picture can still build a blend, read what it
 // would be, and buy it.
 
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useMemo, useState } from 'react';
+import { FloatingJar } from '@/components/FloatingJars';
 import { useCart } from '@/components/cart/CartProvider';
 import { basketCrunch } from '@/components/craft/SoundSwitch';
-import { stillReason } from '@/components/hero/still';
 import { NAME_LIMIT, cleanName, matchBlend, stockOf } from '@/lib/blend';
-import { hourFor } from '@/lib/hour';
-import { materialFor } from '@/lib/material';
 import { money, type Flavor } from '@/lib/content';
-
-type Turn = {
-  dispose(): void;
-  turn(radians?: number): void;
-  setFlavor(flavor: Flavor, look: ReturnType<typeof materialFor>, forWhom?: string): void;
-};
 
 /** "pecans and cinnamon", "almonds, honey and sea salt". */
 function listed(items: string[]): string {
@@ -36,11 +28,6 @@ function listed(items: string[]): string {
 
 export function BuildYourBlend({ flavors }: { flavors: Flavor[] }) {
   const { add } = useCart();
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const turnRef = useRef<Turn | null>(null);
-
-  const [possible, setPossible] = useState(false);
-  const [live, setLive] = useState(false);
   const [chosen, setChosen] = useState<string[]>([]);
   const [who, setWho] = useState('');
   const [added, setAdded] = useState<string | null>(null);
@@ -52,48 +39,6 @@ export function BuildYourBlend({ flavors }: { flavors: Flavor[] }) {
   // What the jar is showing: what she would actually bake for this.
   const showing = match.exact ?? match.closest ?? flavors[0] ?? null;
   const buyable = match.exact ?? (match.closest && !match.closest.soldOut ? match.closest : null);
-
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas || !flavors.length) return;
-    if (stillReason()) return;
-
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setPossible(true);
-    let cancelled = false;
-
-    (async () => {
-      try {
-        const [{ createTurn }, data] = await Promise.all([
-          import('@/components/hero/turn.js'),
-          fetch('/pour.json').then((r) => r.json()),
-        ]);
-        if (cancelled) return;
-        const start = flavors[0];
-        turnRef.current = createTurn({
-          canvas,
-          data,
-          flavor: start,
-          look: materialFor(start),
-          hour: hourFor(new Date()),
-        });
-        setLive(true);
-      } catch (error) {
-        if (!cancelled) console.error('[blend] the jar could not start', error);
-      }
-    })();
-
-    return () => {
-      cancelled = true;
-      turnRef.current?.dispose();
-      turnRef.current = null;
-    };
-  }, [flavors]);
-
-  useEffect(() => {
-    if (!showing) return;
-    turnRef.current?.setFlavor(showing, materialFor(showing), named);
-  }, [showing, named]);
 
   if (!flavors.length) return null;
 
@@ -115,18 +60,12 @@ export function BuildYourBlend({ flavors }: { flavors: Flavor[] }) {
 
   return (
     <div className="blend">
-      <div className="blend-stage" hidden={!possible} data-live={live ? 'yes' : 'no'}>
-        <canvas
-          ref={canvasRef}
-          className="turn-glass"
-          tabIndex={0}
-          role="img"
-          aria-label={
-            showing
-              ? `A jar of ${showing.name}${named ? `, labelled for ${named}` : ''}. Drag it, or use the arrow keys, to turn it round.`
-              : 'A jar'
-          }
-        />
+      <div className="blend-stage">
+        {showing ? (
+          <div className="turn-photo">
+            <FloatingJar key={showing.slug} flavor={showing} featured />
+          </div>
+        ) : null}
       </div>
 
       <div className="blend-choices">

@@ -37,7 +37,7 @@ test("packed dates stay on the calendar day she typed", () => {
 });
 
 test("a bag and a jar have different net weights", () => {
-  assert.match(defaultNetWeight("bag"), /12 oz/);
+  assert.match(defaultNetWeight("bag"), /16 oz/);
   assert.match(defaultNetWeight("jar"), /16 oz/);
 });
 

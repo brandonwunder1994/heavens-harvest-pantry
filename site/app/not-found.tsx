@@ -4,13 +4,14 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { HeartSeal } from "@/components/Sprite";
 import { getShop } from "@/lib/settings";
+import { ordersArePaused } from "@/lib/fulfilment";
 
 /** Sits above the route groups, so it brings its own shop chrome. */
 export default async function NotFound() {
   const shop = await getShop();
 
   return (
-    <CartProvider shop={shop}>
+    <CartProvider shop={shop} initialOrdersPaused={ordersArePaused()}>
       <Header shop={shop} />
       <main>
         <section className="mx-auto flex w-full max-w-[720px] flex-col items-center gap-5 px-6 py-24 text-center sm:px-10">

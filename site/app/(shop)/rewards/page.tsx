@@ -1,3 +1,4 @@
+import { REWARDS_ENABLED } from "@/lib/features";
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { PageHeader } from "@/components/PageHeader";
@@ -5,32 +6,27 @@ import { SignInBox } from "@/components/rewards/SignInBox";
 import { RewardsCard } from "@/components/rewards/RewardsCard";
 import { signedInEmail } from "@/lib/rewards-auth";
 import { mailReady } from "@/lib/mailer";
-import { money, rewardOffer, type Shop } from "@/lib/content";
-import { getShop } from "@/lib/settings";
+import { rewardOffer } from "@/lib/content";
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
     title: "Pantry Rewards",
-    description: `${rewardOffer.sentence} Every bag or jar punches the card, and returned jars help too.`,
+    description: `${rewardOffer.sentence} Every bag and sampler bag counts.`,
   };
 }
 
-const waysFor = ({ jarRules, rewards }: Shop) => [
+const waysFor = () => [
   {
-    title: "Every bag or jar",
+    title: "Every bag or sampler bag",
     body: "Ten punches, then one is free. Nothing to scan, nothing to remember. It starts on your first order.",
-  },
-  {
-    title: `${money(jarRules.creditDollars)} a jar back`,
-    body: `Returned jars take ${money(jarRules.creditDollars)} off the order and still help punch the card.`,
   },
   {
     title: "A head start",
     body: "Your first order starts the card, so you are already on your way rather than at nothing.",
   },
   {
-    title: `${money(rewards.referralCredit)} each way`,
-    body: "Send a neighbor. When their first delivery lands, you both get a credit on the next order.",
+    title: "Share with a neighbor",
+    body: "Send a neighbor our way. When ordering reopens, referrals will be part of Pantry Rewards.",
   },
 ];
 
@@ -41,26 +37,26 @@ export default async function RewardsPage({
 }: {
   searchParams: Promise<{ link?: string }>;
 }) {
+  if (!REWARDS_ENABLED) redirect("/menu");
   // Somebody already signed in on this device goes straight to their points.
   if (await signedInEmail()) redirect("/rewards/me");
   const { link } = await searchParams;
 
-  const shop = await getShop();
-  const ways = waysFor(shop);
+  const ways = waysFor();
 
   return (
     <>
       <PageHeader
         eyebrow="Pantry Rewards"
         title={rewardOffer.sentence}
-        standfirst="No app, no plastic card, nothing that quietly expires. The email your order goes to is your card, and the first bag or jar punches it without you doing anything."
+        standfirst="No app, no plastic card, nothing that quietly expires. The email your order goes to is your card, and bag and sampler orders count automatically."
       />
 
       <div className="mx-auto mt-10 flex w-full max-w-[1100px] justify-center px-6 sm:px-10">
         <RewardsCard punched={9} />
       </div>
 
-      <section className="mx-auto mt-14 grid w-full max-w-[1100px] gap-5 px-6 sm:px-10 lg:grid-cols-4">
+      <section className="mx-auto mt-14 grid w-full max-w-[1100px] gap-5 px-6 sm:px-10 lg:grid-cols-3">
         {ways.map((way) => (
           <div key={way.title} className="dashed-frame flex flex-col gap-2 bg-paper px-6 py-6">
             <div className="display text-[28px]">{way.title}</div>

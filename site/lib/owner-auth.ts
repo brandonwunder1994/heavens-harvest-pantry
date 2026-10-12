@@ -3,6 +3,8 @@ import { createHmac, randomBytes, scrypt as scryptCb, timingSafeEqual } from "no
 import { promisify } from "node:util";
 import { cookies } from "next/headers";
 import { databaseReady, sql } from "@/lib/db";
+import { guideSample } from "@/lib/handoff-sample";
+import { passwordChangeProblem, passwordMatches, type PasswordChangeInput } from "@/lib/owner-password";
 
 const scrypt = promisify(scryptCb) as (
   password: string,
@@ -103,19 +105,48 @@ export async function verifyCredentials(username: string, password: string): Pro
   const expectedUser = match?.username ?? "\0".repeat(Math.max(wanted.length, 1));
   if (!validPasswordHash(stored) && !match) return false;
 
-  const [salt, hash] = stored.split(":");
-  if (!salt || !hash) return false;
-
   const userOk = safeEqual(wanted, expectedUser.trim().toLowerCase());
-  let passOk = false;
-  try {
-    const derived = await scrypt(password, salt, 64);
-    const expected = Buffer.from(hash, "hex");
-    passOk = derived.length === expected.length && timingSafeEqual(derived, expected);
-  } catch {
-    passOk = false;
-  }
+  const passOk = await passwordMatches(password, stored);
   return userOk && passOk;
+}
+
+/** Verify the existing password and save only its replacement. Rotate sessions atomically. */
+export async function changeOwnerPassword(input: PasswordChangeInput): Promise<{ ok: boolean; message: string }> {
+  if (guideSample) return { ok: false, message: "Sample preview only. Changes are not saved." };
+  if (!(await isSignedIn())) return { ok: false, message: "Your sign-in expired. Sign in again before changing your password." };
+  const problem = passwordChangeProblem(input);
+  if (problem) return { ok: false, message: problem };
+  if (!databaseReady) return { ok: false, message: "Your password could not be saved. Try again in a minute." };
+  try {
+    const accounts = (await sql()`select id, password_hash from owner_auth where lower(trim(username)) = ${input.username.trim().toLowerCase()}`) as { id: number; password_hash: string }[];
+    const account = accounts[0];
+    const stored = account?.password_hash ?? `${"0".repeat(32)}:${"0".repeat(128)}`;
+    const matches = await passwordMatches(input.currentPassword, stored);
+    if (!account || !matches) return { ok: false, message: "The username and current password did not match. Try again." };
+    const replacement = await hashPassword(input.newPassword);
+    const secret = randomBytes(32).toString("hex");
+    const changed = await sql()`
+      with changed as (
+        update owner_auth
+        set password_hash = ${replacement},
+            session_secret = case when id = 1 then ${secret} else session_secret end,
+            updated_at = now()
+        where id = ${account.id} and password_hash = ${account.password_hash}
+          and exists (select 1 from owner_auth where id = 1)
+        returning id
+      ), rotated as (
+        update owner_auth set session_secret = ${secret}, updated_at = now()
+        where id = 1 and ${account.id} <> 1 and exists (select 1 from changed)
+        returning id
+      )
+      select id from changed
+    `;
+    if (changed.length !== 1) return { ok: false, message: "Your login changed while you were editing. Sign in again and retry." };
+    return { ok: true, message: "Password changed." };
+  } catch {
+    console.error("[owner-auth] password change could not be saved");
+    return { ok: false, message: "Your password could not be saved. Try again in a minute." };
+  }
 }
 
 function safeEqual(a: string, b: string): boolean {
@@ -126,6 +157,7 @@ function safeEqual(a: string, b: string): boolean {
 }
 
 async function sessionSecret(): Promise<string> {
+  if(guideSample&&process.env.HHP_GUIDE_SECRET)return process.env.HHP_GUIDE_SECRET;
   const record = await ownerRecord();
   return record?.session_secret ?? process.env.OWNER_SESSION_SECRET ?? "";
 }

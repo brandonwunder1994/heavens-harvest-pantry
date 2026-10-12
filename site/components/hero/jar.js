@@ -53,7 +53,7 @@ export function createJar({ radius, label = true }) {
     new THREE.Vector2(outer - WALL, 0.065),
     new THREE.Vector2(0.0, 0.065),
   ];
-  const glassGeo = new THREE.LatheGeometry(profile, 72);
+  const glassGeo = new THREE.LatheGeometry(profile, 48);
   const glassMesh = new THREE.Mesh(glassGeo, glass);
   glassMesh.castShadow = true;
   group.add(glassMesh);

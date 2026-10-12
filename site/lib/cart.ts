@@ -1,5 +1,7 @@
 import { cleanName } from "@/lib/blend";
 import type { Flavor, Shop } from "@/lib/content";
+import { cleanOmissions, omissionLabel, sizeLabel, type Omission, type SizeOz } from "@/lib/products";
+import { REWARDS_ENABLED } from "@/lib/features";
 
 /**
  * Every function here takes the live shop rather than importing fixed prices,
@@ -8,9 +10,12 @@ import type { Flavor, Shop } from "@/lib/content";
  * stale price ever reaching the till.
  */
 
-export type Format = "jar" | "bag";
+export type Format = "jar" | "bag" | "sampler";
 
 export type CartLine = {
+  sizeOz?: SizeOz;
+  omissions?: Omission[];
+  gift?: { id: string; recipientName: string; address: string; inVistancia: boolean; verseRef?: string; verseNote?: string };
   slug: string;
   format: Format;
   qty: number;
@@ -27,6 +32,7 @@ export type CartLine = {
 export type OrderOptions = {
   jarsReturned: number;
   blessingBags: number;
+  blessingGiftJars?: number;
 };
 
 export type PricedLine = {
@@ -49,6 +55,8 @@ export type Totals = {
   blessingBags: number;
   subtotalCents: number;
   blessingCents: number;
+  blessingGiftJars: number;
+  giftJarCents: number;
   /** What the customer asked for: jars returned times the credit. */
   jarCreditRequestedCents: number;
   /** What actually comes off this order, after the minimum-charge floor. */
@@ -62,8 +70,11 @@ export const MINIMUM_CHARGE_CENTS = 100;
 export const MAX_JARS_RETURNED = 12;
 export const MAX_BLESSING_BAGS = 20;
 export const MAX_QTY_PER_LINE = 20;
+/** Existing gift-jar add-on price, shared with the Stripe line item. */
+export const GIFT_JAR_CENTS = 200;
 
 export const dollarsToCents = (dollars: number) => Math.round(dollars * 100);
+export const blessingSurchargeCents = (shop: Shop) => dollarsToCents(shop.blessingBag.price);
 
 export function formatMoney(cents: number): string {
   return `$${(cents / 100).toFixed(2)}`;
@@ -73,22 +84,31 @@ export function findFlavor(shop: Shop, slug: string): Flavor | undefined {
   return shop.flavors.find((f) => f.slug === slug);
 }
 
-export function unitPriceCents(flavor: Flavor, format: Format): number {
-  return dollarsToCents(format === "jar" ? flavor.jarPrice : flavor.bagPrice);
+export function unitPriceCents(flavor: Flavor, format: Format, sizeOz?: SizeOz): number {
+  if (sizeOz && flavor.sizePrices) return dollarsToCents(flavor.sizePrices[sizeOz]);
+  if (format === "jar") return dollarsToCents(flavor.jarPrice);
+  if (format === "sampler") return dollarsToCents(flavor.samplerPrice ?? flavor.bagPrice);
+  return dollarsToCents(flavor.bagPrice);
 }
 
-export function lineKey(line: Pick<CartLine, "slug" | "format" | "name">): string {
+export function lineKey(line: Pick<CartLine, "slug" | "format" | "name" | "sizeOz" | "omissions" | "gift">): string {
   const named = cleanName(line.name);
-  return named ? `${line.slug}:${line.format}:${named}` : `${line.slug}:${line.format}`;
+  const base = named ? `${line.slug}:${line.format}:${named}` : `${line.slug}:${line.format}`;
+  return `${base}${line.sizeOz ? `:${line.sizeOz}` : ""}${cleanOmissions(line.omissions).length ? `:${cleanOmissions(line.omissions).join(",")}` : ""}${line.gift ? `:gift:${line.gift.id}` : ""}`;
 }
+
+export const lineWeight = (line: CartLine) => (line.sizeOz ?? (line.format === "sampler" ? 3 : 16)) * line.qty;
+export const orderWeight = (lines: CartLine[]) => lines.reduce((n, line) => n + lineWeight(line), 0);
 
 /** Drops anything that no longer exists or is sold out, and clamps quantities. */
 export function sanitizeCart(shop: Shop, lines: CartLine[]): CartLine[] {
   const merged = new Map<string, CartLine>();
   for (const line of lines) {
+    if (!line || typeof line !== "object") continue;
     const flavor = findFlavor(shop, line.slug);
     if (!flavor || flavor.soldOut) continue;
-    if (line.format !== "jar" && line.format !== "bag") continue;
+    if (line.format !== "jar" && line.format !== "bag" && line.format !== "sampler") continue;
+    if (line.sizeOz !== undefined && ![3, 8, 16].includes(line.sizeOz)) continue;
     const qty = Math.floor(Number(line.qty));
     if (!Number.isFinite(qty) || qty < 1) continue;
     const named = cleanName(line.name);
@@ -99,6 +119,9 @@ export function sanitizeCart(shop: Shop, lines: CartLine[]): CartLine[] {
       slug: line.slug,
       format: line.format,
       qty: next,
+      ...(line.sizeOz ? { sizeOz: line.sizeOz } : {}),
+      ...(cleanOmissions(line.omissions).length ? { omissions: cleanOmissions(line.omissions).filter(o => flavor.allowedOmissions?.includes(o)) } : {}),
+      ...(line.gift ? { gift: { id: String(line.gift.id).slice(0, 80), recipientName: String(line.gift.recipientName ?? "").trim().slice(0, 80), address: String(line.gift.address ?? "").trim().slice(0, 250), inVistancia: line.gift.inVistancia === true, verseRef: String(line.gift.verseRef ?? "").slice(0, 60), verseNote: String(line.gift.verseNote ?? "").slice(0, 300) } } : {}),
       ...(named ? { name: named } : {}),
     });
   }
@@ -110,7 +133,7 @@ export function priceOrder(shop: Shop, lines: CartLine[], options: OrderOptions)
 
   const priced: PricedLine[] = clean.map((line) => {
     const flavor = findFlavor(shop, line.slug)!;
-    const unitCents = unitPriceCents(flavor, line.format);
+    const unitCents = unitPriceCents(flavor, line.format, line.sizeOz) + (line.gift ? blessingSurchargeCents(shop) : 0);
     return { line, flavor, unitCents, totalCents: unitCents * line.qty };
   });
 
@@ -119,11 +142,13 @@ export function priceOrder(shop: Shop, lines: CartLine[], options: OrderOptions)
 
   const blessingBags = clamp(options.blessingBags, 0, MAX_BLESSING_BAGS);
   const blessingCents = blessingBags * dollarsToCents(shop.blessingBag.price);
+  const blessingGiftJars = clamp(options.blessingGiftJars ?? 0, 0, blessingBags);
+  const giftJarCents = blessingGiftJars * GIFT_JAR_CENTS;
 
   const jarsReturned = clamp(options.jarsReturned, 0, MAX_JARS_RETURNED);
   const jarCreditRequestedCents = jarsReturned * dollarsToCents(shop.jarRules.creditDollars);
 
-  const beforeCredit = subtotalCents + blessingCents;
+  const beforeCredit = subtotalCents + blessingCents + giftJarCents;
   // Credit can wipe out most of an order but never all of it, or there would be
   // nothing to charge. Any jars it cannot pay for still earn their points.
   const room = Math.max(0, beforeCredit - MINIMUM_CHARGE_CENTS);
@@ -131,9 +156,9 @@ export function priceOrder(shop: Shop, lines: CartLine[], options: OrderOptions)
 
   const totalCents = beforeCredit - jarCreditAppliedCents;
 
-  const points =
+  const points = REWARDS_ENABLED ?
     Math.floor((beforeCredit / 100) * shop.rewards.pointsPerDollar) +
-    jarsReturned * shop.jarRules.bonusPoints;
+    jarsReturned * shop.jarRules.bonusPoints : 0;
 
   return {
     lines: priced,
@@ -142,6 +167,8 @@ export function priceOrder(shop: Shop, lines: CartLine[], options: OrderOptions)
     blessingBags,
     subtotalCents,
     blessingCents,
+    blessingGiftJars,
+    giftJarCents,
     jarCreditRequestedCents,
     jarCreditAppliedCents,
     totalCents,
@@ -157,5 +184,7 @@ function clamp(value: number, min: number, max: number): number {
 
 export function describeLine(p: PricedLine): string {
   const named = p.line.name ? ` for ${p.line.name}` : "";
-  return `${p.flavor.name}${named}, ${p.line.format}${p.line.qty > 1 ? ` ×${p.line.qty}` : ""}`;
+  const format = p.line.sizeOz ? `${sizeLabel(p.line.sizeOz)} ${p.line.gift ? "blessing jar" : "bag"}` : p.line.format === "sampler" ? "3 oz sampler bag" : p.line.format;
+  const omissions = cleanOmissions(p.line.omissions).map(o => omissionLabel[o]).join(", ");
+  return `${p.flavor.name}${named}, ${format}${p.line.qty > 1 ? ` ×${p.line.qty}` : ""}${omissions ? ` · ${omissions}` : ""}${p.line.gift ? ` · for ${p.line.gift.recipientName}` : ""}`;
 }

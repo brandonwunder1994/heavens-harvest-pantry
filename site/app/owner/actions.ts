@@ -5,6 +5,7 @@ import { isSignedIn } from "@/lib/owner-auth";
 import { archiveVerse, clearWeeklyVerse, isEditableKey, readShop, saveSetting } from "@/lib/settings";
 import { approve, remove } from "@/lib/reviews-source";
 import type { SaveState } from "@/lib/save-state";
+import { guideSample } from "@/lib/handoff-sample";
 
 /**
  * Everything the owner can change about the shop goes through here. Each one
@@ -21,11 +22,13 @@ function refreshTheShop() {
 }
 
 export async function saveBlock(_previous: SaveState, formData: FormData): Promise<SaveState> {
+  if (guideSample) return { ok: false, message: "Sample preview only. Changes are not saved." };
   if (!(await isSignedIn())) {
     return { ok: false, message: "Your sign-in expired. Open the page again and nothing will be lost." };
   }
 
   const key = String(formData.get("key") ?? "");
+  if (["jarRules", "rewards", "delivery"].includes(key)) return { ok: false, message: "This feature is retired or paused. Its historical settings are preserved." };
   if (!isEditableKey(key)) {
     return { ok: false, message: "That is not something this page can change." };
   }

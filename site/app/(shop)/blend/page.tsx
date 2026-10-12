@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import Link from "@/components/ShopLink";
 import { HeartSeal } from "@/components/Sprite";
 import { BuildYourBlend } from "@/components/blend/BuildYourBlend";
 import { CartBar } from "@/components/cart/CartBar";
 import { getShop } from "@/lib/settings";
+import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
   title: "Build your own jar",
@@ -12,6 +13,7 @@ export const metadata: Metadata = {
 };
 
 export default async function BlendPage() {
+  redirect("/menu");
   const shop = await getShop();
 
   return (

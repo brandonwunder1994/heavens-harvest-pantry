@@ -1,7 +1,7 @@
 // One sound, once.
 //
 // A soft crunch when something goes into the basket. Nothing else on this site
-// makes a sound, and this one is off until somebody switches it on.
+// makes a sound. On unless somebody has switched it off.
 //
 // The crunch is built in the browser rather than downloaded: a short burst of
 // filtered noise with a fast attack and a quick decay, which is what a dry,
@@ -11,7 +11,8 @@
 // Three rules it keeps, and they are the difference between charming and the
 // reason somebody closes a tab:
 //
-//   1. Off by default. Always. Nobody's first visit makes a noise.
+//   1. On by default. It only ever fires on a click into the basket, so a first
+//      visit is still quiet until somebody adds something.
 //   2. The choice is remembered, and it is remembered per person, not per page.
 //   3. It never plays twice on top of itself, and never more than once for one
 //      action, however many times a button is pressed.
@@ -26,12 +27,12 @@ let lastPlayedAt = 0;
 /** Two crunches inside this many milliseconds are one crunch. */
 export const DEBOUNCE_MS = 180;
 
-/** Whether sound is on. Off unless somebody has explicitly said otherwise. */
+/** Whether sound is on. On unless somebody has explicitly said otherwise. */
 export function soundIsOn(store: Pick<Storage, "getItem"> | null = safeStorage()): boolean {
   try {
-    return store?.getItem(STORAGE_KEY) === "on";
+    return store?.getItem(STORAGE_KEY) !== "off";
   } catch {
-    return false;
+    return true;
   }
 }
 

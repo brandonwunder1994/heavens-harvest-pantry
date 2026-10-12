@@ -1,0 +1,62 @@
+.blessing-gift-visual {
+  position: relative;
+  isolation: isolate;
+  padding: 10px 0 18px;
+  perspective: 900px;
+}
+
+.blessing-gift-visual::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  bottom: 12px;
+  left: 18%;
+  width: 64%;
+  height: 15px;
+  border-radius: 50%;
+  background: rgb(58 39 18 / 23%);
+  filter: blur(9px);
+  animation: blessing-gift-shadow 6.5s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.blessing-gift-float {
+  animation: blessing-gift-float 6.5s ease-in-out infinite;
+}
+
+.blessing-gift-stage {
+  transform-origin: 50% 80%;
+  transition: transform 600ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.blessing-gift-photo {
+  filter: drop-shadow(0 12px 12px rgb(58 39 18 / 18%));
+}
+
+@keyframes blessing-gift-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-7px); }
+}
+
+@keyframes blessing-gift-shadow {
+  0%, 100% { transform: scaleX(1); opacity: 0.9; }
+  50% { transform: scaleX(0.88); opacity: 0.6; }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .blessing-gift-visual:hover .blessing-gift-stage {
+    transform: translateY(-5px) rotateX(3deg) rotateY(-4deg) rotateZ(-1deg) scale(1.025);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .blessing-gift-float,
+  .blessing-gift-visual::after {
+    animation: none;
+  }
+
+  .blessing-gift-stage {
+    transition: none;
+    transform: none !important;
+  }
+}

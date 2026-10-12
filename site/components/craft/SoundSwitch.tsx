@@ -1,8 +1,9 @@
 'use client';
 
-// The one sound, and the switch that turns it on.
+// The one sound, and the switch that turns it off.
 //
-// Off on a first visit, always. Nobody's first visit makes a noise.
+// On unless this browser has said otherwise. It still only fires when
+// something goes into the basket, so a first visit is quiet until then.
 
 import { useEffect, useState } from 'react';
 import { crunch, preview, setSound, soundIsOn } from '@/lib/crunch';
@@ -10,13 +11,13 @@ import { crunch, preview, setSound, soundIsOn } from '@/lib/crunch';
 // -------------------------------------------------------------- the one sound
 
 export function SoundSwitch({ label = 'Sound' }: { label?: string }) {
-  // Rendered off on the server, then corrected once the browser has been asked.
-  // Never the other way round: a switch that flicks itself on is worse than one
-  // that takes a beat to flick itself off.
-  const [on, setOn] = useState(false);
+  // Rendered on to match the default, then corrected once the browser has been
+  // asked. A switch that flicks itself off for someone who already said no is
+  // honest; one that flicks itself on is not.
+  const [on, setOn] = useState(true);
   useEffect(() => {
     // Whether sound is on is kept in this browser, so it cannot be known until
-    // the browser is there to ask. Off is the honest answer until then.
+    // the browser is there to ask. On is the honest answer until then.
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setOn(soundIsOn());
   }, []);
@@ -45,6 +46,6 @@ export function SoundSwitch({ label = 'Sound' }: { label?: string }) {
 /**
  * Call this wherever something goes into the basket. It decides for itself
  * whether to make a noise, so the basket does not have to know anything about
- * sound. Silent unless somebody has switched it on.
+ * sound. Silent only if somebody has switched it off.
  */
 export const basketCrunch = crunch;

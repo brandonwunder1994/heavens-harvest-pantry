@@ -1,7 +1,12 @@
 import "server-only";
+import { cache } from "react";
+import { unstable_cache } from "next/cache";
 import { getStripe } from "@/lib/stripe";
+import { listStoredOrders } from "@/lib/order-store";
+import { mergePurchasedOrders } from "@/lib/owner-order-merge";
 import { toOrder, type Order } from "@/lib/orders";
 import type { Given } from "@/lib/blessings";
+import { guideSample,sampleOrders } from "@/lib/handoff-sample";
 
 export type OrdersResult =
   | { status: "ok"; orders: Order[] }
@@ -9,11 +14,11 @@ export type OrdersResult =
   | { status: "error"; message: string };
 
 /**
- * Stripe is the order book. Everything the owner's page shows is derived from
- * the sessions it has already stored, so there is no second database to keep
- * in step, and no copy of a customer's address anywhere else.
+ * Stripe supplies payment totals; stored paid snapshots supply purchased
+ * contents and fulfillment state. A zero-day window means complete history.
  */
 export async function loadOrders(days = 60): Promise<OrdersResult> {
+  if(guideSample)return {status:"ok",orders:sampleOrders};
   const stripe = getStripe();
   if (!stripe) return { status: "not_configured" };
 
@@ -22,15 +27,14 @@ export async function loadOrders(days = 60): Promise<OrdersResult> {
   try {
     const orders: Order[] = [];
     for await (const session of stripe.checkout.sessions.list({
-      created: { gte: since },
+      ...(days > 0 ? { created: { gte: since } } : {}),
       limit: 100,
     })) {
-      if (session.payment_status !== "paid") continue;
+      if (session.payment_status !== "paid" || session.metadata?.practice === "true") continue;
       orders.push(toOrder(session));
-      if (orders.length >= 500) break;
     }
-    orders.sort((a, b) => b.createdAt - a.createdAt);
-    return { status: "ok", orders };
+    const stored = await listStoredOrders();
+    return { status: "ok", orders: mergePurchasedOrders(orders, stored) };
   } catch (error) {
     const message = error instanceof Error ? error.message : "Could not reach Stripe.";
     console.error("[orders] load failed:", message);
@@ -57,30 +61,43 @@ export async function ordersFor(email: string, days = 730): Promise<Order[]> {
  * How many blessing bags neighbors have paid for this year. Returns null when
  * that cannot be answered — no payment account, or Stripe unreachable — so the
  * pages that show it can leave the line out rather than print a made-up number.
+ *
+ * Cached for five minutes. Counting walks every paid session since January, and
+ * that walk used to sit in front of the homepage hero.
  */
-export async function blessingBagsThisYear(): Promise<number | null> {
+export const blessingBagsThisYear = cache(async function blessingBagsThisYear(): Promise<number | null> {
   const stripe = getStripe();
   if (!stripe) return null;
+  return countBlessingBagsThisYear();
+});
 
-  const since = Math.floor(new Date(new Date().getFullYear(), 0, 1).getTime() / 1000);
+const countBlessingBagsThisYear = unstable_cache(
+  async (): Promise<number | null> => {
+    const stripe = getStripe();
+    if (!stripe) return null;
 
-  try {
-    let total = 0;
-    let seen = 0;
-    for await (const session of stripe.checkout.sessions.list({
-      created: { gte: since },
-      limit: 100,
-    })) {
-      if (session.payment_status !== "paid") continue;
-      total += Number(session.metadata?.blessing_bags ?? 0) || 0;
-      if (++seen >= 1000) break;
+    const since = Math.floor(new Date(new Date().getFullYear(), 0, 1).getTime() / 1000);
+
+    try {
+      let total = 0;
+      let seen = 0;
+      for await (const session of stripe.checkout.sessions.list({
+        created: { gte: since },
+        limit: 100,
+      })) {
+        if (session.payment_status !== "paid" || session.metadata?.practice === "true") continue;
+        total += Number(session.metadata?.blessing_bags ?? 0) || 0;
+        if (++seen >= 1000) break;
+      }
+      return total;
+    } catch (error) {
+      console.error("[orders] could not count blessing bags:", error);
+      return null;
     }
-    return total;
-  } catch (error) {
-    console.error("[orders] could not count blessing bags:", error);
-    return null;
-  }
-}
+  },
+  ["blessing-bags-this-year"],
+  { revalidate: 300 },
+);
 
 /**
  * Every blessing bag of the last year, as the little the map needs: which round
@@ -100,7 +117,7 @@ export async function blessingsGiven(): Promise<Given[] | null> {
       created: { gte: since },
       limit: 100,
     })) {
-      if (session.payment_status !== "paid") continue;
+      if (session.payment_status !== "paid" || session.metadata?.practice === "true") continue;
       const bags = Number(session.metadata?.blessing_bags ?? 0) || 0;
       if (bags > 0) {
         given.push({
@@ -127,6 +144,7 @@ export async function markDelivered(orderId: string, delivered: boolean): Promis
   if (!stripe) return false;
 
   const session = await stripe.checkout.sessions.retrieve(orderId);
+  if (session.metadata?.practice === "true") return false;
   const paymentIntent =
     typeof session.payment_intent === "string" ? session.payment_intent : session.payment_intent?.id;
 

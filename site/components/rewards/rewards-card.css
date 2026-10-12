@@ -1,0 +1,233 @@
+/* A cotton punch card on the counter. The photograph is the stock;
+   the holes are cut through it, so the page shows. */
+
+.punch-stage {
+  --c-ink: var(--color-ink, #3a2712);
+  --c-brown: var(--color-brown, #5b3d1e);
+  --c-muted: var(--color-muted, #6b5a42);
+  --c-display: var(--font-display, "Cinzel", Georgia, serif);
+  --c-serif: var(--font-serif, "Cormorant Garamond", Georgia, serif);
+
+  position: relative;
+  isolation: isolate;
+  display: block;
+  width: 100%;
+  max-width: 440px;
+  aspect-ratio: 16 / 9;
+  padding: 0;
+  perspective: 920px;
+  text-decoration: none;
+  color: inherit;
+  outline: none;
+}
+
+.punch-shadow {
+  position: absolute;
+  left: 5%;
+  right: 5%;
+  bottom: -2%;
+  height: 28%;
+  border-radius: 50%;
+  background: rgba(58, 39, 18, 0.4);
+  filter: blur(16px);
+  transform: translate3d(var(--sx, 0px), var(--sy, 8px), 0) scale(var(--ss, 1));
+  transition:
+    transform 220ms ease-out,
+    filter 220ms ease-out,
+    opacity 220ms ease-out;
+  pointer-events: none;
+}
+
+.punch-stage:hover .punch-shadow,
+.punch-stage:focus-visible .punch-shadow {
+  filter: blur(22px);
+  opacity: 0.85;
+}
+
+.punch-card {
+  position: absolute;
+  inset: 0 10px 22px;
+  transform:
+    translate3d(0, var(--lift, 0px), 0)
+    rotateX(var(--rx, 0deg))
+    rotateY(var(--ry, 0deg))
+    rotate(var(--rest, -2deg));
+  transform-origin: 50% 62%;
+  transition: transform 220ms ease-out;
+  will-change: transform;
+  box-shadow:
+    0 2px 3px rgba(58, 39, 18, 0.1),
+    0 22px 36px -12px rgba(58, 39, 18, 0.48);
+}
+
+.punch-stage:hover .punch-card,
+.punch-stage:focus-visible .punch-card {
+  --rest: 0deg;
+  --lift: -10px;
+}
+
+.punch-face,
+.punch-stock {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.punch-face {
+  position: absolute;
+  inset: 0;
+  mask-size: 100% 100%;
+  -webkit-mask-size: 100% 100%;
+  mask-repeat: no-repeat;
+  -webkit-mask-repeat: no-repeat;
+}
+
+.punch-stock {
+  object-fit: cover;
+}
+
+.punch-ink {
+  position: absolute;
+  left: 12%;
+  right: 12%;
+  top: 14%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  text-align: center;
+  pointer-events: none;
+}
+
+.punch-title {
+  font-family: var(--c-display);
+  font-size: clamp(10px, 2.1vw, 12px);
+  font-weight: 700;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--c-brown);
+}
+
+.punch-line {
+  font-family: var(--c-serif);
+  font-size: clamp(14px, 2.8vw, 17px);
+  font-style: italic;
+  font-weight: 400;
+  color: var(--c-muted);
+  line-height: 1.15;
+}
+
+.punch-board {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.punch-hole,
+.punch-target {
+  position: absolute;
+  width: 9.6%;
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%) rotate(var(--rot, 0deg));
+}
+
+.punch-hole svg,
+.punch-target svg,
+.punch-chad svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+/* The paper is gone. The well is a heart cut, looking through to the page. */
+.punch-hole path {
+  fill: var(--color-cream, #f4eee2);
+  stroke: rgba(91, 61, 30, 0.38);
+  stroke-width: 0.85;
+  filter: drop-shadow(0 1px 0 rgba(255, 248, 236, 0.55));
+}
+
+.punch-hole[data-last="yes"] {
+  animation: punch-cut 420ms cubic-bezier(0.18, 0.86, 0.22, 1) both;
+}
+
+.punch-target path {
+  fill: none;
+  stroke: rgba(91, 61, 30, 0.62);
+  stroke-width: 0.95;
+  stroke-dasharray: 1.6 1.35;
+}
+
+.punch-chad {
+  position: absolute;
+  width: 5.6%;
+  aspect-ratio: 1;
+  left: 90%;
+  top: 84%;
+  transform: rotate(16deg) translate3d(var(--sx, 0px), var(--sy, 0px), 0);
+  transition: transform 220ms ease-out;
+  pointer-events: none;
+}
+
+.punch-chad path {
+  fill: #f3ead8;
+  stroke: rgba(91, 61, 30, 0.16);
+  stroke-width: 0.6;
+  filter: drop-shadow(0 1px 1px rgba(58, 39, 18, 0.22));
+}
+
+.punch-sheen {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    160px 110px at var(--shine-x, 42%) var(--shine-y, 22%),
+    rgba(255, 252, 245, 0.3),
+    transparent 58%
+  );
+  mix-blend-mode: soft-light;
+  opacity: 0;
+  transition: opacity 180ms ease-out;
+}
+
+.punch-stage:hover .punch-sheen,
+.punch-stage:focus-visible .punch-sheen {
+  opacity: 1;
+}
+
+.punch-stage:focus-visible {
+  outline: 2px solid var(--color-sage, #6b7a4a);
+  outline-offset: 6px;
+}
+
+@keyframes punch-cut {
+  0% {
+    transform: translate(-50%, -50%) rotate(var(--rot, 0deg)) scale(0.15);
+  }
+  58% {
+    transform: translate(-50%, -50%) rotate(var(--rot, 0deg)) scale(1.14);
+  }
+  100% {
+    transform: translate(-50%, -50%) rotate(var(--rot, 0deg)) scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .punch-card,
+  .punch-shadow,
+  .punch-chad,
+  .punch-sheen {
+    transition-duration: 0.01ms;
+  }
+
+  .punch-stage:hover .punch-card,
+  .punch-stage:focus-visible .punch-card {
+    --rest: -1.6deg;
+    --lift: 0px;
+  }
+
+  .punch-hole[data-last="yes"] {
+    animation: none;
+  }
+}

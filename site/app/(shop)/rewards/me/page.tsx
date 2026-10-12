@@ -1,3 +1,4 @@
+import { REWARDS_ENABLED } from "@/lib/features";
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { PageHeader } from "@/components/PageHeader";
@@ -18,6 +19,7 @@ export const metadata: Metadata = { title: "Your card", robots: { index: false }
 export const dynamic = "force-dynamic";
 
 export default async function MyRewardsPage() {
+  if (!REWARDS_ENABLED) redirect("/menu");
   const email = await signedInEmail();
   if (!email) redirect("/rewards");
 
@@ -35,7 +37,7 @@ export default async function MyRewardsPage() {
   };
 
   // Anything she has renamed or sold out since simply is not in the link.
-  const reorderHref = (items: { qty: number; name: string; format: "jar" | "bag" }[]) =>
+  const reorderHref = (items: { qty: number; name: string; format: "jar" | "bag" | "sampler" }[]) =>
     reorderLink(items, shop.flavors) ?? "/menu";
   const points = account?.points ?? 0;
   const owed = bagsEarned(points, shop.rewards);
@@ -87,7 +89,7 @@ export default async function MyRewardsPage() {
               {owed} free bag{owed === 1 ? "" : "s"} waiting for you.
             </p>
             <p className="max-w-sm text-[17px] leading-relaxed text-sage-deep">
-              She will add {owed === 1 ? "it" : "them"} to your next delivery. Nothing for you to do, and
+              She will add {owed === 1 ? "it" : "them"} to your next pickup order. Nothing for you to do, and
               nothing to remember at checkout.
             </p>
           </div>

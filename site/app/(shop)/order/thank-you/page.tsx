@@ -1,137 +1,48 @@
 import type { Metadata } from "next";
-import Link from "next/link";
-import { CrossWheat, HeartSeal } from "@/components/Sprite";
+import Link from "@/components/ShopLink";
+import { OrderConfirmation } from "@/components/checkout/OrderConfirmation";
+import { HeartSeal } from "@/components/Sprite";
 import { ClearCartOnMount } from "@/components/checkout/ClearCartOnMount";
-import { formatMoney } from "@/lib/cart";
-import { business, filled, rewardOffer } from "@/lib/content";
-import { getShop } from "@/lib/settings";
-import { accountFor } from "@/lib/rewards-source";
-import { bagsEarned, standing } from "@/lib/rewards";
 import { getStripe } from "@/lib/stripe";
+import { recordPaid, privatePickup, emailOrder, getStoredOrder } from "@/lib/order-store";
+import { readPaidReceipt } from "@/lib/paid-receipt";
+import { mailReady } from "@/lib/mailer";
+import { pickupDateLabel, ADDRESS_NOTE } from "@/lib/fulfilment";
 
-export const metadata: Metadata = {
-  title: "Thank you",
-  robots: { index: false },
-};
+export const dynamic = "force-dynamic";
+export const metadata: Metadata = { title: "Order confirmation", robots: { index: false, follow: false } };
 
-export default async function ThankYouPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ session_id?: string }>;
-}) {
-  const { session_id: sessionId } = await searchParams;
-  const shop = await getShop();
-  const { verseOfTheWeek } = shop;
+export default async function ThankYouPage({ searchParams }: { searchParams: Promise<{ session_id?: string }> }) {
+  const { session_id: id } = await searchParams;
   const stripe = getStripe();
+  const receipt = stripe ? await readPaidReceipt(id, {
+    retrieve: sessionId => stripe.checkout.sessions.retrieve(sessionId),
+    recordPaid, privatePickup, emailOrder, getStoredOrder,
+  }) : { paid: false as const };
 
-  let paid = false;
-  let amountCents: number | null = null;
-  let name = "";
-  let runArea = "";
-  let runDate = "";
-  let jars = 0;
-  let points = 0;
-  let email = "";
-
-  if (stripe && sessionId) {
-    try {
-      const session = await stripe.checkout.sessions.retrieve(sessionId);
-      paid = session.payment_status === "paid";
-      amountCents = session.amount_total;
-      const meta = session.metadata ?? {};
-      name = (meta.customer_name ?? "").split(" ")[0] ?? "";
-      runArea = meta.run_area ?? "";
-      runDate = meta.run_date ?? "";
-      jars = Number(meta.jars_returned ?? 0);
-      points = Number(meta.points_earned ?? 0);
-      email = session.customer_details?.email ?? "";
-    } catch {
-      // A stale or forged session id just falls through to the generic message.
-    }
+  if (receipt.paid && receipt.stored) {
+    const row = receipt.stored;
+    return <OrderConfirmation stored={row} pickup={receipt.pickup} pickupUnavailable={receipt.pickupUnavailable}
+      confirmationEmailAvailable={mailReady}
+      tax={Math.max(0, (row.amount_cents ?? row.snapshot.totals.totalCents) - row.snapshot.totals.totalCents)} />;
   }
 
-  // The webhook is what actually records the points, and it can land a moment
-  // after this page does, so the balance is only shown once it is really there.
-  const account = paid && email ? await accountFor(email) : null;
-  const balance = account?.points ?? 0;
-  const owed = bagsEarned(balance, shop.rewards);
-
-  return (
-    <div className="mx-auto flex w-full max-w-[640px] flex-col items-center gap-6 px-6 pb-20 pt-4 text-center sm:px-10">
-      {paid ? <ClearCartOnMount /> : null}
-      <HeartSeal size={48} />
-
-      <h1 className="display m-0 text-[44px] sm:text-[58px]">
-        {paid ? (name ? `Thank you, ${name}.` : "Thank you.") : "Thank you."}
-      </h1>
-
-      {paid ? (
-        <>
-          <p className="max-w-md text-[20px] leading-relaxed text-bark">
-            Your order is on the list.
-            {runArea && runDate ? ` She bakes Monday and it lands on your porch in ${runArea} on ${runDate}.` : ""}{" "}
-            You&apos;ll get a text when she sets out.
-          </p>
-
-          <dl className="dashed-frame grid w-full max-w-[420px] grid-cols-2 gap-x-6 gap-y-2 bg-paper px-6 py-5 text-left font-ui text-[14px]">
-            {amountCents !== null ? (
-              <>
-                <dt className="text-muted">Paid</dt>
-                <dd className="m-0 text-right font-semibold text-ink">{formatMoney(amountCents)}</dd>
-              </>
-            ) : null}
-            {jars > 0 ? (
-              <>
-                <dt className="text-muted">Jars to leave out</dt>
-                <dd className="m-0 text-right font-semibold text-ink">{jars}</dd>
-              </>
-            ) : null}
-            {points > 0 || balance > 0 ? (
-              <>
-                <dt className="text-muted">Rewards</dt>
-                <dd className="m-0 text-right font-semibold text-sage">{rewardOffer.sentence}</dd>
-              </>
-            ) : null}
-          </dl>
-
-          {balance > 0 ? (
-            <p className="max-w-md font-ui text-[14px] leading-relaxed text-muted">
-              {owed > 0
-                ? `That is ${owed} free bag${owed === 1 ? "" : "s"} earned. She will add ${owed === 1 ? "it" : "them"} to your next delivery.`
-                : standing(balance, shop.rewards)}{" "}
-              <Link href="/rewards" className="font-semibold text-sage underline underline-offset-4">
-                See your card any time
-              </Link>
-              .
-            </p>
-          ) : null}
-        </>
-      ) : (
-        <p className="max-w-md text-[20px] leading-relaxed text-bark">
-          If your payment went through you will have a receipt by email, and she has your order. If you are not
-          sure, {filled(business.phone) ? `text ${filled(business.phone)}` : "get in touch"} and she will check.
-        </p>
-      )}
-
-      <div className="mt-2 flex flex-col items-center gap-3 border-t border-dashed border-hedge pt-8">
-        <CrossWheat size={44} />
-        <p className="verse max-w-lg text-[26px] text-ink sm:text-[30px]">
-          &ldquo;{verseOfTheWeek.text}&rdquo;
-        </p>
-        <div className="ref text-sage">{verseOfTheWeek.reference}</div>
-        <p className="mt-1 font-ui text-[13px] text-faint">This week&apos;s card, tucked in with your order.</p>
-      </div>
-
-      <div className="mt-2 flex flex-wrap items-center justify-center gap-3">
-        <Link href="/" className="stamp stamp-light">
-          Back to the front page
-        </Link>
-        {paid ? (
-          <Link href="/reviews#leave-one" className="stamp stamp-light">
-            Tell her how it was
-          </Link>
-        ) : null}
-      </div>
-    </div>
-  );
+  return <div className="mx-auto flex w-full max-w-[700px] flex-col items-center gap-6 px-6 pb-20 text-center sm:px-10">
+    {receipt.paid && <ClearCartOnMount receiptId={`legacy:${id}`} />}
+    <HeartSeal size={48} />
+    <h1 className="display text-[44px] sm:text-[58px]">{receipt.paid ? "Thank you. Your order is confirmed." : "Check your payment status."}</h1>
+    {receipt.paid ? <>
+      <p className="text-[20px] text-bark">Your payment is complete and your order is on the list.</p>
+      {receipt.pickup && <section className="w-full border border-sage bg-paper p-6 text-left">
+        <h2 className="display text-[28px]">Your porch pickup</h2>
+        <p className="mt-3 text-[19px]">{pickupDateLabel(receipt.legacyDate)}{receipt.legacyPeriod ? `, ${receipt.legacyPeriod}` : ""}</p>
+        <p className="mt-5 text-[20px]">{receipt.pickup.address}</p>
+        {receipt.pickup.contact && <p className="mt-3">Questions? {receipt.pickup.contact}</p>}
+        <p className="mt-3 font-ui text-[12px] text-muted">{ADDRESS_NOTE}</p>
+      </section>}
+      {receipt.pickupUnavailable && <p role="status">Your payment is confirmed. Pickup details could not load just now. Save this link and refresh it to see your address; do not pay again.</p>}
+      <p className="font-ui text-[14px] text-muted">Keep this page for your order details.</p>
+    </> : <p className="max-w-[55ch] text-[19px] text-muted">We could not verify payment from this link. If you already paid, save this link and refresh it before trying another payment. Pickup details are shared only after payment is verified.</p>}
+    <div className="flex flex-wrap justify-center gap-3"><Link href="/" className="stamp stamp-light">Back to the shop</Link>{receipt.paid && <Link href="/reviews#leave-one" className="stamp stamp-light">Leave a review</Link>}</div>
+  </div>;
 }

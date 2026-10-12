@@ -1,0 +1,782 @@
+<title>Four Posts a Week</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Karla:wght@400;500;600;700&display=swap">
+
+<style>
+  /* The owner's console already has a design system: cream paper, brown ink,
+     sage, gold, letterpress stamps, squared corners. Nothing here invents a
+     second one. Every token below is lifted from site/app/globals.css. */
+  :root {
+    --cream:      #f4eee2;
+    --paper:      #fbf8f1;
+    --ink:        #3a2712;
+    --brown:      #5b3d1e;
+    --brown-deep: #3f2a14;
+    --sage:       #6b7a4a;
+    --sage-deep:  #4f5a35;
+    --gold:       #c9a06a;
+    --sand:       #cdbfa5;
+    --moss:       #eef0e2;
+    --moss-line:  #d7dbc0;
+    --bark:       #4a3520;
+    --muted:      #6b5a42;
+    --faint:      #6f6047;
+    --hedge:      #a9b18a;
+    --linen:      #eadfcc;
+    --rule:       #e3d9c4;
+
+    /* State vocabulary, kept apart from the brand accent. */
+    --ok:         #4f5a35;
+    --ok-bg:      #eef0e2;
+    --wait:       #8a6a2f;
+    --wait-bg:    #f7edda;
+    --bad:        #8c3a24;
+    --bad-bg:     #f7e7e1;
+
+    --display: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
+    --caps:    'Cinzel', Georgia, serif;
+    --ui:      'Karla', system-ui, -apple-system, sans-serif;
+
+    --z-sticky: 20;
+    --z-toast:  60;
+  }
+
+  /* One committed world: this is a printed-paper kitchen console and it looks
+     the same on any host. Every surface paints itself, so nothing borrows the
+     viewer's ground. */
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--cream);
+    color: var(--ink);
+    font-family: var(--display);
+    -webkit-font-smoothing: antialiased;
+  }
+  :focus-visible { outline: 2px solid var(--sage); outline-offset: 3px; }
+  ::selection { background: var(--gold); color: var(--ink); }
+
+  .caps {
+    font-family: var(--ui); font-size: 11px; font-weight: 600;
+    letter-spacing: 0.2em; text-transform: uppercase; color: var(--sage);
+  }
+  .display { font-family: var(--display); font-weight: 500; letter-spacing: -0.015em; line-height: 1.02; }
+
+  /* Letterpress stamp: solid block, inset gold keyline. Primary actions only. */
+  .stamp {
+    font-family: var(--caps); font-weight: 600; font-size: 11px;
+    letter-spacing: 0.16em; text-transform: uppercase;
+    background: var(--brown); color: var(--cream);
+    padding: 0 20px; min-height: 44px; border: 0; cursor: pointer;
+    display: inline-flex; align-items: center; justify-content: center;
+    box-shadow: inset 0 0 0 4px var(--brown), inset 0 0 0 5px var(--gold);
+    transition: background 160ms cubic-bezier(0.22, 1, 0.36, 1),
+                box-shadow 160ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .stamp:hover { background: var(--brown-deep); box-shadow: inset 0 0 0 4px var(--brown-deep), inset 0 0 0 5px var(--gold); }
+  .stamp:active { transform: translateY(1px); }
+  .stamp[disabled] { opacity: 0.42; cursor: not-allowed; }
+  .stamp[disabled]:hover { background: var(--brown); box-shadow: inset 0 0 0 4px var(--brown), inset 0 0 0 5px var(--gold); }
+
+  /* Secondary action: outline, no fill. Same shape, quieter voice. */
+  .quiet {
+    font-family: var(--ui); font-size: 12.5px; font-weight: 600;
+    background: transparent; color: var(--brown); cursor: pointer;
+    padding: 0 14px; min-height: 38px; border: 1px solid var(--sand);
+    display: inline-flex; align-items: center; gap: 7px;
+    transition: background 150ms ease, border-color 150ms ease, color 150ms ease;
+  }
+  .quiet:hover { background: var(--paper); border-color: var(--brown); }
+  .quiet[disabled] { opacity: 0.4; cursor: not-allowed; }
+  .quiet[disabled]:hover { background: transparent; border-color: var(--sand); }
+
+  /* ---- shell ---------------------------------------------------------- */
+  .shell { display: grid; grid-template-columns: 232px minmax(0, 1fr); min-height: 100vh; }
+  @media (max-width: 900px) { .shell { grid-template-columns: minmax(0, 1fr); } }
+
+  .side { background: var(--brown-deep); padding: 18px 12px; display: flex; flex-direction: column; gap: 2px; }
+  .mark { display: flex; align-items: center; gap: 10px; padding: 0 12px 20px; }
+  .mark .disc {
+    width: 34px; height: 34px; border-radius: 50%; background: var(--cream);
+    display: grid; place-items: center; flex: none;
+  }
+  .mark b { font-family: var(--ui); font-size: 12.5px; color: var(--cream); font-weight: 600; display: block; }
+  .mark span { font-family: var(--ui); font-size: 11px; color: var(--gold); }
+  .side nav { display: flex; flex-direction: column; gap: 1px; }
+  .side a {
+    font-family: var(--ui); font-size: 13.5px; color: var(--linen);
+    padding: 9px 12px; text-decoration: none; transition: color 150ms ease, background 150ms ease;
+  }
+  .side a:hover { color: var(--cream); background: rgba(244,238,226,0.06); }
+  .side a[aria-current] { background: rgba(244,238,226,0.12); color: var(--cream); font-weight: 600; }
+  .side .foot { margin-top: auto; padding-top: 16px; border-top: 1px solid rgba(244,238,226,0.15); }
+  @media (max-width: 900px) {
+    .side { padding: 12px; min-width: 0; }
+    .side nav { flex-direction: row; overflow-x: auto; gap: 2px; min-width: 0; }
+    .side a { white-space: nowrap; }
+    .side .foot { display: none; }
+  }
+
+  main { padding: 30px 26px 80px; max-width: 1140px; }
+  @media (max-width: 640px) { main { padding: 22px 16px 70px; } }
+
+  .head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 16px; }
+  .head h1 { margin: 6px 0 0; font-size: 37px; }
+  .head p { margin: 8px 0 0; font-family: var(--ui); font-size: 13.5px; line-height: 1.6; color: var(--muted); max-width: 60ch; }
+
+  /* Connection state. A strip, not a card — it is a status line, not an object. */
+  .conn {
+    margin: 22px 0 0; display: flex; flex-wrap: wrap; align-items: center; gap: 12px;
+    border: 1px dashed var(--hedge); background: var(--paper); padding: 13px 16px;
+  }
+  .conn .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--wait); flex: none; }
+  .conn p { margin: 0; flex: 1 1 320px; font-family: var(--ui); font-size: 13px; color: var(--bark); line-height: 1.55; }
+  .conn p b { font-weight: 600; }
+
+  /* ---- tabs ----------------------------------------------------------- */
+  .tabs { margin-top: 26px; display: flex; gap: 26px; border-bottom: 1px solid var(--rule); }
+  .tab {
+    font-family: var(--ui); font-size: 13.5px; font-weight: 600; color: var(--faint);
+    background: none; border: 0; padding: 0 0 11px; cursor: pointer; position: relative;
+    transition: color 150ms ease;
+  }
+  .tab:hover { color: var(--bark); }
+  .tab[aria-selected="true"] { color: var(--ink); }
+  .tab[aria-selected="true"]::after {
+    content: ''; position: absolute; left: 0; right: 0; bottom: -1px; height: 2px; background: var(--brown);
+  }
+  .tab .n { font-variant-numeric: tabular-nums; color: var(--faint); font-weight: 500; }
+
+  .panel { padding-top: 26px; }
+  .panel[hidden] { display: none !important; }
+
+  h2.sec { font-family: var(--display); font-weight: 500; font-size: 25px; margin: 0; letter-spacing: -0.01em; }
+  .note { font-family: var(--ui); font-size: 12.5px; line-height: 1.6; color: var(--faint); margin: 0; }
+
+  /* ---- the week ------------------------------------------------------- */
+  .weekbar { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; }
+  .weekbar .spacer { flex: 1 1 20px; }
+
+  .slots { margin-top: 18px; display: flex; flex-direction: column; gap: 10px; }
+  .slot {
+    border: 1px solid var(--rule); background: var(--paper);
+    display: grid; grid-template-columns: 128px minmax(0, 1fr) auto; align-items: start; gap: 18px; padding: 15px 18px;
+  }
+  @media (max-width: 760px) { .slot { grid-template-columns: minmax(0, 1fr); gap: 10px; } }
+  .slot.empty { background: transparent; border-style: dashed; border-color: var(--hedge); }
+  .slot .day b { font-family: var(--ui); font-size: 13px; font-weight: 700; display: block; color: var(--ink); }
+  .slot .day span { font-family: var(--ui); font-size: 12px; color: var(--faint); }
+  .slot .what h3 { margin: 0; font-family: var(--display); font-size: 21px; font-weight: 500; line-height: 1.15; text-wrap: balance; }
+  .slot .what .meta { margin-top: 5px; font-family: var(--ui); font-size: 12px; color: var(--faint); }
+  .slot .what .placeholder { font-family: var(--ui); font-size: 13px; color: var(--faint); font-style: normal; }
+  .slot .act { display: flex; gap: 8px; align-items: center; }
+
+  .shotlist { margin-top: 30px; border: 1px solid var(--moss-line); background: var(--moss); padding: 18px 20px; }
+  .shotlist h2 { margin: 0 0 4px; }
+  .shotlist ol { margin: 14px 0 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 12px; counter-reset: shot; }
+  .shotlist li {
+    font-family: var(--ui); font-size: 13.5px; line-height: 1.6; color: var(--bark);
+    display: grid; grid-template-columns: 26px 1fr; gap: 10px; align-items: baseline;
+  }
+  .shotlist li::before {
+    counter-increment: shot; content: counter(shot);
+    font-family: var(--caps); font-size: 12px; font-weight: 600; color: var(--sage-deep);
+    font-variant-numeric: tabular-nums;
+  }
+  .shotlist li em { font-style: normal; color: var(--sage-deep); font-weight: 600; }
+
+  /* ---- library -------------------------------------------------------- */
+  .filters { display: flex; flex-direction: column; gap: 12px; }
+  .searchrow { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+  .search {
+    flex: 1 1 260px; min-width: 200px; font-family: var(--ui); font-size: 14px; color: var(--ink);
+    background: var(--paper); border: 1px solid var(--sand); padding: 11px 13px;
+  }
+  .search::placeholder { color: var(--faint); }
+  .search:focus { border-color: var(--sage); }
+  select.pick {
+    font-family: var(--ui); font-size: 13px; color: var(--ink); background: var(--paper);
+    border: 1px solid var(--sand); padding: 11px 12px;
+  }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .chip {
+    font-family: var(--ui); font-size: 12px; font-weight: 500; color: var(--muted);
+    background: transparent; border: 1px solid var(--rule); padding: 6px 11px; cursor: pointer;
+    transition: background 140ms ease, color 140ms ease, border-color 140ms ease;
+  }
+  .chip:hover { border-color: var(--sand); background: var(--paper); }
+  .chip[aria-pressed="true"] { background: var(--brown); border-color: var(--brown); color: var(--cream); font-weight: 600; }
+  .chip .n { font-variant-numeric: tabular-nums; opacity: 0.62; margin-left: 5px; }
+
+  .tally { font-family: var(--ui); font-size: 12.5px; color: var(--faint); margin: 16px 0 0; font-variant-numeric: tabular-nums; }
+
+  .grid { margin-top: 14px; display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 14px; align-items: start; }
+
+  .post { border: 1px solid var(--rule); background: var(--paper); padding: 17px 18px 15px; display: flex; flex-direction: column; gap: 11px; }
+  .post .top { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+  .post .id { font-family: var(--ui); font-size: 10.5px; font-weight: 600; letter-spacing: 0.13em; text-transform: uppercase; color: var(--faint); font-variant-numeric: tabular-nums; }
+  .post .kind { display: flex; gap: 5px; align-items: center; }
+  .tag {
+    font-family: var(--ui); font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+    padding: 3px 7px; border: 1px solid var(--moss-line); background: var(--moss); color: var(--sage-deep);
+  }
+  .tag.fmt { border-color: var(--sand); background: transparent; color: var(--muted); }
+
+  .post h3 { margin: 0; font-family: var(--display); font-size: 23px; font-weight: 500; line-height: 1.14; letter-spacing: -0.012em; text-wrap: balance; }
+  .post .cap { margin: 0; font-family: var(--ui); font-size: 13.5px; line-height: 1.62; color: var(--bark); white-space: pre-wrap; }
+  .post .ask { margin: 0; font-family: var(--ui); font-size: 13px; line-height: 1.55; font-weight: 600; color: var(--sage-deep); }
+  .post .tags { font-family: var(--ui); font-size: 12px; color: var(--faint); word-spacing: 2px; }
+
+  .shot { border-left: 0; background: var(--moss); border: 1px solid var(--moss-line); padding: 10px 12px; }
+  .shot b { font-family: var(--ui); font-size: 10px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--sage-deep); display: block; margin-bottom: 4px; }
+  .shot p { margin: 0; font-family: var(--ui); font-size: 12.5px; line-height: 1.55; color: var(--bark); }
+
+  .why { font-family: var(--ui); font-size: 12px; line-height: 1.55; color: var(--faint); border-top: 1px solid var(--rule); padding-top: 10px; }
+  .why b { color: var(--muted); font-weight: 600; }
+
+  .flag { background: var(--wait-bg); border: 1px solid var(--gold); padding: 9px 11px; display: flex; gap: 8px; align-items: flex-start; }
+  .flag b { font-family: var(--ui); font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--wait); white-space: nowrap; }
+  .flag p { margin: 0; font-family: var(--ui); font-size: 12.5px; line-height: 1.5; color: var(--bark); }
+
+  .post .act { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 2px; }
+
+  .none { border: 1px dashed var(--hedge); padding: 44px 24px; text-align: center; }
+  .none h3 { font-family: var(--display); font-size: 23px; font-weight: 500; margin: 0 0 6px; }
+  .none p { font-family: var(--ui); font-size: 13.5px; color: var(--muted); margin: 0; line-height: 1.6; }
+
+  /* ---- calendar ------------------------------------------------------- */
+  .cal { border: 1px solid var(--rule); background: var(--paper); }
+  .calhead { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); background: var(--cream); border-bottom: 1px solid var(--rule); }
+  .calhead span { font-family: var(--ui); font-size: 10px; font-weight: 700; letter-spacing: 0.13em; text-transform: uppercase; color: var(--faint); padding: 9px 10px; }
+  .calgrid { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); }
+  .cell { min-height: 92px; border-right: 1px solid var(--rule); border-bottom: 1px solid var(--rule); padding: 7px 8px; display: flex; flex-direction: column; gap: 5px; }
+  .cell:nth-child(7n) { border-right: 0; }
+  .cell.pad { background: #f7f2e7; }
+  .cell .d { font-family: var(--ui); font-size: 11.5px; color: var(--faint); font-variant-numeric: tabular-nums; }
+  .cell.today .d { color: var(--brown); font-weight: 700; }
+  .pip {
+    font-family: var(--ui); font-size: 11px; line-height: 1.35; padding: 4px 6px;
+    border: 1px solid var(--moss-line); background: var(--moss); color: var(--sage-deep);
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0;
+  }
+  .pip.scheduled { border-color: var(--gold); background: var(--wait-bg); color: var(--wait); }
+  .pip.failed { border-color: var(--bad); background: var(--bad-bg); color: var(--bad); }
+  @media (max-width: 700px) { .cell { min-height: 62px; } .pip { font-size: 0; padding: 4px; } }
+
+  .queue { margin-top: 26px; display: flex; flex-direction: column; }
+  .qrow {
+    display: grid; grid-template-columns: 116px minmax(0, 1fr) 128px 96px; gap: 16px; align-items: center;
+    border-top: 1px solid var(--rule); padding: 13px 4px;
+  }
+  .qrow:last-child { border-bottom: 1px solid var(--rule); }
+  @media (max-width: 760px) { .qrow { grid-template-columns: minmax(0, 1fr) auto; row-gap: 6px; } .qrow .when { grid-column: 1 / -1; } }
+  .qrow .when { font-family: var(--ui); font-size: 12.5px; color: var(--muted); font-variant-numeric: tabular-nums; }
+  .qrow .title { font-family: var(--display); font-size: 18px; line-height: 1.2; min-width: 0; }
+  .qrow .num { font-family: var(--ui); font-size: 12.5px; color: var(--faint); font-variant-numeric: tabular-nums; }
+  .state {
+    font-family: var(--ui); font-size: 10.5px; font-weight: 700; letter-spacing: 0.11em; text-transform: uppercase;
+    padding: 4px 8px; display: inline-block; justify-self: start;
+  }
+  .state.published { background: var(--ok-bg); color: var(--ok); border: 1px solid var(--moss-line); }
+  .state.scheduled { background: var(--wait-bg); color: var(--wait); border: 1px solid var(--gold); }
+  .state.failed { background: var(--bad-bg); color: var(--bad); border: 1px solid var(--bad); }
+  .qfail { font-family: var(--ui); font-size: 12.5px; line-height: 1.55; color: var(--bad); grid-column: 1 / -1; margin: 2px 0 0; }
+
+  /* ---- toast ---------------------------------------------------------- */
+  .toast {
+    position: fixed; left: 50%; bottom: 26px; transform: translate(-50%, 14px);
+    background: var(--brown-deep); color: var(--cream);
+    font-family: var(--ui); font-size: 13px; font-weight: 500;
+    padding: 12px 20px; box-shadow: inset 0 0 0 1px var(--gold);
+    opacity: 0; pointer-events: none; z-index: var(--z-toast);
+    transition: opacity 180ms cubic-bezier(0.22,1,0.36,1), transform 180ms cubic-bezier(0.22,1,0.36,1);
+  }
+  .toast.on { opacity: 1; transform: translate(-50%, 0); }
+
+  .fresh { animation: land 320ms cubic-bezier(0.22, 1, 0.36, 1) both; }
+  @keyframes land { from { opacity: 0.35; transform: translateY(5px); } to { opacity: 1; transform: none; } }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+  }
+
+  .demo {
+    font-family: var(--ui); font-size: 12px; color: var(--faint); line-height: 1.6;
+    border-top: 1px solid var(--rule); margin-top: 44px; padding-top: 16px; max-width: 72ch;
+  }
+</style>
+
+<div class="shell">
+  <aside class="side">
+    <div class="mark">
+      <span class="disc" aria-hidden="true">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#5b3d1e" stroke-width="1.6" stroke-linecap="round">
+          <path d="M12 3v11M8.5 6.5h7"/><path d="M12 21c-3.2 0-5-2.2-5-4.6 0-1.4.7-2.6 1.6-3.4"/>
+          <path d="M12 21c3.2 0 5-2.2 5-4.6 0-1.4-.7-2.6-1.6-3.4"/>
+        </svg>
+      </span>
+      <span>
+        <b>Owner&rsquo;s page</b>
+        <span>Heaven&rsquo;s Harvest</span>
+      </span>
+    </div>
+    <nav aria-label="Owner sections">
+      <a href="#">Today</a>
+      <a href="#">Flavors &amp; prices</a>
+      <a href="#">Verse card</a>
+      <a href="#" aria-current="page">Social media</a>
+      <a href="#">Reviews</a>
+      <a href="#">Rewards</a>
+    </nav>
+    <div class="foot">
+      <a href="#">View the shop</a>
+      <a href="#">Sign out</a>
+    </div>
+  </aside>
+
+  <main>
+    <header class="head">
+      <div>
+        <div class="caps">Social media</div>
+        <h1 class="display">Four posts a week, already written.</h1>
+        <p>A hundred finished posts, each with the caption, the picture to take, and the reason it works.
+           Copy one to your phone, or let the page put the week together and send them out for you.</p>
+      </div>
+    </header>
+
+    <div class="conn">
+      <span class="dot" aria-hidden="true"></span>
+      <p><b>Instagram is not connected yet.</b> Everything below works without it &mdash; copy a caption and post from your phone.
+         Connecting takes about ten minutes, once.</p>
+      <button class="quiet" disabled>Connect Instagram</button>
+    </div>
+
+    <div class="tabs" role="tablist" aria-label="Social media screens">
+      <button class="tab" role="tab" id="tab-week" aria-controls="p-week" aria-selected="true">This week</button>
+      <button class="tab" role="tab" id="tab-lib" aria-controls="p-lib" aria-selected="false">Library <span class="n">100</span></button>
+      <button class="tab" role="tab" id="tab-cal" aria-controls="p-cal" aria-selected="false">Calendar</button>
+    </div>
+
+    <!-- ================= WEEK ================= -->
+    <section class="panel" id="p-week" role="tabpanel" aria-labelledby="tab-week">
+      <div class="weekbar">
+        <div>
+          <h2 class="sec">Sunday 6 September &ndash; Saturday 12</h2>
+          <p class="note" style="margin-top:6px">Four slots. The list closes Sunday at nine, so the urgency post goes out before it.</p>
+        </div>
+        <span class="spacer"></span>
+        <button class="stamp" id="fill">Fill my week</button>
+        <button class="quiet" id="clearweek">Clear</button>
+      </div>
+
+      <div class="slots" id="slots"></div>
+
+      <section class="shotlist" id="shotlist" hidden>
+        <h2 class="sec">Everything to photograph, in one morning</h2>
+        <p class="note" style="color:var(--sage-deep)">Do all of these on bake day while the kitchen already looks like this.</p>
+        <ol id="shots"></ol>
+      </section>
+    </section>
+
+    <!-- ================= LIBRARY ================= -->
+    <section class="panel" id="p-lib" role="tabpanel" aria-labelledby="tab-lib" hidden>
+      <div class="filters">
+        <div class="searchrow">
+          <input class="search" id="q" type="search" placeholder="Search hooks, captions, anything&hellip;" aria-label="Search the library">
+          <select class="pick" id="goal" aria-label="What the post is for">
+            <option value="">Any purpose</option>
+            <option value="clicks">Drives orders</option>
+            <option value="saves">Gets saved</option>
+            <option value="shares">Gets sent to a friend</option>
+            <option value="watch">Gets watched to the end</option>
+            <option value="comments">Starts a conversation</option>
+          </select>
+          <button class="chip" id="needsonly" aria-pressed="false">Needs your detail</button>
+        </div>
+        <div class="chips" id="pillars" role="group" aria-label="Filter by kind"></div>
+        <div class="chips" id="formats" role="group" aria-label="Filter by format"></div>
+      </div>
+
+      <p class="tally" id="tally"></p>
+      <div class="grid" id="grid"></div>
+    </section>
+
+    <!-- ================= CALENDAR ================= -->
+    <section class="panel" id="p-cal" role="tabpanel" aria-labelledby="tab-cal" hidden>
+      <h2 class="sec">September 2026</h2>
+      <p class="note" style="margin:6px 0 16px">Green has gone out. Gold is waiting. Red needs you.</p>
+
+      <div class="cal">
+        <div class="calhead" aria-hidden="true">
+          <span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span>
+        </div>
+        <div class="calgrid" id="calgrid"></div>
+      </div>
+
+      <h2 class="sec" style="margin-top:34px">The queue</h2>
+      <div class="queue" id="queue"></div>
+    </section>
+
+    <p class="demo">
+      This is a working sketch of the page, not the finished page. The hundred posts are real and final.
+      The week and the calendar are filled with an example September so you can see what it does &mdash; no Instagram
+      account is connected and nothing here has been published anywhere.
+    </p>
+  </main>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+const POSTS = /*POSTS*/[]/*END*/;
+
+const PILLAR_LABEL = {
+  bake: "In the kitchen", jar: "The jar", funny: "Funny", faith: "Faith",
+  blessing: "Blessing bags", flavor: "Flavors", useful: "Useful", urgency: "Order by Sunday",
+  local: "Neighborhood", proof: "What people say", origin: "Her story", seasonal: "Seasonal",
+  rewards: "Rewards", blend: "Build your own"
+};
+const FORMAT_LABEL = { reel: "Reel", photo: "Photo", carousel: "Carousel" };
+const GOAL_LABEL = {
+  clicks: "Drives orders", saves: "Gets saved", shares: "Gets sent on",
+  watch: "Watched to the end", comments: "Starts a conversation"
+};
+
+const $ = (s, r) => (r || document).querySelector(s);
+const el = (tag, cls, text) => { const n = document.createElement(tag); if (cls) n.className = cls; if (text != null) n.textContent = text; return n; };
+
+/* ---- toast ---- */
+let toastTimer;
+function say(msg) {
+  const t = $("#toast");
+  t.textContent = msg;
+  t.classList.add("on");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove("on"), 2200);
+}
+
+/* ---- tabs ---- */
+const TABS = [["#tab-week", "#p-week"], ["#tab-lib", "#p-lib"], ["#tab-cal", "#p-cal"]];
+TABS.forEach(([tabSel, panelSel]) => {
+  $(tabSel).addEventListener("click", () => {
+    TABS.forEach(([t, p]) => {
+      const on = t === tabSel;
+      $(t).setAttribute("aria-selected", String(on));
+      $(p).hidden = !on;
+    });
+  });
+});
+
+/* ---- the week ---------------------------------------------------------- */
+/* Mirrors the rhythm in the plan: quiet Sunday morning, the money post before
+   the list closes, bake day on Monday, one reach post midweek. */
+const SLOTS = [
+  { day: "Sunday",    date: "Sep 6",  time: "8:00am",  want: ["faith", "useful"] },
+  { day: "Sunday",    date: "Sep 6",  time: "4:30pm",  want: ["urgency"] },
+  { day: "Monday",    date: "Sep 7",  time: "7:00am",  want: ["bake"] },
+  { day: "Wednesday", date: "Sep 9",  time: "6:30pm",  want: ["funny", "flavor", "local"] }
+];
+
+let week = SLOTS.map(() => null);
+const usedIds = new Set();
+
+function renderWeek() {
+  const wrap = $("#slots");
+  wrap.replaceChildren();
+
+  week.forEach((post, i) => {
+    const slot = SLOTS[i];
+    const row = el("div", "slot" + (post ? "" : " empty"));
+
+    const day = el("div", "day");
+    day.append(el("b", null, slot.day + " " + slot.date), el("span", null, slot.time));
+    row.append(day);
+
+    const what = el("div", "what");
+    if (post) {
+      const h = el("h3", null, post.hook);
+      const meta = el("div", "meta",
+        FORMAT_LABEL[post.format] + " · " + PILLAR_LABEL[post.pillar] + " · " + GOAL_LABEL[post.goal]);
+      what.append(h, meta);
+    } else {
+      what.append(el("p", "placeholder", "Nothing here yet — " +
+        slot.want.map((w) => PILLAR_LABEL[w].toLowerCase()).join(" or ") + " goes in this slot."));
+    }
+    row.append(what);
+
+    const act = el("div", "act");
+    if (post) {
+      const copy = el("button", "quiet", "Copy caption");
+      copy.addEventListener("click", () => copyPost(post));
+      const swap = el("button", "quiet", "Swap");
+      swap.addEventListener("click", () => { fillSlot(i, true); renderWeek(); renderShots(); });
+      act.append(copy, swap);
+    } else {
+      const pick = el("button", "quiet", "Choose one");
+      pick.addEventListener("click", () => { fillSlot(i, true); renderWeek(); renderShots(); });
+      act.append(pick);
+    }
+    row.append(act);
+    if (post) row.classList.add("fresh");
+    wrap.append(row);
+  });
+}
+
+function fillSlot(i, force) {
+  const slot = SLOTS[i];
+  if (week[i] && !force) return;
+  if (week[i]) usedIds.delete(week[i].id);
+  const pool = POSTS.filter((p) => slot.want.includes(p.pillar) && !usedIds.has(p.id));
+  if (!pool.length) return;
+  const pick = pool[Math.floor(Math.random() * pool.length)];
+  usedIds.add(pick.id);
+  week[i] = pick;
+}
+
+function renderShots() {
+  const list = $("#shots");
+  const chosen = week.filter(Boolean);
+  $("#shotlist").hidden = chosen.length === 0;
+  list.replaceChildren();
+  chosen.forEach((p) => {
+    const li = el("li");
+    const strong = el("em", null, FORMAT_LABEL[p.format] + " — ");
+    li.append(strong, document.createTextNode(p.shot));
+    list.append(li);
+  });
+}
+
+$("#fill").addEventListener("click", () => {
+  week.forEach((p) => p && usedIds.delete(p.id));
+  week = SLOTS.map(() => null);
+  SLOTS.forEach((_, i) => fillSlot(i, true));
+  renderWeek();
+  renderShots();
+  say("Week filled. Swap anything you don’t like.");
+});
+
+$("#clearweek").addEventListener("click", () => {
+  week.forEach((p) => p && usedIds.delete(p.id));
+  week = SLOTS.map(() => null);
+  renderWeek();
+  renderShots();
+});
+
+/* ---- copy -------------------------------------------------------------- */
+function captionText(p) {
+  return p.caption + "\n\n" + p.cta + "\n\n" + p.hashtags.join(" ");
+}
+function copyPost(p) {
+  const text = captionText(p);
+  const done = () => say(p.needs ? "Copied — fill in your real detail first." : "Copied. Paste it into Instagram.");
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(done, () => fallbackCopy(text, done));
+  } else {
+    fallbackCopy(text, done);
+  }
+}
+function fallbackCopy(text, done) {
+  const ta = document.createElement("textarea");
+  ta.value = text;
+  ta.setAttribute("readonly", "");
+  ta.style.position = "fixed";
+  ta.style.opacity = "0";
+  document.body.append(ta);
+  ta.select();
+  try { document.execCommand("copy"); done(); } catch (e) { say("Could not copy — select the caption and copy it by hand."); }
+  ta.remove();
+}
+
+/* ---- library ----------------------------------------------------------- */
+const state = { q: "", pillar: "", format: "", goal: "", needsOnly: false };
+
+function countBy(key) {
+  return POSTS.reduce((m, p) => { m[p[key]] = (m[p[key]] || 0) + 1; return m; }, {});
+}
+
+function buildChips(hostSel, key, labels) {
+  const host = $(hostSel);
+  const counts = countBy(key);
+  const all = el("button", "chip", "All");
+  all.setAttribute("aria-pressed", "true");
+  all.dataset.value = "";
+  host.append(all);
+  Object.keys(labels)
+    .filter((k) => counts[k])
+    .sort((a, b) => counts[b] - counts[a])
+    .forEach((k) => {
+      const c = el("button", "chip");
+      c.dataset.value = k;
+      c.setAttribute("aria-pressed", "false");
+      c.append(document.createTextNode(labels[k]), el("span", "n", String(counts[k])));
+      host.append(c);
+    });
+  host.addEventListener("click", (e) => {
+    const btn = e.target.closest(".chip");
+    if (!btn) return;
+    state[key] = btn.dataset.value;
+    host.querySelectorAll(".chip").forEach((c) => c.setAttribute("aria-pressed", String(c === btn)));
+    renderLibrary();
+  });
+}
+
+function matches(p) {
+  if (state.pillar && p.pillar !== state.pillar) return false;
+  if (state.format && p.format !== state.format) return false;
+  if (state.goal && p.goal !== state.goal) return false;
+  if (state.needsOnly && !p.needs) return false;
+  if (state.q) {
+    const hay = (p.hook + " " + p.caption + " " + p.cta + " " + p.shot + " " + p.why + " " + p.hashtags.join(" ")).toLowerCase();
+    if (!hay.includes(state.q)) return false;
+  }
+  return true;
+}
+
+function postCard(p) {
+  const card = el("article", "post");
+
+  const top = el("div", "top");
+  top.append(el("span", "id", p.id.replace("hh-", "No. ")));
+  const kind = el("div", "kind");
+  kind.append(el("span", "tag", PILLAR_LABEL[p.pillar]), el("span", "tag fmt", FORMAT_LABEL[p.format]));
+  top.append(kind);
+  card.append(top);
+
+  card.append(el("h3", null, p.hook));
+  card.append(el("p", "cap", p.caption));
+  card.append(el("p", "ask", p.cta));
+
+  if (p.needs) {
+    const flag = el("div", "flag");
+    flag.append(el("b", null, "Needs you"), el("p", null, p.needs));
+    card.append(flag);
+  }
+
+  const shot = el("div", "shot");
+  shot.append(el("b", null, "Take this"), el("p", null, p.shot));
+  card.append(shot);
+
+  card.append(el("div", "tags", p.hashtags.join("  ")));
+
+  const why = el("div", "why");
+  why.append(el("b", null, "Why it works. "), document.createTextNode(p.why));
+  card.append(why);
+
+  const act = el("div", "act");
+  const copy = el("button", "quiet", "Copy caption");
+  copy.addEventListener("click", () => copyPost(p));
+  const sched = el("button", "quiet", "Schedule");
+  sched.disabled = true;
+  sched.title = "Available once Instagram is connected";
+  act.append(copy, sched);
+  card.append(act);
+
+  return card;
+}
+
+function renderLibrary() {
+  const found = POSTS.filter(matches);
+  const grid = $("#grid");
+  grid.replaceChildren();
+
+  const reels = found.filter((p) => p.format === "reel").length;
+  const carousels = found.filter((p) => p.format === "carousel").length;
+  const needs = found.filter((p) => p.needs).length;
+  $("#tally").textContent = found.length === POSTS.length
+    ? POSTS.length + " posts · " + reels + " reels · " + carousels + " carousels · " + needs + " need a real detail from you"
+    : found.length + " of " + POSTS.length + " posts";
+
+  if (!found.length) {
+    const none = el("div", "none");
+    none.append(el("h3", null, "Nothing matches that."),
+      el("p", null, "Clear the search, or press All on both rows of buttons."));
+    grid.append(none);
+    return;
+  }
+  found.forEach((p) => grid.append(postCard(p)));
+}
+
+$("#q").addEventListener("input", (e) => { state.q = e.target.value.trim().toLowerCase(); renderLibrary(); });
+$("#goal").addEventListener("change", (e) => { state.goal = e.target.value; renderLibrary(); });
+$("#needsonly").addEventListener("click", (e) => {
+  state.needsOnly = !state.needsOnly;
+  e.currentTarget.setAttribute("aria-pressed", String(state.needsOnly));
+  renderLibrary();
+});
+
+buildChips("#pillars", "pillar", PILLAR_LABEL);
+buildChips("#formats", "format", FORMAT_LABEL);
+
+/* ---- calendar ---------------------------------------------------------- */
+/* An example September, so the screen shows what it does rather than an empty
+   grid. Nothing here was published anywhere. */
+const SEPT = {
+  1:  [["published", "The oven beats the sunrise"]],
+  3:  [["published", "Store-bought granola is cereal"]],
+  6:  [["published", "There is a card in the bottom"], ["published", "Sunday. 9pm."]],
+  7:  [["published", "Nobody tells you it cools 4 hours"]],
+  9:  [["failed",    "This jar has been to eleven houses"]],
+  13: [["scheduled", "“Work at it with all your heart”"], ["scheduled", "Four hours left."]],
+  14: [["scheduled", "Nine pounds of oats. One bowl."]],
+  16: [["scheduled", "The bag says 12 ounces"]],
+  20: [["scheduled", "October finally showed up"]]
+};
+
+function renderCalendar() {
+  const grid = $("#calgrid");
+  grid.replaceChildren();
+  // 1 September 2026 is a Tuesday, so two padding cells lead the month.
+  for (let i = 0; i < 2; i++) {
+    const pad = el("div", "cell pad");
+    pad.setAttribute("aria-hidden", "true");
+    grid.append(pad);
+  }
+  for (let d = 1; d <= 30; d++) {
+    const cell = el("div", "cell" + (d === 2 ? " today" : ""));
+    cell.append(el("span", "d", String(d)));
+    (SEPT[d] || []).forEach(([status, label]) => {
+      const pip = el("div", "pip " + status, label);
+      pip.title = label + " — " + status;
+      cell.append(pip);
+    });
+    grid.append(cell);
+  }
+}
+
+const QUEUE = [
+  { when: "Sun 13, 8:00am",  title: "“Work at it with all your heart”", state: "scheduled", num: "" },
+  { when: "Sun 13, 4:30pm",  title: "Four hours left.",                          state: "scheduled", num: "" },
+  { when: "Mon 14, 7:00am",  title: "Nine pounds of oats. One bowl.",            state: "scheduled", num: "" },
+  { when: "Tue 9, 7:00pm",   title: "This jar has been to eleven houses",        state: "failed",    num: "",
+    error: "Instagram would not take the video — it is 4 minutes long and the limit is 90 seconds. Trim it and press Retry." },
+  { when: "Sun 6, 4:30pm",   title: "Sunday. 9pm.",                              state: "published", num: "41 saves · 9 sends" },
+  { when: "Sun 6, 8:00am",   title: "There is a card in the bottom",             state: "published", num: "88 saves · 22 sends" },
+  { when: "Thu 3, 12:00pm",  title: "Store-bought granola is cereal",            state: "published", num: "17 saves · 31 sends" }
+];
+
+function renderQueue() {
+  const host = $("#queue");
+  host.replaceChildren();
+  QUEUE.forEach((q) => {
+    const row = el("div", "qrow");
+    row.append(el("div", "when", q.when));
+    row.append(el("div", "title", q.title));
+    row.append(el("div", "num", q.num || "—"));
+    const s = el("span", "state " + q.state, q.state);
+    row.append(s);
+    if (q.error) {
+      const msg = el("p", "qfail", q.error);
+      row.append(msg);
+    }
+    host.append(row);
+  });
+}
+
+/* ---- go ---------------------------------------------------------------- */
+SLOTS.forEach((_, i) => fillSlot(i, true));
+renderWeek();
+renderShots();
+renderLibrary();
+renderCalendar();
+renderQueue();
+</script>

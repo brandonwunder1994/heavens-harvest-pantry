@@ -1,3 +1,4 @@
+import { REWARDS_ENABLED } from "@/lib/features";
 import { NextResponse } from "next/server";
 import { spendLink, startRewardsSession } from "@/lib/rewards-auth";
 import { siteUrl } from "@/lib/site-url";
@@ -14,6 +15,7 @@ import { siteUrl } from "@/lib/site-url";
  * never sits in the address bar or in their history.
  */
 export async function GET(request: Request) {
+  if (!REWARDS_ENABLED) return NextResponse.json({ error: "rewards_paused", message: "Rewards are paused." }, { status: 404 });
   const origin = siteUrl() ?? new URL(request.url).origin;
   const token = new URL(request.url).searchParams.get("token") ?? "";
 

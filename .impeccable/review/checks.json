@@ -1,0 +1,96 @@
+{
+  "checks": [
+    {
+      "name": "dashboard",
+      "width": 1366,
+      "overflow": false
+    },
+    {
+      "name": "products",
+      "width": 1366,
+      "overflow": false
+    },
+    {
+      "name": "orders",
+      "width": 1366,
+      "overflow": false
+    },
+    {
+      "name": "bake",
+      "width": 1366,
+      "overflow": false
+    },
+    {
+      "name": "pickups",
+      "width": 1366,
+      "overflow": false
+    },
+    {
+      "name": "gifts",
+      "width": 1366,
+      "overflow": false
+    },
+    {
+      "name": "print",
+      "width": 1366,
+      "overflow": false
+    },
+    {
+      "name": "settings",
+      "width": 1366,
+      "overflow": false
+    },
+    {
+      "name": "labels",
+      "width": 1366,
+      "overflow": false
+    },
+    {
+      "name": "dashboard",
+      "width": 390,
+      "overflow": false
+    },
+    {
+      "name": "products",
+      "width": 390,
+      "overflow": false
+    },
+    {
+      "name": "orders",
+      "width": 390,
+      "overflow": false
+    },
+    {
+      "name": "bake",
+      "width": 390,
+      "overflow": false
+    },
+    {
+      "name": "pickups",
+      "width": 390,
+      "overflow": false
+    },
+    {
+      "name": "gifts",
+      "width": 390,
+      "overflow": false
+    },
+    {
+      "name": "print",
+      "width": 390,
+      "overflow": false
+    },
+    {
+      "name": "settings",
+      "width": 390,
+      "overflow": false
+    },
+    {
+      "name": "labels",
+      "width": 390,
+      "overflow": false
+    }
+  ],
+  "interactions": "passed",
+  "errors": []
+}

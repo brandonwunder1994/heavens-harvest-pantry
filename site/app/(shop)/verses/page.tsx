@@ -5,6 +5,7 @@ import { getShop, verseArchive } from "@/lib/settings";
 import { wall, weeksUntilRepeat } from "@/lib/verses";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/verses" },
   title: "The verse archive",
   description: "Every verse card that has gone out with an order, kept in one place.",
 };

@@ -10,7 +10,7 @@
 // first time: each of those is a real state, not an error, and each one says
 // something true rather than showing an empty box.
 
-export type OrderItem = { qty: number; name: string; format: "jar" | "bag" };
+export type OrderItem = { qty: number; name: string; format: "jar" | "bag" | "sampler" };
 
 /** The part of the shop's own Order type that any of this needs. */
 export type PastOrder = {

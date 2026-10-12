@@ -1,87 +1,80 @@
+import { REWARDS_ENABLED } from "@/lib/features";
 import Image from "next/image";
-import Link from "next/link";
+import Link from "@/components/ShopLink";
 import InviteLine from "@/components/InviteLine";
-import { SoundSwitch } from "@/components/craft/SoundSwitch";
 import { WheatHem } from "@/components/craft/WheatHem";
 import { business, filled, type Shop } from "@/lib/content";
+import { PICKUP_LABEL } from "@/lib/fulfilment";
 
 const shopLinks = [
   { href: "/menu", label: "This week's menu" },
-  { href: "/blend", label: "Build your own jar" },
-  { href: "/send", label: "Send it with a verse" },
-  { href: "/bowl", label: "Make a bowl" },
-  { href: "/jars", label: "Jar returns" },
+  { href: "/bowl", label: "Ways to eat granola" },
   { href: "/blessing-bags", label: "Blessing bags" },
-  { href: "/rewards", label: "Rewards" },
+  ...(REWARDS_ENABLED ? [{ href: "/rewards", label: "Rewards" }] : []),
 ];
 
-export function Footer({ shop }: { shop: Shop }) {
-  const { delivery, verses } = shop;
+export function Footer({ shop, practice = false }: { shop: Shop; practice?: boolean }) {
+  const { verses } = shop;
 
   return (
     <>
-      <footer className="px-6 pb-14 sm:px-10 lg:px-18">
-      <div className="border border-brown p-2.5">
-        <div className="dashed-frame flex flex-col gap-8 px-6 py-9 sm:px-10 lg:px-12">
-          <div className="grid gap-9 lg:grid-cols-[1.2fr_1fr_1fr_auto] lg:items-center lg:gap-10">
-            <div className="flex items-center gap-5">
-              <Image src="/logo.webp" alt="" width={220} height={220} className="h-[110px] w-[110px]" />
-              <div className="flex flex-col gap-1.5">
-                <div className="caps text-[13px] text-brown">{business.name}</div>
-                <p className="text-[17px] italic text-sage">{business.tagline}</p>
+      <footer className="px-6 pb-8 sm:px-10 lg:px-18">
+        <div className="border-t border-dashed border-hedge pt-6">
+          <div className="grid gap-6 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,1.4fr)_minmax(0,1fr)_auto] lg:items-start lg:gap-8">
+            <Link href="/" className="flex items-center gap-3" aria-label={`${business.name}, home`}>
+              <Image src="/logo.webp" alt="" width={96} height={96} className="h-12 w-12" />
+              <div className="flex flex-col gap-0.5">
+                <div className="caps text-[11px] text-brown">{business.name}</div>
+                <p className="text-[15px] italic leading-snug text-sage">{business.tagline}</p>
               </div>
-            </div>
+            </Link>
 
-            <div className="flex flex-col gap-2 font-ui text-[15px]">
+            <nav aria-label="Shop" className="flex flex-col gap-2">
               <div className="small-caps">Shop</div>
-              {shopLinks.map((link) => (
-                <Link key={link.href} href={link.href} className="text-brown hover:text-sage">
-                  {link.label}
-                </Link>
-              ))}
-            </div>
+              <ul className="flex flex-wrap gap-x-3 gap-y-1 font-ui text-[13px]">
+                {shopLinks.map((link) => (
+                  <li key={link.href}>
+                    <Link href={link.href} className="text-brown hover:text-sage">
+                      {link.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </nav>
 
-            <div className="flex flex-col gap-2 font-ui text-[15px] text-brown">
+            <div className="flex flex-col gap-1.5 font-ui text-[13px] text-brown">
               <div className="small-caps">Find us</div>
-              {/* A blanked field must not leave a dangling middot, and a
-                  placeholder she has not filled in yet must not show at all. */}
-              {delivery.runs.map((run) => (
-                <span key={run.area}>
-                  {run.area}
-                  {run.day ? ` · ${run.day}` : ""}
-                </span>
-              ))}
-              {filled(delivery.dropOff) ? <span>Drop-off · {filled(delivery.dropOff)}</span> : null}
+              <span>{PICKUP_LABEL}</span>
+              <Link href="/pickup" className="text-sage hover:text-brown">Pickup details</Link>
               {filled(business.phone) ? <span>Text · {filled(business.phone)}</span> : null}
             </div>
 
-            <div className="flex flex-col items-center gap-2">
-              <Image src="/qr.svg" alt="Scan to reorder" width={104} height={104} className="h-[104px] w-[104px]" />
-              <div className="small-caps text-faint">Scan to reorder</div>
+            <div className="flex items-center gap-2.5 lg:flex-col lg:items-center">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={practice ? "/api/mock/qr" : "/qr.svg?v=6"} alt={practice ? "Scan for practice menu" : "Scan to reorder"} width={56} height={56} className="h-14 w-14" />
+              <div className="small-caps text-faint">{practice ? "Practice menu" : "Scan to reorder"}</div>
             </div>
           </div>
 
-          <div className="flex flex-col items-center gap-2 border-t border-sand pt-6">
-            <p className="verse max-w-2xl text-center text-[22px] text-brown sm:text-[27px]">
-              &ldquo;{verses.blessing.text}&rdquo;
+          <div className="mt-5 flex flex-col items-start justify-between gap-3 border-t border-sand pt-4 sm:flex-row sm:items-center">
+            <p className="verse max-w-xl text-[17px] leading-snug text-brown sm:text-[19px]">
+              &ldquo;{verses.blessing.text}&rdquo;{" "}
+              <span className="ref !text-[9px] text-faint">{verses.blessing.reference}</span>
             </p>
-            <div className="ref !text-[10px] text-faint">{verses.blessing.reference}</div>
+            <InviteLine compact />
           </div>
 
-          {/* A small door, six words and an arrow, under the blessing. It is
-              deliberately quiet: easy to walk past, easy to follow. */}
-          <InviteLine />
-
-          <div className="flex justify-center">
-            <SoundSwitch label="A small sound when something goes in the basket" />
+          <div className="mt-4 flex flex-col gap-2 border-t border-sand pt-3 sm:flex-row sm:items-baseline sm:justify-between">
+            <p className="font-ui text-[11px] leading-relaxed text-faint">
+              Made in a home kitchen in {business.city}. Registered with the Arizona Department of Health
+              Services cottage food program. Ingredients and allergens are listed on every flavor and every
+              label.
+            </p>
+            <Link href={practice ? "/owner/mock" : "/owner/login"} className="shrink-0 font-ui text-[11px] text-faint hover:text-sage">
+              {practice ? "Mock receipts" : "Owner sign-in"}
+            </Link>
           </div>
-
-          <p className="text-center font-ui text-[11px] leading-relaxed text-faint">
-            Made in a home kitchen in {business.city}. Registered with the Arizona Department of Health Services
-            cottage food program. Ingredients and allergens are listed on every flavor and every label.
-          </p>
         </div>
-      </div>
       </footer>
 
       {/* A horizon for the blessing to sit above. It is outside the footer's

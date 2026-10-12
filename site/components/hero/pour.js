@@ -23,7 +23,7 @@ import { createGranola } from './granola.js';
 import { createSteam } from './steam.js';
 import { createCrumbs } from './crumbs.js';
 
-export function createPour({ canvas, data, onFinish, reducedMotion = false }) {
+export function createPour({ canvas, data, onFinish = undefined, reducedMotion = false }) {
   const stage = createStage({ canvas });
 
   const jar = createJar({ radius: data.jar.radius });

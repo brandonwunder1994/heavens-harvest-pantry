@@ -1,0 +1,56 @@
+[
+  {
+    "width": 1100,
+    "kind": "ordinary",
+    "documentWidth": 1100,
+    "declineThenSuccess": true,
+    "emailPreview": true,
+    "liveBasketUnchanged": true,
+    "stripeRequests": 0
+  },
+  {
+    "width": 1100,
+    "kind": "chocolate",
+    "documentWidth": 1100,
+    "declineThenSuccess": true,
+    "emailPreview": true,
+    "liveBasketUnchanged": true,
+    "stripeRequests": 0
+  },
+  {
+    "width": 1100,
+    "kind": "mixed-gift",
+    "documentWidth": 1100,
+    "declineThenSuccess": true,
+    "emailPreview": true,
+    "liveBasketUnchanged": true,
+    "stripeRequests": 0
+  },
+  {
+    "width": 390,
+    "kind": "ordinary",
+    "documentWidth": 390,
+    "declineThenSuccess": true,
+    "emailPreview": true,
+    "liveBasketUnchanged": true,
+    "stripeRequests": 0
+  },
+  {
+    "width": 390,
+    "kind": "chocolate",
+    "documentWidth": 390,
+    "declineThenSuccess": true,
+    "emailPreview": true,
+    "liveBasketUnchanged": true,
+    "stripeRequests": 0
+  },
+  {
+    "width": 390,
+    "kind": "mixed-gift",
+    "documentWidth": 390,
+    "declineThenSuccess": true,
+    "emailPreview": true,
+    "liveBasketUnchanged": true,
+    "stripeRequests": 0
+  }
+]

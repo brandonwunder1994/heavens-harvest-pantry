@@ -4,15 +4,24 @@ import { redirect } from "next/navigation";
 import { isSignedIn, ownerConfigured, startSession, verifyCredentials } from "@/lib/owner-auth";
 import { clearAttempts, recordFailure, tooManyAttempts } from "@/lib/attempts";
 import { business } from "@/lib/content";
+import { guideSample } from "@/lib/handoff-sample";
 
 export default async function OwnerLoginPage({
   searchParams,
 }: {
-  searchParams: Promise<{ error?: string }>;
+  searchParams: Promise<{ error?: string; next?: string; password?: string }>;
 }) {
-  if (await isSignedIn()) redirect("/owner");
-  const { error } = await searchParams;
+  const { error, next, password } = await searchParams;
+  const destination = next && /^\/(?:mock|mockorder)(?:\/|\?|$)/.test(next) && !next.includes("\\") ? next : "/owner";
+  if (await isSignedIn()) redirect(destination);
   const configured = await ownerConfigured();
+
+  async function openSample() {
+    "use server";
+    if (!guideSample || !process.env.HHP_GUIDE_SECRET) redirect("/owner/login");
+    await startSession();
+    redirect("/owner");
+  }
 
   async function signIn(formData: FormData) {
     "use server";
@@ -28,12 +37,12 @@ export default async function OwnerLoginPage({
 
     if (!(await verifyCredentials(username, password))) {
       recordFailure(from);
-      redirect("/owner/login?error=wrong");
+      redirect(`/owner/login?error=wrong&next=${encodeURIComponent(destination)}`);
     }
 
     clearAttempts(from);
     await startSession();
-    redirect("/owner");
+    redirect(destination);
   }
 
   return (
@@ -43,6 +52,8 @@ export default async function OwnerLoginPage({
         <h1 className="display m-0 text-[40px]">Owner&apos;s page</h1>
         <p className="text-[17px] italic text-sage">{business.name}</p>
       </div>
+
+      {password === "changed" ? <p role="status" className="w-full border border-sage bg-paper px-4 py-3 text-center font-ui text-[14px] text-sage-deep">Your password has been changed. Sign in with your new password.</p> : null}
 
       {error === "slow" ? (
         <p role="alert" className="w-full border border-brown bg-paper px-4 py-3 text-center font-ui text-[13px] font-semibold text-brown">
@@ -56,7 +67,9 @@ export default async function OwnerLoginPage({
         </p>
       ) : null}
 
-      {!configured ? (
+      {guideSample ? <form action={openSample} className="w-full text-center"><p className="mb-4 font-ui text-sm">Local sample preview. Sales are examples and saving is disabled.</p><button className="stamp" type="submit">Open sample preview</button></form> : null}
+
+      {!configured && !guideSample ? (
         <p role="alert" className="dashed-frame w-full bg-paper px-4 py-3 text-center font-ui text-[13px] leading-relaxed text-bark">
           No sign-in has been set up on this deployment yet, so nobody can get in. Add the owner
           username, password hash and session secret in the hosting settings.

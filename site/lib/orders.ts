@@ -1,6 +1,16 @@
-export type OrderItem = { qty: number; name: string; format: "jar" | "bag" };
+import type { Omission, SizeOz } from "@/lib/products";
+import type { CartLine } from "@/lib/cart";
+export type OrderItem = { qty: number; name: string; format: "jar" | "bag" | "sampler"; slug?:string; sizeOz?:SizeOz; omissions?:Omission[]; gift?:CartLine["gift"]; ingredients?:string; allergens?:string; requiresCooling?:boolean };
 
 export type Order = {
+  bakeId?:string;
+  pickupPeriod?:string;
+  requiresCooling?:boolean;
+  pickupDone?:boolean;
+  giftsDone?:Record<string,boolean>;
+  storedId?:string;
+  emailStatus?:string;
+  emailError?:string;
   /** Lower-cased, so a customer's own orders can be found. */
   email: string;
   id: string;
@@ -42,12 +52,12 @@ export function parseItems(raw: string): OrderItem[] {
     .map((part) => part.trim())
     .filter(Boolean)
     .map((part) => {
-      const match = /^(\d+)x\s+(.*)\s+\((jar|bag)\)$/i.exec(part);
+      const match = /^(\d+)x\s+(.*)\s+\((jar|bag|sampler)\)$/i.exec(part);
       if (!match) return null;
       return {
         qty: Number(match[1]),
         name: match[2].trim(),
-        format: match[3].toLowerCase() as "jar" | "bag",
+        format: match[3].toLowerCase() as OrderItem["format"],
       };
     })
     .filter((item): item is OrderItem => item !== null);

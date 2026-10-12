@@ -1,0 +1,313 @@
+<title>The Instagram Plan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Karla:wght@400;500;600;700&display=swap">
+
+<style>
+  /* Same paper the shop is printed on. Tokens lifted from site/app/globals.css
+     so this document and the tab it describes read as one object. */
+  :root {
+    --cream: #f4eee2; --paper: #fbf8f1; --ink: #3a2712; --brown: #5b3d1e;
+    --brown-deep: #3f2a14; --sage: #6b7a4a; --sage-deep: #4f5a35; --gold: #c9a06a;
+    --sand: #cdbfa5; --moss: #eef0e2; --moss-line: #d7dbc0; --bark: #4a3520;
+    --muted: #6b5a42; --faint: #6f6047; --hedge: #a9b18a; --rule: #e3d9c4;
+    --ok: #4f5a35; --wait: #8a6a2f; --wait-bg: #f7edda; --bad: #8c3a24;
+    --display: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
+    --caps: 'Cinzel', Georgia, serif;
+    --ui: 'Karla', system-ui, -apple-system, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--cream); color: var(--ink); font-family: var(--ui); }
+  :focus-visible { outline: 2px solid var(--sage); outline-offset: 3px; }
+  ::selection { background: var(--gold); color: var(--ink); }
+
+  .sheet { max-width: 760px; margin: 0 auto; padding: 46px 24px 90px; }
+  @media (max-width: 640px) { .sheet { padding: 30px 18px 70px; } }
+
+  .caps { font-size: 11px; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--sage); }
+
+  h1 { font-family: var(--display); font-weight: 500; font-size: 46px; line-height: 1.0; letter-spacing: -0.02em;
+       margin: 8px 0 0; text-wrap: balance; }
+  @media (max-width: 520px) { h1 { font-size: 36px; } }
+  .lede { font-family: var(--display); font-size: 22px; line-height: 1.38; color: var(--bark); margin: 16px 0 0;
+          max-width: 34em; text-wrap: pretty; }
+  .by { font-size: 12px; color: var(--faint); margin: 22px 0 0; letter-spacing: 0.02em; }
+
+  h2 { font-family: var(--display); font-weight: 500; font-size: 30px; line-height: 1.08; letter-spacing: -0.015em;
+       margin: 54px 0 0; text-wrap: balance; padding-top: 22px; border-top: 1px solid var(--rule); }
+  h3 { font-family: var(--ui); font-size: 13px; font-weight: 700; letter-spacing: 0.02em;
+       margin: 30px 0 0; color: var(--ink); }
+  p { font-size: 15px; line-height: 1.68; color: var(--bark); margin: 14px 0 0; max-width: 66ch; text-wrap: pretty; }
+  p strong, li strong { font-weight: 700; color: var(--ink); }
+  em { font-style: italic; }
+  a { color: var(--sage-deep); text-underline-offset: 3px; }
+
+  ul { margin: 14px 0 0; padding: 0 0 0 20px; max-width: 66ch; }
+  li { font-size: 15px; line-height: 1.68; color: var(--bark); margin-top: 8px; }
+  li::marker { color: var(--hedge); }
+
+  /* A claim worth stopping on. One per section at most. */
+  .pull { font-family: var(--display); font-size: 25px; line-height: 1.3; color: var(--ink);
+          border-left: 0; border-top: 1px solid var(--gold); border-bottom: 1px solid var(--gold);
+          padding: 18px 0; margin: 30px 0 0; max-width: 30em; text-wrap: pretty; }
+
+  .panel { border: 1px solid var(--moss-line); background: var(--moss); padding: 18px 20px; margin: 26px 0 0; }
+  .panel h3 { margin-top: 0; color: var(--sage-deep); }
+  .panel p, .panel li { color: var(--bark); }
+
+  .warn { border: 1px solid var(--gold); background: var(--wait-bg); padding: 18px 20px; margin: 26px 0 0; }
+  .warn h3 { margin-top: 0; color: var(--wait); }
+
+  .tblwrap { overflow-x: auto; margin: 22px 0 0; }
+  table { border-collapse: collapse; width: 100%; min-width: 520px; }
+  th, td { text-align: left; padding: 10px 12px 10px 0; border-bottom: 1px solid var(--rule);
+           font-size: 14px; line-height: 1.5; color: var(--bark); vertical-align: top; }
+  th { font-size: 10px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--faint);
+       border-bottom-color: var(--sand); }
+  td.n { font-variant-numeric: tabular-nums; white-space: nowrap; color: var(--muted); }
+  td b { color: var(--ink); }
+
+  /* Pillar mix: the bar IS the number, so no separate figure is needed. */
+  .mix { margin: 22px 0 0; display: flex; flex-direction: column; gap: 7px; max-width: 560px; }
+  .mixrow { display: grid; grid-template-columns: 128px minmax(0, 1fr) 26px; align-items: center; gap: 12px; }
+  .mixrow span:first-child { font-size: 13px; color: var(--bark); }
+  .bar { height: 11px; background: var(--sage); }
+  .bar.alt { background: var(--gold); }
+  .mixrow span:last-child { font-size: 12.5px; color: var(--muted); text-align: right; font-variant-numeric: tabular-nums; }
+
+  ol.steps { margin: 18px 0 0; padding: 0; list-style: none; counter-reset: s; max-width: 66ch; }
+  ol.steps li { display: grid; grid-template-columns: 30px minmax(0, 1fr); gap: 12px; align-items: baseline; margin-top: 12px; }
+  ol.steps li::before { counter-increment: s; content: counter(s); font-family: var(--caps); font-size: 13px;
+                        font-weight: 600; color: var(--gold); font-variant-numeric: tabular-nums; }
+
+  .cta { display: inline-flex; align-items: center; min-height: 46px; padding: 0 24px; margin-top: 20px;
+         font-family: var(--caps); font-size: 11px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase;
+         background: var(--brown); color: var(--cream); text-decoration: none;
+         box-shadow: inset 0 0 0 4px var(--brown), inset 0 0 0 5px var(--gold);
+         transition: background 160ms cubic-bezier(0.22,1,0.36,1), box-shadow 160ms cubic-bezier(0.22,1,0.36,1); }
+  .cta:hover { background: var(--brown-deep); box-shadow: inset 0 0 0 4px var(--brown-deep), inset 0 0 0 5px var(--gold); }
+
+  .end { margin-top: 60px; padding-top: 18px; border-top: 1px solid var(--rule); font-size: 12.5px;
+         line-height: 1.7; color: var(--faint); }
+  .end a { color: var(--muted); }
+
+  @media (prefers-reduced-motion: reduce) { * { transition-duration: 0.01ms !important; } }
+</style>
+
+<div class="sheet">
+
+  <div class="caps">Heaven&rsquo;s Harvest Pantry &middot; Instagram</div>
+  <h1>A hundred posts and a way to send them.</h1>
+  <p class="lede">Two things: a content system that is already written, and a build plan for connecting
+     her Instagram so posts can be scheduled from her own owner&rsquo;s page.</p>
+  <p class="by">Written 2 September 2026 &middot; nothing built yet &middot; this is the thing to approve or change</p>
+
+  <a class="cta" href="https://claude.ai/code/artifact/b0b8325b-44b5-4ae8-a465-b68b3bdf3c7a">See the page &rarr;</a>
+
+  <h2>What we are actually trying to do</h2>
+  <p>Lauren bakes on Monday and delivers Tuesday and Friday. The list closes Sunday at nine.
+     Everything about the business is a weekly loop, and Instagram has to sit inside that loop
+     rather than beside it.</p>
+  <p>So the target is not &ldquo;grow the account.&rdquo; The target is three steps:</p>
+  <ol class="steps">
+    <li><span><strong>A stranger in Peoria stops scrolling</strong> &mdash; because the post is funny, or beautiful, or true.</span></li>
+    <li><span><strong>They tap the bio link</strong> and land on the shop.</span></li>
+    <li><span><strong>They order before Sunday at nine.</strong></span></li>
+  </ol>
+  <p>Everything here is judged against those. A post that gets four hundred likes from people in Ohio
+     has failed. A post that gets nineteen likes and two orders from Vistancia has worked.</p>
+  <p>The second job, quieter: the account is the front door for the <strong>blessing bags</strong> and the
+     <strong>verse card</strong>. Those are the two things nobody else in the granola business has, and they are
+     the reason someone follows an account about oats.</p>
+
+  <h2>What actually works on Instagram right now</h2>
+  <p>This is the research, compressed. All hundred posts are built on it.</p>
+
+  <p><strong>Reach in 2026 comes from three signals</strong>, in this order: watch time (did they finish it),
+     sends (did they DM it to someone), and saves. Likes are close to decorative. So every post in the
+     library has one stated purpose &mdash; watched, saved, sent on, commented, or clicked &mdash; and is shaped
+     around that single job rather than trying to do all five.</p>
+
+  <p><strong>The first line does all the work.</strong> The hook has to be specific enough to be believed and
+     narrow enough to feel personally addressed. Which is why the hooks read like</p>
+  <p class="pull">&ldquo;This jar has been to eleven houses.&rdquo;<br>
+     &ldquo;The pickup line is twenty-two minutes long. Ask me how I know.&rdquo;</p>
+  <p>&hellip;and never &ldquo;Try our delicious granola.&rdquo;</p>
+
+  <ul>
+    <li><strong>Specificity is the whole game.</strong> Numbers, street names, times of day, the real temperature,
+        the real number of trays. A woman saying &ldquo;Monday, 5:41 a.m., Peoria is still dark&rdquo; is not invisible;
+        generic food-brand language is.</li>
+    <li><strong>Carousels earn swipes</strong>, and swipes are dwell time. Anything that is a list, a build, a
+        ranking or a how-to is a carousel with the payoff on the last slide.</li>
+    <li><strong>Short loops beat long videos.</strong> A six-second reel that loops cleanly finishes; a
+        thirty-second one does not. Sound on &mdash; crunch, honey pouring, a jar lid popping.</li>
+    <li><strong>Save-bait has to be explicit.</strong> &ldquo;Save this for the week you forget you have it.&rdquo;</li>
+    <li><strong>Send-bait has to name a person.</strong> Not &ldquo;share this&rdquo; but &ldquo;you know exactly who in your
+        family this is.&rdquo; Sends are the most weighted signal there is.</li>
+    <li><strong>Hashtags are nearly dead but not free-dead.</strong> Five per post, local-weighted.</li>
+    <li><strong>Faith content works when it costs the writer something.</strong> A verse with a pretty photo is
+        scrolled past. A verse taped above the counter, with an admission that some weeks it is a job
+        description rather than an encouragement, is not.</li>
+  </ul>
+
+  <div class="warn">
+    <h3>The rule that overrides all of it</h3>
+    <p>Nothing invented. No fake reviews, no invented backstory, no number she has not counted.
+       <strong>23 of the 100 posts are marked &ldquo;needs your detail&rdquo;</strong> &mdash; they are frames with her fact
+       missing, and the page will not let her schedule one until it is filled in.</p>
+  </div>
+
+  <h2>The content system</h2>
+  <p>Twelve pillars, weighted toward what earns reach and what only she can say.</p>
+
+  <div class="mix">
+    <div class="mixrow"><span>Funny</span><span class="bar" style="width:100%"></span><span>12</span></div>
+    <div class="mixrow"><span>Faith</span><span class="bar" style="width:92%"></span><span>11</span></div>
+    <div class="mixrow"><span>Useful</span><span class="bar" style="width:92%"></span><span>11</span></div>
+    <div class="mixrow"><span>In the kitchen</span><span class="bar" style="width:75%"></span><span>9</span></div>
+    <div class="mixrow"><span>Neighborhood</span><span class="bar" style="width:75%"></span><span>9</span></div>
+    <div class="mixrow"><span>Flavors</span><span class="bar" style="width:67%"></span><span>8</span></div>
+    <div class="mixrow"><span>Seasonal</span><span class="bar" style="width:67%"></span><span>8</span></div>
+    <div class="mixrow"><span>Order by Sunday</span><span class="bar alt" style="width:50%"></span><span>6</span></div>
+    <div class="mixrow"><span>Blessing bags</span><span class="bar alt" style="width:50%"></span><span>6</span></div>
+    <div class="mixrow"><span>What people say</span><span class="bar alt" style="width:50%"></span><span>6</span></div>
+    <div class="mixrow"><span>Her story</span><span class="bar alt" style="width:42%"></span><span>5</span></div>
+    <div class="mixrow"><span>The jar</span><span class="bar alt" style="width:42%"></span><span>5</span></div>
+    <div class="mixrow"><span>Rewards &amp; blends</span><span class="bar alt" style="width:33%"></span><span>4</span></div>
+  </div>
+
+  <h3>The weekly rhythm</h3>
+  <p>Four posts a week, plus stories. Deliberately sustainable &mdash; she is one person with an oven. The
+     rhythm mirrors her actual week, so the content is a by-product of work she is already doing.</p>
+
+  <div class="tblwrap">
+    <table>
+      <thead><tr><th>Day</th><th>Post</th><th>Why then</th></tr></thead>
+      <tbody>
+        <tr><td class="n"><b>Sunday am</b></td><td>Faith or useful</td><td>Quiet audience, high save rate</td></tr>
+        <tr><td class="n"><b>Sunday 3&ndash;6pm</b></td><td>Order by Sunday</td><td>The list closes at nine. This is the money post</td></tr>
+        <tr><td class="n"><b>Monday</b></td><td>In the kitchen</td><td>She is baking anyway. Film it while it happens</td></tr>
+        <tr><td class="n"><b>Wed or Thu</b></td><td>Funny, flavor or local</td><td>The mid-week reach post</td></tr>
+        <tr><td class="n">Any day</td><td>Stories</td><td>Porch shots, jars coming back, sold-out notices</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>Four a week is roughly 200 a year. The library covers <strong>six months with no repeats</strong>, and the
+     best twenty are worth running again after that. Real moments she catches go in on top.</p>
+
+  <h3>What each post already contains</h3>
+  <p>Not just a caption. Each one has the hook, the finished caption in her voice, one call to action,
+     five hashtags, the suggested day and time, one line on why it works &mdash; and <strong>the shot</strong>, which is
+     the part that actually stops her:</p>
+  <div class="panel">
+    <h3>Take this</h3>
+    <p>Break one big cluster in half over the tray with your thumbs. Close, daylight, sound on.
+       Cut it so it loops.</p>
+  </div>
+
+  <h2>Connecting Instagram</h2>
+  <p><strong>The honest summary:</strong> publishing to Instagram from our own software is possible, free, and
+     does <em>not</em> require Meta&rsquo;s app review &mdash; as long as we only ever post to her own account. That last
+     clause is what makes this easy. Building something that posts on behalf of strangers would be a
+     six-week compliance project. We are not doing that.</p>
+
+  <h3>What Meta requires, once</h3>
+  <ol class="steps">
+    <li><span>Her Instagram is a <strong>Professional account</strong>. Free, a settings toggle.</span></li>
+    <li><span>It is <strong>linked to a Facebook Page</strong>. The Page can sit empty and unused; it is plumbing,
+        not a second account to run.</span></li>
+    <li><span>A <strong>Meta developer app</strong>, created once by us, left in Development mode.</span></li>
+    <li><span>Her account added to that app as an <strong>Instagram Tester</strong>, invite accepted.</span></li>
+  </ol>
+  <p>Step 4 is the unlock. In Development mode an app can publish to accounts that have a role on it,
+     with no app review and no business verification. Since the only account we will ever post to is
+     hers, we stay in Development mode permanently.</p>
+
+  <h3>Scheduling: we build the clock, not Instagram</h3>
+  <p>This is the most important decision in the document. Instagram&rsquo;s API does not reliably offer
+     future-scheduling the way Facebook Pages do &mdash; it is undocumented for Instagram in Meta&rsquo;s own
+     reference, and it definitively does not exist for Stories or Reels.</p>
+  <p class="pull">Every commercial scheduler &mdash; Later, Planoly, Buffer &mdash; holds the post in its own
+     database and calls the publish API itself at the right second. We do the same.</p>
+  <p>It is more code than we would like, and it is also more reliable: we control the retries, we
+     control the token refresh, and a post that fails <strong>says so on her page</strong> instead of vanishing into
+     Meta&rsquo;s queue. A job runs every five minutes, picks up whatever is due, and publishes it. Nothing is
+     ever published twice &mdash; the Instagram post id, once written down, is the receipt.</p>
+
+  <div class="panel">
+    <h3>Two constraints worth knowing now</h3>
+    <ul>
+      <li><strong>Photos have to live somewhere public.</strong> Instagram fetches the file from a URL itself, so a
+          photo on her phone cannot be posted directly. She uploads it to us, we host it, we hand
+          Instagram the link.</li>
+      <li><strong>Stories cannot be scheduled by anybody.</strong> So the page treats stories as a checklist for the
+          day &mdash; &ldquo;post a porch shot on the run today&rdquo; &mdash; not as something it publishes.</li>
+    </ul>
+  </div>
+
+  <h3>What we are not going to do</h3>
+  <ul>
+    <li>No captions written by a machine at post time. Everything is written in advance and read by her.
+        An AI writing unsupervised in her voice, on a faith brand, is a risk with no upside.</li>
+    <li>No auto-DMs, no follow-bots, no engagement automation. Against Meta&rsquo;s terms and against the brand.</li>
+  </ul>
+
+  <h2>The build, in six phases</h2>
+  <p>Phases 1 and 2 are useful on their own. If we stop after them she has a hundred posts and a shot
+     list and she posts from her phone like everybody else &mdash; which is already most of the value.</p>
+
+  <div class="tblwrap">
+    <table>
+      <thead><tr><th></th><th>Phase</th><th>What she gets</th></tr></thead>
+      <tbody>
+        <tr><td class="n"><b>1</b></td><td><b>Library &amp; tab</b></td><td>All 100 posts, filters, search, copy-caption. Works with no Instagram at all.</td></tr>
+        <tr><td class="n"><b>2</b></td><td><b>The week</b></td><td>&ldquo;Fill my week&rdquo;, the seven-day view, the one-morning shot list.</td></tr>
+        <tr><td class="n"><b>3</b></td><td><b>Photos</b></td><td>Upload from her phone against a post. iPhone HEIC converted automatically.</td></tr>
+        <tr><td class="n"><b>4</b></td><td><b>Connect</b></td><td>Meta app, tester role, sign-in, token refreshed on its own, reconnect banner.</td></tr>
+        <tr><td class="n"><b>5</b></td><td><b>The auto-poster</b></td><td>The queue, the five-minute clock, retries, the calendar, honest failures.</td></tr>
+        <tr><td class="n"><b>6</b></td><td>Learn from it <em>(optional)</em></td><td>Saves and sends read back per post, so the library sorts itself by what works for her.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>What I need from you</h2>
+  <ol class="steps">
+    <li><span><strong>Where the clock runs.</strong> Vercel Pro gives us five-minute timing for about $20 a month
+        and nothing new to maintain &mdash; my recommendation. A free external scheduler also works.</span></li>
+    <li><span><strong>Where photos live.</strong> Vercel Blob, alongside the site &mdash; my recommendation.</span></li>
+    <li><span><strong>Do we stop after phase 2?</strong> Library and shot list only, no Instagram connection. Cheapest
+        path to most of the value and entirely defensible.</span></li>
+    <li><span><strong>Is she already on GoHighLevel?</strong> If she needs to be posting <em>this week</em>, GHL will
+        connect Instagram in ten minutes of clicking with no code. Worth doing as a stopgap. It is not the
+        recommendation, because GHL cannot see which flavor just sold out, which verse is going out, or whether
+        she is baking &mdash; and that is exactly what makes &ldquo;fill my week&rdquo; worth building inside her own page.</span></li>
+  </ol>
+
+  <h2>Risks, honestly</h2>
+  <ul>
+    <li><strong>The Facebook Page requirement</strong> is where this stalls. Five minutes with someone sitting next
+        to her; hours alone.</li>
+    <li><strong>Token expiry</strong> breaks self-built posters more than anything else. Designed for from the start:
+        weekly refresh, loud banner, posts pause rather than failing one by one.</li>
+    <li><strong>Meta changes the API.</strong> It happens. The queue is ours, so a breaking change means posts sit
+        unpublished with a clear error rather than disappearing.</li>
+    <li><strong>The real risk is not technical.</strong> It is that she does not have the photos. That is why the
+        shot list exists in phase 2, before any of the API work.</li>
+  </ul>
+
+  <a class="cta" href="https://claude.ai/code/artifact/b0b8325b-44b5-4ae8-a465-b68b3bdf3c7a">See the page &rarr;</a>
+
+  <p class="end">
+    Research behind this:
+    <a href="https://developers.facebook.com/docs/instagram-platform/content-publishing">Meta &mdash; Instagram Content Publishing</a>,
+    <a href="https://developers.facebook.com/docs/instagram-platform/create-an-instagram-app/">Meta &mdash; Create an Instagram App</a>,
+    <a href="https://sproutsocial.com/insights/instagram-algorithm/">Sprout Social &mdash; How the Instagram Algorithm Works, 2026</a>,
+    <a href="https://www.socialpilot.co/instagram-marketing/how-instagram-algorithm-works">SocialPilot &mdash; Instagram Algorithm, August 2026</a>,
+    <a href="https://www.truefuturemedia.com/articles/instagram-reach-2026-algorithm-reels-carousels-caption-seo">True Future Media &mdash; Instagram Reach in 2026</a>,
+    <a href="https://www.adpicto.com/en/blog/instagram-carousel-best-practices-2026">Adpicto &mdash; Carousel Best Practices 2026</a>,
+    <a href="https://posteverywhere.ai/blog/schedule-instagram-posts-api">PostEverywhere &mdash; Scheduling via API</a>,
+    <a href="https://www.blotato.com/blog/instagram-posting-api">Blotato &mdash; Instagram Posting API 2026</a>.
+  </p>
+
+</div>

@@ -11,8 +11,14 @@ import {
   sanitizeCart,
 } from "../lib/cart.ts";
 import { normalisePhone, orderMetadata, validateOrder } from "../lib/order.ts";
+import { pickupDate } from "../lib/fulfilment.ts";
 
-const shop = defaultShop;
+// Freeze the old catalog to verify legacy cart arithmetic independently of the live menu.
+const shop = {...defaultShop, flavors:[
+ {...defaultShop.flavors[0],slug:'honey-almond-crunch',name:'Honey Almond Crunch',bagPrice:9,jarPrice:12,samplerPrice:5},
+ {...defaultShop.flavors[0],name:'Maple Pecan',bagPrice:10,jarPrice:13,samplerPrice:5},
+ {...defaultShop.flavors[3],soldOut:true}
+]};
 const none = { jarsReturned: 0, blessingBags: 0 };
 
 test("prices bags at the bag price", () => {
@@ -20,6 +26,12 @@ test("prices bags at the bag price", () => {
   assert.equal(t.subtotalCents, 1800);
   assert.equal(t.totalCents, 1800);
   assert.equal(t.itemCount, 2);
+});
+
+test("prices the 3 oz sampler as its own bag format", () => {
+  const t = priceOrder(shop, [{ slug: "honey-almond-crunch", format: "sampler", qty: 1 }], none);
+  assert.equal(t.totalCents, 500);
+  assert.equal(t.lines[0].line.format, "sampler");
 });
 
 test("prices jars at the jar price", () => {
@@ -49,9 +61,9 @@ test("merges duplicate lines and clamps the quantity", () => {
 
 test("blessing bags cost their own price and earn points", () => {
   const t = priceOrder(shop, [], { jarsReturned: 0, blessingBags: 2 });
-  assert.equal(t.blessingCents, 1800);
-  assert.equal(t.totalCents, 1800);
-  assert.equal(t.points, 18);
+  assert.equal(t.blessingCents, 1400);
+  assert.equal(t.totalCents, 1400);
+  assert.equal(t.points, 0);
 });
 
 test("a returned jar takes money off and adds points", () => {
@@ -63,7 +75,7 @@ test("a returned jar takes money off and adds points", () => {
   assert.equal(t.jarCreditRequestedCents, 600);
   assert.equal(t.jarCreditAppliedCents, 600);
   assert.equal(t.totalCents, 2000);
-  assert.equal(t.points, 26 + 15);
+  assert.equal(t.points, 0);
 });
 
 test("the jar credit never drops an order below a dollar", () => {
@@ -75,7 +87,7 @@ test("the jar credit never drops an order below a dollar", () => {
   assert.equal(t.jarCreditAppliedCents, 800);
   assert.equal(t.totalCents, 100);
   // Jars the credit could not pay for still earn every one of their points.
-  assert.equal(t.points, 9 + 60);
+  assert.equal(t.points, 0);
 });
 
 test("nonsense quantities never reach the till", () => {
@@ -85,7 +97,7 @@ test("nonsense quantities never reach the till", () => {
   });
   assert.equal(t.itemCount, 0);
   assert.equal(t.jarCreditRequestedCents, 0);
-  assert.equal(t.blessingCents, 20 * 900);
+  assert.equal(t.blessingCents, 20 * 700);
 });
 
 test("money reads the way she would write it", () => {
@@ -104,9 +116,10 @@ const goodOrder = {
   jarsReturned: 0,
   blessingBags: 0,
   details: {
-    method: "delivery",
-    runArea: shop.delivery.runs[0].area,
-    runDate: shop.delivery.runs[0].nextDate,
+    method: "dropoff",
+    runArea: "Porch pickup",
+    runDate: pickupDate(),
+    pickupPeriod: "morning",
     name: "Ruth Boaz",
     phone: "623-555-0134",
     address: "12 Olive Way",
@@ -127,13 +140,13 @@ test("an empty basket is refused", () => {
   assert.ok(result.errors.lines);
 });
 
-test("delivery with nowhere to leave it is refused", () => {
+test("delivery is paused even when an address is supplied", () => {
   const result = validateOrder(shop, {
     ...goodOrder,
-    details: { ...goodOrder.details, address: "" },
+    details: { ...goodOrder.details, method: "delivery" },
   });
   assert.equal(result.ok, false);
-  assert.ok(result.errors.address);
+  assert.match(result.errors.method, /paused/);
 });
 
 test("a drop-off order uses the drop-off spot, not a home address", () => {
@@ -142,19 +155,19 @@ test("a drop-off order uses the drop-off spot, not a home address", () => {
     details: { ...goodOrder.details, method: "dropoff", address: "" },
   });
   assert.equal(result.ok, true);
-  assert.equal(result.order.details.address, shop.delivery.dropOff);
+  assert.equal(result.order.details.address, "Vistancia");
 });
 
-test("a delivery day that does not exist is refused", () => {
+test("an old pickup date is rejected instead of silently moved", () => {
   const result = validateOrder(shop, {
     ...goodOrder,
     details: { ...goodOrder.details, runArea: "Narnia", runDate: "Tue Sep 8" },
   });
   assert.equal(result.ok, false);
-  assert.ok(result.errors.runIndex);
+  assert.ok(result.errors.runDate);
 });
 
-test("a run she has since removed is refused, not quietly swapped for another", () => {
+test("pickup still works if an old delivery run is removed", () => {
   // The customer chose Vistancia. She deletes that run, so Anthem shifts into
   // its place. An order booked by position would land on the wrong porch.
   const withoutFirst = {
@@ -162,19 +175,19 @@ test("a run she has since removed is refused, not quietly swapped for another", 
     delivery: { ...shop.delivery, runs: shop.delivery.runs.slice(1) },
   };
   const result = validateOrder(withoutFirst, goodOrder);
-  assert.equal(result.ok, false);
-  assert.match(result.errors.runIndex, /not being offered/);
+  assert.equal(result.ok, true);
+  assert.equal(result.order.details.runArea, "Porch pickup");
 });
 
-test("the run that was chosen is the run that is recorded", () => {
+test("a pickup order records pickup instead of a delivery run", () => {
   const second = shop.delivery.runs[1];
   const result = validateOrder(shop, {
     ...goodOrder,
-    details: { ...goodOrder.details, runArea: second.area, runDate: second.nextDate },
+    details: { ...goodOrder.details, runArea: second.area, runDate: pickupDate() },
   });
   assert.equal(result.ok, true);
-  assert.equal(result.order.details.runIndex, 1);
-  assert.equal(orderMetadata(shop, result.order, result.totals).run_area, second.area);
+  assert.equal(result.order.details.runArea, "Porch pickup");
+  assert.equal(orderMetadata(shop, result.order, result.totals).run_area, "Porch pickup");
 });
 
 test("a wild blessing-bag count is refused rather than billed", () => {
@@ -184,18 +197,24 @@ test("a wild blessing-bag count is refused rather than billed", () => {
 });
 
 test("the quantities that were priced are the quantities that get charged", () => {
-  const result = validateOrder(shop, { ...goodOrder, blessingBags: 3, jarsReturned: 2 });
+  const result = validateOrder(shop, { ...goodOrder, jarsReturned: 0 });
   assert.equal(result.ok, true);
   // Whatever the browser sent, the order carries the clamped, priced figures.
   assert.equal(result.order.blessingBags, result.totals.blessingBags);
   assert.equal(result.order.jarsReturned, result.totals.jarsReturned);
-  assert.equal(result.totals.blessingBags, 3);
+  assert.equal(result.totals.blessingBags, 0);
 });
 
-test("the kitchen slip carries the items, the run and the points", () => {
+test("legacy flat-price blessing purchases require a recipient selection", () => {
+  const result = validateOrder(shop, { ...goodOrder, blessingBags: 1 });
+  assert.equal(result.ok, false);
+  assert.ok(result.errors.blessingBags);
+});
+
+test("the kitchen slip carries the items, pickup and the points", () => {
   const result = validateOrder(shop, goodOrder);
   const meta = orderMetadata(shop, result.order, result.totals);
   assert.equal(meta.items, "1x Maple Pecan (bag)");
-  assert.equal(meta.run_area, shop.delivery.runs[0].area);
-  assert.equal(meta.points_earned, "10");
+  assert.equal(meta.run_area, "Porch pickup");
+  assert.equal(meta.points_earned, "0");
 });

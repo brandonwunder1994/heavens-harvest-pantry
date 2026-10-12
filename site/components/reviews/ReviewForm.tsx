@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
+import Link, { usePractice } from "@/components/ShopLink";
 import { HeartSeal } from "@/components/Sprite";
 
 /**
@@ -9,6 +9,7 @@ import { HeartSeal } from "@/components/Sprite";
  * when they press send: it goes to her, and she decides.
  */
 export function ReviewForm({ flavors, presetFlavor }: { flavors: string[]; presetFlavor?: string }) {
+  const practice = usePractice();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [flavor, setFlavor] = useState(presetFlavor && flavors.includes(presetFlavor) ? presetFlavor : "");
@@ -28,7 +29,7 @@ export function ReviewForm({ flavors, presetFlavor }: { flavors: string[]; prese
     setFailure("");
 
     try {
-      const response = await fetch("/api/reviews", {
+      const response = await fetch(practice ? "/api/mock/reviews" : "/api/reviews", {
         method: "POST",
         headers: { "content-type": "application/json" },
         body: JSON.stringify({ name, email, flavor, rating, body }),
@@ -88,14 +89,14 @@ export function ReviewForm({ flavors, presetFlavor }: { flavors: string[]; prese
       </div>
 
       <div className="grid gap-5 sm:grid-cols-2">
-        <label className="flex flex-col gap-1.5">
+        <label className="flex min-w-0 flex-col gap-1.5">
           <span className="font-ui text-[12px] font-semibold text-muted">
-            Which one <span className="font-normal text-faint">· optional</span>
+            Flavor <span className="font-normal text-faint">· optional</span>
           </span>
           <select
             value={flavor}
             onChange={(e) => setFlavor(e.target.value)}
-            className="h-12 border border-sand bg-cream px-3 font-ui text-[15px] text-ink"
+            className="h-12 w-full min-w-0 max-w-full border border-sand bg-cream px-3 font-ui text-[15px] text-ink"
           >
             <option value="">Not about one in particular</option>
             {flavors.map((option) => (
@@ -106,7 +107,7 @@ export function ReviewForm({ flavors, presetFlavor }: { flavors: string[]; prese
           </select>
         </label>
 
-        <fieldset className="flex flex-col gap-1.5">
+        <fieldset className="flex min-w-0 flex-col gap-1.5">
           <legend className="font-ui text-[12px] font-semibold text-muted">How was it</legend>
           <div className="flex h-12 items-center gap-1">
             {[1, 2, 3, 4, 5].map((star) => (
@@ -116,7 +117,7 @@ export function ReviewForm({ flavors, presetFlavor }: { flavors: string[]; prese
                 onClick={() => setRating(star)}
                 aria-label={`${star} out of 5`}
                 aria-pressed={rating === star}
-                className={`px-1 text-[30px] leading-none transition-colors ${
+                className={`min-h-11 min-w-11 px-1 text-[30px] leading-none transition-colors ${
                   star <= rating ? "text-brown" : "text-muted hover:text-sage"
                 }`}
               >
@@ -130,7 +131,7 @@ export function ReviewForm({ flavors, presetFlavor }: { flavors: string[]; prese
         </fieldset>
       </div>
 
-      <label className="flex flex-col gap-1.5">
+      <label className="flex min-w-0 flex-col gap-1.5">
         <span className="font-ui text-[12px] font-semibold text-muted">What you would tell a neighbor</span>
         <textarea
           value={body}
@@ -139,7 +140,7 @@ export function ReviewForm({ flavors, presetFlavor }: { flavors: string[]; prese
           maxLength={900}
           aria-describedby="review-count"
           placeholder="A sentence or two is perfect."
-          className={`border bg-cream px-3.5 py-3 font-ui text-[15px] leading-relaxed text-ink placeholder:text-faint ${
+          className={`w-full min-w-0 border bg-cream px-3.5 py-3 font-ui text-[15px] leading-relaxed text-ink placeholder:text-faint ${
             errors.body ? "border-brown" : "border-sand"
           }`}
         />
@@ -159,9 +160,6 @@ export function ReviewForm({ flavors, presetFlavor }: { flavors: string[]; prese
         <button type="submit" disabled={sending} className="stamp disabled:opacity-60">
           {sending ? "Sending…" : "Send it to her"}
         </button>
-        <p className="font-ui text-[12px] leading-relaxed text-faint">
-          She reads it before anyone else does. Nothing goes on the site without her.
-        </p>
       </div>
     </form>
   );
@@ -185,7 +183,7 @@ function Field({
   error?: string;
 }) {
   return (
-    <label className="flex flex-col gap-1.5">
+    <label className="flex min-w-0 flex-col gap-1.5">
       <span className="font-ui text-[12px] font-semibold text-muted">
         {label}
         {optional ? <span className="font-normal text-faint"> · optional</span> : null}
@@ -194,7 +192,7 @@ function Field({
         type={type}
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className={`h-12 border bg-cream px-3.5 font-ui text-[15px] text-ink placeholder:text-faint ${
+        className={`h-12 w-full min-w-0 border bg-cream px-3.5 font-ui text-[15px] text-ink placeholder:text-faint ${
           error ? "border-brown" : "border-sand"
         }`}
       />

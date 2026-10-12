@@ -250,26 +250,19 @@ def tiny_data_uri_b64(im: Image.Image, size: tuple[int, int]) -> str:
     return "data:image/webp;base64," + base64.b64encode(buf.getvalue()).decode("ascii")
 
 
-def place_jar(plate: Image.Image, jar: Image.Image, lid: Image.Image, *, cx: float, bottom: float, jar_h: float) -> Image.Image:
+def place_jar(plate: Image.Image, jar: Image.Image, *, cx: float, bottom: float, jar_h: float) -> Image.Image:
     out = plate.convert("RGBA")
     scale = (plate.height * jar_h) / jar.height
     jw, jh = max(1, round(jar.width * scale)), max(1, round(jar.height * scale))
     jar_s = jar.resize((jw, jh), Image.Resampling.LANCZOS)
     x = int(plate.width * cx - jw / 2)
     y = int(plate.height * bottom - jh)
-    # Soft contact shadow
     shadow = Image.new("RGBA", out.size, (0, 0, 0, 0))
     sh = Image.new("RGBA", (int(jw * 0.86), int(jh * 0.08)), (40, 24, 10, 70))
     sh = sh.filter(ImageFilter.GaussianBlur(18))
     shadow.paste(sh, (x + int(jw * 0.07), y + jh - int(jh * 0.04)), sh)
     out = Image.alpha_composite(out, shadow)
     out.paste(jar_s, (x, y), jar_s)
-    lw = int(jw * 0.78)
-    lh = max(1, round(lid.height * (lw / lid.width)))
-    lid_s = lid.resize((lw, lh), Image.Resampling.LANCZOS)
-    lx = x + (jw - lw) // 2
-    ly = y + int(jh * 0.008)
-    out.paste(lid_s, (lx, ly), lid_s)
     return out
 
 
@@ -319,8 +312,8 @@ def main() -> None:
     save_webp(plate_wide, OUT / "plate-wide.webp", 84)
     save_webp(plate_tall, OUT / "plate-tall.webp", 84)
 
-    still_wide = place_jar(plate_wide, filled, lid, cx=0.74, bottom=0.905, jar_h=0.60)
-    still_tall = place_jar(plate_tall, filled, lid, cx=0.50, bottom=0.72, jar_h=0.40)
+    still_wide = place_jar(plate_wide, filled, cx=0.74, bottom=0.905, jar_h=0.60)
+    still_tall = place_jar(plate_tall, filled, cx=0.50, bottom=0.72, jar_h=0.40)
     save_webp(still_wide.convert("RGB"), STILL / "counter-wide.webp", 86)
     save_webp(still_tall.convert("RGB"), STILL / "counter-tall.webp", 86)
     save_webp(still_wide.convert("RGB"), OUT / "still-wide.webp", 86)

@@ -1,4 +1,6 @@
 import type { Shop } from "@/lib/content";
+import { DELIVERY_ENABLED, pickupDate, saturdayDate, type PickupPeriod } from "@/lib/fulfilment";
+import { BLESSING_SIZES, OMISSIONS, cleanOmissions, type Omission } from "@/lib/products";
 import {
   MAX_BLESSING_BAGS,
   MAX_JARS_RETURNED,
@@ -10,6 +12,9 @@ import {
 export type FulfilmentMethod = "delivery" | "dropoff";
 
 export type OrderDetails = {
+  bakeId?: string;
+  pickupPeriod?: PickupPeriod;
+  requiresCooling?: boolean;
   method: FulfilmentMethod;
   /**
    * Which delivery day was chosen. Sent as the neighborhood and date rather
@@ -24,6 +29,8 @@ export type OrderDetails = {
   address: string;
   note: string;
   prayer: string;
+  blessingGiftJars?: number;
+  blessingVerse?: { reference: string; text: string; note: string; from: string; to: string };
 };
 
 export type OrderRequest = {
@@ -59,7 +66,25 @@ export function validateOrder(shop: Shop, input: unknown): ValidationResult {
   const jarsReturned = Number(body.jarsReturned) || 0;
   const blessingBags = Number(body.blessingBags) || 0;
 
-  const totals = priceOrder(shop, lines, { jarsReturned, blessingBags });
+  const totals = priceOrder(shop, lines, { jarsReturned, blessingBags, blessingGiftJars: rawDetails.blessingGiftJars });
+  if (lines.length > 40) errors.lines = "Please keep an order to 40 different selections or fewer.";
+  if (blessingBags > 0) errors.blessingBags = "Choose a flavor, size, and recipient for each blessing gift below.";
+  if (jarsReturned > 0) errors.jarsReturned = "Jar returns are paused while we use resealable bags.";
+  const giftIds=new Set<string>();
+  for (const line of lines) {
+    if (!line || typeof line !== "object") continue;
+    const flavor = shop.flavors.find(f => f.slug === line.slug);
+    if (!flavor) continue;
+    if (line.sizeOz !== undefined && ![3, 8, 16].includes(line.sizeOz)) errors.lines = "Choose a 3 oz, 8 oz, or 1 lb size.";
+    if (line.omissions !== undefined && (!Array.isArray(line.omissions) || line.omissions.some(o => !OMISSIONS.includes(o as Omission) || !flavor.allowedOmissions?.includes(o)))) errors.lines = "One ingredient option is no longer offered. Please choose again.";
+    if (line.gift) {
+      if(giftIds.has(line.gift.id))errors.gifts="Please add each gift as a separate recipient selection.";
+      giftIds.add(line.gift.id);
+      const giftSize = line.sizeOz ?? (line.format === "sampler" ? 3 : 16);
+      if (!BLESSING_SIZES.some(size => size === giftSize)) errors.gifts = "Choose an 8 oz or 1 lb size for each blessing gift.";
+      if (typeof line.gift.id !== "string" || !line.gift.id || clean(line.gift.recipientName, 80).length < 2 || clean(line.gift.address, 250).length < 8 || line.gift.inVistancia !== true) errors.gifts = "Each blessing gift needs a recipient, delivery address, and confirmation that it is in Vistancia.";
+    }
+  }
 
   if (totals.itemCount === 0 && totals.blessingBags === 0) {
     errors.lines = "Your order is empty.";
@@ -71,12 +96,17 @@ export function validateOrder(shop: Shop, input: unknown): ValidationResult {
     errors.blessingBags = `Between 0 and ${MAX_BLESSING_BAGS} blessing bags, please.`;
   }
 
-  const method: FulfilmentMethod = rawDetails.method === "dropoff" ? "dropoff" : "delivery";
+  const method: FulfilmentMethod = rawDetails.method === "delivery" ? "delivery" : "dropoff";
+  if (method === "delivery" && !DELIVERY_ENABLED) errors.method = "Delivery is paused. Please choose Friday or Saturday porch pickup.";
 
   const runArea = clean(rawDetails.runArea, 60);
   const runDate = clean(rawDetails.runDate, 40);
+  const bakeId = pickupDate();
+  const hasPickup = totals.lines.some(p => !p.line.gift);
+  if (hasPickup && runDate !== bakeId && runDate !== saturdayDate(bakeId)) errors.runDate = "Choose an available Friday or Saturday pickup date.";
+  if (hasPickup && rawDetails.pickupPeriod !== "morning" && rawDetails.pickupPeriod !== "afternoon") errors.pickupPeriod = "Choose morning or afternoon pickup.";
   const matched = shop.delivery.runs.findIndex((r) => r.area === runArea && r.nextDate === runDate);
-  if (matched < 0) {
+  if (method === "delivery" && matched < 0) {
     errors.runIndex = runArea
       ? "That delivery day is not being offered any more. Please pick another."
       : "Pick a delivery day.";
@@ -109,13 +139,18 @@ export function validateOrder(shop: Shop, input: unknown): ValidationResult {
       details: {
         method,
         runIndex,
-        runArea,
-        runDate,
+        runArea: method === "delivery" ? runArea : "Porch pickup",
+        runDate: hasPickup ? runDate : bakeId,
+        bakeId,
+        pickupPeriod: hasPickup ? rawDetails.pickupPeriod : undefined,
+        requiresCooling: totals.lines.some(p => !p.line.gift && p.flavor.requiresCooling),
         name,
         phone,
-        address: method === "delivery" ? address : shop.delivery.dropOff,
+        address: method === "delivery" ? address : "Vistancia",
         note: clean(rawDetails.note),
         prayer: clean(rawDetails.prayer, 500),
+        blessingGiftJars: totals.blessingGiftJars,
+        blessingVerse: undefined,
       },
     },
   };
@@ -127,24 +162,29 @@ export function orderMetadata(
   order: OrderRequest,
   totals: Totals,
 ): Record<string, string> {
-  const run = shop.delivery.runs[order.details.runIndex];
+  const run = order.details.method === "delivery" ? shop.delivery.runs[order.details.runIndex] : null;
   return {
     customer_name: order.details.name,
     phone: order.details.phone,
     method: order.details.method,
-    run_area: run.area,
-    run_date: run.nextDate,
+    run_area: run?.area ?? "Porch pickup",
+    run_date: run?.nextDate ?? order.details.runDate,
+    bake_id: order.details.bakeId ?? order.details.runDate,
+    pickup_period: order.details.pickupPeriod ?? "",
+    requires_cooling: order.details.requiresCooling ? "yes" : "no",
     address: order.details.address,
     porch_note: order.details.note,
     prayer_request: order.details.prayer,
+    blessing_gift_jars: String(order.details.blessingGiftJars ?? 0),
+    blessing_verse: order.details.blessingVerse ? JSON.stringify(order.details.blessingVerse).slice(0, 480) : "",
     jars_returned: String(order.jarsReturned),
-    blessing_bags: String(order.blessingBags),
+    blessing_bags: String(order.blessingBags+totals.lines.filter(p=>p.line.gift).reduce((n,p)=>n+p.line.qty,0)),
     jar_credit_cents: String(totals.jarCreditAppliedCents),
     points_earned: String(totals.points),
     items: totals.lines
       // The name somebody asked for goes on the ticket she reads in the
       // kitchen, because a label with the wrong name on it is worse than none.
-      .map((p) => `${p.line.qty}x ${p.flavor.name}${p.line.name ? ` for ${p.line.name}` : ""} (${p.line.format})`)
+      .map((p) => `${p.line.qty}x ${p.flavor.name}${p.line.name ? ` for ${p.line.name}` : ""}${p.line.sizeOz ? ` ${p.line.sizeOz} oz` : ""}${cleanOmissions(p.line.omissions).length ? ` ${cleanOmissions(p.line.omissions).join(",")}` : ""} (${p.line.format})`)
       .join("; ")
       .slice(0, 480),
   };

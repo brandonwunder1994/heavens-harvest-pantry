@@ -117,6 +117,8 @@
   footer { border-top: 1px dashed #a9b18a; padding: clamp(40px, 5vw, 64px) 0 40px; text-align: center; }
 .kj .blessing { max-width: 30em; margin: 14px auto 0; }
 .kj .invite-rule { display: flex; align-items: center; gap: 18px; margin-top: 36px; }
+.kj.invite-only { background: transparent; font-size: inherit; line-height: inherit; }
+.kj.invite-only .invite-rule { margin-top: 0; gap: 0; }
 .kj .invite-rule .dots { flex: 1; border-bottom: 1px dotted #c2b393; }
 .kj .invite-link {
     display: inline-flex; align-items: center; gap: 11px; text-decoration: none;

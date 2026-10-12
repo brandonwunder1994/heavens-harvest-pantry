@@ -1,4 +1,5 @@
 import { noPorch, type Porch } from "@/lib/porch";
+import { launchFlavors, type Omission, type SizeOz } from "@/lib/products";
 
 /**
  * Every piece of copy and every number the owner will eventually edit from her
@@ -29,8 +30,8 @@ export type Delivery = {
 };
 
 export const delivery: Delivery = {
-  cutoff: "Order by Sunday 9pm",
-  bakeDay: "Monday",
+  cutoff: "Order by Tuesday at 9 p.m. Arizona time",
+  bakeDay: "Fresh for Friday and Saturday pickup",
   runs: [
     { area: "Vistancia", day: "Tuesdays", nextDate: "Tue Sep 8" },
     { area: "Anthem", day: "Fridays", nextDate: "Fri Sep 11" },
@@ -39,6 +40,10 @@ export const delivery: Delivery = {
 };
 
 export type Flavor = {
+  sizePrices?: Record<SizeOz, number>;
+  allowedOmissions?: Omission[];
+  requiresCooling?: boolean;
+  category?: "granola" | "almonds";
   slug: string;
   name: string;
   blurb: string;
@@ -46,6 +51,8 @@ export type Flavor = {
   allergens: string;
   bagPrice: number;
   jarPrice: number;
+  /** Price in dollars for a 3 oz sampler bag. */
+  samplerPrice?: number;
   soldOut?: boolean;
   backOn?: string;
   /**
@@ -65,51 +72,8 @@ export type Flavor = {
   icons?: string[];
 };
 
-/** Sample flavors. These swap for hers the moment she sends the real list. */
-export const flavors: Flavor[] = [
-  {
-    slug: "honey-almond-crunch",
-    name: "Honey Almond Crunch",
-    blurb: "Local honey, toasted almonds, a little sea salt. The one people start with.",
-    ingredients: "Rolled oats, local honey, almonds, olive oil, vanilla, sea salt.",
-    allergens: "Tree nuts. Made in a kitchen that also handles wheat and peanuts.",
-    addIns: "almonds, honey, sea salt",
-    bagPrice: 9,
-    jarPrice: 12,
-  },
-  {
-    slug: "maple-pecan",
-    name: "Maple Pecan",
-    blurb: "Real maple, Arizona pecans, cinnamon. Big clusters.",
-    ingredients: "Rolled oats, maple syrup, pecans, olive oil, cinnamon, sea salt.",
-    allergens: "Tree nuts. Made in a kitchen that also handles wheat and peanuts.",
-    addIns: "pecans, maple, cinnamon",
-    bagPrice: 10,
-    jarPrice: 13,
-  },
-  {
-    slug: "dark-chocolate-sea-salt",
-    name: "Dark Chocolate Sea Salt",
-    blurb: "Cacao nibs and dark chocolate chunks. Dessert that counts as breakfast.",
-    ingredients: "Rolled oats, honey, dark chocolate, cacao nibs, olive oil, sea salt.",
-    allergens: "Milk, soy. Made in a kitchen that also handles wheat, peanuts and tree nuts.",
-    addIns: "dark chocolate, cacao nibs, sea salt",
-    bagPrice: 10,
-    jarPrice: 13,
-  },
-  {
-    slug: "cinnamon-apple",
-    name: "Cinnamon Apple",
-    blurb: "Dried apple, cinnamon, brown sugar. Tastes like October.",
-    ingredients: "Rolled oats, dried apple, brown sugar, olive oil, cinnamon, sea salt.",
-    allergens: "Made in a kitchen that also handles wheat, peanuts, tree nuts and milk.",
-    addIns: "dried apple, cinnamon, brown sugar",
-    bagPrice: 9,
-    jarPrice: 12,
-    soldOut: true,
-    backOn: "Friday",
-  },
-];
+/** The approved menu; saved owner edits override these defaults. */
+export const flavors: Flavor[] = launchFlavors;
 
 export type JarRules = {
   creditDollars: number;
@@ -121,9 +85,12 @@ export type JarRules = {
 export const jarRules: JarRules = {
   creditDollars: 2,
   bonusPoints: 5,
-  bagSize: "about 12 ounces",
+  bagSize: "3 oz, 8 oz, or 1 lb",
   jarSize: "16-ounce glass mason jar",
 };
+
+/** The only customer-facing jar option: a gift jar for a blessing bag. */
+export const giftJarPrice = 2;
 
 export type RewardRules = {
   pointsPerDollar: number;
@@ -147,9 +114,9 @@ export const rewardOffer = {
 export type BlessingBag = { price: number; blurb: string };
 
 export const blessingBag: BlessingBag = {
-  price: 9,
+  price: 7,
   blurb:
-    "For $9 at checkout you can put a bag on someone else's porch. A new mom, a family in a hard season, a widow down the street. She delivers it with your name on it, or without, whichever you say.",
+    "Add $7 to your chosen granola or candied almonds for a cute gift jar and anonymous delivery in Vistancia.",
 };
 
 export type Verse = {
@@ -186,7 +153,7 @@ export const labelScripture: Verse = {
 };
 
 /** Same address as the footer QR, so a scan from a bag lands on the menu. */
-export const labelQrUrl = "https://heavens-harvest-pantry.vercel.app/menu?src=qr";
+export const labelQrUrl = "https://heavensharvestpantry.com/menu?src=qr";
 
 export const defaultLabelSettings: LabelSettings = {
   templates: [],
@@ -266,7 +233,7 @@ export type Shop = {
 };
 
 export const defaultShop: Shop = {
-  flavors,
+  flavors: launchFlavors,
   porch: noPorch,
   jarRules,
   rewards,

@@ -10,7 +10,7 @@
 // It saves through the same action every other block on her page uses, so
 // there is nothing new to trust.
 
-import { useActionState, useState } from 'react';
+import { useActionState, useState, useCallback } from 'react';
 import { saveBlock } from "@/app/owner/actions";
 import { idle } from "@/lib/save-state";
 import { SaveBar } from '@/components/owner/SaveBar';
@@ -18,14 +18,17 @@ import { defaultNote, flip, ownerStatus, type Porch } from '@/lib/porch';
 
 export function PorchSwitch({ porch }: { porch: Porch }) {
   const [state, action] = useActionState(saveBlock, idle);
+  const [dirty, setDirty] = useState(false);
+  const settled = useCallback(() => setDirty(false), []);
   const [lit, setLit] = useState<boolean | null>(porch.lit);
   const [note, setNote] = useState(porch.note);
-  // Her words are hers. Flipping the switch never rewrites them — it only asks
+  // Her words are hers. Flipping the switch never rewrites them â€” it only asks
   // her to look at them again, because "Baking Thursday" under an unlit lamp is
   // exactly the kind of thing this feature exists to prevent.
   const [recheck, setRecheck] = useState(false);
 
   function choose(value: boolean) {
+    setDirty(true);
     setRecheck(note.trim().length > 0 && value !== lit);
     setLit(value);
   }
@@ -61,7 +64,7 @@ export function PorchSwitch({ porch }: { porch: Porch }) {
           onClick={() => choose(true)}
         >
           <span className="dot" aria-hidden="true" />
-          I am baking this week
+          Baking this week · message only
         </button>
         <button
           type="button"
@@ -71,7 +74,7 @@ export function PorchSwitch({ porch }: { porch: Porch }) {
           onClick={() => choose(false)}
         >
           <span className="dot" aria-hidden="true" />
-          Sold out this week
+          Sold out this week · message only
         </button>
       </div>
 
@@ -82,10 +85,11 @@ export function PorchSwitch({ porch }: { porch: Porch }) {
           value={note}
           maxLength={64}
           onChange={(event) => {
+            setDirty(true);
             setNote(event.target.value);
             setRecheck(false);
           }}
-          placeholder={lit === false ? 'Sold out — back Thursday' : 'Baking Thursday, orders open'}
+          placeholder={lit === false ? 'Sold out â€” back Thursday' : 'Baking Thursday, orders open'}
         />
         {recheck ? (
           <span className="recheck-note" role="status">
@@ -106,11 +110,11 @@ export function PorchSwitch({ porch }: { porch: Porch }) {
             <span className="porch-note">{showing}</span>
           </span>
         ) : (
-          <span className="empty">Nothing yet — choose one above.</span>
+          <span className="empty">Nothing yet â€” choose one above.</span>
         )}
       </div>
 
-      <SaveBar state={state} label="Save the light" />
+      <SaveBar state={state} label="Save storefront message" dirty={dirty} onSaved={settled} />
     </form>
   );
 }

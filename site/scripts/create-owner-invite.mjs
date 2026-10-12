@@ -30,6 +30,6 @@ if (rows.length === 0) {
   process.exit(1);
 }
 
-const origin = process.env.NEXT_PUBLIC_SITE_URL || "https://heavens-harvest-pantry.vercel.app";
+const origin = process.env.NEXT_PUBLIC_SITE_URL || "https://heavensharvestpantry.com";
 console.log(`Setup link (expires ${new Date(rows[0].setup_expires_at).toLocaleString()}):`);
 console.log(`${origin.replace(/\/$/, "")}/owner/setup?token=${token}`);
