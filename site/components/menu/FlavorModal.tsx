@@ -40,8 +40,12 @@ export function FlavorModal({
   );
 }
 
-function FlavorSheet({flavor,onClose}:{flavor:Flavor;onClose:()=>void}) {
+function FlavorSheet({flavor:entry,onClose}:{flavor:Flavor;onClose:()=>void}) {
   const practice = usePractice();
+  const [variantSlug, setVariantSlug] = useState(entry.variants?.find(v => !v.soldOut)?.slug ?? entry.variants?.[0]?.slug);
+  const chosenVariant = entry.variants?.find(v => v.slug === variantSlug);
+  // The chosen style is the real flavor that goes in the basket; the menu entry just names the pair.
+  const flavor: Flavor = chosenVariant ? { ...chosenVariant, name: entry.name === chosenVariant.name ? entry.name : chosenVariant.name } : entry;
   const [size, setSize] = useState<SizeOz>(8);
   return <div className="flavor-sheet">
           {practice && <p className="col-span-full mb-0 bg-brown-deep px-4 py-3 font-ui text-[13px] text-cream">MOCK — practice basket only. No real order or charge.</p>}
@@ -62,10 +66,13 @@ function FlavorSheet({flavor,onClose}:{flavor:Flavor;onClose:()=>void}) {
 
           <div className="flavor-sheet-copy">
             <h2 id="flavor-modal-title" className="display m-0 text-[32px] sm:text-[40px]">
-              {flavor.name}
+              {entry.variants ? entry.name : flavor.name}
             </h2>
             <p className="font-ui text-[13px] font-semibold text-sage">3 oz, 8 oz, or 1 lb bags</p>
-            <p className="m-0 text-[19px] italic leading-snug text-muted">{flavor.blurb}</p>
+            {entry.variants && <div role="group" aria-label="Choose your chocolate" className="flex flex-wrap gap-2">
+              {entry.variants.map(v => <button key={v.slug} type="button" aria-pressed={v.slug === variantSlug} disabled={v.soldOut} onClick={() => setVariantSlug(v.slug)} className={`min-h-11 border border-brown px-3 py-2 font-ui text-[13px] disabled:opacity-50 ${v.slug === variantSlug ? "bg-brown text-cream" : "bg-cream text-brown hover:bg-paper"}`}>{v.variantLabel}{v.soldOut ? " · sold out" : ""}</button>)}
+            </div>}
+            <p className="m-0 text-[19px] italic leading-snug text-muted">{entry.variants ? entry.blurb : flavor.blurb}</p>
 
             <dl className="grid gap-x-8 gap-y-1.5 font-ui text-[13px] leading-relaxed text-muted sm:grid-cols-[110px_1fr]">
               <dt className="small-caps !text-[10px] text-faint">Ingredients</dt>

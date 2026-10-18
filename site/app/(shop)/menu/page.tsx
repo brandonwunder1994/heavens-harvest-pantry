@@ -6,7 +6,9 @@ import { CartBar } from "@/components/cart/CartBar";
 import { ReorderOnArrival } from "@/components/cart/ReorderOnArrival";
 import { TurnTheJar } from "@/components/menu/TurnTheJar";
 import { getShop } from "@/lib/settings";
-import { PICKUP_LABEL } from "@/lib/fulfilment";
+import { menuFlavors } from "@/lib/menu-groups";
+import { ReadyNow } from "@/components/menu/ReadyNow";
+import { PICKUP_LABEL, nextPickups } from "@/lib/fulfilment";
 
 export const metadata: Metadata = {
   alternates: { canonical: "/menu" },
@@ -17,7 +19,8 @@ export const metadata: Metadata = {
 
 export default async function MenuPage() {
   const shop = await getShop();
-  const { flavors, verseOfTheWeek } = shop;
+  const { verseOfTheWeek } = shop;
+  const flavors = menuFlavors(shop.flavors);
 
   return (
     <>
@@ -29,14 +32,16 @@ export default async function MenuPage() {
         <HeartSeal size={38} />
         <h1 className="display m-0 text-[46px] sm:text-[64px] lg:text-[76px]">This week&apos;s menu</h1>
         <p className="text-[19px] italic text-sage sm:text-[22px]">
-          {flavors.filter((f) => !f.soldOut).length} on the tray. Ordering is open. First pickups: Friday, October 16, and Saturday, October 17.
+          {flavors.filter((f) => !f.soldOut).length} on the tray. Ordering is open. Next pickups: {nextPickups()}.
         </p>
         <div className="mt-2 flex flex-wrap justify-center gap-2.5 font-ui text-[12px] font-semibold text-sage-deep">
           <span className="border border-hedge bg-moss px-3 py-2">{PICKUP_LABEL}</span>
         </div>
       </section>
 
-      <TurnTheJar flavors={flavors} />
+      <ReadyNow />
+
+      <div id="order-next"><TurnTheJar flavors={flavors} /></div>
 
       <section className="mx-6 mt-4 flex flex-col items-center gap-1.5 bg-brown px-6 py-6 text-center text-cream shadow-[inset_0_0_0_4px_#5b3d1e,inset_0_0_0_5px_#c9a06a] sm:mx-10 lg:mx-auto lg:max-w-[900px]">
         <CrossWheat size={40} color="#c9a06a" />

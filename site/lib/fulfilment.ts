@@ -29,3 +29,15 @@ export function pickupDateLabel(date: string): string {
   if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) return date;
   return new Intl.DateTimeFormat("en-US", { timeZone: "UTC", weekday: "long", month: "long", day: "numeric" }).format(new Date(`${date}T12:00:00Z`));
 }
+/** "Friday, October 23, and Saturday, October 24" — always the pickup weekend now open for orders. */
+export function nextPickups(now = Date.now()): string {
+  const friday = pickupDate(now);
+  return `${pickupDateLabel(friday)}, and ${pickupDateLabel(saturdayDate(friday))}`;
+}
+/** Short form for tight spots: "October 23 and 24" (handles month changes). */
+export function nextPickupsShort(now = Date.now()): string {
+  const friday = pickupDate(now), saturday = saturdayDate(friday);
+  const month = (d: string) => new Intl.DateTimeFormat("en-US", { timeZone: "UTC", month: "long" }).format(new Date(`${d}T12:00:00Z`));
+  const day = (d: string) => Number(d.slice(8));
+  return month(friday) === month(saturday) ? `${month(friday)} ${day(friday)} and ${day(saturday)}` : `${month(friday)} ${day(friday)} and ${month(saturday)} ${day(saturday)}`;
+}

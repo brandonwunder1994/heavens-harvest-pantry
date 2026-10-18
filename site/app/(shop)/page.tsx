@@ -8,13 +8,15 @@ import { FloatingJar } from "@/components/FloatingJars";
 import ThePour from "@/components/hero/ThePour";
 import { KitchenPhoto } from "@/components/KitchenPhoto";
 import { StoryNarrative } from "@/components/StoryNarrative";
-import { ScriptureBand } from "@/components/ScriptureBand";
 import { MenuList } from "@/components/MenuList";
+import { ScriptureBand } from "@/components/ScriptureBand";
 import { RewardsCard } from "@/components/rewards/RewardsCard";
 import { business, filled, money, rewardOffer, type Flavor, type Shop } from "@/lib/content";
 import { getShop } from "@/lib/settings";
+import { menuFlavors } from "@/lib/menu-groups";
+import { ReadyNow } from "@/components/menu/ReadyNow";
 import { josephReview } from "@/lib/customer-testimonial";
-import { DELIVERY_ENABLED, PICKUP_LABEL } from "@/lib/fulfilment";
+import { DELIVERY_ENABLED, PICKUP_LABEL, nextPickups } from "@/lib/fulfilment";
 import { blessingBagsThisYear } from "@/lib/orders-source";
 
 const stepsFor = () => [
@@ -82,15 +84,11 @@ export default async function HomePage() {
       </ThePour>
 
       <div className="mx-auto mt-5 w-full max-w-[1296px] px-6 sm:px-10 lg:px-18">
-        <HeroShelf flavors={shop.flavors} />
+        <HeroShelf flavors={menuFlavors(shop.flavors)} />
       </div>
 
-      <div className="mt-10">
-        <ScriptureBand verse={verses.hero} ink>
-          That verse is why this kitchen exists. Good food, made slowly, handed to a neighbor is one of the plainest
-          ways we know to show someone they are loved.
-        </ScriptureBand>
-      </div>
+
+      <ReadyNow />
 
       <section className="grid gap-12 px-6 pt-16 sm:px-10 lg:grid-cols-[1fr_360px] lg:items-start lg:gap-20 lg:px-18 lg:pt-[84px]">
         <div className="flex flex-col gap-7">
@@ -98,7 +96,7 @@ export default async function HomePage() {
             <HeartSeal />
             <h2 className="display m-0 text-[38px] sm:text-[58px]">This week&apos;s menu</h2>
           </div>
-          <MenuList shop={shop} />
+          <MenuList shop={{ ...shop, flavors: menuFlavors(shop.flavors) }} />
           <div className="mt-2 flex flex-wrap items-center gap-4">
             <Link href="/menu" className="stamp">
               Browse the menu
@@ -115,7 +113,7 @@ export default async function HomePage() {
             <FloatingJar flavor={samplePack(shop)} format="bag" mark="none" />
           </div>
           <p className="text-[18px] leading-snug text-bark">
-            Choose a 3 oz, 8 oz, or 1 lb bag. First pickups: Friday, October 16, and Saturday, October 17.
+            Choose a 3 oz, 8 oz, or 1 lb bag. Next pickups: {nextPickups()}.
           </p>
           <p className="text-[15px] italic text-sage">Order by Tuesday at 9 p.m. for Friday or Saturday porch pickup.</p>
         </aside>

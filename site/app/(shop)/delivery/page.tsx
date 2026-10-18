@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 import { PageHeader } from "@/components/PageHeader";
 import { business, filled } from "@/lib/content";
 import { getShop } from "@/lib/settings";
-import { DELIVERY_ENABLED } from "@/lib/fulfilment";
+import { DELIVERY_ENABLED, pickupDate, pickupDateLabel } from "@/lib/fulfilment";
 
 export async function generateMetadata(): Promise<Metadata> {
   if (!DELIVERY_ENABLED) return { title: "Porch pickup", robots: { index: false } };
@@ -94,7 +94,7 @@ export default async function DeliveryPage() {
         <div className="dashed-frame flex flex-col gap-2 bg-paper px-6 py-6">
           <div className="display text-[26px]">Sealable bags</div>
           <p className="text-[17px] leading-snug text-muted">
-            Choose regular resealable bags or 3 oz sampler bags. Order now for the first porch pickup on Friday, October 16.
+            Choose regular resealable bags or 3 oz sampler bags. Order now for porch pickup on {pickupDateLabel(pickupDate())}.
           </p>
         </div>
         <div className="dashed-frame flex flex-col gap-2 bg-paper px-6 py-6">

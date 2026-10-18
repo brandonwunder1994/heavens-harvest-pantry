@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { FloatingJar } from "@/components/FloatingJars";
 import { FlavorModal } from "@/components/menu/FlavorModal";
 import { type Flavor } from "@/lib/content";
+import { entryHasSlug } from "@/lib/menu-groups";
 import { useCart } from "@/components/cart/CartProvider";
 import { formatMoney, unitPriceCents } from "@/lib/cart";
 
@@ -28,7 +29,7 @@ export function TurnTheJar({ flavors }: { flavors: Flavor[] }) {
         setOpen(null);
         return;
       }
-      const index = flavors.findIndex((flavor) => flavor.slug === slug);
+      const index = flavors.findIndex((flavor) => entryHasSlug(flavor, slug));
       if (index < 0) return;
       setAt(index);
       setOpen(flavors[index] ?? null);

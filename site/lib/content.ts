@@ -1,5 +1,6 @@
 import { noPorch, type Porch } from "@/lib/porch";
 import { launchFlavors, type Omission, type SizeOz } from "@/lib/products";
+import type { ExtrasState } from "@/lib/extras";
 
 /**
  * Every piece of copy and every number the owner will eventually edit from her
@@ -44,6 +45,9 @@ export type Flavor = {
   allowedOmissions?: Omission[];
   requiresCooling?: boolean;
   category?: "granola" | "almonds";
+  /** Menu-only: dark/semi-sweet style choices folded under one entry. */
+  variants?: Flavor[];
+  variantLabel?: string;
   slug: string;
   name: string;
   blurb: string;
@@ -230,6 +234,10 @@ export type Shop = {
   verses: Record<string, Verse>;
   /** Owner-only. Customer pages never read this. */
   labelTemplates: LabelSettings;
+  /** This weekend's leftover bags, ready now. Present only while she has them open. */
+  extras?: ExtrasState;
+  /** The same extras as sellable products. Kept apart so they never appear on the regular menu. */
+  extraFlavors?: Flavor[];
 };
 
 export const defaultShop: Shop = {

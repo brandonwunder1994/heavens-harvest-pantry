@@ -13,7 +13,8 @@ import { useCart } from "@/components/cart/CartProvider";
 import { Stepper } from "@/components/cart/Stepper";
 import { describeLine,formatMoney,lineKey,orderWeight } from "@/lib/cart";
 import { pickupDateLabel,saturdayDate,storageMessage,ORDERS_PAUSED_MESSAGE } from "@/lib/fulfilment";
-export function CheckoutForm({paymentsLive,testMode,pickupDate,publishableKey,simulate=false,confirmationEmailAvailable=true,taxDisplay=null}:{paymentsLive:boolean;testMode:boolean;pickupDate:string;publishableKey?:string;simulate?:boolean;confirmationEmailAvailable?:boolean;taxDisplay?:CheckoutTaxDisplay}) {
+import { isExtraSlug } from "@/lib/extras";
+export function CheckoutForm({paymentsLive,testMode,pickupDate:nextBakeDate,publishableKey,simulate=false,confirmationEmailAvailable=true,taxDisplay=null}:{paymentsLive:boolean;testMode:boolean;pickupDate:string;publishableKey?:string;simulate?:boolean;confirmationEmailAvailable?:boolean;taxDisplay?:CheckoutTaxDisplay}) {
   const cart=useCart(),router=useRouter(),practice=usePractice();
   const [name,setName]=useState(""),[phone,setPhone]=useState(""),[note,setNote]=useState(""),[slot,setSlot]=useState(""),[failure,setFailure]=useState(""),[errors,setErrors]=useState<Record<string,string>>({}),[submitting,setSubmitting]=useState(false),[clientSecret,setClientSecret]=useState<string|null>(null),[availability,setAvailability]=useState<number|null>(null);
   const attempt=useRef<{key:string;id:string}|null>(null);
@@ -21,6 +22,9 @@ export function CheckoutForm({paymentsLive,testMode,pickupDate,publishableKey,si
   const [availabilityError,setAvailabilityError]=useState("");
   const simulated=practice&&simulate;
   const taxCents=simulated?simulatedTax(cart.totals.totalCents):checkoutTaxTotal(cart.shop,cart.totals,taxDisplay);
+  const extraCount=cart.totals.lines.filter(p=>isExtraSlug(p.line.slug)).length,mixedExtras=extraCount>0&&extraCount<cart.totals.lines.length;
+  // Ready-now extras are for this weekend; everything else is for the next bake.
+  const pickupDate=extraCount>0&&!mixedExtras&&cart.shop.extras?.weekend?cart.shop.extras.weekend:nextBakeDate;
   const personal=cart.totals.lines.filter(p=>!p.line.gift),chocolate=personal.some(p=>p.flavor.requiresCooling);
   const field="w-full border border-sand bg-cream px-3 py-3 font-ui text-[15px] text-ink";
   async function submit(event:React.FormEvent){event.preventDefault();setFailure("");setErrors({});setSubmitting(true);
@@ -30,7 +34,7 @@ export function CheckoutForm({paymentsLive,testMode,pickupDate,publishableKey,si
     try {const response=await fetch(simulated?"/api/mock/simulate":practice?"/api/mock/checkout":"/api/checkout",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({...body,attemptId:attempt.current.id,...(simulated?{action:"prepare"}:{})})});const data=await response.json();
       if(data.confirmationUrl){router.push(data.confirmationUrl);return;}
       if(response.status===422){setErrors(data.errors??{});setFailure(data.message??"Check the fields below and try again.");return;}
-      if(!response.ok){setFailure(data.message??"Payment could not load. Please try again.");if(data.error==="session_expired"||data.error==="attempt_conflict")attempt.current=null;if(data.error==="price_changed")router.refresh();return;}
+      if(!response.ok){setFailure(data.message??"Payment could not load. Please try again.");if(data.error==="session_expired"||data.error==="attempt_conflict"||data.error==="extras_sold_out"){attempt.current=null;if(data.error==="extras_sold_out")router.refresh();}if(data.error==="price_changed")router.refresh();return;}
       if(simulated)setSimulation(data.simulation);else setClientSecret(data.clientSecret);
     }catch{setFailure("We could not reach checkout. Please retry. Your basket is saved.");}finally{setSubmitting(false);}
   }
@@ -46,7 +50,7 @@ export function CheckoutForm({paymentsLive,testMode,pickupDate,publishableKey,si
         {photo&&<Image src={photo} alt={`${p.flavor.name} ${p.line.gift?"blessing jar":"bag"}`} width={720} height={1000} sizes="(max-width: 640px) 72px, 88px" className="h-28 w-[72px] shrink-0 object-contain sm:h-32 sm:w-[88px]"/>}
         <div className="flex min-w-0 flex-1 flex-col gap-3"><p className="text-[18px] leading-snug">{describeLine(p)}</p>{p.line.gift&&<p className="break-words font-ui text-[12px] text-muted">Anonymous delivery to {p.line.gift.address}. Jar and delivery included.</p>}<div className="flex w-full flex-wrap items-center justify-between gap-3"><Stepper value={p.line.qty} min={0} max={20} label={describeLine(p)} onChange={n=>cart.setLineQty(p.line,n)}/><span className="font-ui text-[14px] font-semibold tabular-nums">{formatMoney(p.totalCents)}</span></div></div>
       </li>;
-    })}</ul>}<Link href="/menu" className="mt-3 inline-block font-ui text-[13px] text-sage underline">Add another flavor</Link></section>
+    })}</ul>}<Link href="/menu" className="mt-3 inline-block font-ui text-[13px] text-sage underline">Add another flavor</Link>{mixedExtras&&<p role="alert" className="mt-3 border-2 border-brown bg-paper px-4 py-3 font-ui text-[14px] text-brown">Ready-now extras are checked out on their own, for pickup this weekend. Remove the extras or the other items to continue.</p>}</section>
     <GiftComposer/>
     {personal.length>0&&<fieldset><legend className="display text-[28px]">Choose your porch pickup</legend><div className="mt-3 grid gap-3 sm:grid-cols-2">{[pickupDate,saturdayDate(pickupDate)].flatMap(date=>["morning","afternoon"].map(period=><label key={`${date}:${period}`} className={`flex min-h-16 cursor-pointer items-start gap-3 border p-4 font-ui text-[14px] ${slot===`${date}:${period}`?"border-sage bg-moss":"border-sand bg-paper"}`}><input type="radio" name="pickup-slot" value={`${date}:${period}`} checked={slot===`${date}:${period}`} onChange={e=>setSlot(e.target.value)} className="mt-1 accent-[#5b3d1e]"/><span>{pickupDateLabel(date)}<br/>{period==="morning"?"Morning":"Afternoon · from noon"}</span></label>))}</div><p className="mt-3 font-ui text-[14px] text-sage">{storageMessage(chocolate)}</p><p className="mt-2 font-ui text-[12px] text-muted">We share the pickup address after payment.</p>{(errors.runDate||errors.pickupPeriod)&&<p role="alert" className="mt-2 text-brown">{errors.runDate||errors.pickupPeriod}</p>}</fieldset>}
     <section className="flex flex-col gap-4"><h2 className="display text-[28px]">Your details</h2><label className="font-ui text-[13px]">Your name<input className={field} value={name} maxLength={80} onChange={e=>setName(e.target.value)} autoComplete="name"/>{errors.name&&<span className="text-brown">{errors.name}</span>}</label><label className="font-ui text-[13px]">Phone number<input className={field} type="tel" value={phone} maxLength={40} onChange={e=>setPhone(e.target.value)} autoComplete="tel"/>{errors.phone&&<span className="text-brown">{errors.phone}</span>}</label><label className="font-ui text-[13px]">Order note · optional<textarea className={field} value={note} maxLength={300} rows={2} onChange={e=>setNote(e.target.value)}/></label><p className="font-ui text-[12px] text-muted">{simulated?"The next step uses a sample card and shows an email preview. Nothing will be charged or sent.":confirmationEmailAvailable?"Enter your email on the secure payment form. We’ll email your confirmation.":"Enter your email on the secure payment form. Confirmation email is currently unavailable. After payment, save your on-screen receipt for your order and pickup details."}</p></section>

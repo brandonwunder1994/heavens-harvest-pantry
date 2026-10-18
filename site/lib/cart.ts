@@ -2,6 +2,7 @@ import { cleanName } from "@/lib/blend";
 import type { Flavor, Shop } from "@/lib/content";
 import { cleanOmissions, omissionLabel, sizeLabel, type Omission, type SizeOz } from "@/lib/products";
 import { REWARDS_ENABLED } from "@/lib/features";
+import { baseOfExtra, isExtraSlug } from "@/lib/extras";
 
 /**
  * Every function here takes the live shop rather than importing fixed prices,
@@ -81,7 +82,7 @@ export function formatMoney(cents: number): string {
 }
 
 export function findFlavor(shop: Shop, slug: string): Flavor | undefined {
-  return shop.flavors.find((f) => f.slug === slug);
+  return shop.flavors.find((f) => f.slug === slug) ?? shop.extraFlavors?.find((f) => f.slug === slug);
 }
 
 export function unitPriceCents(flavor: Flavor, format: Format, sizeOz?: SizeOz): number {
@@ -97,14 +98,19 @@ export function lineKey(line: Pick<CartLine, "slug" | "format" | "name" | "sizeO
   return `${base}${line.sizeOz ? `:${line.sizeOz}` : ""}${cleanOmissions(line.omissions).length ? `:${cleanOmissions(line.omissions).join(",")}` : ""}${line.gift ? `:gift:${line.gift.id}` : ""}`;
 }
 
-export const lineWeight = (line: CartLine) => (line.sizeOz ?? (line.format === "sampler" ? 3 : 16)) * line.qty;
+/** Ready-now extras are already baked, so they take one unit of bake space each instead of their ounces. */
+export const lineWeight = (line: CartLine) => isExtraSlug(line.slug) ? line.qty : (line.sizeOz ?? (line.format === "sampler" ? 3 : 16)) * line.qty;
 export const orderWeight = (lines: CartLine[]) => lines.reduce((n, line) => n + lineWeight(line), 0);
 
 /** Drops anything that no longer exists or is sold out, and clamps quantities. */
 export function sanitizeCart(shop: Shop, lines: CartLine[]): CartLine[] {
   const merged = new Map<string, CartLine>();
-  for (const line of lines) {
-    if (!line || typeof line !== "object") continue;
+  for (const raw of lines) {
+    if (!raw || typeof raw !== "object") continue;
+    // A ready-now extra is exactly one size and is never a blessing gift, whatever the browser says.
+    const extra = isExtraSlug(raw.slug) ? baseOfExtra(raw.slug) : null;
+    if (isExtraSlug(raw.slug) && !extra) continue;
+    const line: CartLine = extra ? { slug: raw.slug, qty: raw.qty, sizeOz: extra.sizeOz, format: extra.sizeOz === 3 ? "sampler" : "bag" } : raw;
     const flavor = findFlavor(shop, line.slug);
     if (!flavor || flavor.soldOut) continue;
     if (line.format !== "jar" && line.format !== "bag" && line.format !== "sampler") continue;

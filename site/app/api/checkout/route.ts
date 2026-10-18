@@ -10,6 +10,8 @@ import { siteUrl } from "@/lib/site-url";
 import { ordersArePaused, ORDERS_PAUSED_MESSAGE } from "@/lib/fulfilment";
 import { getStoredOrder, reserveOrder, attachSession, privatePickup, reconcileOpenOrders, releaseExpired } from "@/lib/order-store";
 import { sql } from "@/lib/db";
+import { cleanExtras } from "@/lib/extras";
+import { extrasWithinStock } from "@/lib/extras-store";
 
 const reply=(body:unknown,status=200)=>NextResponse.json(body,{status,headers:{"Cache-Control":"no-store"}});
 export async function POST(request: Request) {
@@ -42,10 +44,14 @@ export async function POST(request: Request) {
       if(Number(body.expectedTotalCents)!==totals.totalCents) return reply({error:"price_changed",totalCents:totals.totalCents,message:"Prices changed while you were shopping. Review the new total before continuing."},409);
       if(totals.lines.some(p=>!p.line.gift) && !(await privatePickup()).address) return reply({error:"pickup_setup_pending",message:"Pickup details are being finished. Please check back shortly."},503);
       await reconcileOpenOrders();
+      // Ready-now extras: only what she actually has left.
+      const extraSetting=order.lines.some(l=>l.slug.startsWith("extra-"))?cleanExtras((await sql()`select value from settings where key='extras'`)[0]?.value):null;
+      if(extraSetting&&!(await extrasWithinStock(extraSetting,order.lines,false)))return reply({error:"extras_sold_out",message:"Sorry, someone just claimed the last of those. Check what is still ready now, or order the next bake."},409);
       const params=checkoutSessionParams(shop,order,totals,origin,undefined,tax.rates);
       params.metadata={...params.metadata,order_id:attemptId};
       if(params.payment_intent_data) params.payment_intent_data.metadata={...params.metadata};
       stored=await reserveOrder(attemptId,fingerprint,{order,totals,sessionParams:params});
+      if(stored&&extraSetting&&!(await extrasWithinStock(extraSetting,order.lines,true))){await sql()`select release_bake_order(${attemptId}::uuid)`;return reply({error:"extras_sold_out",message:"Sorry, someone just claimed the last of those. Check what is still ready now, or order the next bake."},409);}
       if(!stored) return reply({error:"bake_full",message:"This bake does not have enough space for your order. Your basket is saved; reduce the quantity or check back for the next bake."},409);
     }
     const session=stored.stripe_session ? await stripe.checkout.sessions.retrieve(stored.stripe_session) : await stripe.checkout.sessions.create(stored.snapshot.sessionParams!,{idempotencyKey:`checkout/${attemptId}`});

@@ -5,6 +5,8 @@ import { databaseReady, sql } from "@/lib/db";
 import { checkBlock, mergeShop, mergeVerse, mergeFlavors, type EditableKey } from "@/lib/shop-schema";
 import { weeklyVerse } from "@/lib/verses";
 import { guideSample } from "@/lib/handoff-sample";
+import { cleanExtras, liveExtras } from "@/lib/extras";
+import { extrasClaimed } from "@/lib/extras-store";
 
 export { editableKeys, isEditableKey, type EditableKey } from "@/lib/shop-schema";
 
@@ -38,7 +40,16 @@ export const readShop = cache(async function readShop(): Promise<ShopRead> {
   try {
     const rows = (await sql()`select key, value from settings where key <> 'privatePickup'`) as Row[];
     const saved = new Map(rows.filter(row => row.key !== "privatePickup").map((row) => [row.key, row.value] as const));
-    return { shop: mergeShop(saved, weekly), live: true };
+    const shop = mergeShop(saved, weekly);
+    // This weekend's leftover bags. A failure here only hides them; it never takes the shop down.
+    try {
+      const setting = cleanExtras(saved.get("extras"));
+      const extras = liveExtras(setting, shop.flavors, await extrasClaimed(setting));
+      if (extras) { shop.extras = extras.state; shop.extraFlavors = extras.flavors; }
+    } catch (error) {
+      console.error("[settings] could not work out the extras, leaving them off", error);
+    }
+    return { shop, live: true };
   } catch (error) {
     console.error("[settings] could not read her settings, showing the built-in defaults", error);
     return { shop: { ...defaultShop, verseOfTheWeek: weekly }, live: false };

@@ -17,6 +17,8 @@ const sections: Section[] = [
   { href: "/mockorder", label: "Practice shop" },
   { href: "/owner/fulfilment", label: "Bake & pickup" },
   { href: "/owner/kitchen", label: "Products & prices" },
+  { href: "/owner/costs", label: "Costs & profit" },
+  { href: "/owner/extras", label: "Extras & stock" },
   { href: "/owner/print", label: "Print studio" },
   { href: "/owner/settings", label: "Settings" },
   { href: "/owner/change-password", label: "Change password" },

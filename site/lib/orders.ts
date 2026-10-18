@@ -1,6 +1,6 @@
 import type { Omission, SizeOz } from "@/lib/products";
 import type { CartLine } from "@/lib/cart";
-export type OrderItem = { qty: number; name: string; format: "jar" | "bag" | "sampler"; slug?:string; sizeOz?:SizeOz; omissions?:Omission[]; gift?:CartLine["gift"]; ingredients?:string; allergens?:string; requiresCooling?:boolean };
+export type OrderItem = { priceCents?: number; qty: number; name: string; format: "jar" | "bag" | "sampler"; slug?:string; sizeOz?:SizeOz; omissions?:Omission[]; gift?:CartLine["gift"]; ingredients?:string; allergens?:string; requiresCooling?:boolean };
 
 export type Order = {
   bakeId?:string;
@@ -23,6 +23,8 @@ export type Order = {
   runDate: string;
   address: string;
   note: string;
+  ownerNote?: string;
+  ownerLog?: string[];
   prayer: string;
   jarsReturned: number;
   blessingBags: number;

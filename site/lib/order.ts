@@ -1,5 +1,6 @@
 import type { Shop } from "@/lib/content";
 import { DELIVERY_ENABLED, pickupDate, saturdayDate, type PickupPeriod } from "@/lib/fulfilment";
+import { isExtraSlug } from "@/lib/extras";
 import { BLESSING_SIZES, OMISSIONS, cleanOmissions, type Omission } from "@/lib/products";
 import {
   MAX_BLESSING_BAGS,
@@ -28,6 +29,9 @@ export type OrderDetails = {
   phone: string;
   address: string;
   note: string;
+  /** Her own note on the order, and a log of changes she made by hand. Never shown to the customer. */
+  ownerNote?: string;
+  ownerLog?: string[];
   prayer: string;
   blessingGiftJars?: number;
   blessingVerse?: { reference: string; text: string; note: string; from: string; to: string };
@@ -73,6 +77,7 @@ export function validateOrder(shop: Shop, input: unknown): ValidationResult {
   const giftIds=new Set<string>();
   for (const line of lines) {
     if (!line || typeof line !== "object") continue;
+    if (isExtraSlug(line.slug) && line.gift) errors.gifts = "Ready-now extras cannot be sent as blessing gifts.";
     const flavor = shop.flavors.find(f => f.slug === line.slug);
     if (!flavor) continue;
     if (line.sizeOz !== undefined && ![3, 8, 16].includes(line.sizeOz)) errors.lines = "Choose a 3 oz, 8 oz, or 1 lb size.";
@@ -101,7 +106,11 @@ export function validateOrder(shop: Shop, input: unknown): ValidationResult {
 
   const runArea = clean(rawDetails.runArea, 60);
   const runDate = clean(rawDetails.runDate, 40);
-  const bakeId = pickupDate();
+  // Ready-now extras are for this weekend and are checked out on their own;
+  // everything else is for the next bake.
+  const extraLines = totals.lines.filter(p => isExtraSlug(p.line.slug)).length;
+  if (extraLines > 0 && extraLines < totals.lines.length) errors.lines = "Ready-now extras are checked out on their own. Finish this order, then order the rest for the next bake.";
+  const bakeId = extraLines > 0 && extraLines === totals.lines.length && shop.extras?.weekend ? shop.extras.weekend : pickupDate();
   const hasPickup = totals.lines.some(p => !p.line.gift);
   if (hasPickup && runDate !== bakeId && runDate !== saturdayDate(bakeId)) errors.runDate = "Choose an available Friday or Saturday pickup date.";
   if (hasPickup && rawDetails.pickupPeriod !== "morning" && rawDetails.pickupPeriod !== "afternoon") errors.pickupPeriod = "Choose morning or afternoon pickup.";

@@ -3,7 +3,8 @@ import type { OrdersResult } from "@/lib/orders-source";
 import type { Order } from "@/lib/orders";
 import { formatCentsExact } from "@/lib/orders";
 import { bakeFor, itemDescription, pounds, pickupWaiting } from "@/lib/owner-dashboard";
-import { pickupDateLabel, storageMessage } from "@/lib/fulfilment";
+import { pickupDateLabel, saturdayDate, storageMessage } from "@/lib/fulfilment";
+import { OrderEditor } from "@/components/owner/OrderEditor";
 import { OrderAction } from "@/components/owner/OrderAction";
 import { DeliveredToggle } from "@/components/owner/DeliveredToggle";
 
@@ -24,7 +25,10 @@ export function OrderCard({ order: o, giftsOnly = false, pickupsOnly = false }: 
     <ul className="my-4 divide-y divide-rule">{o.items.map((i, index) => (!giftsOnly || i.gift) && (!pickupsOnly || !i.gift) && <li key={index} className="py-3"><div className="flex flex-wrap justify-between gap-2"><span>{i.qty} × {itemDescription(i)}{i.gift ? ` · gift for ${i.gift.recipientName}` : ""}</span><Link className="owner-link" href={`/owner/labels?order=${encodeURIComponent(o.id)}&item=${index}`}>Print label</Link></div>{i.gift && <div className="mt-2 owner-muted"><p>{i.gift.address}</p>{i.gift.verseRef && <p>Verse: {i.gift.verseRef}</p>}{i.gift.verseNote && <p>Card note: {i.gift.verseNote}</p>}<p className="my-2">Anonymous gift · {(o.giftsDone?.[i.gift.id] ?? o.delivered) ? "Delivered" : "Waiting for delivery"}</p>{o.storedId && <OrderAction orderId={o.storedId} action="gift" giftId={i.gift.id} done={!!o.giftsDone?.[i.gift.id]} />}</div>}</li>)}</ul>
     {!giftsOnly && o.items.some(i => !i.gift) && <><p className="mb-3 owner-muted">{storageMessage(!!o.requiresCooling)} · {pickupWaiting(o) ? "Waiting for pickup" : "Picked up"}</p>{o.storedId ? <OrderAction orderId={o.storedId} action="pickup" done={o.pickupDone} /> : <DeliveredToggle orderId={o.id} delivered={o.delivered} />}</>}
     {!o.storedId && o.items.every(i => !!i.gift) && <DeliveredToggle orderId={o.id} delivered={o.delivered} />}
-    {!giftsOnly && o.note && <p className="mt-3">Note: {o.note}</p>}{!giftsOnly && o.prayer && <details className="mt-3"><summary className="owner-link cursor-pointer">Private prayer request</summary><p className="mt-2">{o.prayer}</p></details>}
+    {!giftsOnly && o.note && <p className="mt-3">Note: {o.note}</p>}
+    {!giftsOnly && o.ownerNote && <p className="mt-3 border-l-[3px] border-gold pl-3">Your note: {o.ownerNote}</p>}
+    {!giftsOnly && !!o.ownerLog?.length && <ul className="mt-2 owner-muted text-[12px]">{o.ownerLog.map((line, n) => <li key={n}>{line}</li>)}</ul>}
+    {!giftsOnly && o.storedId && (() => { const bake = bakeFor(o); const ok = /^\d{4}-\d{2}-\d{2}$/.test(bake); return <OrderEditor orderId={o.storedId} days={ok ? [{ value: bake, label: pickupDateLabel(bake) }, { value: saturdayDate(bake), label: pickupDateLabel(saturdayDate(bake)) }] : []} runDate={o.runDate} pickupPeriod={o.pickupPeriod ?? "morning"} ownerNote={o.ownerNote ?? ""} canMovePickup={ok && o.items.some(i => !i.gift)} />; })()}{!giftsOnly && o.prayer && <details className="mt-3"><summary className="owner-link cursor-pointer">Private prayer request</summary><p className="mt-2">{o.prayer}</p></details>}
     {!giftsOnly && <EmailStatus order={o} />}<p className="mt-3 break-all text-[11px] owner-muted">Receipt {o.id}</p>
   </article>;
 }
