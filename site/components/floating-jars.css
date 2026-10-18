@@ -110,20 +110,17 @@
   flex: none;
 }
 
-.float-almond-name {
-  position: absolute;
-  left: 48.5%;
-  top: 53.5%;
-  width: 23cqi;
-  transform: translate(-50%, -50%);
+.float-caption {
+  margin-top: 10px;
   color: var(--color-brown);
   font-family: var(--font-display);
-  font-size: 4.2cqi;
+  font-size: clamp(11px, 1.3vw, 14px);
   font-weight: 600;
-  line-height: 1.35;
+  letter-spacing: 0.08em;
+  line-height: 1.3;
+  min-height: 2.6em; /* one- and two-line names keep every bag on the same line */
   text-align: center;
   text-transform: uppercase;
-  pointer-events: none;
 }
 
 .float-placeholder {

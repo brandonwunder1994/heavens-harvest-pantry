@@ -4,21 +4,21 @@ import { useState, type CSSProperties, type PointerEvent } from "react";
 import Image from "next/image";
 import Link from "@/components/ShopLink";
 import { type Flavor } from "@/lib/content";
-import { JAR_PHOTO, jarMarkName, jarPhotoFor, packPhotoFor } from "@/lib/jars";
+import { JAR_PHOTO, bagPhotoFor, jarMarkName, packPhotoFor } from "@/lib/jars";
 import { type SizeOz, sizeLabel } from "@/lib/products";
 import "./floating-jars.css";
 
 type Card = Flavor & { src: string; lineupOnly: boolean };
 
 /**
- * Five mason-jar photographs, floating. The shadow lives under the
- * glass, not in the picture, so it can spread as the jar lifts.
+ * The lineup: one bag of each flavor, floating. The shadow lives under the
+ * bag, not in the picture, so it can spread as the bag lifts.
  */
 export function FloatingJars({ flavors }: { flavors: Flavor[] }) {
   const lineup = flavors.map(flavor => ({ ...flavor, lineupOnly: false }));
   const cards = lineup
     .map((flavor) => {
-      const src = jarPhotoFor(flavor);
+      const src = bagPhotoFor(flavor);
       return src ? { ...flavor, src } : null;
     })
     .filter((row): row is Card => row !== null);
@@ -41,6 +41,10 @@ export function FloatingJars({ flavors }: { flavors: Flavor[] }) {
             quiet={hot !== null && hot !== flavor.slug}
             linked={!flavor.lineupOnly}
             onHot={setHot}
+            format="bag"
+            mark="none"
+            sizeOz={16}
+            caption
           />
         ))}
       </div>
@@ -58,6 +62,7 @@ export function FloatingJar({
   format = "jar",
   mark = "full",
   sizeOz,
+  caption = false,
   onSelect,
   onHot,
 }: {
@@ -70,6 +75,8 @@ export function FloatingJar({
   format?: "jar" | "bag" | "sampler";
   mark?: "full" | "logo" | "none";
   sizeOz?: SizeOz;
+  /** Print the flavor name under the pack. Every bag wears the same sticker. */
+  caption?: boolean;
   onSelect?: () => void;
   onHot?: (slug: string | null) => void;
 }) {
@@ -141,15 +148,13 @@ export function FloatingJar({
               {mark === "full" ? <span className="float-mark-name">{label}</span> : null}
             </span>
           ) : null}
-          {isBag && src === "/bags/candied-almonds.png" && loadedSrc === src ? (
-            <span className="float-almond-name" aria-hidden="true">Candied<br />Almonds</span>
-          ) : null}
           <span className="float-shine" aria-hidden />
           <span className="float-glow" aria-hidden />
         </span>
       </span>
       <span className="float-shadow" aria-hidden />
       </span></span>
+      {caption ? <span className="float-caption">{label}</span> : null}
     </>
   );
 
