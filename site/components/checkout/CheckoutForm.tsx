@@ -11,15 +11,14 @@ import { checkoutTaxTotal, type CheckoutTaxDisplay } from "@/lib/checkout-tax";
 import { GiftComposer } from "@/components/checkout/GiftComposer";
 import { useCart } from "@/components/cart/CartProvider";
 import { Stepper } from "@/components/cart/Stepper";
-import { describeLine,formatMoney,lineKey,orderWeight } from "@/lib/cart";
+import { describeLine,formatMoney,lineKey } from "@/lib/cart";
 import { pickupDateLabel,saturdayDate,storageMessage,ORDERS_PAUSED_MESSAGE } from "@/lib/fulfilment";
 import { isExtraSlug } from "@/lib/extras";
 export function CheckoutForm({paymentsLive,testMode,pickupDate:nextBakeDate,publishableKey,simulate=false,confirmationEmailAvailable=true,taxDisplay=null}:{paymentsLive:boolean;testMode:boolean;pickupDate:string;publishableKey?:string;simulate?:boolean;confirmationEmailAvailable?:boolean;taxDisplay?:CheckoutTaxDisplay}) {
   const cart=useCart(),router=useRouter(),practice=usePractice();
-  const [name,setName]=useState(""),[phone,setPhone]=useState(""),[note,setNote]=useState(""),[slot,setSlot]=useState(""),[failure,setFailure]=useState(""),[errors,setErrors]=useState<Record<string,string>>({}),[submitting,setSubmitting]=useState(false),[clientSecret,setClientSecret]=useState<string|null>(null),[availability,setAvailability]=useState<number|null>(null);
+  const [name,setName]=useState(""),[phone,setPhone]=useState(""),[note,setNote]=useState(""),[slot,setSlot]=useState(""),[failure,setFailure]=useState(""),[errors,setErrors]=useState<Record<string,string>>({}),[submitting,setSubmitting]=useState(false),[clientSecret,setClientSecret]=useState<string|null>(null);
   const attempt=useRef<{key:string;id:string}|null>(null);
   const [simulation,setSimulation]=useState<SimulatedPaymentView|null>(null);
-  const [availabilityError,setAvailabilityError]=useState("");
   const simulated=practice&&simulate;
   const taxCents=simulated?simulatedTax(cart.totals.totalCents):checkoutTaxTotal(cart.shop,cart.totals,taxDisplay);
   const extraCount=cart.totals.lines.filter(p=>isExtraSlug(p.line.slug)).length,mixedExtras=extraCount>0&&extraCount<cart.totals.lines.length;
@@ -38,7 +37,6 @@ export function CheckoutForm({paymentsLive,testMode,pickupDate:nextBakeDate,publ
       if(simulated)setSimulation(data.simulation);else setClientSecret(data.clientSecret);
     }catch{setFailure("We could not reach checkout. Please retry. Your basket is saved.");}finally{setSubmitting(false);}
   }
-  async function checkSpace(){setAvailability(null);setAvailabilityError("");try{const r=await fetch(practice?"/api/mock/capacity":"/api/capacity",{cache:"no-store"});if(!r.ok)throw new Error("unavailable");const data=await r.json();if(!Number.isFinite(data.remainingOz))throw new Error("unavailable");setAvailability(data.remainingOz);}catch{setAvailabilityError("Bake availability could not load. Please try again. We also check space before payment.");}}
   if(!cart.ready)return <p className="py-12 text-center">Fetching your order…</p>;
   if(cart.ordersPaused)return <p role="status" className="py-12">{ORDERS_PAUSED_MESSAGE}</p>;
   if(simulation&&simulated)return <SimulatedPayment payment={simulation} onBack={()=>setSimulation(null)}/>;
@@ -58,7 +56,7 @@ export function CheckoutForm({paymentsLive,testMode,pickupDate:nextBakeDate,publ
       <div className="flex justify-between gap-4"><dt>Subtotal</dt><dd>{formatMoney(cart.totals.totalCents)}</dd></div>
       <div className="flex justify-between gap-4"><dt>{simulated?"Example sales tax":"Sales tax"}</dt><dd>{taxCents===null?"Unavailable":formatMoney(taxCents)}</dd></div>
       {taxCents!==null&&<div className="mt-1 flex justify-between gap-4 border-t border-sand pt-4 text-[18px] font-semibold"><dt>Total including tax</dt><dd>{formatMoney(cart.totals.totalCents+taxCents)}</dd></div>}
-    </dl>{taxCents===null?<p role="status" className="mt-3 font-ui text-[12px] leading-relaxed text-muted">Tax details could not load. <button type="button" onClick={()=>router.refresh()} className="text-sage underline underline-offset-2">Retry tax details</button>, or continue to secure payment to see your tax and final total before paying.</p>:<p className="mt-3 font-ui text-[12px] leading-relaxed text-muted">{simulated?"Example tax for practice only. Nothing will be charged.":"Tax is included in the total above. Review your final total again on secure payment."}</p>}<button type="button" className="mt-3 font-ui text-[12px] text-sage underline" onClick={checkSpace}>Check space for this bake</button>{availabilityError&&<p role="alert" className="mt-2 font-ui text-[13px] text-brown">{availabilityError}</p>}{availability!==null&&<p role="status" className="mt-2 font-ui text-[13px]">{availability===0?"This bake is full.":`${(availability/16).toFixed(2)} lb remaining in this bake.`}{orderWeight(cart.lines)>availability&&" Reduce your order to fit the remaining space."}</p>}</div>
+    </dl>{taxCents===null?<p role="status" className="mt-3 font-ui text-[12px] leading-relaxed text-muted">Tax details could not load. <button type="button" onClick={()=>router.refresh()} className="text-sage underline underline-offset-2">Retry tax details</button>, or continue to secure payment to see your tax and final total before paying.</p>:<p className="mt-3 font-ui text-[12px] leading-relaxed text-muted">{simulated?"Example tax for practice only. Nothing will be charged.":"Tax is included in the total above. Review your final total again on secure payment."}</p>}</div>
     {(failure||errors.lines||errors.gifts||errors.blessingBags)&&<p role="alert" className="border border-brown bg-paper p-4 font-ui text-[14px] text-brown">{errors.lines||errors.gifts||errors.blessingBags||failure}</p>}
     {!paymentsLive&&<p role="status" className="font-ui text-[13px] text-brown">{practice ? "Practice payment is waiting for the Stripe test keys and email connection. You can explore the menu, basket and pickup options now." : "Online payment is being finished. Your basket is saved."}</p>}{testMode&&<p className="font-ui text-[12px] text-muted">{simulated?"Simulated checkout: sample card, example tax, and no real charge.":"Test checkout: no real charge will be made."}</p>}
     <button className="stamp w-full disabled:opacity-60" type="submit" disabled={submitting||cart.totals.itemCount===0||!paymentsLive}>{submitting?"Checking bake space…":"Continue to secure payment"}</button>

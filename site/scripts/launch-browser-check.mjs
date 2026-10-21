@@ -66,10 +66,6 @@ try {
   await page.getByLabel("Your name", { exact: true }).fill("Sample Browser Buyer");
   await page.getByLabel("Phone number", { exact: true }).fill("6235550100");
   await page.getByText(/Confirmation email is currently unavailable/).waitFor();
-  await page.route("**/api/capacity", route => route.fulfill({ status: 503, contentType: "application/json", body: "{}" }));
-  await page.getByRole("button", { name: "Check space for this bake", exact: true }).click();
-  await page.getByRole("alert").filter({ hasText: "Bake availability could not load" }).waitFor();
-  await page.unroute("**/api/capacity");
   await page.screenshot({ path: `${output}/mixed-checkout-390.png`, fullPage: true });
   assert.deepEqual(errors, []);
   writeFileSync(`${output}/checks.json`, JSON.stringify({ checks, interactions: "passed", errors }, null, 2));
