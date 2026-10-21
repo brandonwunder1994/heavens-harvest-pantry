@@ -92,6 +92,23 @@ const steps = [
   ],
   ["reviews approved index", `create index if not exists reviews_approved_idx on reviews (approved, created_at desc)`],
   [
+    "giveaway entries",
+    `create table if not exists giveaway_entries (
+       id          bigserial primary key,
+       round       text not null,
+       name        text not null,
+       email       text not null,
+       instagram   text not null,
+       phone       text,
+       verified    boolean not null default false,
+       verified_at timestamptz,
+       winner      boolean not null default false,
+       created_at  timestamptz not null default now()
+     )`,
+  ],
+  ["giveaway email guard", `create unique index if not exists giveaway_entries_email_key on giveaway_entries (round, email)`],
+  ["giveaway instagram guard", `create unique index if not exists giveaway_entries_instagram_key on giveaway_entries (round, instagram)`],
+  [
     "login links",
     `create table if not exists login_links (
        token_hash text primary key,

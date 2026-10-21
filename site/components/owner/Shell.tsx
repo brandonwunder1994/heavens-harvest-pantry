@@ -19,6 +19,7 @@ const sections: Section[] = [
   { href: "/owner/kitchen", label: "Products & prices" },
   { href: "/owner/costs", label: "Costs & profit" },
   { href: "/owner/extras", label: "Extras & stock" },
+  { href: "/owner/giveaway", label: "Giveaway" },
   { href: "/owner/print", label: "Print studio" },
   { href: "/owner/settings", label: "Settings" },
   { href: "/owner/change-password", label: "Change password" },

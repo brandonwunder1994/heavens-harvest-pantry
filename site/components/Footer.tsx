@@ -10,6 +10,7 @@ const shopLinks = [
   { href: "/menu", label: "This week's menu" },
   { href: "/bowl", label: "Ways to eat granola" },
   { href: "/blessing-bags", label: "Blessing bags" },
+  { href: "/monthly-giveaway", label: "Monthly giveaway" },
   ...(REWARDS_ENABLED ? [{ href: "/rewards", label: "Rewards" }] : []),
 ];
 

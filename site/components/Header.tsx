@@ -19,6 +19,7 @@ const leftLinks = [
 
 const rightLinks = [
   ...(REWARDS_ENABLED ? [{ href: "/rewards", label: "Rewards" }] : []),
+  { href: "/monthly-giveaway", label: "Monthly Giveaway" },
   { href: "/reviews", label: "Reviews" },
 ];
 
