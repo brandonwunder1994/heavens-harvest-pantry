@@ -207,3 +207,37 @@ body {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* The giveaway page's falling confetti and bobbing ribbon. */
+@keyframes confetti-fall {
+  0% { transform: translate3d(0, -12%, 0) rotate(0deg); opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { transform: translate3d(var(--drift, 20px), 420px, 0) rotate(540deg); opacity: 0; }
+}
+
+@keyframes ribbon-bob {
+  0%, 100% { transform: translateY(0) rotate(-2deg); }
+  50% { transform: translateY(-5px) rotate(2deg); }
+}
+
+.confetti-bit {
+  position: absolute;
+  top: 0;
+  border-radius: 2px;
+  animation: confetti-fall var(--dur, 9s) linear var(--delay, 0s) infinite;
+}
+
+.ribbon-bob {
+  animation: ribbon-bob 3.2s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .confetti-bit,
+  .ribbon-bob {
+    animation: none;
+  }
+  .confetti-bit {
+    opacity: 0.6;
+  }
+}

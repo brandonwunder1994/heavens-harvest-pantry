@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, useTransition } from "react";
+import { useEffect, useRef, useState, useTransition } from "react";
 import { spinWheel } from "@/app/owner/giveaway-actions";
 
 /**
@@ -8,6 +8,9 @@ import { spinWheel } from "@/app/owner/giveaway-actions";
  * the names are blurred on top of that, so nobody's details are in the page.
  * Only the signed-in owner gets a Spin button, and the winner is chosen by the
  * server; the wheel just turns to land on whoever it names.
+ *
+ * With no entries yet it shows a sample wheel of "Your name" slices. Whenever it
+ * is not being drawn it turns slowly on its own, so the page feels alive.
  */
 export type WheelSegment = { id: number; label: string };
 
@@ -16,6 +19,8 @@ const SIZE = 400;
 const CENTER = SIZE / 2;
 const RADIUS = 188;
 const SPIN_MS = 7000;
+const IDLE_DEGREES_PER_SECOND = 5;
+const SAMPLE: WheelSegment[] = Array.from({ length: 10 }, (_, i) => ({ id: -(i + 1), label: "Your name" }));
 
 const point = (angle: number, radius: number) => {
   const rad = ((angle - 90) * Math.PI) / 180;
@@ -29,8 +34,11 @@ function slicePath(index: number, count: number): string {
   return `M${CENTER} ${CENTER} L${x1.toFixed(2)} ${y1.toFixed(2)} A${RADIUS} ${RADIUS} 0 ${step > 180 ? 1 : 0} 1 ${x2.toFixed(2)} ${y2.toFixed(2)} Z`;
 }
 
+/** The turn that puts the middle of slice `index` under the pointer at the top. */
+const restingAngle = (index: number, count: number) => 360 - (index + 0.5) * (360 / count);
+
 export function GiveawayWheel({
-  segments,
+  segments: real,
   revealed,
   isOwner,
   winnerId,
@@ -40,21 +48,44 @@ export function GiveawayWheel({
   isOwner: boolean;
   winnerId: number | null;
 }) {
-  const [rotation, setRotation] = useState(0);
+  const sample = real.length === 0;
+  const segments = sample ? SAMPLE : real;
+  const count = segments.length;
+  const step = 360 / count;
+  const showLabels = count <= 60;
+  const blurred = !revealed && !sample;
+
   const [spinning, setSpinning] = useState(false);
   const [winner, setWinner] = useState<number | null>(winnerId);
   const [announce, setAnnounce] = useState(winnerId !== null);
   const [problem, setProblem] = useState("");
   const [, startTransition] = useTransition();
-  const turned = useRef(0);
 
-  const count = segments.length;
-  const step = count > 0 ? 360 / count : 360;
-  const showLabels = count > 0 && count <= 60;
+  const wheel = useRef<SVGSVGElement>(null);
+  const initialIndex = winnerId !== null ? segments.findIndex((s) => s.id === winnerId) : -1;
+  const [startAngle] = useState(() => (initialIndex >= 0 ? restingAngle(initialIndex, count) : 0));
+  const angle = useRef(startAngle);
+
+  // The slow idle turn, until there is a winner to hold on or a spin under way.
+  useEffect(() => {
+    if (spinning || winner !== null) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    let frame = 0;
+    let last = performance.now();
+    const tick = (now: number) => {
+      angle.current += ((now - last) / 1000) * IDLE_DEGREES_PER_SECOND;
+      last = now;
+      if (wheel.current) wheel.current.style.transform = `rotate(${angle.current}deg)`;
+      frame = requestAnimationFrame(tick);
+    };
+    frame = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(frame);
+  }, [spinning, winner]);
+
   const winnerLabel = segments.find((s) => s.id === winner)?.label ?? "";
 
   function spin() {
-    if (spinning || count === 0) return;
+    if (spinning || sample) return;
     setProblem("");
     setAnnounce(false);
     startTransition(async () => {
@@ -64,18 +95,19 @@ export function GiveawayWheel({
         return;
       }
       const index = segments.findIndex((s) => s.id === result.id);
-      if (index < 0) {
+      const el = wheel.current;
+      if (index < 0 || !el) {
         setProblem("The winner is not on this wheel yet. Reload the page and spin again.");
         return;
       }
-      // Land the middle of the winner's slice under the pointer at the top.
-      const centre = (index + 0.5) * step;
-      const current = turned.current;
-      const target = current + 360 * 7 + ((360 - centre - (current % 360)) % 360 + 360) % 360;
-      turned.current = target;
+      const current = angle.current;
+      const target = current + 360 * 7 + ((((360 - (index + 0.5) * step - (current % 360)) % 360) + 360) % 360);
+      angle.current = target;
       setWinner(result.id);
       setSpinning(true);
-      setRotation(target);
+      el.style.transition = `transform ${SPIN_MS}ms cubic-bezier(0.12, 0.6, 0.08, 1)`;
+      void el.getBoundingClientRect(); // commit the starting turn before the long one
+      el.style.transform = `rotate(${target}deg)`;
     });
   }
 
@@ -88,27 +120,26 @@ export function GiveawayWheel({
         </svg>
 
         <svg
+          ref={wheel}
           viewBox={`0 0 ${SIZE} ${SIZE}`}
           role="img"
           aria-label={
-            revealed
-              ? `A wheel with ${count} verified ${count === 1 ? "entry" : "entries"}.`
-              : `A wheel with ${count} verified ${count === 1 ? "entry" : "entries"}. Names are hidden until draw day.`
+            sample
+              ? "A sample prize wheel. Verified entries will appear on it."
+              : revealed
+                ? `A wheel with ${count} verified ${count === 1 ? "entry" : "entries"}.`
+                : `A wheel with ${count} verified ${count === 1 ? "entry" : "entries"}. Names are hidden until draw day.`
           }
           className="w-full"
-          style={{
-            transform: `rotate(${rotation}deg)`,
-            transition: spinning ? `transform ${SPIN_MS}ms cubic-bezier(0.12, 0.6, 0.08, 1)` : "none",
-          }}
+          style={{ transform: `rotate(${startAngle}deg)` }}
           onTransitionEnd={() => {
+            if (wheel.current) wheel.current.style.transition = "none";
             setSpinning(false);
             setAnnounce(true);
           }}
         >
           <circle cx={CENTER} cy={CENTER} r={RADIUS + 8} fill="#3f2a14" />
-          {count === 0 ? (
-            <circle cx={CENTER} cy={CENTER} r={RADIUS} fill="#eadfcc" />
-          ) : count === 1 ? (
+          {count === 1 ? (
             <circle cx={CENTER} cy={CENTER} r={RADIUS} fill={COLORS[0]} />
           ) : (
             segments.map((segment, index) => (
@@ -117,7 +148,7 @@ export function GiveawayWheel({
           )}
 
           {showLabels ? (
-            <g style={revealed ? undefined : { filter: "blur(6px)" }} aria-hidden={revealed ? undefined : true}>
+            <g style={blurred ? { filter: "blur(6px)" } : undefined} aria-hidden={blurred ? true : undefined}>
               {segments.map((segment, index) => {
                 const mid = (index + 0.5) * step;
                 const [x, y] = point(mid, RADIUS - 16);
@@ -146,9 +177,9 @@ export function GiveawayWheel({
         </svg>
       </div>
 
-      {count === 0 ? (
-        <p className="max-w-md text-center font-ui text-[14px] text-muted">
-          The wheel fills up as entries are verified. Check back closer to the draw.
+      {sample ? (
+        <p className="max-w-md text-center font-ui text-[14px] font-semibold text-sage-deep">
+          Be the first name on the wheel. Verified entries show up here.
         </p>
       ) : (
         <p className="font-ui text-[14px] font-semibold text-sage-deep">
@@ -156,18 +187,18 @@ export function GiveawayWheel({
         </p>
       )}
 
-      {!revealed && count > 0 ? (
+      {!revealed && !sample ? (
         <p className="max-w-md text-center font-ui text-[13px] leading-relaxed text-muted">
           Names stay hidden to protect everyone&apos;s privacy. They show on draw day, when we spin it live.
         </p>
       ) : null}
 
-      {isOwner && revealed && count > 0 ? (
+      {isOwner && revealed && !sample ? (
         <button type="button" onClick={spin} disabled={spinning} className="stamp disabled:opacity-60">
           {spinning ? "Spinning…" : winner !== null ? "Spin again" : "Spin the wheel"}
         </button>
       ) : null}
-      {isOwner && !revealed ? (
+      {isOwner && !revealed && !sample ? (
         <p className="max-w-md text-center font-ui text-[13px] text-brown">
           Owner: turn on &ldquo;Show names on the wheel&rdquo; on your Giveaway page to reveal the names and spin.
         </p>

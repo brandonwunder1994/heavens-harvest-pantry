@@ -8,7 +8,7 @@ import { HeartSeal } from "@/components/Sprite";
  * The entry form. Nothing here proves a like or a share; it collects the name,
  * email and Instagram name she needs to check them by hand.
  */
-export function GiveawayForm({ drawLabel }: { drawLabel: string }) {
+export function GiveawayForm({ drawLabel, closed = false }: { drawLabel: string; closed?: boolean }) {
   const practice = usePractice();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -22,6 +22,7 @@ export function GiveawayForm({ drawLabel }: { drawLabel: string }) {
 
   async function submit(event: React.FormEvent) {
     event.preventDefault();
+    if (closed) return;
     setSending(true);
     setErrors({});
     setFailure("");
@@ -73,6 +74,7 @@ export function GiveawayForm({ drawLabel }: { drawLabel: string }) {
 
   return (
     <form onSubmit={submit} className="flex flex-col gap-5 border border-rule bg-paper px-6 py-7 sm:px-8" noValidate>
+      <fieldset disabled={closed} className="m-0 flex min-w-0 flex-col gap-5 border-0 p-0 disabled:opacity-60">
       <div className="grid gap-5 sm:grid-cols-2">
         <Field label="Your name" value={name} onChange={setName} error={errors.name} autoComplete="name" />
         <Field
@@ -118,6 +120,7 @@ export function GiveawayForm({ drawLabel }: { drawLabel: string }) {
         <span>I liked and shared the post on Instagram.</span>
       </label>
       {errors.confirmed ? <FieldError>{errors.confirmed}</FieldError> : null}
+      </fieldset>
 
       {failure ? (
         <p role="alert" className="border border-brown px-4 py-3 font-ui text-[14px] text-brown">
@@ -126,10 +129,12 @@ export function GiveawayForm({ drawLabel }: { drawLabel: string }) {
       ) : null}
 
       <div className="flex flex-wrap items-center gap-4">
-        <button type="submit" disabled={sending} className="stamp disabled:opacity-60">
-          {sending ? "Sending…" : "Enter the giveaway"}
+        <button type="submit" disabled={sending || closed} className="stamp disabled:cursor-not-allowed disabled:opacity-50 disabled:grayscale">
+          {closed ? "Entries open soon" : sending ? "Sending…" : "Enter the giveaway"}
         </button>
-        <span className="font-ui text-[12px] text-faint">One entry each month. Your details are never shown.</span>
+        <span className="font-ui text-[12px] text-faint">
+          {closed ? "The form unlocks when the next giveaway opens." : "One entry each month. Your details are never shown."}
+        </span>
       </div>
     </form>
   );
