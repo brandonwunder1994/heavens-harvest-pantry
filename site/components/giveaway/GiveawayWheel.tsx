@@ -73,7 +73,8 @@ export function GiveawayWheel({
     let frame = 0;
     let last = performance.now();
     const tick = (now: number) => {
-      angle.current += ((now - last) / 1000) * IDLE_DEGREES_PER_SECOND;
+      // A tab that was in the background wakes up with a huge gap; do not lurch.
+      angle.current += (Math.min(now - last, 100) / 1000) * IDLE_DEGREES_PER_SECOND;
       last = now;
       if (wheel.current) wheel.current.style.transform = `rotate(${angle.current}deg)`;
       frame = requestAnimationFrame(tick);
