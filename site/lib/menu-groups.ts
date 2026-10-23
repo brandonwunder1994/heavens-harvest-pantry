@@ -1,4 +1,5 @@
 import type { Flavor } from "@/lib/content";
+import { NUT_ORDER, isNut } from "@/lib/products";
 
 /**
  * The menu shows one "Chocolate Coconut Cashew" and lets a customer pick dark
@@ -19,6 +20,13 @@ const GROUPS = [
 
 /** What the customer sees on the menu: variants folded into one entry. */
 export function menuFlavors(flavors: Flavor[]): Flavor[] {
+  const folded = foldVariants(flavors);
+  const rank = (f: Flavor) => { const i = NUT_ORDER.findIndex(slug => slug === f.slug); return i < 0 ? NUT_ORDER.length : i; };
+  // Granola first; then the candied nuts in lineup order, whatever order she saved them in.
+  return [...folded.filter(f => !isNut(f)), ...folded.filter(isNut).sort((a, b) => rank(a) - rank(b))];
+}
+
+function foldVariants(flavors: Flavor[]): Flavor[] {
   const taken = new Set<string>();
   const out: Flavor[] = [];
   for (const flavor of flavors) {

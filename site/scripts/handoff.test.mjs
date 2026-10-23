@@ -64,8 +64,16 @@ test('chocolate recipes retain cocoa powder and cashew disclosure',()=>{
 });
 
 test('candied nuts sold in 8 oz and 1 lb only: a 3 oz bag is dropped from the basket',()=>{
- const nut=defaultShop.flavors.find(f=>f.slug==='candied-nuts-pink');
+ const nut=defaultShop.flavors.find(f=>f.slug==='coconut-cashews');
  assert.deepEqual(flavorSizes(nut),[8,16]);
  for(const size of [8,16])assert.equal(priceOrder(defaultShop,[line(nut,size)],none).totalCents,({8:1200,16:2000})[size]*1);
  assert.equal(sanitizeCart(defaultShop,[line(nut,3)]).length,0);
+});
+
+test('a saved menu that files the new nuts as granola still gets 8 oz and 1 lb only, in the nuts lineup order',async()=>{
+ const {menuFlavors}=await import('../lib/menu-groups.ts');
+ const saved=['candied-pecans','candied-cashews','coconut-cashews'].map(slug=>({...defaultShop.flavors.find(f=>f.slug===slug),category:'granola',sizes:undefined}));
+ for(const f of saved)assert.deepEqual(flavorSizes(f),[8,16]);
+ const order=menuFlavors([...saved,...defaultShop.flavors.filter(f=>!saved.some(s=>s.slug===f.slug))]).map(f=>f.slug);
+ assert.deepEqual(order.slice(-4),['c','coconut-cashews','candied-pecans','candied-cashews']);
 });

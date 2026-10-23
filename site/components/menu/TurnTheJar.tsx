@@ -8,6 +8,7 @@ import { FloatingJar } from "@/components/FloatingJars";
 import { FlavorModal } from "@/components/menu/FlavorModal";
 import { type Flavor } from "@/lib/content";
 import { entryHasSlug } from "@/lib/menu-groups";
+import { isNut } from "@/lib/products";
 import { useCart } from "@/components/cart/CartProvider";
 import { formatMoney, unitPriceCents } from "@/lib/cart";
 
@@ -76,7 +77,7 @@ export function TurnTheJar({ flavors }: { flavors: Flavor[] }) {
         <div className="turn-picks" role="group" aria-label="Choose a flavor">
           {flavors.map((flavor, i) => (
             <Fragment key={flavor.slug}>
-            {(i === 0 || (flavor.category === "almonds") !== (flavors[i - 1].category === "almonds")) && <p className="turn-group">{flavor.category === "almonds" ? "Candied nuts" : "Granola"}</p>}
+            {(i === 0 || isNut(flavor) !== isNut(flavors[i - 1])) && <p className="turn-group">{isNut(flavor) ? "Candied nuts" : "Granola"}</p>}
             <button
               type="button"
               className="turn-pick"

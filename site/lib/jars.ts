@@ -68,9 +68,9 @@ const BAG_BY_SLUG: Record<string, string> = {
   "vanilla-blueberry-almond": "/bags/vanilla-blueberry-almond.png",
   "candied-almonds": "/bags/candied-almonds.png",
   c: "/bags/candied-almonds.png",
-  "candied-nuts-pink": "/bags/candied-cashews-a.png",
-  "candied-nuts-green": "/bags/candied-pecans-a.png",
-  "candied-nuts-gold": "/bags/candied-cashews-b.png",
+  "coconut-cashews": "/bags/candied-cashews-a.png",
+  "candied-pecans": "/bags/candied-pecans-a.png",
+  "candied-cashews": "/bags/candied-cashews-b.png",
 };
 
 export function bagPhotoFor(flavor: string | FlavorHint): string | undefined {
