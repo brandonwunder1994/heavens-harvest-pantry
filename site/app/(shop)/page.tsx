@@ -62,7 +62,7 @@ export default async function HomePage() {
         <div className="mx-auto flex min-h-[84vh] w-full max-w-[1296px] items-end px-6 pb-10 sm:px-10 lg:min-h-[78vh] lg:items-center lg:px-18 lg:pb-0">
           <div className="flex max-w-[600px] flex-col items-start gap-5 text-left">
             <h1 className="display m-0 text-[40px] leading-[0.98] text-ink sm:text-[52px] lg:text-[66px]">
-              Granola baked
+              Treats baked
               <br />
               <em className="italic text-sage">this week,</em>
               <br />a few streets away.

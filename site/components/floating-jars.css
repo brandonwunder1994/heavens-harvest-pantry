@@ -6,7 +6,10 @@
 }
 
 .float-title {
-  margin: 0 0 12px;
+  /* Room for a bag to lift on hover without ever touching the title. */
+  margin: 0 0 clamp(52px, 7vw, 76px);
+  position: relative;
+  z-index: 3;
   font-family: var(--font-serif);
   font-weight: 500;
   font-size: clamp(34px, 5vw, 52px);
@@ -293,7 +296,7 @@
 
 .float-card:hover .float-stage,
 .float-card:focus-visible .float-stage {
-  transform: translate3d(0, -22px, 40px) scale(1.045) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+  transform: translate3d(0, -14px, 24px) scale(1.035) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
 }
 
 .float-card:hover .float-shine,
