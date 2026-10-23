@@ -68,6 +68,9 @@ const BAG_BY_SLUG: Record<string, string> = {
   "vanilla-blueberry-almond": "/bags/vanilla-blueberry-almond.png",
   "candied-almonds": "/bags/candied-almonds.png",
   c: "/bags/candied-almonds.png",
+  "candied-nuts-pink": "/bags/candied-cashews-a.png",
+  "candied-nuts-green": "/bags/candied-pecans-a.png",
+  "candied-nuts-gold": "/bags/candied-cashews-b.png",
 };
 
 export function bagPhotoFor(flavor: string | FlavorHint): string | undefined {
@@ -80,7 +83,8 @@ export function packPhotoFor(
   flavor: string | FlavorHint,
   format: "jar" | "bag" | "sampler" = "jar",
 ): string | undefined {
-  return format === "jar" ? jarPhotoFor(flavor) : bagPhotoFor(flavor);
+  // Only the almonds have a jar picture; the other candied nuts show their bag.
+  return format === "jar" ? jarPhotoFor(flavor) ?? bagPhotoFor(flavor) : bagPhotoFor(flavor);
 }
 
 function matchHint(hay: string, rows: { test: RegExp; src: string }[] = JAR_BY_HINT): string | undefined {

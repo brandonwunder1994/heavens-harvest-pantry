@@ -45,6 +45,8 @@ export type Flavor = {
   allowedOmissions?: Omission[];
   requiresCooling?: boolean;
   category?: "granola" | "almonds";
+  /** Sizes on sale, in ounces. Leave off for all three. */
+  sizes?: SizeOz[];
   /** Menu-only: dark/semi-sweet style choices folded under one entry. */
   variants?: Flavor[];
   variantLabel?: string;
@@ -120,7 +122,7 @@ export type BlessingBag = { price: number; blurb: string };
 export const blessingBag: BlessingBag = {
   price: 7,
   blurb:
-    "Add $7 to your chosen granola or candied almonds for a cute gift jar and anonymous delivery in Vistancia.",
+    "Add $7 to your chosen granola or candied nuts for a cute gift jar and anonymous delivery in Vistancia.",
 };
 
 export type Verse = {

@@ -1,7 +1,7 @@
 import type { Shop } from "@/lib/content";
 import { DELIVERY_ENABLED, pickupDate, saturdayDate, type PickupPeriod } from "@/lib/fulfilment";
 import { isExtraSlug } from "@/lib/extras";
-import { BLESSING_SIZES, OMISSIONS, cleanOmissions, type Omission } from "@/lib/products";
+import { BLESSING_SIZES, flavorSizes, OMISSIONS, cleanOmissions, type Omission } from "@/lib/products";
 import {
   MAX_BLESSING_BAGS,
   MAX_JARS_RETURNED,
@@ -81,6 +81,7 @@ export function validateOrder(shop: Shop, input: unknown): ValidationResult {
     const flavor = shop.flavors.find(f => f.slug === line.slug);
     if (!flavor) continue;
     if (line.sizeOz !== undefined && ![3, 8, 16].includes(line.sizeOz)) errors.lines = "Choose a 3 oz, 8 oz, or 1 lb size.";
+    if (line.sizeOz !== undefined && !flavorSizes(flavor).includes(line.sizeOz)) errors.lines = "That size is not offered for this flavor. Please choose again.";
     if (line.omissions !== undefined && (!Array.isArray(line.omissions) || line.omissions.some(o => !OMISSIONS.includes(o as Omission) || !flavor.allowedOmissions?.includes(o)))) errors.lines = "One ingredient option is no longer offered. Please choose again.";
     if (line.gift) {
       if(giftIds.has(line.gift.id))errors.gifts="Please add each gift as a separate recipient selection.";

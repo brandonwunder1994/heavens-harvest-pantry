@@ -138,6 +138,7 @@ export function mergeFlavors(value: unknown): Flavor[] {
       allowedOmissions: cleanOmissions(f.allowedOmissions),
       requiresCooling: f.requiresCooling === true,
       category: f.category === "almonds" ? "almonds" : "granola",
+      ...(Array.isArray(f.sizes) && f.sizes.some(s => s === 8 || s === 16) ? { sizes: ([3, 8, 16] as const).filter(s => (f.sizes as unknown[]).includes(s)) } : {}),
       soldOut,
       backOn: soldOut ? text(f.backOn, "", limits.day) || undefined : undefined,
       ...(icons.length ? { icons } : {}),

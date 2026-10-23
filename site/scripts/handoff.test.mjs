@@ -5,12 +5,12 @@ import {priceOrder,orderWeight,sanitizeCart,lineKey} from '../lib/cart.ts';
 import {validateOrder} from '../lib/order.ts';
 import {checkoutSessionParams} from '../lib/checkout-session.ts';
 import {pickupDate,saturdayDate,storageMessage} from '../lib/fulfilment.ts';
-import {ingredientsWithout,netWeight,OMISSIONS} from '../lib/products.ts';
+import {flavorSizes,ingredientsWithout,netWeight,OMISSIONS} from '../lib/products.ts';
 const none={jarsReturned:0,blessingBags:0};
 const line=(f,sizeOz,extra={})=>({slug:f.slug,format:'bag',qty:1,sizeOz,...extra});
 const details={method:'dropoff',runDate:pickupDate(),pickupPeriod:'morning',name:'Sample Customer',phone:'6235550100'};
 const gift=id=>({id,recipientName:'Sample Recipient',address:'123 Sample Lane, Vistancia',inVistancia:true});
-for(const flavor of defaultShop.flavors)for(const size of [3,8,16])test(`${flavor.name}: ${size} oz price and weight`,()=>{
+for(const flavor of defaultShop.flavors)for(const size of flavorSizes(flavor))test(`${flavor.name}: ${size} oz price and weight`,()=>{
  const total=priceOrder(defaultShop,[line(flavor,size)],none);
  assert.equal(total.totalCents,flavor.sizePrices[size]*100);assert.equal(orderWeight(total.lines.map(p=>p.line)),size);
  const params=checkoutSessionParams(defaultShop,{lines:total.lines.map(p=>p.line),...none,details},total,'https://example.com');
@@ -61,4 +61,11 @@ test('label weights are purchased food weights',()=>{
 test('chocolate recipes retain cocoa powder and cashew disclosure',()=>{
  for(const f of defaultShop.flavors.filter(f=>f.requiresCooling)){assert.match(f.ingredients,/Cocoa Powder/i);assert.match(f.allergens,/cashew/i);}
  assert.match(defaultShop.flavors[2].ingredients,/organic cane sugar, organic cacao mass, cocoa liquor, and organic cocoa butter/);
+});
+
+test('candied nuts sold in 8 oz and 1 lb only: a 3 oz bag is dropped from the basket',()=>{
+ const nut=defaultShop.flavors.find(f=>f.slug==='candied-nuts-pink');
+ assert.deepEqual(flavorSizes(nut),[8,16]);
+ for(const size of [8,16])assert.equal(priceOrder(defaultShop,[line(nut,size)],none).totalCents,({8:1200,16:2000})[size]*1);
+ assert.equal(sanitizeCart(defaultShop,[line(nut,3)]).length,0);
 });

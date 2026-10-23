@@ -4,7 +4,7 @@ import { usePractice } from "@/components/ShopLink";
 import { useEffect, useRef, useState } from "react";
 import { AddToCart } from "@/components/cart/AddToCart";
 import { FloatingJar } from "@/components/FloatingJars";
-import { type SizeOz } from "@/lib/products";
+import { flavorSizes, sizeLabel, type SizeOz } from "@/lib/products";
 import { type Flavor } from "@/lib/content";
 
 export function FlavorModal({
@@ -68,7 +68,7 @@ function FlavorSheet({flavor:entry,onClose}:{flavor:Flavor;onClose:()=>void}) {
             <h2 id="flavor-modal-title" className="display m-0 text-[32px] sm:text-[40px]">
               {entry.variants ? entry.name : flavor.name}
             </h2>
-            <p className="font-ui text-[13px] font-semibold text-sage">3 oz, 8 oz, or 1 lb bags</p>
+            <p className="font-ui text-[13px] font-semibold text-sage">{flavorSizes(flavor).map(sizeLabel).join(", ").replace(/, ([^,]*)$/, " or $1")} bags</p>
             {entry.variants && <div role="group" aria-label="Choose your chocolate" className="flex flex-wrap gap-2">
               {entry.variants.map(v => <button key={v.slug} type="button" aria-pressed={v.slug === variantSlug} disabled={v.soldOut} onClick={() => setVariantSlug(v.slug)} className={`min-h-11 border border-brown px-3 py-2 font-ui text-[13px] disabled:opacity-50 ${v.slug === variantSlug ? "bg-brown text-cream" : "bg-cream text-brown hover:bg-paper"}`}>{v.variantLabel}{v.soldOut ? " · sold out" : ""}</button>)}
             </div>}

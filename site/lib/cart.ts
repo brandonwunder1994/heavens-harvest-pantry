@@ -1,6 +1,6 @@
 import { cleanName } from "@/lib/blend";
 import type { Flavor, Shop } from "@/lib/content";
-import { cleanOmissions, omissionLabel, sizeLabel, type Omission, type SizeOz } from "@/lib/products";
+import { cleanOmissions, flavorSizes, omissionLabel, sizeLabel, type Omission, type SizeOz } from "@/lib/products";
 import { REWARDS_ENABLED } from "@/lib/features";
 import { baseOfExtra, isExtraSlug } from "@/lib/extras";
 
@@ -115,6 +115,7 @@ export function sanitizeCart(shop: Shop, lines: CartLine[]): CartLine[] {
     if (!flavor || flavor.soldOut) continue;
     if (line.format !== "jar" && line.format !== "bag" && line.format !== "sampler") continue;
     if (line.sizeOz !== undefined && ![3, 8, 16].includes(line.sizeOz)) continue;
+    if (line.sizeOz !== undefined && !flavorSizes(flavor).includes(line.sizeOz)) continue;
     const qty = Math.floor(Number(line.qty));
     if (!Number.isFinite(qty) || qty < 1) continue;
     const named = cleanName(line.name);

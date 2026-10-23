@@ -21,7 +21,7 @@ export function GiftComposer() {
         <figcaption className="mt-2 text-center font-ui text-[11px] text-muted">Example gift & prayer card</figcaption>
       </figure>
       <div><h2 className="display text-[28px]">Send an anonymous blessing gift</h2>
-      <p className="mt-3 text-[17px] leading-relaxed text-bark">Add {formatMoney(blessingSurchargeCents(cart.shop))} to your chosen granola or candied almonds for a cute gift jar and anonymous delivery in Vistancia.</p>
+      <p className="mt-3 text-[17px] leading-relaxed text-bark">Add {formatMoney(blessingSurchargeCents(cart.shop))} to your chosen granola or candied nuts for a cute gift jar and anonymous delivery in Vistancia.</p>
       {!open&&<button type="button" onClick={()=>setOpen(true)} className="stamp stamp-light mt-4">Choose a blessing gift</button>}</div>
     </div>
     {open&&<div className="mt-6 flex flex-col gap-4">

@@ -1,9 +1,16 @@
 import { FloatingJars } from "@/components/FloatingJars";
 import type { Flavor } from "@/lib/content";
 
-/** The five jars on the front of the shop. */
+/** The two lineups on the front of the shop: granola first, then the candied nuts. */
 export function HeroShelf({ flavors }: { flavors: Flavor[] }) {
-  return <FloatingJars flavors={flavors} />;
+  const nuts = flavors.filter(flavor => flavor.category === "almonds");
+  const granola = flavors.filter(flavor => flavor.category !== "almonds");
+  return (
+    <>
+      <FloatingJars flavors={granola} title="The Granola Lineup" id="granola-lineup" />
+      <FloatingJars flavors={nuts} title="The Candied Nuts Lineup" id="nuts-lineup" />
+    </>
+  );
 }
 
 /** A name split across the two lines a jar label holds. */

@@ -14,7 +14,7 @@ type Card = Flavor & { src: string; lineupOnly: boolean };
  * The lineup: one bag of each flavor, floating. The shadow lives under the
  * bag, not in the picture, so it can spread as the bag lifts.
  */
-export function FloatingJars({ flavors }: { flavors: Flavor[] }) {
+export function FloatingJars({ flavors, title = "The Lineup", id = "float-shelf" }: { flavors: Flavor[]; title?: string; id?: string }) {
   const lineup = flavors.map(flavor => ({ ...flavor, lineupOnly: false }));
   const cards = lineup
     .map((flavor) => {
@@ -28,9 +28,9 @@ export function FloatingJars({ flavors }: { flavors: Flavor[] }) {
   if (!cards.length) return null;
 
   return (
-    <section className="float-shelf" aria-labelledby="float-shelf-title">
-      <h2 id="float-shelf-title" className="float-title">
-        The Lineup
+    <section className="float-shelf" aria-labelledby={`${id}-title`}>
+      <h2 id={`${id}-title`} className="float-title">
+        {title}
       </h2>
       <div className="float-row" data-hot={hot ? "yes" : "no"}>
         {cards.map((flavor, i) => (

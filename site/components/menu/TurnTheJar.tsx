@@ -3,7 +3,7 @@
 // The jar at the top of the menu, and the list of her flavours beside it.
 // Hover swaps the photograph. Click opens the flavor.
 
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { FloatingJar } from "@/components/FloatingJars";
 import { FlavorModal } from "@/components/menu/FlavorModal";
 import { type Flavor } from "@/lib/content";
@@ -75,8 +75,9 @@ export function TurnTheJar({ flavors }: { flavors: Flavor[] }) {
 
         <div className="turn-picks" role="group" aria-label="Choose a flavor">
           {flavors.map((flavor, i) => (
+            <Fragment key={flavor.slug}>
+            {(i === 0 || (flavor.category === "almonds") !== (flavors[i - 1].category === "almonds")) && <p className="turn-group">{flavor.category === "almonds" ? "Candied nuts" : "Granola"}</p>}
             <button
-              key={flavor.slug}
               type="button"
               className="turn-pick"
               aria-pressed={i === at}
@@ -88,6 +89,7 @@ export function TurnTheJar({ flavors }: { flavors: Flavor[] }) {
               <span className="turn-pick-name">{flavor.name}</span>
               <span className="turn-pick-price">{flavor.soldOut ? "sold out" : ordersPaused ? "ordering paused" : `8 oz · ${formatMoney(unitPriceCents(flavor, "bag", 8))}`}</span>
             </button>
+            </Fragment>
           ))}
         </div>
       </div>

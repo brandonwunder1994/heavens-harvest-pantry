@@ -32,7 +32,7 @@ test("all available flavors support 8 oz and 16 oz blessing gifts with a $7 add-
 });
 
 test("3 oz blessing gifts are refused while regular 3 oz bags remain available", () => {
-  for (const flavor of defaultShop.flavors) {
+  for (const flavor of defaultShop.flavors.filter(f => !f.sizes)) {
     const gift = validateOrder(defaultShop, orderFor(flavor, 3));
     assert.equal(gift.ok, false);
     assert.match(gift.errors.gifts, /8 oz or 1 lb/);
