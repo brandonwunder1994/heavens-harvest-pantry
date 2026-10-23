@@ -1,9 +1,9 @@
 import type { Order, OrderItem } from "@/lib/orders";
-import { omissionLabel } from "@/lib/products";
+import { omissionLabel, sizeLabel } from "@/lib/products";
 
 export const itemOz = (item: OrderItem) => (item.sizeOz ?? (item.format === "sampler" ? 3 : 16)) * item.qty;
 export const pounds = (oz: number) => (oz / 16).toLocaleString("en-US", { maximumFractionDigits: 3 });
-export const itemDescription = (item: OrderItem) => `${item.name} · ${item.sizeOz ?? (item.format === "sampler" ? 3 : 16)} oz${item.omissions?.length ? ` · ${item.omissions.map(o => omissionLabel[o]).join(", ")}` : ""}`;
+export const itemDescription = (item: OrderItem) => `${item.name} · ${sizeLabel(item.sizeOz ?? (item.format === "sampler" ? 3 : 16))}${item.omissions?.length ? ` · ${item.omissions.map(o => omissionLabel[o]).join(", ")}` : ""}`;
 export const bakeFor = (order: Order) => {
   if (order.bakeId) return order.bakeId;
   if (!/^\d{4}-\d{2}-\d{2}$/.test(order.runDate)) return order.runDate;

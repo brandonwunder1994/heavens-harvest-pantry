@@ -1,7 +1,7 @@
 import type { Shop } from "@/lib/content";
 import { DELIVERY_ENABLED, pickupDate, saturdayDate, type PickupPeriod } from "@/lib/fulfilment";
 import { isExtraSlug } from "@/lib/extras";
-import { BLESSING_SIZES, flavorSizes, OMISSIONS, cleanOmissions, type Omission } from "@/lib/products";
+import { BLESSING_SIZES, flavorSizes, sizeLabel, OMISSIONS, cleanOmissions, type Omission } from "@/lib/products";
 import {
   MAX_BLESSING_BAGS,
   MAX_JARS_RETURNED,
@@ -194,7 +194,7 @@ export function orderMetadata(
     items: totals.lines
       // The name somebody asked for goes on the ticket she reads in the
       // kitchen, because a label with the wrong name on it is worse than none.
-      .map((p) => `${p.line.qty}x ${p.flavor.name}${p.line.name ? ` for ${p.line.name}` : ""}${p.line.sizeOz ? ` ${p.line.sizeOz} oz` : ""}${cleanOmissions(p.line.omissions).length ? ` ${cleanOmissions(p.line.omissions).join(",")}` : ""} (${p.line.format})`)
+      .map((p) => `${p.line.qty}x ${p.flavor.name}${p.line.name ? ` for ${p.line.name}` : ""}${p.line.sizeOz ? ` ${sizeLabel(p.line.sizeOz)}` : ""}${cleanOmissions(p.line.omissions).length ? ` ${cleanOmissions(p.line.omissions).join(",")}` : ""} (${p.line.format})`)
       .join("; ")
       .slice(0, 480),
   };
