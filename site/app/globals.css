@@ -291,6 +291,11 @@ body {
   pointer-events: none;
 }
 .ready-tag-words { display: flex; min-width: 0; flex-direction: column; gap: 2px; }
+@media (max-width: 639px) {
+  .ready-tag-body { gap: 10px; padding: 10px 16px 10px 34px; }
+  .ready-tag-heart svg { width: 36px; height: 36px; }
+  .ready-tag-arrow { font-size: 22px; }
+}
 .ready-tag-heart { flex: none; display: grid; place-items: center; }
 .ready-tag-heart::before {
   content: "";

@@ -78,10 +78,11 @@ export default async function HomePage() {
                     </svg>
                   </span>
                   <span className="ready-tag-words">
-                    <span className="caps text-[10px] text-sage sm:text-[11px]">
-                      Just baked{deal.off ? ` · $${deal.off} off` : " · special price"} · {deal.left} left
+                    <span className="caps whitespace-nowrap text-[10px] text-sage sm:text-[11px]">
+                      <span className="hidden sm:inline">Just baked · </span>
+                      {deal.off ? `$${deal.off} off` : "Special price"} · {deal.left} left
                     </span>
-                    <span className="display text-[23px] italic leading-tight text-ink sm:text-[26px]">Ready to pick up today!</span>
+                    <span className="display whitespace-nowrap text-[21px] italic leading-tight text-ink sm:text-[26px]">Ready to pick up today!</span>
                   </span>
                   <span aria-hidden className="ready-tag-arrow">→</span>
                 </span>
