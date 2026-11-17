@@ -41,3 +41,10 @@ test("a Tuesday pickup belongs to Monday's bake", () => {
   assert.equal(bakeFor({ runDate: "2026-11-24" }), "2026-11-23");
   assert.equal(bakeFor({ runDate: "2026-11-21" }), "2026-11-20");
 });
+
+test("ready-now extras can be picked up today, then Friday or Saturday", async () => {
+  const { extrasPickupDays } = await import("@/lib/fulfilment");
+  assert.deepEqual(extrasPickupDays("2026-11-20", az("2026-11-17T10:00:00")), ["2026-11-17", "2026-11-20", "2026-11-21"]);
+  assert.deepEqual(extrasPickupDays("2026-11-20", az("2026-11-20T10:00:00")), ["2026-11-20", "2026-11-21"]);
+  assert.deepEqual(extrasPickupDays("2026-11-20", az("2026-11-21T10:00:00")), ["2026-11-21"]);
+});

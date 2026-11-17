@@ -30,6 +30,18 @@ export const THANKSGIVING = {
 } as const;
 export const thanksgivingNoticeShowing = (now = Date.now()) => now < THANKSGIVING.showUntil;
 export const thanksgivingOrdersOpen = (now = Date.now()) => now >= THANKSGIVING.opensAt && now < THANKSGIVING.closesAt;
+/** Today's date in Arizona, "2026-11-17". */
+export function todayAZ(now = Date.now()): string {
+  return new Intl.DateTimeFormat("en-CA", { timeZone: "America/Phoenix", year: "numeric", month: "2-digit", day: "2-digit" }).format(new Date(now));
+}
+/**
+ * The days a ready-now extras order can be picked up: today, if today comes
+ * before that weekend's Friday, then the Friday and Saturday themselves.
+ */
+export function extrasPickupDays(weekend: string, now = Date.now()): string[] {
+  const today = todayAZ(now), saturday = saturdayDate(weekend);
+  return [...(today < weekend ? [today] : []), weekend, saturday].filter(d => d >= today);
+}
 /** Where the Thanksgiving week stands: still taking its orders, closed and baking, or over. */
 export function thanksgivingPhase(now = Date.now()): "ordering" | "closed" | "over" {
   return now < THANKSGIVING.closesAt ? "ordering" : now < THANKSGIVING.showUntil ? "closed" : "over";

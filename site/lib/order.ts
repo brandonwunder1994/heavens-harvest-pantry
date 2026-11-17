@@ -1,5 +1,5 @@
 import type { Shop } from "@/lib/content";
-import { DELIVERY_ENABLED, THANKSGIVING, isThanksgivingPickup, pickupDate, saturdayDate, type PickupPeriod } from "@/lib/fulfilment";
+import { DELIVERY_ENABLED, THANKSGIVING, isThanksgivingPickup, pickupDate, saturdayDate, todayAZ, type PickupPeriod } from "@/lib/fulfilment";
 import { isExtraSlug } from "@/lib/extras";
 import { BLESSING_SIZES, flavorSizes, sizeLabel, OMISSIONS, cleanOmissions, type Omission } from "@/lib/products";
 import {
@@ -117,7 +117,9 @@ export function validateOrder(shop: Shop, input: unknown): ValidationResult {
   const thanksgiving = !extrasOnly && Date.now() < THANKSGIVING.closesAt && isThanksgivingPickup(runDate);
   const bakeId = extrasOnly ? shop.extras!.weekend : thanksgiving ? THANKSGIVING.first : pickupDate();
   const hasPickup = totals.lines.some(p => !p.line.gift);
-  if (hasPickup && runDate !== bakeId && runDate !== saturdayDate(bakeId)) errors.runDate = "Choose one of the pickup days shown.";
+  // Extras can also be picked up any day from today until that weekend.
+  const extrasDay = extrasOnly && /^\d{4}-\d{2}-\d{2}$/.test(runDate) && runDate >= todayAZ() && runDate < bakeId;
+  if (hasPickup && !extrasDay && runDate !== bakeId && runDate !== saturdayDate(bakeId)) errors.runDate = "Choose one of the pickup days shown.";
   if (hasPickup && rawDetails.pickupPeriod !== "morning" && rawDetails.pickupPeriod !== "afternoon") errors.pickupPeriod = "Choose morning or afternoon pickup.";
   const matched = shop.delivery.runs.findIndex((r) => r.area === runArea && r.nextDate === runDate);
   if (method === "delivery" && matched < 0) {

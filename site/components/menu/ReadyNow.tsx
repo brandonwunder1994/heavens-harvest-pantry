@@ -4,7 +4,7 @@ import Link from "@/components/ShopLink";
 import { useCart } from "@/components/cart/CartProvider";
 import { Stepper } from "@/components/cart/Stepper";
 import { formatMoney, lineKey, dollarsToCents, type CartLine } from "@/lib/cart";
-import { pickupDateLabel, saturdayDate } from "@/lib/fulfilment";
+import { extrasPickupDays, weekdayOf } from "@/lib/fulfilment";
 import { sizeLabel } from "@/lib/products";
 
 /**
@@ -25,7 +25,7 @@ export function ReadyNow() {
           <div className="small-caps">Just baked · limited</div>
           <h2 id="ready-now" className="display m-0 text-[34px] sm:text-[44px]">Ready now</h2>
           <p className="text-[18px] italic text-sage">
-            Extras from this weekend&apos;s bake, at a special price. Pickup {pickupDateLabel(extras.weekend)} or {pickupDateLabel(saturdayDate(extras.weekend))}.
+            Extras from this week&apos;s bake, at a special price. Ready to pick up today, or choose {extrasPickupDays(extras.weekend).slice(1).map(d => weekdayOf(d)).join(" or ") || "it at checkout"}.
           </p>
           {extras.note ? <p className="text-[17px] text-bark">{extras.note}</p> : null}
         </div>
