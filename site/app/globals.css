@@ -241,3 +241,90 @@ body {
     opacity: 0.6;
   }
 }
+
+/* The hero's ready-now tag: a hang tag like the one on her jars, with a gold
+   heart that beats so the eye finds it. Motion stops for anyone who asks.
+   The outer link carries the shadow and glow; the inner body is the cut tag. */
+.ready-tag {
+  display: inline-flex;
+  max-width: 100%;
+  transform: rotate(-1.2deg);
+  transition: transform 220ms ease;
+  filter: drop-shadow(0 10px 16px rgba(58, 39, 18, 0.18));
+  animation: ready-tag-glow 1.6s ease-in-out infinite;
+}
+.ready-tag:hover { transform: rotate(0deg) translateY(-2px); }
+.ready-tag:focus-visible { outline: 2px solid var(--color-sage); outline-offset: 6px; }
+.ready-tag-body {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+  padding: 12px 24px 12px 38px;
+  background: var(--color-brown);
+  clip-path: polygon(22px 0, 100% 0, 100% 100%, 22px 100%, 0 50%);
+}
+.ready-tag-body::before {
+  content: "";
+  position: absolute;
+  inset: 1.5px;
+  background: var(--color-paper);
+  clip-path: polygon(21px 0, 100% 0, 100% 100%, 21px 100%, 0 50%);
+}
+.ready-tag-heart, .ready-tag-words, .ready-tag-arrow { position: relative; }
+.ready-tag-hole {
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  width: 9px;
+  height: 9px;
+  margin-top: -4.5px;
+  border-radius: 50%;
+  background: var(--color-cream);
+  box-shadow: inset 0 0 0 1.2px var(--color-brown);
+}
+.ready-tag-stitch {
+  position: absolute;
+  inset: 5px 5px 5px 30px;
+  border: 1px dashed var(--color-hedge);
+  pointer-events: none;
+}
+.ready-tag-words { display: flex; min-width: 0; flex-direction: column; gap: 2px; }
+.ready-tag-heart { flex: none; display: grid; place-items: center; }
+.ready-tag-heart::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(201, 160, 106, 0.6), rgba(201, 160, 106, 0) 68%);
+  animation: ready-tag-halo 1.6s ease-out infinite;
+}
+.ready-tag-heart svg { position: relative; display: block; }
+.ready-tag-beat { transform-box: fill-box; transform-origin: center; animation: ready-tag-beat 1.6s ease-in-out infinite; }
+.ready-tag-arrow {
+  flex: none;
+  font-family: var(--font-serif);
+  font-size: 26px;
+  line-height: 1;
+  color: var(--color-sage);
+  transition: transform 220ms ease, color 220ms ease;
+}
+.ready-tag:hover .ready-tag-arrow { transform: translateX(4px); color: var(--color-brown); }
+@keyframes ready-tag-beat {
+  0%, 40%, 100% { transform: scale(1); }
+  12% { transform: scale(1.24); }
+  22% { transform: scale(1.04); }
+  30% { transform: scale(1.16); }
+}
+@keyframes ready-tag-halo {
+  0% { transform: scale(0.6); opacity: 0.95; }
+  65%, 100% { transform: scale(1.8); opacity: 0; }
+}
+@keyframes ready-tag-glow {
+  0%, 45%, 100% { filter: drop-shadow(0 10px 16px rgba(58, 39, 18, 0.18)); }
+  14% { filter: drop-shadow(0 10px 16px rgba(58, 39, 18, 0.18)) drop-shadow(0 0 16px rgba(201, 160, 106, 0.85)); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ready-tag, .ready-tag-beat, .ready-tag-heart::before { animation: none; }
+}

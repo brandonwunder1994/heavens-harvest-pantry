@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "@/components/ShopLink";
 import { CheckoutForm } from "@/components/checkout/CheckoutForm";
 import { getStripe, isTestMode, paymentsConfigured } from "@/lib/stripe";
-import { pickupDate } from "@/lib/fulfilment";
+import { pickupDate, thanksgivingExtraBake } from "@/lib/fulfilment";
 import { checkoutTaxConfiguration } from "@/lib/checkout-tax";
 import { business } from "@/lib/content";
 import { mailReady } from "@/lib/mailer";
@@ -43,7 +43,7 @@ export default async function CheckoutPage({
         </div>
       ) : null}
 
-      <CheckoutForm paymentsLive={paymentsConfigured() && tax.ready} taxDisplay={taxDisplay} confirmationEmailAvailable={mailReady} testMode={isTestMode()} pickupDate={pickupDate()} />
+      <CheckoutForm paymentsLive={paymentsConfigured() && tax.ready} taxDisplay={taxDisplay} confirmationEmailAvailable={mailReady} testMode={isTestMode()} pickupDate={pickupDate()} thanksgivingDate={thanksgivingExtraBake()} />
     </div>
   );
 }

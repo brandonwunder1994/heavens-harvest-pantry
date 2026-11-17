@@ -11,6 +11,39 @@ export const CAPACITY_OZ = 768;
 export type PickupPeriod = "morning" | "afternoon";
 export const ADDRESS_NOTE = "Thanks for keeping our home address between us. It’s just for your pickup. 🙂";
 export const storageMessage = (chocolate: boolean) => chocolate ? "Your order will be in the porch fridge." : "Your order will be on the porch table.";
+
+/**
+ * Thanksgiving 2026, a one-off. Orders placed after the usual Tuesday cutoff
+ * and before Saturday at 9 p.m. pick up Monday or Tuesday (morning or night)
+ * instead of Friday or Saturday. She is out of town the weekend after, so that
+ * Friday is skipped and later orders roll to December 4. The second pickup day
+ * is still "the day after the first", so Monday and Tuesday ride the same rails
+ * as Friday and Saturday; only the words change. Every date is Arizona time.
+ */
+export const THANKSGIVING = {
+  first: "2026-11-23",
+  second: "2026-11-24",
+  opensAt: Date.parse("2026-11-18T04:00:00Z"), // Tue Nov 17, 9 p.m.
+  closesAt: Date.parse("2026-11-22T04:00:00Z"), // Sat Nov 21, 9 p.m.
+  showUntil: Date.parse("2026-11-25T07:00:00Z"), // end of Tue Nov 24
+  skipped: ["2026-11-27"], // no pickups Fri Nov 27 or Sat Nov 28
+} as const;
+export const thanksgivingNoticeShowing = (now = Date.now()) => now < THANKSGIVING.showUntil;
+export const thanksgivingOrdersOpen = (now = Date.now()) => now >= THANKSGIVING.opensAt && now < THANKSGIVING.closesAt;
+/** Where the Thanksgiving week stands: still taking its orders, closed and baking, or over. */
+export function thanksgivingPhase(now = Date.now()): "ordering" | "closed" | "over" {
+  return now < THANKSGIVING.closesAt ? "ordering" : now < THANKSGIVING.showUntil ? "closed" : "over";
+}
+/** Monday's bake, offered alongside the usual days while it is still open and is not already the next bake. */
+export const thanksgivingExtraBake = (now = Date.now()) => now < THANKSGIVING.closesAt && pickupDate(now) !== THANKSGIVING.first ? THANKSGIVING.first : undefined;
+export const isThanksgivingPickup =(date: string) => date === THANKSGIVING.first || date === THANKSGIVING.second;
+/** "Monday", "Friday": the weekday of a pickup date. */
+export const weekdayOf = (date: string) => /^\d{4}-\d{2}-\d{2}$/.test(date) ? new Intl.DateTimeFormat("en-US", { timeZone: "UTC", weekday: "long" }).format(new Date(`${date}T12:00:00Z`)) : date;
+/** How a half-day reads: "Morning", "Afternoon, from noon", or "Night" for the Thanksgiving pickups. */
+export function periodLabel(date: string, period: string | undefined): string {
+  if (period !== "afternoon") return "Morning";
+  return isThanksgivingPickup(date) ? "Night" : "Afternoon, from noon";
+}
 export function pickupDate(now = Date.now()): string {
   const parts = new Intl.DateTimeFormat("en-US", { timeZone: "America/Phoenix", year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", hourCycle: "h23" }).formatToParts(new Date(now));
   const part = (type: string) => Number(parts.find(p => p.type === type)?.value);
@@ -18,7 +51,9 @@ export function pickupDate(now = Date.now()): string {
   const day = date.getUTCDay();
   let days = (5 - day + 7) % 7;
   if ((day === 2 && part("hour") >= 21) || (day >= 3 && day <= 5)) days += 7;
+  if (thanksgivingOrdersOpen(now)) return THANKSGIVING.first;
   date.setUTCDate(date.getUTCDate() + days);
+  while ((THANKSGIVING.skipped as readonly string[]).includes(date.toISOString().slice(0, 10))) date.setUTCDate(date.getUTCDate() + 7);
   const result = date.toISOString().slice(0, 10);
   return result < FIRST_PICKUP_DATE ? FIRST_PICKUP_DATE : result;
 }

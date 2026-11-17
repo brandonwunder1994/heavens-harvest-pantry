@@ -8,7 +8,7 @@ import { PorchLight } from "@/components/PorchLight";
 import { business, type Shop } from "@/lib/content";
 import { porchState } from "@/lib/porch";
 import { PICKUP_LABEL } from "@/lib/fulfilment";
-import { ORDERS_PAUSED_MESSAGE } from "@/lib/fulfilment";
+import { ORDERS_PAUSED_MESSAGE, thanksgivingPhase } from "@/lib/fulfilment";
 import { useCart } from "@/components/cart/CartProvider";
 
 const leftLinks = [
@@ -34,7 +34,13 @@ export function Header({ shop }: { shop: Shop }) {
       ) : null}
       <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-1 border-b border-dashed border-hedge px-6 py-3 text-center font-ui text-[10px] font-semibold uppercase tracking-[0.22em] text-sage sm:justify-between sm:px-10 lg:px-18 lg:text-[11px]">
         <span>
-          {ordersPaused ? "Ordering temporarily paused" : "Order by Tues, Porch Pickup Fri/Sat"}
+          {ordersPaused
+            ? "Ordering temporarily paused"
+            : thanksgivingPhase() === "ordering"
+              ? "Thanksgiving: order by Sat 9 p.m. · Pickup Mon/Tue"
+              : thanksgivingPhase() === "closed"
+                ? "No pickups Nov 27–28 · Next pickups Dec 4–5"
+                : "Order by Tues, Porch Pickup Fri/Sat"}
         </span>
         {/* The lamp when there is something honest to say, and the line we
             always had when there is not. */}

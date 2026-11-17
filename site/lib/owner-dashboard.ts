@@ -1,3 +1,4 @@
+import { THANKSGIVING } from "@/lib/fulfilment";
 import type { Order, OrderItem } from "@/lib/orders";
 import { omissionLabel, sizeLabel } from "@/lib/products";
 
@@ -8,7 +9,7 @@ export const bakeFor = (order: Order) => {
   if (order.bakeId) return order.bakeId;
   if (!/^\d{4}-\d{2}-\d{2}$/.test(order.runDate)) return order.runDate;
   const date = new Date(`${order.runDate}T12:00:00Z`);
-  if (date.getUTCDay() === 6) date.setUTCDate(date.getUTCDate() - 1);
+  if (date.getUTCDay() === 6 || order.runDate === THANKSGIVING.second) date.setUTCDate(date.getUTCDate() - 1);
   return date.toISOString().slice(0, 10);
 };
 export const pickupWaiting = (order: Order) => order.items.some(i => !i.gift) && !(order.pickupDone ?? order.delivered);

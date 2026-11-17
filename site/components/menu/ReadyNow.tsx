@@ -44,7 +44,19 @@ export function ReadyNow() {
                   </p>
                 </div>
                 <div className="flex items-center gap-4">
-                  <span className="font-ui text-[16px] font-semibold tabular-nums">{formatMoney(dollarsToCents(item.price))}</span>
+                  {(() => {
+                    const regular = cart.shop.flavors.find(f => f.slug === item.slug)?.sizePrices?.[item.sizeOz];
+                    return (
+                      <span className="flex items-baseline gap-2 font-ui tabular-nums">
+                        {regular !== undefined && regular > item.price ? (
+                          <s className="text-[15px] text-muted decoration-brown/70 decoration-[1.5px]" aria-label={`was ${formatMoney(dollarsToCents(regular))}`}>
+                            {formatMoney(dollarsToCents(regular))}
+                          </s>
+                        ) : null}
+                        <span className="text-[17px] font-semibold text-brown">{formatMoney(dollarsToCents(item.price))}</span>
+                      </span>
+                    );
+                  })()}
                   {gone ? (
                     <span className="caps -rotate-2 border-2 border-brown px-2.5 py-1.5 text-[10px] text-brown">Sold out</span>
                   ) : cart.ordersPaused ? (

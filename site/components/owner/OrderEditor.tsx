@@ -1,4 +1,5 @@
 "use client";
+import { isThanksgivingPickup } from "@/lib/fulfilment";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { ownerInputClass } from "@/lib/owner-ui";
@@ -61,7 +62,7 @@ export function OrderEditor({ orderId, days, runDate, pickupPeriod, ownerNote, c
             <label className="flex flex-col gap-1.5 font-ui text-[12px] font-semibold text-muted">Pickup time
               <select className={ownerInputClass} value={period} onChange={e => setPeriod(e.target.value)}>
                 <option value="morning">Morning</option>
-                <option value="afternoon">Afternoon (from noon)</option>
+                <option value="afternoon">{days.some(d => isThanksgivingPickup(d.value)) ? "Night" : "Afternoon (from noon)"}</option>
               </select>
             </label>
           </div>

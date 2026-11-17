@@ -15,6 +15,7 @@ import { business, filled, money, rewardOffer, type Flavor, type Shop } from "@/
 import { getShop } from "@/lib/settings";
 import { menuFlavors } from "@/lib/menu-groups";
 import { ReadyNow } from "@/components/menu/ReadyNow";
+import { ThanksgivingNotice } from "@/components/ThanksgivingNotice";
 import { josephReview } from "@/lib/customer-testimonial";
 import { DELIVERY_ENABLED, PICKUP_LABEL, nextPickups } from "@/lib/fulfilment";
 import { blessingBagsThisYear } from "@/lib/orders-source";
@@ -63,13 +64,27 @@ export default async function HomePage() {
         <div className="mx-auto flex min-h-[84vh] w-full max-w-[1296px] items-end px-6 pb-10 sm:px-10 lg:min-h-[78vh] lg:items-center lg:px-18 lg:pb-0">
           <div className="flex max-w-[600px] flex-col items-start gap-5 text-left">
             {deal ? (
-              <a href="#ready-now-extras" className="group flex max-w-full flex-wrap items-center gap-x-3 gap-y-1 rounded-full border-2 border-brown bg-paper px-5 py-2.5 shadow-[0_6px_18px_rgba(58,39,18,0.18)] transition-transform hover:-translate-y-0.5">
-                <span className="caps rounded-full bg-brown px-3 py-1 text-[11px] text-cream">Just baked · limited</span>
-                <span className="font-ui text-[16px] font-semibold text-ink">
-                  {deal.off ? `$${deal.off} off every bag, ` : "Special price, "}
-                  {deal.left} left for pickup this weekend
+              <a href="#ready-now-extras" className="ready-tag">
+                <span className="ready-tag-body">
+                  <span className="ready-tag-hole" aria-hidden />
+                  <span className="ready-tag-stitch" aria-hidden />
+                  <span className="ready-tag-heart" aria-hidden>
+                    <svg viewBox="0 0 44 44" width="44" height="44" focusable="false">
+                      <circle cx="22" cy="22" r="20" fill="none" stroke="#6b7a4a" strokeWidth="1" />
+                      <circle cx="22" cy="22" r="16" fill="none" stroke="#6b7a4a" strokeWidth="0.8" strokeDasharray="2.5 2.5" />
+                      <g className="ready-tag-beat">
+                        <use href="#heart" transform="translate(13 12.5) scale(0.75)" fill="#c9a06a" />
+                      </g>
+                    </svg>
+                  </span>
+                  <span className="ready-tag-words">
+                    <span className="caps text-[10px] text-sage sm:text-[11px]">
+                      Just baked{deal.off ? ` · $${deal.off} off` : " · special price"} · {deal.left} left
+                    </span>
+                    <span className="display text-[23px] italic leading-tight text-ink sm:text-[26px]">Ready to pick up today!</span>
+                  </span>
+                  <span aria-hidden className="ready-tag-arrow">→</span>
                 </span>
-                <span aria-hidden className="font-ui text-[16px] text-sage group-hover:text-brown">See what&apos;s ready →</span>
               </a>
             ) : null}
             <h1 className="display m-0 text-[40px] leading-[0.98] text-ink sm:text-[52px] lg:text-[66px]">
@@ -98,6 +113,8 @@ export default async function HomePage() {
         <HeroShelf flavors={menuFlavors(shop.flavors)} />
       </div>
 
+
+      <ThanksgivingNotice />
 
       <ReadyNow />
 

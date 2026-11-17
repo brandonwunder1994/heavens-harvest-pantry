@@ -1,5 +1,5 @@
 import type { OrderSnapshot } from "@/lib/order-store";
-import { ADDRESS_NOTE, pickupDateLabel } from "@/lib/fulfilment";
+import { ADDRESS_NOTE, periodLabel, pickupDateLabel } from "@/lib/fulfilment";
 import { formatMoney } from "@/lib/cart";
 import { sizeLabel } from "@/lib/products";
 import { packPhotoFor } from "@/lib/jars";
@@ -111,7 +111,7 @@ export function confirmationHtml(
 <tr><td style="background:${SAGE};color:#fbf8f1;padding:20px 22px;border-radius:6px 6px 0 0;">
 <div style="font:700 12px ${SANS};letter-spacing:3px;text-transform:uppercase;color:#dfe5c8;">Porch pickup</div>
 <div style="font:700 26px/1.2 ${SERIF};color:#fbf8f1;margin-top:6px;">${esc(pickupDateLabel(order.details.runDate))}</div>
-<div style="font:16px ${SANS};color:#fbf8f1;margin-top:4px;">${esc(order.details.pickupPeriod === "afternoon" ? "Afternoon, from noon" : "Morning")}</div></td></tr>
+<div style="font:16px ${SANS};color:#fbf8f1;margin-top:4px;">${esc(periodLabel(order.details.runDate, order.details.pickupPeriod))}</div></td></tr>
 ${storage("In the fridge", "#dfe7ee", "#2f4a63", "Your whole order is bagged together, so it all goes in the fridge:", fridge)}${storage("On the table", "#f1e2c6", "#6b4a1b", "Waiting for you on the porch table:", table)}
 <tr><td style="padding:20px 22px;border-top:1px solid #d7dbc0;"><div style="font:700 11px ${SANS};letter-spacing:2px;text-transform:uppercase;color:${SAGE};margin-bottom:8px;">Pickup address</div>
 <div style="font:700 20px/1.4 ${SERIF};color:${INK};"><a href="${esc(mapsUrl)}" style="color:${INK};text-decoration:none;">${esc(pickup.address).replace(/\n/g, "<br>")}</a></div>
