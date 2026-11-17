@@ -67,7 +67,7 @@ export default async function ReviewsPage({
       </section>
 
       <section id="leave-one" className="mx-auto mt-14 w-full max-w-[820px] px-6 pb-16 sm:px-10">
-        <h2 className="display mb-4 text-center text-[32px] sm:text-[40px]">Tried the granola?</h2>
+        <h2 className="display mb-4 text-center text-[32px] sm:text-[40px]">Tried our snacks?</h2>
         <ReviewForm flavors={shop.flavors.map((f) => f.name)} presetFlavor={flavor} />
       </section>
     </>
