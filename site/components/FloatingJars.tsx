@@ -144,7 +144,7 @@ export function FloatingJar({
           />
           {!isBag && mark !== "none" && loadedSrc === src ? (
             <span className="float-mark">
-              <Image src="/logo.webp" alt="" width={72} height={72} className="float-mark-logo" />
+              <Image src="/logo-seal.webp" alt="" width={72} height={72} className="float-mark-logo" />
               {mark === "full" ? <span className="float-mark-name">{label}</span> : null}
             </span>
           ) : null}

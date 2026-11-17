@@ -47,7 +47,7 @@ export default async function OwnerLoginPage({
 
   return (
     <div className="mx-auto flex min-h-screen w-full max-w-[420px] flex-col items-center justify-center gap-6 px-6 py-16">
-      <Image src="/logo.webp" alt="" width={220} height={220} className="h-28 w-28" />
+      <Image src="/logo-seal.webp" alt="" width={220} height={220} className="h-28 w-28" />
       <div className="flex flex-col items-center gap-1 text-center">
         <h1 className="display m-0 text-[40px]">Owner&apos;s page</h1>
         <p className="text-[17px] italic text-sage">{business.name}</p>

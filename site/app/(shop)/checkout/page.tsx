@@ -28,7 +28,7 @@ export default async function CheckoutPage({
     <div className="mx-auto w-full max-w-[640px] px-6 pb-16 sm:px-10">
       <div className="flex flex-col items-center gap-1.5 pt-2 text-center">
         <Link href="/menu" aria-label={`${business.name}, back to the menu`}>
-          <Image src="/logo.webp" alt="" width={160} height={160} className="h-16 w-16" />
+          <Image src="/logo-seal.webp" alt="" width={160} height={160} className="h-16 w-16" />
         </Link>
         <h1 className="display m-0 text-[40px]">Checkout</h1>
         <p className="text-[17px] italic text-sage">About a minute. No account needed.</p>

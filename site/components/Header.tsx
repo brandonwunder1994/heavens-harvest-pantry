@@ -65,7 +65,7 @@ export function Header({ shop }: { shop: Shop }) {
 
         <Link href="/" aria-label={`${business.name}, home`}>
           <Image
-            src="/logo.webp"
+            src="/logo-seal.webp"
             alt={business.name}
             width={420}
             height={420}

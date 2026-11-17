@@ -23,7 +23,7 @@ export function Footer({ shop, practice = false }: { shop: Shop; practice?: bool
         <div className="border-t border-dashed border-hedge pt-6">
           <div className="grid gap-6 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,1.4fr)_minmax(0,1fr)_auto] lg:items-start lg:gap-8">
             <Link href="/" className="flex items-center gap-3" aria-label={`${business.name}, home`}>
-              <Image src="/logo.webp" alt="" width={96} height={96} className="h-12 w-12" />
+              <Image src="/logo-seal.webp" alt="" width={96} height={96} className="h-12 w-12" />
               <div className="flex flex-col gap-0.5">
                 <div className="caps text-[11px] text-brown">{business.name}</div>
                 <p className="text-[15px] italic leading-snug text-sage">{business.tagline}</p>

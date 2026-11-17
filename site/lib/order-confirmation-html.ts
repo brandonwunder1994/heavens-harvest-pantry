@@ -153,7 +153,7 @@ ${origin ? `<td valign="middle" style="background:#ffffff;padding:10px;border-ra
 <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="max-width:600px;background:${PAPER};border-radius:6px;">
 ${banner}
 <tr><td style="height:6px;background:#6b7a4a;font-size:0;line-height:0;border-radius:6px 6px 0 0;">&nbsp;</td></tr>
-<tr><td align="center" style="background:${CREAM};padding:28px 24px 6px;">${origin ? `<img src="${esc(origin)}/email/logo.png" width="150" height="150" alt="Heaven&rsquo;s Harvest Pantry" style="display:block;width:150px;height:150px;border:0;">` : ""}</td></tr>
+<tr><td align="center" style="background:${CREAM};padding:28px 24px 6px;">${origin ? `<img src="${esc(origin)}/email/logo-seal.png" width="150" height="150" alt="Heaven&rsquo;s Harvest Pantry" style="display:block;width:150px;height:150px;border:0;">` : ""}</td></tr>
 <tr><td align="center" style="background:${CREAM};padding:22px 32px 22px;">
 <div style="font:600 34px/1.15 ${SERIF};color:${BROWN};">Thank you, ${esc(first)}.</div>
 <div style="font:16px/1.6 ${SANS};color:${MUTED};margin-top:10px;">${opts.mock ? "Your practice payment is complete." : "We got your order and we are so grateful for it."}<br>Here is your receipt.</div></td></tr>

@@ -63,7 +63,7 @@ export function OwnerShell({
       {/* Desktop navigation stays visible; phones use a native disclosure. */}
       <aside className="owner-sidebar flex flex-col gap-1 bg-brown-deep px-3.5 py-3 lg:min-h-screen lg:py-5">
         <div className="flex items-center gap-2.5 px-3.5 pb-3 lg:pb-5">
-          <Image src="/logo.webp" alt="" width={72} height={72} className="h-9 w-9 rounded-full bg-cream" />
+          <Image src="/logo-seal.webp" alt="" width={72} height={72} className="h-9 w-9 rounded-full bg-cream" />
           <div className="flex flex-col">
             <span className="font-ui text-[13px] font-semibold text-cream">Owner&apos;s page</span>
             <span className="font-ui text-[11px] text-gold">{business.shortName}</span>

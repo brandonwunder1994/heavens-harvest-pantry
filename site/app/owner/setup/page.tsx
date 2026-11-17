@@ -35,7 +35,7 @@ export default async function OwnerSetupPage({
 
   return (
     <div className="mx-auto flex min-h-screen w-full max-w-[440px] flex-col items-center justify-center gap-6 px-6 py-16">
-      <Image src="/logo.webp" alt="" width={220} height={220} className="h-28 w-28" priority />
+      <Image src="/logo-seal.webp" alt="" width={220} height={220} className="h-28 w-28" priority />
       <div className="flex flex-col items-center gap-1 text-center">
         <h1 className="display m-0 text-[40px]">Set up your owner&apos;s page</h1>
         <p className="text-[17px] italic text-sage">{business.name}</p>
