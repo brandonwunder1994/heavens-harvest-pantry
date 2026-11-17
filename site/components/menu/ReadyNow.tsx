@@ -19,7 +19,7 @@ export function ReadyNow() {
   const allGone = extras.items.every(i => i.remaining <= 0);
 
   return (
-    <section aria-labelledby="ready-now" className="mx-auto mt-10 w-full max-w-[1000px] px-6 sm:px-10">
+    <section id="ready-now-extras" aria-labelledby="ready-now" className="scroll-mt-24 mx-auto mt-10 w-full max-w-[1000px] px-6 sm:px-10">
       <div className="dashed-frame flex flex-col gap-5 bg-paper px-6 py-7 sm:px-9">
         <div className="flex flex-col gap-1.5">
           <div className="small-caps">Just baked · limited</div>

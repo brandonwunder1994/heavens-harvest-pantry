@@ -45,6 +45,7 @@ export default async function HomePage() {
   const shop = await getShop();
   const { blessingBag, jarRules, verses } = shop;
   const steps = stepsFor();
+  const deal = readyNowDeal(shop);
 
   return (
     <>
@@ -61,6 +62,16 @@ export default async function HomePage() {
       <ThePour className="min-h-[84vh] w-full lg:min-h-[78vh]">
         <div className="mx-auto flex min-h-[84vh] w-full max-w-[1296px] items-end px-6 pb-10 sm:px-10 lg:min-h-[78vh] lg:items-center lg:px-18 lg:pb-0">
           <div className="flex max-w-[600px] flex-col items-start gap-5 text-left">
+            {deal ? (
+              <a href="#ready-now-extras" className="group flex max-w-full flex-wrap items-center gap-x-3 gap-y-1 rounded-full border-2 border-brown bg-paper px-5 py-2.5 shadow-[0_6px_18px_rgba(58,39,18,0.18)] transition-transform hover:-translate-y-0.5">
+                <span className="caps rounded-full bg-brown px-3 py-1 text-[11px] text-cream">Just baked · limited</span>
+                <span className="font-ui text-[16px] font-semibold text-ink">
+                  {deal.off ? `$${deal.off} off every bag, ` : "Special price, "}
+                  {deal.left} left for pickup this weekend
+                </span>
+                <span aria-hidden className="font-ui text-[16px] text-sage group-hover:text-brown">See what&apos;s ready →</span>
+              </a>
+            ) : null}
             <h1 className="display m-0 text-[40px] leading-[0.98] text-ink sm:text-[52px] lg:text-[66px]">
               Treats baked
               <br />
@@ -318,6 +329,19 @@ async function BlessedCount() {
       {blessed} blessing bag{blessed === 1 ? "" : "s"} delivered so far this year
     </div>
   );
+}
+
+/** The hero callout: only while extras are open and something is still unclaimed. */
+function readyNowDeal(shop: Shop): { off: number; left: number } | null {
+  const items = shop.extras?.items.filter((item) => item.remaining > 0) ?? [];
+  if (!items.length) return null;
+  const savings = items.map((item) => {
+    const base = shop.flavors.find((flavor) => flavor.slug === item.slug);
+    const regular = base?.sizePrices?.[item.sizeOz];
+    return regular === undefined ? 0 : Math.round((regular - item.price) * 100) / 100;
+  });
+  const same = savings.every((value) => value === savings[0]) && savings[0] > 0;
+  return { off: same ? savings[0] : 0, left: items.reduce((total, item) => total + item.remaining, 0) };
 }
 
 function samplePack(shop: Shop): Flavor {
