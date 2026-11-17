@@ -9,7 +9,7 @@ import { josephReview } from "@/lib/customer-testimonial";
 export const metadata: Metadata = {
   alternates: { canonical: "/reviews" },
   title: "Reviews",
-  description: "What neighbors say after an order. Every review is read and published by hand.",
+  description: "What customers say after an order.",
 };
 
 export default async function ReviewsPage({
@@ -28,9 +28,9 @@ export default async function ReviewsPage({
   return (
     <>
       <PageHeader
-        eyebrow="From the neighborhood"
+        eyebrow="Customer reviews"
         title="What customers say at the door."
-        standfirst="Words from neighbors who tried our snacks. New reviews are read before they appear here."
+        standfirst="Words from customers who tried our snacks."
       />
 
       {reviews.length > 0 ? (
@@ -39,7 +39,7 @@ export default async function ReviewsPage({
             {starLine(average)}
           </div>
           <p className="font-ui text-[13px] text-muted">
-            {average} out of 5, from {reviews.length} {reviews.length === 1 ? "neighbor" : "neighbors"}
+            {average} out of 5, from {reviews.length} {reviews.length === 1 ? "customer" : "customers"}
           </p>
         </section>
       ) : null}
@@ -48,7 +48,7 @@ export default async function ReviewsPage({
         <div className="flex flex-col gap-6">
           <article className="dashed-frame flex flex-col gap-3 bg-paper px-6 py-7 sm:px-8">
             <p className="text-[20px] italic leading-snug text-ink sm:text-[24px]">&ldquo;{josephReview.body}&rdquo;</p>
-            <div className="small-caps">{josephReview.name} · a neighbor</div>
+            <div className="small-caps">{josephReview.name}</div>
           </article>
             {reviews.map((review) => (
               <article key={review.id} className="dashed-frame flex flex-col gap-2.5 bg-paper px-6 py-6 sm:px-8">
@@ -59,7 +59,7 @@ export default async function ReviewsPage({
                 <p className="text-[20px] italic leading-snug text-ink sm:text-[22px]">{review.body}</p>
                 <div className="small-caps">
                   {review.name}
-                  {review.flavor ? ` · ${review.flavor}` : ""} · a neighbor
+                  {review.flavor ? ` · ${review.flavor}` : ""}
                 </div>
               </article>
             ))}

@@ -132,7 +132,7 @@ export function ReviewForm({ flavors, presetFlavor }: { flavors: string[]; prese
       </div>
 
       <label className="flex min-w-0 flex-col gap-1.5">
-        <span className="font-ui text-[12px] font-semibold text-muted">What you would tell a neighbor</span>
+        <span className="font-ui text-[12px] font-semibold text-muted">What you would tell a friend</span>
         <textarea
           value={body}
           onChange={(e) => setBody(e.target.value)}

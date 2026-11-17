@@ -141,7 +141,7 @@ ${verse.reference ? `<div style="font:700 12px ${SANS};letter-spacing:3px;text-t
   const review = `<tr><td style="padding:28px 20px 0;"><table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="background:${BROWN};border-radius:6px;"><tr><td align="center" style="padding:26px 20px;">
 <div style="color:${GOLD};font:22px ${SANS};letter-spacing:6px;">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
 <div style="font:25px ${SERIF};color:#fbf8f1;margin:8px 0;">We would love your review</div>
-<div style="font:15px/1.6 ${SANS};color:#e6dcc8;max-width:400px;margin:0 auto 18px;">A few kind words help neighbors find us. Scan the code with your phone, or tap the button.</div>
+<div style="font:15px/1.6 ${SANS};color:#e6dcc8;max-width:400px;margin:0 auto 18px;">A few kind words help others find us. Scan the code with your phone, or tap the button.</div>
 <table role="presentation" cellpadding="0" cellspacing="0" align="center"><tr>
 ${origin ? `<td valign="middle" style="background:#ffffff;padding:10px;border-radius:4px;"><a href="${REVIEW_URL}">${img("/email/review-qr.png", 124, 124, "QR code to our review page")}</a></td><td width="40" align="center" style="font:12px ${SANS};color:#cdbfa5;">or</td>` : ""}
 <td valign="middle"><a href="${REVIEW_URL}" style="display:inline-block;background:${GOLD};color:${INK};text-decoration:none;font:700 16px ${SANS};padding:14px 26px;border-radius:4px;">Leave a review</a></td></tr></table>

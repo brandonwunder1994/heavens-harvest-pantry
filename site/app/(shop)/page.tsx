@@ -334,7 +334,7 @@ function NeighborQuoteBody() {
           strokeLinecap="round"
         />
       </svg>
-      <div className="small-caps">{josephReview.name} · a neighbor</div>
+      <div className="small-caps">{josephReview.name}</div>
     </>
   );
 }
