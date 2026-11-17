@@ -31,7 +31,7 @@ export default async function ReviewsPage({
     <>
       <PageHeader
         eyebrow="Reviews"
-        title="What customers say at the door."
+        title="What people say."
         standfirst="Words from customers who tried our snacks."
       />
 
