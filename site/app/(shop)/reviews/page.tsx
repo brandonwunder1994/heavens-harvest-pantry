@@ -30,7 +30,7 @@ export default async function ReviewsPage({
       <PageHeader
         eyebrow="From the neighborhood"
         title="What customers say at the door."
-        standfirst="Words from neighbors who have tried the granola. New reviews are read before they appear here."
+        standfirst="Words from neighbors who tried our snacks. New reviews are read before they appear here."
       />
 
       {reviews.length > 0 ? (
