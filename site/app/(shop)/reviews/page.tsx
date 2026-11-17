@@ -30,7 +30,7 @@ export default async function ReviewsPage({
   return (
     <>
       <PageHeader
-        eyebrow="Customer reviews"
+        eyebrow="Reviews"
         title="What customers say at the door."
         standfirst="Words from customers who tried our snacks."
       />
