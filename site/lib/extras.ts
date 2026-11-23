@@ -1,5 +1,5 @@
 import type { Flavor } from "@/lib/content";
-import { saturdayDate } from "@/lib/fulfilment";
+import { extrasPickupDays, todayAZ, type PickupPeriod } from "@/lib/fulfilment";
 
 /**
  * "Extras": the bags left over after the weekend's bake, posted on Instagram
@@ -17,13 +17,57 @@ export const EXTRA_SIZES: readonly ExtraSize[] = [3, 8, 16];
 
 /** What she saves. `qty` is the total she has to sell; the site subtracts what has been claimed. */
 export type ExtraItem = { slug: string; sizeOz: ExtraSize; qty: number; price: number; setAt: string };
-export type ExtrasSetting = { open: boolean; weekend: string; note: string; items: ExtraItem[] };
+/**
+ * The days and half-days she can be home for extras pickups, as real dates.
+ * She ticks weekdays on the owner page and each one becomes its next date,
+ * so a holiday week can run Monday to Wednesday instead of Friday and Saturday.
+ * An empty list means "the usual": today until that weekend, morning or afternoon.
+ */
+export type ExtraPickup = { date: string; morning: boolean; afternoon: boolean };
+export type ExtrasSetting = { open: boolean; weekend: string; note: string; items: ExtraItem[]; pickups: ExtraPickup[] };
 
 /** An item with the live numbers a customer page needs. */
 export type ExtraLive = ExtraItem & { key: string; name: string; remaining: number };
-export type ExtrasState = { weekend: string; note: string; items: ExtraLive[] };
+export type ExtrasState = { weekend: string; note: string; items: ExtraLive[]; pickups: ExtraPickup[] };
 
-export const noExtras: ExtrasSetting = { open: false, weekend: "", note: "", items: [] };
+export const noExtras: ExtrasSetting = { open: false, weekend: "", note: "", items: [], pickups: [] };
+
+/** How far ahead she can offer extras pickups: today and the six days after it. */
+export const EXTRA_PICKUP_WINDOW = 7;
+
+/** The next seven dates starting today, "2026-11-23" first: one checkbox each on the owner page. */
+export function extraPickupChoices(now = Date.now()): string[] {
+  const start = new Date(`${todayAZ(now)}T12:00:00Z`);
+  return Array.from({ length: EXTRA_PICKUP_WINDOW }, (_, n) => {
+    const d = new Date(start); d.setUTCDate(d.getUTCDate() + n); return d.toISOString().slice(0, 10);
+  });
+}
+
+/** The pickups customers can choose from today on: what she picked, or the usual days if she picked none. */
+export function extrasPickups(setting: Pick<ExtrasSetting, "weekend" | "pickups">, now = Date.now()): ExtraPickup[] {
+  const today = todayAZ(now);
+  const chosen = setting.pickups?.length ? setting.pickups : /^\d{4}-\d{2}-\d{2}$/.test(setting.weekend) ? extrasPickupDays(setting.weekend, now).map(date => ({ date, morning: true, afternoon: true })) : [];
+  return chosen.filter(p => p.date >= today && (p.morning || p.afternoon));
+}
+
+/** True when that date and half-day is one she offered. */
+export const extrasPickupAllowed = (pickups: ExtraPickup[], date: string, period: unknown) =>
+  (period === "morning" || period === "afternoon") && pickups.some(p => p.date === date && p[period as PickupPeriod]);
+
+/** The last day anyone can pick up, or "" when there is none. */
+export function lastExtrasPickup(setting: Pick<ExtrasSetting, "weekend" | "pickups">, now = Date.now()): string {
+  return extrasPickups(setting, now).map(p => p.date).sort().at(-1) ?? "";
+}
+
+/**
+ * Whether a saved list still belongs to the run in progress: the same weekend,
+ * or pickups that have not finished yet. A run that spills past Saturday keeps
+ * its counts, so re-saving on Sunday cannot let the same bag sell twice.
+ */
+export function extrasStillRunning(setting: ExtrasSetting, now = Date.now()): boolean {
+  if (!setting.weekend) return false;
+  return setting.weekend === weekendFor(now) || (setting.items.length > 0 && lastExtrasPickup(setting, now) !== "");
+}
 
 export const extraSlug = (slug: string, size: number) => `extra-${slug}-${size}`;
 export const isExtraSlug = (slug: unknown): slug is string => typeof slug === "string" && slug.startsWith("extra-");
@@ -49,11 +93,10 @@ export function weekendFor(now = Date.now()): string {
   return date.toISOString().slice(0, 10);
 }
 
-/** Extras stay up until the end of that Saturday, then close on their own. */
+/** Extras stay up until the end of the last pickup day she offered, then close on their own. */
 export function extrasAreOpen(setting: ExtrasSetting, now = Date.now()): boolean {
   if (!setting.open || !/^\d{4}-\d{2}-\d{2}$/.test(setting.weekend) || setting.items.length === 0) return false;
-  const today = phoenix(now).toISOString().slice(0, 10);
-  return today <= saturdayDate(setting.weekend);
+  return extrasPickups(setting, now).length > 0;
 }
 
 const text = (value: unknown, max: number) => String(value ?? "").replace(/[\u0000-\u001f]/g, " ").trim().slice(0, max);
@@ -75,7 +118,18 @@ export function cleanExtras(raw: unknown, now = Date.now()): ExtrasSetting {
     items.push({ slug, sizeOz, qty, price, setAt });
   }
   const weekend = /^\d{4}-\d{2}-\d{2}$/.test(String(value.weekend)) ? String(value.weekend) : weekendFor(now);
-  return { open: value.open === true, weekend, note: text(value.note, 300), items };
+  const dates = new Set<string>();
+  const pickups: ExtraPickup[] = [];
+  for (const row of (Array.isArray(value.pickups) ? value.pickups : []).slice(0, 14)) {
+    const date = String(row?.date ?? "");
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(date) || Number.isNaN(Date.parse(`${date}T12:00:00Z`)) || dates.has(date)) continue;
+    const morning = row?.morning === true, afternoon = row?.afternoon === true;
+    if (!morning && !afternoon) continue;
+    dates.add(date);
+    pickups.push({ date, morning, afternoon });
+  }
+  pickups.sort((a, b) => a.date.localeCompare(b.date));
+  return { open: value.open === true, weekend, note: text(value.note, 300), items, pickups };
 }
 
 /** The product the cart and checkout see for one extra. */
@@ -85,7 +139,7 @@ export function extraFlavor(base: Flavor, item: ExtraItem, remaining: number): F
     ...base,
     slug: extraSlug(base.slug, item.sizeOz),
     name: `${base.name} · ready now`,
-    blurb: "Fresh from this weekend's bake, ready for pickup right away.",
+    blurb: "Fresh from this week's bake, ready for pickup on the days shown.",
     sizePrices: { 3: price, 8: price, 16: price },
     bagPrice: price,
     jarPrice: price,
@@ -113,5 +167,5 @@ export function liveExtras(setting: ExtrasSetting, flavors: Flavor[], claimed: M
     items.push({ ...item, key, name: flavor.name, remaining });
   }
   if (!items.length) return undefined;
-  return { state: { weekend: setting.weekend, note: setting.note, items }, flavors: sellable };
+  return { state: { weekend: setting.weekend, note: setting.note, items, pickups: extrasPickups(setting, now) }, flavors: sellable };
 }

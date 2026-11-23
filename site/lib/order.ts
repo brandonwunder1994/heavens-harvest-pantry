@@ -1,6 +1,6 @@
 import type { Shop } from "@/lib/content";
-import { DELIVERY_ENABLED, THANKSGIVING, isThanksgivingPickup, pickupDate, saturdayDate, todayAZ, type PickupPeriod } from "@/lib/fulfilment";
-import { isExtraSlug } from "@/lib/extras";
+import { DELIVERY_ENABLED, THANKSGIVING, isThanksgivingPickup, pickupDate, saturdayDate, type PickupPeriod } from "@/lib/fulfilment";
+import { extrasPickupAllowed, isExtraSlug } from "@/lib/extras";
 import { BLESSING_SIZES, flavorSizes, sizeLabel, OMISSIONS, cleanOmissions, type Omission } from "@/lib/products";
 import {
   MAX_BLESSING_BAGS,
@@ -117,10 +117,11 @@ export function validateOrder(shop: Shop, input: unknown): ValidationResult {
   const thanksgiving = !extrasOnly && Date.now() < THANKSGIVING.closesAt && isThanksgivingPickup(runDate);
   const bakeId = extrasOnly ? shop.extras!.weekend : thanksgiving ? THANKSGIVING.first : pickupDate();
   const hasPickup = totals.lines.some(p => !p.line.gift);
-  // Extras can also be picked up any day from today until that weekend.
-  const extrasDay = extrasOnly && /^\d{4}-\d{2}-\d{2}$/.test(runDate) && runDate >= todayAZ() && runDate < bakeId;
-  if (hasPickup && !extrasDay && runDate !== bakeId && runDate !== saturdayDate(bakeId)) errors.runDate = "Choose one of the pickup days shown.";
   if (hasPickup && rawDetails.pickupPeriod !== "morning" && rawDetails.pickupPeriod !== "afternoon") errors.pickupPeriod = "Choose morning or afternoon pickup.";
+  // Extras are picked up only on the days and half-days she offered for them.
+  if (hasPickup && extrasOnly) {
+    if (!errors.pickupPeriod && !extrasPickupAllowed(shop.extras!.pickups ?? [], runDate, rawDetails.pickupPeriod)) errors.runDate = "Choose one of the pickup times shown.";
+  } else if (hasPickup && runDate !== bakeId && runDate !== saturdayDate(bakeId)) errors.runDate = "Choose one of the pickup days shown.";
   const matched = shop.delivery.runs.findIndex((r) => r.area === runArea && r.nextDate === runDate);
   if (method === "delivery" && matched < 0) {
     errors.runIndex = runArea

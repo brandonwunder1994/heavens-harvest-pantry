@@ -1,7 +1,7 @@
 "use server";
 import { revalidatePath } from "next/cache";
 import { isSignedIn } from "@/lib/owner-auth";
-import { cleanExtras, extraSlug, weekendFor } from "@/lib/extras";
+import { cleanExtras, extraPickupChoices, extraSlug, extrasStillRunning, weekendFor } from "@/lib/extras";
 import { readExtrasSetting, writeExtrasSetting } from "@/lib/extras-store";
 import { readShop } from "@/lib/settings";
 import { guideSample } from "@/lib/handoff-sample";
@@ -24,10 +24,15 @@ export async function saveExtras(_previous: SaveState, form: FormData): Promise<
   if (!live || !previous.live) return { ok: false, message: "Could not reach the place your settings are kept. Nothing was changed. Try again in a minute." };
 
   const now = Date.now();
-  const weekend = weekendFor(now);
+  // A run still in progress keeps its weekend, even past Saturday, so its counts carry on.
+  const sameWeekend = extrasStillRunning(previous.setting, now);
+  const weekend = sameWeekend ? previous.setting.weekend : weekendFor(now);
   const cleaned = cleanExtras(raw, now);
   const known = new Set(shop.flavors.map(f => f.slug));
-  const sameWeekend = previous.setting.weekend === weekend;
+  // Only days the page offered: today through the next six.
+  const offered = new Set(extraPickupChoices(now));
+  const pickups = cleaned.pickups.filter(p => offered.has(p.date));
+  if (cleaned.open && cleaned.items.length && !pickups.length) return { ok: false, message: "Tick at least one pickup day, morning or afternoon, before showing extras on the site." };
   const stamp = new Date(now).toISOString();
   const items = cleaned.items
     .filter(i => known.has(i.slug))
@@ -36,7 +41,7 @@ export async function saveExtras(_previous: SaveState, form: FormData): Promise<
       return { ...i, setAt: before?.setAt ?? stamp };
     });
 
-  try { await writeExtrasSetting({ open: cleaned.open, weekend, note: cleaned.note, items }); }
+  try { await writeExtrasSetting({ open: cleaned.open, weekend, note: cleaned.note, items, pickups }); }
   catch (error) {
     console.error("[extras] save failed", error);
     return { ok: false, message: "The save did not go through. Nothing was changed." };

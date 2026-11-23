@@ -4,7 +4,9 @@ import { useActionState, useCallback, useState } from "react";
 import { saveExtras } from "@/app/owner/extras-actions";
 import { idle } from "@/lib/save-state";
 import { SaveBar, inputClass } from "@/components/owner/SaveBar";
-import { EXTRA_SIZES, type ExtraSize } from "@/lib/extras";
+import { EXTRA_SIZES, type ExtraPickup, type ExtraSize } from "@/lib/extras";
+
+export type ExtraDayChoice = { date: string; label: string; afternoon: string };
 
 export type ExtraFlavorChoice = { slug: string; name: string; prices: Record<ExtraSize, number> };
 type Row = { key: string; slug: string; sizeOz: ExtraSize; qty: number; price: string; claimed: number };
@@ -12,14 +14,19 @@ type Row = { key: string; slug: string; sizeOz: ExtraSize; qty: number; price: s
 const sizeName = (s: number) => (s === 16 ? "1 lb" : `${s} oz`);
 let counter = 0;
 
-export function ExtrasEditor({ flavors, initial, open: wasOpen, note: wasNote, weekendLabel }: {
+export function ExtrasEditor({ flavors, initial, open: wasOpen, note: wasNote, days, pickups: wasPickups }: {
   flavors: ExtraFlavorChoice[];
   initial: { slug: string; sizeOz: ExtraSize; qty: number; price: number; claimed: number }[];
   open: boolean;
   note: string;
-  weekendLabel: string;
+  /** Today and the six days after it, each a checkbox. */
+  days: ExtraDayChoice[];
+  pickups: ExtraPickup[];
 }) {
   const [open, setOpen] = useState(wasOpen);
+  const [pickups, setPickups] = useState<Record<string, { morning: boolean; afternoon: boolean }>>(() => Object.fromEntries(wasPickups.map(p => [p.date, { morning: p.morning, afternoon: p.afternoon }])));
+  const setDay = (date: string, value: { morning: boolean; afternoon: boolean }) => { setDirty(true); setPickups(prev => ({ ...prev, [date]: value })); };
+  const chosenDays = days.filter(d => pickups[d.date]?.morning || pickups[d.date]?.afternoon);
   const [note, setNote] = useState(wasNote);
   const [rows, setRows] = useState<Row[]>(() => initial.map(i => ({ key: `r${counter++}`, slug: i.slug, sizeOz: i.sizeOz, qty: i.qty, price: i.price.toFixed(2), claimed: i.claimed })));
   const [dirty, setDirty] = useState(false);
@@ -29,7 +36,7 @@ export function ExtrasEditor({ flavors, initial, open: wasOpen, note: wasNote, w
   const update = (key: string, patch: Partial<Row>) => { setDirty(true); setRows(prev => prev.map(r => (r.key === key ? { ...r, ...patch } : r))); };
   const nameOf = (slug: string) => flavors.find(f => f.slug === slug)?.name ?? slug;
 
-  const payload = { open, note, items: rows.map(r => ({ slug: r.slug, sizeOz: r.sizeOz, qty: r.qty, price: Number(r.price) })) };
+  const payload = { open, note, items: rows.map(r => ({ slug: r.slug, sizeOz: r.sizeOz, qty: r.qty, price: Number(r.price) })), pickups: chosenDays.map(d => ({ date: d.date, ...pickups[d.date] })) };
 
   function addRow() {
     const first = flavors[0];
@@ -50,7 +57,31 @@ export function ExtrasEditor({ flavors, initial, open: wasOpen, note: wasNote, w
           <input type="checkbox" checked={open} onChange={e => touch(setOpen)(e.target.checked)} className="h-5 w-5 accent-[#5b3d1e]" />
           Show these extras on the website
         </label>
-        <p className="owner-muted">For pickup {weekendLabel}. They close by themselves at the end of Saturday. Turn this off any time to hide them.</p>
+        <fieldset className="flex flex-col gap-2">
+          <legend className="font-ui text-[12px] font-semibold text-muted">Pickup days for these extras</legend>
+          <p className="owner-muted">Tick the days you&apos;re home, then morning, afternoon, or both. Customers only see what you tick. They close by themselves after the last day. Turn this off any time to hide them.</p>
+          <div className="mt-1 flex flex-col divide-y divide-rule border-y border-rule">
+            {days.map((d, n) => {
+              const value = pickups[d.date] ?? { morning: false, afternoon: false };
+              const on = value.morning || value.afternoon;
+              return (
+                <div key={d.date} className="flex flex-wrap items-center gap-x-5 gap-y-1 py-1.5">
+                  <label className="flex min-h-11 min-w-[220px] items-center gap-3 font-semibold">
+                    <input type="checkbox" checked={on} onChange={e => setDay(d.date, { morning: e.target.checked, afternoon: e.target.checked })} className="h-5 w-5 accent-[#5b3d1e]" />
+                    {d.label}{n === 0 ? " (today)" : ""}
+                  </label>
+                  {on && (
+                    <span className="flex gap-4 font-ui text-[14px]">
+                      <label className="flex min-h-11 items-center gap-2"><input type="checkbox" checked={value.morning} onChange={e => setDay(d.date, { ...value, morning: e.target.checked })} className="h-4 w-4 accent-[#5b3d1e]" />Morning</label>
+                      <label className="flex min-h-11 items-center gap-2"><input type="checkbox" checked={value.afternoon} onChange={e => setDay(d.date, { ...value, afternoon: e.target.checked })} className="h-4 w-4 accent-[#5b3d1e]" />{d.afternoon}</label>
+                    </span>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+          {open && rows.length > 0 && chosenDays.length === 0 && <p role="alert" className="font-ui text-[13px] text-brown">Tick at least one pickup day so customers can choose when to come.</p>}
+        </fieldset>
         <label className="flex flex-col gap-1.5 font-ui text-[12px] font-semibold text-muted">A line for customers (optional)
           <input className={inputClass} maxLength={300} value={note} onChange={e => touch(setNote)(e.target.value)} placeholder="Just came out of the oven. Porch pickup tonight or tomorrow." />
         </label>
@@ -73,7 +104,7 @@ export function ExtrasEditor({ flavors, initial, open: wasOpen, note: wasNote, w
                   {EXTRA_SIZES.map(s => <option key={s} value={s}>{sizeName(s)}</option>)}
                 </select>
               </label>
-              <label className="flex flex-col gap-1.5 font-ui text-[12px] font-semibold text-muted">Total to sell this weekend
+              <label className="flex flex-col gap-1.5 font-ui text-[12px] font-semibold text-muted">Total to sell
                 <input className={inputClass} type="number" min={0} max={500} step={1} inputMode="numeric" value={r.qty} onChange={e => update(r.key, { qty: Math.max(0, Math.floor(Number(e.target.value) || 0)) })} />
               </label>
               <label className="flex flex-col gap-1.5 font-ui text-[12px] font-semibold text-muted">Price each ($)
