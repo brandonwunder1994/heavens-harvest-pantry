@@ -4,21 +4,6 @@ import Link from "@/components/ShopLink";
 import { useCart } from "@/components/cart/CartProvider";
 import { Stepper } from "@/components/cart/Stepper";
 import { formatMoney, lineKey, dollarsToCents, type CartLine } from "@/lib/cart";
-import { periodLabel, todayAZ, weekdayOf } from "@/lib/fulfilment";
-import type { ExtraPickup } from "@/lib/extras";
-
-/** "Pick up today (afternoon), Tuesday or Wednesday (morning)." Only the days she offered. */
-function pickupLine(pickups: ExtraPickup[]): string {
-  if (!pickups.length) return "Choose your pickup time at checkout.";
-  const today = todayAZ();
-  const parts = pickups.map(p => {
-    const day = p.date === today ? "today" : weekdayOf(p.date);
-    const half = p.morning && p.afternoon ? "" : ` (${periodLabel(p.date, p.morning ? "morning" : "afternoon").replace(", from noon", "").toLowerCase()})`;
-    return day + half;
-  });
-  const list = parts.length > 1 ? `${parts.slice(0, -1).join(", ")} or ${parts.at(-1)}` : parts[0];
-  return `Pick up ${list}.`;
-}
 import { sizeLabel } from "@/lib/products";
 
 /**
@@ -38,9 +23,6 @@ export function ReadyNow() {
         <div className="flex flex-col gap-1.5">
           <div className="small-caps">Just baked · limited</div>
           <h2 id="ready-now" className="display m-0 text-[34px] sm:text-[44px]">Ready now</h2>
-          <p className="text-[18px] italic text-sage">
-            Extras from this week&apos;s bake, at a special price. {pickupLine(extras.pickups ?? [])}
-          </p>
           {extras.note ? <p className="text-[17px] text-bark">{extras.note}</p> : null}
         </div>
 
@@ -90,9 +72,7 @@ export function ReadyNow() {
           <p className="text-[18px] text-bark">
             The extras are all gone. <Link href="/menu#order-next" className="text-sage underline">Pre-order the next bake</Link> and we will have yours fresh.
           </p>
-        ) : (
-          <p className="font-ui text-[13px] text-muted">Extras are checked out on their own, for the pickup days shown above. They cannot be sent as blessing gifts.</p>
-        )}
+        ) : null}
       </div>
     </section>
   );
